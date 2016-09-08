@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    = display_meta_tags site: "機械団地電子入札システム2", reverse: true, separator: "｜", nofollow: true, noindex: true
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => :reload
+    = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
+    = csrf_meta_tags
+
+  body
+    header.navbar.navbar-default.container-fluid role="navigation"
+      .navbar-header
+        .navbar-brand BA System
+
+    .container-fluid
+      = raw breadcrumbs style: :bootstrap, semantic: true
+
+      - if notice.present?
+        .alert.alert-success
+          span.glyphicon.glyphicon-info-sign
+          =< notice
+      - if alert.present?
+        .alert.alert-danger
+          span.glyphicon.glyphicon-alert
+          =< alert
+
+      - if content_for?(:page_title)
+        h1.hidden-xs.hidden-sm = yield(:page_title)
+      = yield
+
+    footer.container-fluid Copyright &copy; #{Time.now.year} OMDC, All Rights reserved.

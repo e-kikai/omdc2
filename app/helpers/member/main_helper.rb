@@ -1,0 +1,2 @@
+module Member::MainHelper
+end
