@@ -1,4 +1,4 @@
-class System::CompaniesController < ApplicationController
+class System::CompaniesController < System::ApplicationController
   def index
     @companies = Company.order(:no)
   end

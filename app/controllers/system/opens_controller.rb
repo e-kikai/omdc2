@@ -1,4 +1,4 @@
-class System::OpensController < ApplicationController
+class System::OpensController < System::ApplicationController
   def index
     @opens = Open.order(:bid_end_at)
   end
