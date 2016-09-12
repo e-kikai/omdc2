@@ -1,0 +1,11 @@
+- set_meta_tags title: "会社新規登録"
+- breadcrumb  :system_companies_new
+
+.col-md-offset-3.col-md-6
+  - if @company.errors.full_messages.present?
+    .alert.alert-danger
+      ul
+        - @company.errors.full_messages.each do |msg|
+          li = msg
+  = form_for @company, url: "/system/companies", method: :post do |f|
+    = render "form", f: f

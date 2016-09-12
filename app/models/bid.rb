@@ -3,6 +3,6 @@ class Bid < ApplicationRecord
   default_scope { without_soft_destroyed }
 
   belongs_to :product
-  belogns_to :company
+  belongs_to :company
 
 end

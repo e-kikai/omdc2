@@ -8,16 +8,27 @@ Rails.application.routes.draw do
   # root to: "bamember/main#index"
 
   devise_for :companies,
-    path:       'member',
+    path:       'bid',
     path_names: {sign_in: 'login', sign_out: 'logout'},
     only:       [:sessions]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  root to: "main#index"
+
   namespace :system do
     root to: "main#index"
+
+    get    'edit_password' => 'main#edit_password'
+    patch  'edit_password' => 'main#update_password'
+
+    resources :opens,     except: [:show]
+    resources :companies, except: [:show]
   end
 
-  namespace :member do
+  namespace :bid do
     root to: "main#index"
+
+    get    'edit_password' => 'main#edit_password'
+    patch  'edit_password' => 'main#update_password'
   end
 end

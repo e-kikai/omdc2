@@ -1,0 +1,76 @@
+table.table.table-hover.table-condensed.form-table
+  tr
+    th ID
+    td = f.object.id || "新規登録"
+  tr
+    th = f.label :name
+    td = f.text_field :name, class: "form-control",  required: "required"
+    
+  tr
+    th = f.label :no
+    td = f.number_field :no, class: "form-control",  required: "required"
+
+  tr
+    th = f.label :charge
+    td = f.text_field :charge, class: "form-control"
+
+  tr
+    th = f.label :representative
+    td = f.text_field :representative, class: "form-control"
+    
+  tr
+    th = f.label :position
+    td = f.text_field :position, class: "form-control"
+
+  tr
+    th = f.label :zip
+    td = f.text_field :zip, class: "form-control"
+
+  tr
+    th = f.label :address
+    td = f.text_field :address, class: "form-control"
+
+  tr
+    th = f.label :tel
+    td = f.text_field :tel, class: "form-control"
+    
+  tr
+    th = f.label :fax
+    td = f.text_field :fax, class: "form-control"
+
+  tr
+    th = f.label :mail
+    td = f.text_field :mail, class: "form-control"
+    
+  tr
+    th = f.label :memo
+    td = f.text_area :memo, class: "form-control"
+    
+  tr
+    th = f.label :entry
+    td
+      label.radio-inline
+        = f.radio_button :entry, true
+        | 可
+      label.radio-inline
+        = f.radio_button :entry, false
+        | 不可
+    tr
+      th = f.label :account
+      td = f.text_field :account, class: "form-control", required: "required"
+      
+  - if f.object.id.blank?
+    tr
+      th = f.label :password
+      td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上", required: "required"
+  / - else
+  /   tr
+  /     th = f.label :password, "パスワード変更"
+  /     td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上"
+  /   tr
+  /     th = f.label :password_confirmation, "パスワード変更(確認)"
+  /     td = f.password_field :password_confirmation, class: "form-control", placeholder: "確認用"
+
+= f.button :button, data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-success center-block" do
+  span.glyphicon.glyphicon-save
+  =< "保存"

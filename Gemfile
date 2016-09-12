@@ -41,9 +41,6 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
-
   gem 'rails-footnotes'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -86,6 +83,8 @@ gem 'gretel'
 gem 'charwidth'
 gem 'nested_form'
 
+gem 'simple_form'
+
 # ページャ
 gem 'kaminari'
 
@@ -103,6 +102,9 @@ group :development do
   gem 'capistrano-sidekiq'
 
   gem 'listen', '~> 3.0.5'
+
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
 end
 
 # assets

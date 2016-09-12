@@ -1,0 +1,2 @@
+module System::CompaniesHelper
+end

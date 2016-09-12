@@ -1,0 +1,43 @@
+ja:
+  activerecord:
+    models:
+      open: 入札会
+      company: 会員
+      product: 商品
+      bid: 入札
+      system: 管理者
+    attributes:
+      open:
+        name:  入札会名
+        owner: 主催者
+        entry_start_date: 登録開始日
+        entry_end_date: 登録終了日
+        carry_in_start_date: 搬入開始日
+        carry_in_end_date: 搬入終了日
+        preview_start_date: 下見開始日
+        preview_end_date: 下見終了日
+        bid_start_at: 入札開始日時
+        bid_end_at: 入札終了日時
+        user_bid_end_at: ユーザ向け入札終了日時
+        carry_out_start_date: 搬出開始日
+        carry_out_end_date: 搬出終了日
+        billing_date: 請求日
+        payment_date: 支払日
+        lower_price: 最低入札金額
+        rate: 入札金額レート
+        tax: 消費税率
+      company:
+        name: 会社名
+        no: '会社No.'
+        charge: 担当者
+        representative: 代表者
+        position: 役職
+        zip: 〒
+        address: 住所
+        tel: TEL
+        fax: FAX
+        mail: メールアドレス
+        memo: 備考
+        entry: 出品可否
+        account: ログインアカウント
+        password: パスワード

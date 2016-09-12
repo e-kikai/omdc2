@@ -1,0 +1,72 @@
+table.table.table-hover.table-condensed.form-table
+  tr
+    th ID
+    td.id = f.object.id || "新規登録"
+  tr
+    th = f.label :name
+    td = f.text_field :name, class: "form-control"
+    
+  tr
+    th = f.label :owner
+    td = f.text_field :owner, class: "form-control"
+
+  tr
+    th 登録期間
+    td.form-inline
+      = f.text_field :entry_start_date, class: "form-control datepicker"
+      = " 〜 "
+      = f.text_field :entry_end_date, class: "form-control datepicker"
+  tr
+    th 搬入期間
+    td.form-inline
+      = f.text_field :carry_in_start_date, class: "form-control datepicker"
+      = " 〜 "
+      = f.text_field :carry_in_end_date, class: "form-control datepicker"
+  tr
+    th 下見期間
+    td.form-inline
+      = f.text_field :preview_start_date, class: "form-control datepicker"
+      = " 〜 "
+      = f.text_field :preview_end_date, class: "form-control datepicker"
+  tr
+    th 入札期間
+    td.form-inline
+      = f.text_field :bid_start_at, class: "form-control datetimepicker"
+      = " 〜 "
+      = f.text_field :bid_end_at, class: "form-control datetimepicker"
+  tr
+    th = f.label :user_bid_end_at
+    td.form-inline = f.text_field :user_bid_end_at, class: "form-control datetimepicker"
+
+  tr
+    th 搬出期間
+    td.form-inline
+      = f.text_field :carry_out_start_date, class: "form-control datepicker"
+      = " 〜 "
+      = f.text_field :carry_out_end_date, class: "form-control datepicker"
+
+  tr
+    th = f.label :billing_date
+    td.form-inline = f.text_field :billing_date, class: "form-control datepicker"
+  tr
+    th = f.label :payment_date
+    td.form-inline = f.text_field :payment_date, class: "form-control datepicker"
+
+  tr
+    th = f.label :lower_price
+    td.form-inline
+      = f.number_field :lower_price, class: "form-control"
+      = " 円"
+  tr
+    th = f.label :rate
+    td.form-inline
+      = f.number_field :rate, class: "form-control"
+      = " 円"
+  tr.form-inline
+    th = f.label :tax
+    td
+      = f.number_field :tax, class: "form-control"
+      = " %"
+= f.button data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-success center-block" do
+  span.glyphicon.glyphicon-save
+  =< "保存"

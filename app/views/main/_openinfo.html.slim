@@ -1,0 +1,29 @@
+- if open.blank?
+  div 現在開催されている入札会はありません
+- else
+  h4 = open.name
+  table.table.table-condensed
+    tr
+      th 出品期間
+      td #{open.entry_start_date} 〜 #{open.entry_end_date.strftime('%m/%d')}
+    tr
+      th 搬入期間
+      td #{open.carry_in_start_date} 〜 #{open.carry_in_end_date.strftime('%m/%d')}
+    tr
+      th 出品期間
+      td #{open.preview_start_date} 〜 #{open.preview_end_date.strftime('%m/%d')}
+    tr
+      th 入札期間
+      td #{open.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{open.bid_end_at.strftime('%m/%d %H:%M')}
+    tr
+      th ユーザ向け入札終了日時
+      td #{open.user_bid_end_at.strftime('%Y/%m/%d %H:%M')}
+    tr
+      th 搬出期間
+      td #{open.carry_out_start_date} 〜 #{open.carry_out_end_date.strftime('%m/%d')}
+    tr
+      th 請求日
+      td #{open.billing_date}
+    tr
+      th 支払日
+      td #{open.payment_date}

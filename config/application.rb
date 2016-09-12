@@ -22,6 +22,14 @@ module Omdc2
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    config.active_record.raise_in_transactional_callbacks = true
+
+    I18n.available_locales = I18n.available_locales.push(:ja)
+    config.i18n.default_locale = :ja
+
+    config.active_record.default_timezone = :local
+    config.time_zone = 'Tokyo'
+    
     config.generators do |g|
       g.test_framework :rspec,
         fixtures: true,

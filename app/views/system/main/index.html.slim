@@ -1,0 +1,65 @@
+- set_meta_tags title: "管理者メニュー"    
+
+.col-md-5
+  div = current_system.name
+  = render "/main/openinfo", open: @open_now
+
+  hr
+  ul.nav.nav-pills.nav-stacked
+    li = link_to "新規会社登録",   "/system/companies/new"
+    li = link_to "会社一覧",       "/system/companies/"
+    li = link_to "表示設定",       "/system/infos/"
+    li = link_to "お知らせ一覧",   "/system/infos/"
+    li = link_to "パスワード変更", "/system/edit_password"
+    
+    li = link_to "ログアウト",     "/system/logout",     method: :delete
+
+.col-md-7
+  .panel.panel-default
+    .panel-heading 入札会開催
+    .panel-body
+      ul.nav.nav-pills.nav-stacked
+        li = link_to "新規入札会登録", "/system/opens/new"
+        li = link_to "入札会一覧",     "/system/opens/"
+  div
+    span.glyphicon.glyphicon-arrow-down
+  
+  .panel.panel-default
+    .panel-heading 出品商品申し込み
+    .panel-body
+      ul.nav.nav-pills.nav-stacked
+        li = link_to "新規出品商品登録",         "/system/products/new"
+        li = link_to "新規出品一括ファイル登録", "/system/products/csv"
+        li = link_to "新規出品一覧",             "/system/products/"
+  div
+    span.glyphicon.glyphicon-arrow-down
+    
+    
+  .panel.panel-default
+    .panel-heading リスト作成
+    .panel-body
+      ul.nav.nav-pills.nav-stacked
+        li = link_to "新規出品商品登録",         "/system/products/new"
+        li = link_to "新規出品一括ファイル登録", "/system/products/csv"
+        li = link_to "新規出品一覧",             "/system/products/"
+  div
+    span.glyphicon.glyphicon-arrow-down
+      
+      
+  .panel.panel-default
+    .panel-heading 入札
+    .panel-body
+      ul.nav.nav-pills.nav-stacked
+        li = link_to "入札",                   "/system/bids/new"
+        li = link_to "入札状況一覧",           "/system/bids/"
+        li = link_to "商品検索(ユーザページ)", "/", target: "_blank"
+  div
+    span.glyphicon.glyphicon-arrow-down
+        
+  .panel.panel-default
+    .panel-heading 入札終了後
+    .panel-body
+      ul.nav.nav-pills.nav-stacked
+        li = link_to "落札結果一覧",         "/system/products/new"
+        li = link_to "新規出品一括ファイル登録", "/system/products/csv"
+        li = link_to "新規出品一覧",             "/system/products/"

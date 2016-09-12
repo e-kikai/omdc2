@@ -14,11 +14,21 @@
 #= require jquery_ujs
 #= require turbolinks
 #= require bootstrap
-#= require jquery_nested_form
-#= require bootstrap-fileinput
-#= require fixed_midashi
-#= require bootstrap-select
+# require jquery_nested_form
+# require bootstrap-fileinput
+# require fixed_midashi
+# require bootstrap-select
 #= require moment
 #= require moment/locale/ja
 #= require bootstrap3-datetimepicker
 #= require_tree .
+$(document).on 'ready, turbolinks:load', ->
+  # # フォーム共通 : フォーム自動全選択
+  # $('input.allselect').click ->
+  #   @.select()
+
+  # フォーム共通 : datetimepicker
+  $('input.datepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD'})
+  $('input.datetimepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD HH:mm:ss'})
+  # # 検索結果ページ : テーブルスクロール制御
+  # FixedMidashi.create()
