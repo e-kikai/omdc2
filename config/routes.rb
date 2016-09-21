@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   root to: "main#index"
 
+  get 'search' => 'main#search'
+
   namespace :system do
     root to: "main#index"
 
