@@ -1,4 +1,4 @@
-class System::ProductsController < ApplicationController
+class System::ProductsController < System::ApplicationController
   before_action :select_company
 
   def index

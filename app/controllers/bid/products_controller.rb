@@ -1,9 +1,10 @@
-class Bid::ProductsController < ApplicationController
+class Bid::ProductsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
   before_action :products
 
   def index
+
   end
 
   def new

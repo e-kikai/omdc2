@@ -1,4 +1,4 @@
-class Bid::BidsController < ApplicationController
+class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
   before_action :bids
