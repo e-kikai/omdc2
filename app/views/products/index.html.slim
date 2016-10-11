@@ -1,0 +1,28 @@
+- set_meta_tags title: "落札結果"
+- breadcrumb  :bid_products
+    
+  / = link_to "/system/companies.csv", class: "btn btn-warning" do
+  /   span.glyphicon.glyphicon-save-file
+  /   =< "エクスポート"
+
+= paginate @pproducts
+
+.scroll_div
+  table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    tr
+      th.id リストNo.
+      th 商品名
+      th メーカー
+      th 型式
+      th 年式
+      th 最低入札金額
+      th 画像
+    - @pproducts.each do |p|
+      tr
+        td.id = p.list_no
+        td = p.name
+        td = p.maker
+        td = p.model 
+        td = p.year
+        td.num = p.min_price.to_s(:delimited) + "円"
+        td

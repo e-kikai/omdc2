@@ -1,0 +1,51 @@
+- set_meta_tags title: "出品商品一覧"
+- breadcrumb  :bid_products
+
+.container-fluid.list-menu
+  = link_to "/bid/products/new", class: "btn btn-success" do
+    span.glyphicon.glyphicon-plus
+    =< "新規登録"
+    
+  / = link_to "/system/companies.csv", class: "btn btn-warning" do
+  /   span.glyphicon.glyphicon-save-file
+  /   =< "エクスポート"
+
+- if @products.blank?
+  div 出品商品がありませんでした
+- else
+  / .page-area
+  /   | #{number_with_delimiter(@pdatas.total_count)}件 : 
+  /   | #{number_with_delimiter(@pdatas.offset_value + 1)}件 〜 
+  /   | #{number_with_delimiter(@pdatas.offset_value + @pdatas.length)}件を表示中
+  / 
+  /   = paginate @pdatas
+  
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th 申込No.
+        th リストNo.
+        th 商品名
+        th メーカー
+        th 型式
+        th 年式
+        th 最低入札金額
+        th 備考欄
+        th 画像
+        th 
+      - @products.each do |p|
+        tr
+          td.num
+          td.num = p.list_no
+          td = link_to p.name, "/bid/products/#{p.id}/edit"
+          td = p.maker
+          td = p.model 
+          td = p.year
+          td.num = p.min_price.to_s(:delimited) + "円"
+          td = p.comment
+          td
+          td
+            - message = "#{p.name}\n\nこの出品商品を削除しますか？"
+            = link_to "/bid/products/#{p.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
+              span.glyphicon.glyphicon-remove
+              =< "削除"

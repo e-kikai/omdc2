@@ -35,7 +35,7 @@ footer {
 }
 
 table {
-  &.list-table {
+  & {
     th.id {
       width: 40px;
     }
@@ -44,6 +44,18 @@ table {
       width: 40px;
       text-align: right;
     }
+
+    td {
+      &.id {
+        width: 40px;
+        text-align: right;
+      }
+
+      &.num {
+        text-align: right;
+      }
+    }
+
   }
 
   &.form-table {
@@ -63,6 +75,8 @@ table {
   }
 
 }
+
+div.scroll_div { overflow: auto; }
 
 label.required abbr {
   color: #F00;

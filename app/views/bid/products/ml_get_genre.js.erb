@@ -1,0 +1,14 @@
+$('span.genre_loading').html("");
+
+genre_id = "<%= @genre_id %>";
+if (genre_id.match(/^[0-9]+$/)) {
+  $('select#product_genre_id').val(genre_id);
+} else if (genre_id == "NG") {
+  alert("該当するジャンルがありませんでした\nジャンルを選択して下さい")
+  $('select#product_genre_id').val(null);
+} else {
+  alert("ジャンル取得時にエラーが発生しました\nお手数ですが、ジャンルを選択して下さい\n\n" + genre_id)
+  $('select#product_genre_id').val(null);
+}
+
+console.log(genre_id);

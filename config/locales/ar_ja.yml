@@ -6,6 +6,9 @@ ja:
       product: 商品
       bid: 入札
       system: 管理者
+      genre: ジャンル
+      large_genre: 中ジャンル
+      xl_genre: 大ジャンル
     attributes:
       open:
         name:  入札会名
@@ -24,7 +27,7 @@ ja:
         billing_date: 請求日
         payment_date: 支払日
         lower_price: 最低入札金額
-        rate: 入札金額レート
+        rate: 入札金額単位
         tax: 消費税率
       company:
         name: 会社名
@@ -41,3 +44,21 @@ ja:
         entry: 出品可否
         account: ログインアカウント
         password: パスワード
+      product:
+        list_no: リストNo.
+        name: 商品名
+        maker: メーカー
+        model: 型式
+        year: 年式
+        jousetus: 常設
+        spec: 仕様
+        comment: 備考欄
+        min_price: 最低入札金額
+        genre_id: ジャンル
+      genre:
+        name: ジャンル
+        order_no: 並び順
+      bid:
+        amount: 入札金額
+        charge: 担当者
+        comment: 備考欄

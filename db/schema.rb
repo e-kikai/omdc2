@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912021901) do
+ActiveRecord::Schema.define(version: 20161010141429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20160912021901) do
     t.datetime "created_at",                                                                              null: false
     t.datetime "updated_at",                                                                              null: false
     t.datetime "soft_destroyed_at"
+    t.string   "charge"
     t.index ["company_id"], name: "index_bids_on_company_id", using: :btree
     t.index ["product_id"], name: "index_bids_on_product_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_bids_on_soft_destroyed_at", using: :btree
@@ -59,6 +60,32 @@ ActiveRecord::Schema.define(version: 20160912021901) do
     t.index ["account", "soft_destroyed_at"], name: "index_companies_on_account_and_soft_destroyed_at", unique: true, using: :btree
     t.index ["no", "soft_destroyed_at"], name: "index_companies_on_no_and_soft_destroyed_at", unique: true, using: :btree
     t.index ["soft_destroyed_at"], name: "index_companies_on_soft_destroyed_at", using: :btree
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "order_no"
+    t.integer  "large_genre_id"
+    t.string   "capacity_label"
+    t.string   "capacity_unit"
+    t.string   "naming"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["large_genre_id"], name: "index_genres_on_large_genre_id", using: :btree
+    t.index ["soft_destroyed_at"], name: "index_genres_on_soft_destroyed_at", using: :btree
+  end
+
+  create_table "large_genres", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "order_no"
+    t.integer  "xl_genre_id"
+    t.string   "hide_option"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["soft_destroyed_at"], name: "index_large_genres_on_soft_destroyed_at", using: :btree
+    t.index ["xl_genre_id"], name: "index_large_genres_on_xl_genre_id", using: :btree
   end
 
   create_table "opens", force: :cascade do |t|
@@ -103,6 +130,14 @@ ActiveRecord::Schema.define(version: 20160912021901) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.datetime "soft_destroyed_at"
+    t.integer  "genre_id"
+    t.float    "capacity"
+    t.string   "accessory"
+    t.string   "top_img"
+    t.string   "imgs"
+    t.string   "pdfs"
+    t.string   "youtube"
+    t.integer  "area_id"
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
     t.index ["open_id"], name: "index_products_on_open_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at", using: :btree
@@ -135,6 +170,15 @@ ActiveRecord::Schema.define(version: 20160912021901) do
     t.string   "email",                  default: "", null: false
     t.index ["account", "soft_destroyed_at"], name: "index_systems_on_account_and_soft_destroyed_at", unique: true, using: :btree
     t.index ["soft_destroyed_at"], name: "index_systems_on_soft_destroyed_at", using: :btree
+  end
+
+  create_table "xl_genres", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "order_no"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["soft_destroyed_at"], name: "index_xl_genres_on_soft_destroyed_at", using: :btree
   end
 
 end

@@ -2,6 +2,9 @@ class Open < ApplicationRecord
   soft_deletable
   default_scope { without_soft_destroyed }
 
+  has_many :products
+  has_many :bids, through: :products
+
   validates :name,  presence: true
   validates :owner, presence: true
   validates :entry_start_date,     presence: true
@@ -23,7 +26,7 @@ class Open < ApplicationRecord
 
   # 現在開催中の入札会を取得
   scope :now, -> {
-    where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id).first
+    where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id)
   }
 
   # 現在の入札会の状態を取得

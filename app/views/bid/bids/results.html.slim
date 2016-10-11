@@ -1,0 +1,41 @@
+- set_meta_tags title: "落札結果"
+- breadcrumb  :bid_products
+    
+  / = link_to "/system/companies.csv", class: "btn btn-warning" do
+  /   span.glyphicon.glyphicon-save-file
+  /   =< "エクスポート"
+
+- if @pproducts.blank?
+  div 入札がありませんでしたa
+- else
+  / .page-area
+  /   | #{number_with_delimiter(@pdatas.total_count)}件 : 
+  /   | #{number_with_delimiter(@pdatas.offset_value + 1)}件 〜 
+  /   | #{number_with_delimiter(@pdatas.offset_value + @pdatas.length)}件を表示中
+  / 
+  /   = paginate @pdatas
+  
+  = paginate @pproducts
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th.id リストNo.
+        th 商品名
+        th メーカー
+        th 型式
+        th 最低入札金額
+        th 入札数
+        th 落札金額
+        th 自社入札金額
+        th 結果
+      - @pproducts.each do |p|
+        tr
+          td.id = p.list_no
+          td = p.name
+          td = p.maker
+          td = p.model 
+          td.num = p.min_price.to_s(:delimited) + "円"
+          td.num = p.bids.count if p.bids.count > 0
+          td.num = p.bids.maximum(:amount).to_s(:delimited) + "円" if p.bids.count > 0
+          td.num = p.bids.where(company: current_company).maximum(:amount).to_s
+          td

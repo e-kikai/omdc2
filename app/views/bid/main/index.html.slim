@@ -16,9 +16,9 @@
     .panel-heading 出品商品申し込み
     .panel-body
       ul.nav.nav-pills.nav-stacked
-        li = link_to "新規出品商品登録",         "/bid/products/new"
-        li = link_to "新規出品一括ファイル登録", "/bid/products/csv"
-        li = link_to "新規出品一覧",             "/bid/products/"
+        li = link_to "新規登録",         "/bid/products/new"
+        li = link_to "一括ファイル登録", "/bid/products/csv"
+        li = link_to "一覧",             "/bid/products/"
   div
     span.glyphicon.glyphicon-arrow-down
     
@@ -27,8 +27,8 @@
     .panel-heading 入札
     .panel-body
       ul.nav.nav-pills.nav-stacked
-        li = link_to "入札",                   "/bid/bids/new"
-        li = link_to "入札状況一覧",           "/bid/bids/"
+        li = link_to "入札",                   "/bid/bids/"
+        / li = link_to "入札状況一覧",           "/bid/bids/"
         li = link_to "商品検索(ユーザページ)", "/", target: "_blank"
   div
     span.glyphicon.glyphicon-arrow-down
@@ -37,7 +37,7 @@
     .panel-heading 入札終了後
     .panel-body
       ul.nav.nav-pills.nav-stacked
-        li = link_to "落札結果一覧",         "/bid/products/new"
+        li = link_to "落札結果一覧",        "/bid/bids/results"
         li = link_to "落札商品 個別計算表", "/bid/products/csv"
         li = link_to "出品商品 個別計算表", "/bid/products/"
-        li = link_to "落札・出品集計", "/bid/products/"
+        li = link_to "落札・出品集計",      "/bid/products/"

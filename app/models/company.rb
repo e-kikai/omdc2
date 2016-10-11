@@ -8,6 +8,9 @@ class Company < ApplicationRecord
   soft_deletable
   default_scope { without_soft_destroyed }
 
+  has_many :products
+  has_many :bids
+
   validates :name,    presence: true
   validates :no,      presence: true, uniqueness: { scope: [:soft_destroyed_at] }, numericality: { only_integer: true }
   validates :account, presence: true, uniqueness: { scope: [:soft_destroyed_at] }
