@@ -10,13 +10,13 @@
       th 搬入期間
       td #{open.carry_in_start_date} 〜 #{open.carry_in_end_date.strftime('%m/%d')}
     tr
-      th 出品期間
+      th 下見期間
       td #{open.preview_start_date} 〜 #{open.preview_end_date.strftime('%m/%d')}
     tr
       th 入札期間
       td #{open.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{open.bid_end_at.strftime('%m/%d %H:%M')}
     tr
-      th ユーザ向け入札終了日時
+      th ユーザ向け入札締切
       td #{open.user_bid_end_at.strftime('%Y/%m/%d %H:%M')}
     tr
       th 搬出期間

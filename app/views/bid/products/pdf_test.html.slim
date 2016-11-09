@@ -1,0 +1,30 @@
+- set_meta_tags title: "出品商品一覧"
+- breadcrumb  :bid_products
+
+scss:
+  header, .breadcrumb {
+    display: none;
+  }
+
+- if @products.blank?
+  div 出品商品がありませんでした
+- else  
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed
+      tr
+        th リストNo.
+        th 商品名
+        th メーカー
+        th 型式
+        th 最低入札金額
+        th 画像
+        th 落札
+      - @products.each do |p|
+        tr
+          td = p.list_no
+          td = p.name
+          td = p.maker
+          td = p.model 
+          td.num = p.min_price.to_s(:delimited) + "円"
+          td = p.imgs.present? ? "◯" : "X"
+          td = p.list_no.to_i % 2 == 0 ? "◯" : "X"

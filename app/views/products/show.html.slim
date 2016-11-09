@@ -1,51 +1,102 @@
-- set_meta_tags title: "立旋盤 OM TMO-12 商品詳細"
-- breadcrumb  :something, "立旋盤 OM TMO-12 商品詳細"
+- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model}商品詳細"
+- breadcrumb  :detail, @product
 
 .container-fluid.list-menu
   .col-sm-12.col-md-6
     .panel.panel-default
       .panel-heading 商品詳細
       .panel-body
-        table.table.table-condensed
+        table.table.table-condensed.table-detail
           tr
             th リストNo.
-            td 2301
+            td = @product.list_no
           tr
             th ジャンル
-            td 立旋盤
+            td #{@product.xl_genre.name} > #{@product.large_genre.name} > #{@product.genre.name}
           tr
             th 商品名
-            td 立旋盤
+            td #{@product.name}
           tr
             th メーカー
-            td OM
+            td #{@product.maker}
           tr
             th 型式
-            td TMO-12
+            td #{@product.model}
           tr
             th 最低入札金額
-            td 380,000 円
+            td #{number_with_delimiter(@product.min_price)}円
           tr
             th 年式
-            td
+            td = @product.year
+          tr
+            th 展示場所
+            td = @product.area == "店頭" ? "堀川機械" : @product.area
           tr
             th 仕様
-            td φ1500 T:φ1200 旋削高さ:930 3-150rpm 積載重量:4000kg <br />バイト□38 ラム刃物台 左右-852 上下-700 傾斜:左右30°
+            td = simple_format(@product.spec)
           tr
             th 備考
-            td
+            td = simple_format(@product.comment)
     .form-group
       = button_tag class: "btn btn-primary btn-lg" do
         span.glyphicon.glyphicon-bookmark
         =< "ウィッシュリストに追加"
-      = button_tag class: "btn btn-warning btn-lg" do
-        span.glyphicon.glyphicon-envelope
-        =< "事務局に問い合わせ"
+    .contact-info ※ 商品に関する問い合わせは、入札を依頼される商社へお問い合せ下さい
+        
+    / .form-group
+    /   = button_tag :button, class: "btn btn-warning btn-lg", data: { toggle: :modal, target: "#sampleModal" } do
+    /     span.glyphicon.glyphicon-earphone
+    /     =< "電話で問い合わせ"
+    /   = link_to "/contact/#{@product.id}", class: "btn btn-warning btn-lg" do
+    /     span.glyphicon.glyphicon-envelope
+    /     =< "メールで問い合わせ"
+    /   
+    / .modal.fade#sampleModal tabindex="-1"
+    /   .modal-dialog
+    /     .modal-content
+    /       .modal-header
+    /         = button_tag :button, class: :close, data: { dismiss: :modal} do
+    /           span ☓
+    /         h4 電話で問い合わせ
+    /       .modal-body
+    /         iframe src="/contact_tel/#{@product.id}" style="width:100%;height:320px;" frameborder="0"
+            
+    .map-area
+      - if @product.area == "店頭"
+        <iframe id="gmap2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="100%" height="400" src="http://maps.google.co.jp/maps?f=q&amp;q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E6%9D%B1%E5%A4%A7%E9%98%AA%E5%B8%82%E6%9C%AC%E5%BA%84%E8%A5%BF2-4-1+(%E5%A0%80%E5%B7%9D%E6%A9%9F%E6%A2%B0%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE)&amp;source=s_q&amp;hl=ja&amp;geocode=ie=UTF8&amp;t=m&amp;output=embed"></iframe>
+        br
+        <a href="https://maps.google.co.jp/maps?f=q&amp;q=%E5%A4%A7%E9%98%AA%E5%BA%9C%E6%9D%B1%E5%A4%A7%E9%98%AA%E5%B8%82%E6%9C%AC%E5%BA%84%E8%A5%BF2-4-1+(%E5%A0%80%E5%B7%9D%E6%A9%9F%E6%A2%B0%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE)&amp;source=embed&amp;hl=ja&amp;geocode=&amp;ie=UTF8&amp;t=m" style="color:#0000FF;text-align:left" target="_blank">大きな地図で見る</a>
+      - elsif @product.area =~ /1F/
+        = image_tag "1f_test.png", alt: "機械団地 共同展示場 1F"
+      - elsif @product.area =~ /2F/
+        = image_tag "2f_test.png", alt: "機械団地 共同展示場 2F"
+      - elsif @product.area =~ /第2/
+        ="機械団地 第2展示場"
+        / <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d205.04719059570672!2d135.60325779735018!3d34.68613117040824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sja!2sjp!4v1477433001797+(在庫エリア)" width="600" height="450" frameborder="0" style="border:0"  width="100%" height="400" allowfullscreen></iframe>
+        / br
+        / <a href="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d205.04719059570672!2d135.60325779735018!3d34.68613117040824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sja!2sjp!4v1477432956561+(在庫エリア)&amp;source=embed&amp;hl=ja&amp;geocode=&amp;ie=UTF8&amp;t=m" style="color:#0000FF;text-align:left" target="_blank">大きな地図で見る</a>
+    
+    - if @product.genre.products.present?
+      h4 この商品と同じジャンルの商品
+      .same-area style="overflow-x:scroll;border:1px solid #CCC;"
+        .same-body style="white-space:nowrap;"
+          - @product.genre.products.each do |p|
+            - next if p.id == @product.id
+            . style="width:160px;height:200px;display:inline-block;margin-left:8px;"
+              .thumbnail style="height:100%;white-space:normal;overflow:hidden;"
+                = link_to "/detail/#{p.id}" do
+                  = image_tag "http://www.zenkiren.net/media/machine/f_20160824180900_0.jpg", style: "width:100%;"
+                  .list_no No. #{p.list_no}
+                  .name #{p.name} #{p.maker} #{p.model}
+                .price #{number_with_delimiter(p.min_price)}円
+
   .col-sm-12.col-md-6
-    | <iframe width="560" height="315" src="https://www.youtube.com/embed/SO7f-N-GzWU" frameborder="0" allowfullscreen></iframe>
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180900_0.jpg", style: "width:100%;"
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180907_0.jpg", style: "width:100%;"
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180910_0.jpg", style: "width:100%;"
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180914_0.jpg", style: "width:100%;"
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180917_0.jpg", style: "width:100%;"
-    = image_tag "http://www.zenkiren.net/media/machine/f_20160824180921_0.jpg", style: "width:100%;"
+    - if @product.youtube.present?
+      .youtube-area <iframe width="560" height="315" src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen></iframe>
+    .imgs-area
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180900_0.jpg", style: "width:100%;"
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180907_0.jpg", style: "width:100%;"
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180910_0.jpg", style: "width:100%;"
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180914_0.jpg", style: "width:100%;"
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180917_0.jpg", style: "width:100%;"
+      = image_tag "http://www.zenkiren.net/media/machine/f_20160824180921_0.jpg", style: "width:100%;"

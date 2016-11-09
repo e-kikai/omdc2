@@ -1,28 +1,45 @@
-- set_meta_tags title: "落札結果"
-- breadcrumb  :bid_products
+- set_meta_tags title: "検索結果"
+- if @xl_genre
+  - breadcrumb  :xl_genre, @xl_genre
+- elsif @large_genre
+  - breadcrumb  :large_genre, @large_genre
+- elsif @genre
+  - breadcrumb  :genre, @genre
+- else
+  - breadcrumb  :search, params[:q]
     
   / = link_to "/system/companies.csv", class: "btn btn-warning" do
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
+.
+  = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |f|
+    = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
+    .form-group
+      = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+      = " 〜 "
+      = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+    = submit_tag "検索", class: "btn btn-default"
 
 = paginate @pproducts
 
 .scroll_div
   table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
     tr
-      th.id リストNo.
-      th 商品名
-      th メーカー
-      th 型式
-      th 年式
-      th 最低入札金額
-      th 画像
+      th リストNo.
+      th = sort_link @search, :name, "商品名"
+      th = sort_link @search, :maker, "メーカー"
+      th = sort_link @search, :model, "型式"
+      th = sort_link @search, :year, "年式"
+      th = sort_link @search, :min_price, "最低入札金額"
+      th = sort_link @search, :area, "展示場所"
+      th = sort_link @search, :imgs, "画像"
     - @pproducts.each do |p|
       tr
-        td.id = p.list_no
-        td = p.name
+        td = p.list_no
+        td = link_to p.name, "/detail/#{p.id}"
         td = p.maker
         td = p.model 
         td = p.year
         td.num = p.min_price.to_s(:delimited) + "円"
-        td
+        td = p.area == "店頭" ? "堀川機械" : p.area
+        td = p.imgs.present? ? "◯" : "☓"

@@ -7,4 +7,7 @@ class System < ApplicationRecord
 
   soft_deletable
   default_scope { without_soft_destroyed }
+
+  validates :name,                 presence: true
+
 end

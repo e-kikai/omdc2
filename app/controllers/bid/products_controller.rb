@@ -4,7 +4,6 @@ class Bid::ProductsController < Bid::ApplicationController
   before_action :products
 
   def index
-
   end
 
   def new
@@ -27,7 +26,7 @@ class Bid::ProductsController < Bid::ApplicationController
   def update
     @product = @products.find(params[:id])
     if @product.update(product_params)
-      redirect_to "/bid/products/", notice: "#{@company.name}を変更しました"
+      redirect_to "/bid/products/", notice: "#{@product.name}を変更しました"
     else
       render :edit
     end
@@ -48,14 +47,41 @@ class Bid::ProductsController < Bid::ApplicationController
     end
   end
 
+  def imgs
+  end
+
+  def pdf_test
+    respond_to do |format|
+      format.html
+      format.pdf do
+        # 詳細画面のHTMLを取得
+        html = render_to_string template: "/bid/products/pdf_test.html.slim"
+
+        # PDFKitを作成
+        kit = PDFKit.new(html, encoding: "UTF-8")
+        kit.stylesheets << "/usr/local/rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rails-assets-bootstrap-3.3.7/app/assets/stylesheets/bootstrap/bootstrap.scss"
+        # kit = PDFKit.new("http://192.168.33.110:8082/bid/products/pdf_test", encoding: "UTF-8")
+
+        # 画面にPDFを表示する
+        # to_pdfメソッドでPDFファイルに変換する
+        # 他には、to_fileメソッドでPDFファイルを作成できる
+        # disposition: "inline" によりPDFはダウンロードではなく画面に表示される
+        send_data kit.to_pdf,
+          filename:    "pdf_test.pdf",
+          type:        "application/pdf",
+          disposition: "inline"
+      end
+    end
+  end
+
   private
 
   def check_open
-    redirect_to "/bid/", notice: "現在、開催されている入札会はありません" unless @open_now
+    redirect_to "/bid/", alert: "現在、開催されている入札会はありません" unless @open_now
   end
 
   def check_entry_date
-    redirect_to "/bid/", notice: "現在、出品期間ではありません" unless @open_now
+    redirect_to "/bid/", alert: "現在、出品期間ではありません" unless @open_now
   end
 
   def products
@@ -63,6 +89,6 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :comment, :min_price, :genre_id)
+    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :comment, :min_price, :genre_id, :youtube, :display)
   end
 end

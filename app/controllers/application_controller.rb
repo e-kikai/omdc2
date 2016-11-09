@@ -1,6 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action { @open_now = Open.now.first }
+  before_action {
+    @open_now       = Open.now.first
+    if @open_now
+      @entry_products = @open_now.products
+      @products       = @open_now.products.where.not(list_no: nil)
+    end
+  }
 
   layout 'layouts/application'
 

@@ -5,10 +5,16 @@ class Product < ApplicationRecord
   belongs_to :open
   belongs_to :company
   belongs_to :genre
-  delegate   :large_genre, to: :genre
-  delegate   :xl_genre,    to: :large_genre
+  has_one    :large_genre, through: :genre
+  has_one    :xl_genre,    through: :large_genre
 
   has_many :bids
+
+  enum display: { "一般出品" => 0, "常設コマ" => 10, "単品預り" => 20, "店頭出品" => 30 }
+
+  validate  :check_min_price_to_open
+  validates :name,      presence: true
+  validates :min_price, presence: true, numericality: { only_integer: true }
 
   def self.ml_get_genre(product)
     workspaces = "42c03c07608247ef802a8ff6fce5b577"
@@ -52,6 +58,13 @@ class Product < ApplicationRecord
     else
       "error : #{res}"
     end
+  end
+
+  private
+
+  def check_min_price_to_open
+    errors[:min_price] << ("最低入札金額が#{open.rate}円単位ではありません")         if min_price % open.rate > 0
+    errors[:min_price] << ("最低入札金額が#{open.lower_price}円未満になっています")  if min_price < open.lower_price
   end
 
 end

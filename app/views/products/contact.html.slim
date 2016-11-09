@@ -1,0 +1,35 @@
+- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} メールで問い合わせ"
+- breadcrumb  :contact, @product
+
+.container-fluid.list-menu
+  .col-sm-12.col-md-6.col-md-offset-3
+    table.table.table-condensed.table-detail
+      tr
+        th リストNo.
+        td = @product.list_no
+      tr
+        th 商品
+        td #{@product.name} #{@product.maker} #{@product.model}
+      tr
+        th 最低入札金額
+        td #{number_with_delimiter(@product.min_price)}円
+      tr
+        th メールアドレス
+        td = text_field_tag :mail, "", required: true, class: "form-control"
+      tr
+        th お名前
+        td = text_field_tag :name, "", required: true, class: "form-control"
+      tr 
+        th 会社名
+        td = text_field_tag :company, "", class: "form-control"
+      tr 
+        th TEL
+        td = text_field_tag :company, "", class: "form-control"
+
+      tr
+        th 問い合わせ内容
+        td = text_area_tag :content, "", class: "form-control"
+        
+    = button_tag :button, data: { "disable-with" => "送信中..." }, class: "btn btn-success center-block" do
+      span.glyphicon.glyphicon-send
+      =< "送信"

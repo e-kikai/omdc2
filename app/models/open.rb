@@ -5,8 +5,8 @@ class Open < ApplicationRecord
   has_many :products
   has_many :bids, through: :products
 
-  validates :name,  presence: true
-  validates :owner, presence: true
+  validates :name,                 presence: true
+  validates :owner,                presence: true
   validates :entry_start_date,     presence: true
   validates :entry_end_date,       presence: true
   validates :carry_in_start_date,  presence: true

@@ -36,14 +36,14 @@
       - @products.each do |p|
         tr
           td.num
-          td.num = p.list_no
+          td = p.list_no
           td = link_to p.name, "/bid/products/#{p.id}/edit"
           td = p.maker
           td = p.model 
           td = p.year
           td.num = p.min_price.to_s(:delimited) + "円"
           td = p.comment
-          td
+          td = p.imgs.present? ? "◯" : "☓"
           td
             - message = "#{p.name}\n\nこの出品商品を削除しますか？"
             = link_to "/bid/products/#{p.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do

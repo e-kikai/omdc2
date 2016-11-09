@@ -8,6 +8,36 @@ crumb :something do |title|
   parent :root
 end
 
+crumb :search do |q|
+  link   "検索結果", search_path(q: q)
+  parent :root
+end
+
+crumb :xl_genre do |xl_genre|
+  link   xl_genre.name, "/xl_genre/#{xl_genre.id}"
+  parent :root
+end
+
+crumb :large_genre do |large_genre|
+  link   large_genre.name, "/large_genre/#{large_genre.id}"
+  parent :xl_genre, large_genre.xl_genre
+end
+
+crumb :genre do |genre|
+  link   genre.name, "/genre/#{genre.id}"
+  parent :large_genre, genre.large_genre
+end
+
+crumb :detail do |product|
+  link "#{product.name} #{product.maker} #{product.model} 商品詳細", "/detail/#{product.id}"
+  parent :genre, product.genre
+end
+
+crumb :contact do |product|
+  link "メールで問い合わせ", "/contact/#{product.id}"
+  parent :detail, product
+end
+
 
 ### 管理者画面 ###
 crumb :system_root do

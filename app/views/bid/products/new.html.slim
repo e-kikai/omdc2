@@ -2,5 +2,7 @@
 - breadcrumb  :bid_products_new
 
 .col-md-offset-3.col-md-6
+  / = form_tag("/bid/products", class: :dropzone)
+
   = form_for @product, url: "/bid/products", method: :post do |f|
     = render "form", f: f

@@ -54,7 +54,9 @@ ja:
         spec: 仕様
         comment: 備考欄
         min_price: 最低入札金額
-        genre_id: ジャンル
+        genre: ジャンル
+        display: 出品区分
+        youtube: Youtube
       genre:
         name: ジャンル
         order_no: 並び順

@@ -12,6 +12,8 @@
  *
  *= require bootstrap-select
  *= require bootstrap3-datetimepicker
+ *= require dropzone/basic
+ *= require dropzone/dropzone
  *= require_tree .
  *= require_self
  */
@@ -21,6 +23,14 @@ $icon-font-path: "bootstrap-sass-official/assets/fonts/bootstrap/";
 @import "bootstrap-sass-official/bootstrap";
 @import 'bootstrap-fileinput';
 
+/// header ///
+header {
+  .omdc-logo {
+    padding: 2px 16px;
+  }
+}
+
+/// footer ///
 footer {
   margin-top: 16px;
   text-align: center;

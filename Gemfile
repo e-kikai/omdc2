@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem 'rails', '~> 5.0'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
-gem 'pg'
+gem 'pg', '~> 0.18.4'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -138,3 +138,8 @@ gem 'whenever', require: false
 # # バックグラウンドジョブ
 # gem 'sidekiq'
 # gem 'sinatra', require: false
+
+gem 'dropzonejs-rails'
+
+gem 'pdfkit'
+gem 'wkhtmltopdf-binary'

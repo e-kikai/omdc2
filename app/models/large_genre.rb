@@ -4,4 +4,7 @@ class LargeGenre < ApplicationRecord
 
   belongs_to :xl_genre
   has_many   :genres
+  has_many   :products, through: :genres
+
+  validates :name,                 presence: true
 end

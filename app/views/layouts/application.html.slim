@@ -12,7 +12,10 @@ html
   body
     header.navbar.navbar-default.container-fluid role="navigation"
       .navbar-header
-        .navbar-brand 機械団地電子入札システム2
+        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo"
+      .navbar-collapse.collapse
+        ul.nav.navbar-nav.navbar-right
+          li = link_to "入札会FAQ", "http://www.omdc.or.jp/?page_id=542", target: "_blank"
 
     .container-fluid
       = raw breadcrumbs style: :bootstrap, semantic: true

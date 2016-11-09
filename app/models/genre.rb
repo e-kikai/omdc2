@@ -4,6 +4,10 @@ class Genre < ApplicationRecord
 
   belongs_to :large_genre
   has_one    :xl_genre,   through: :large_genre
+  has_many   :products
+
+  validates :name,                 presence: true
+
 
   def self.options
     all.includes(:large_genre, :xl_genre).order("xl_genres.order_no, large_genres.order_no, genres.order_no").map do |g|

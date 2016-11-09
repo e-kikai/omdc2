@@ -1,3 +1,5 @@
+coffee:
+  
 - if f.object.errors.full_messages.present?
   .alert.alert-danger
     ul
@@ -45,10 +47,23 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :comment
     td = f.text_area :comment, class: "form-control"
-  tr
-    th 画像
-    td
     
+  tr
+    th = f.label :display
+    td
+      - Product.displays.each do |k, v|
+        label.radio-inline = f.radio_button(:display, k, inline: true) + k
+        
+  / tr
+  /   th 画像
+  /   td
+    
+  tr
+    th = f.label :youtube
+    td = f.text_field :youtube, class: "form-control"
+
 = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-success center-block" do
   span.glyphicon.glyphicon-save
   =< "保存"
+  
+  

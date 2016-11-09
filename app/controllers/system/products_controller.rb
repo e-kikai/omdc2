@@ -1,5 +1,7 @@
 class System::ProductsController < System::ApplicationController
   before_action :select_company
+  before_action :check_open
+  before_action :check_entry_date, extract: [:index]
 
   def index
     @products = @company ? @company.products.order(:id) : []
@@ -43,9 +45,13 @@ class System::ProductsController < System::ApplicationController
   def select_company
     @companies = Company.order(:no)
 
-    unless @company = Company.find(params[:company_id])
+    unless @company = Company.find_by(id: params[:company_id])
       flash[:notice] = "会社を選択してください"
     end
+  end
+
+  def check_open
+    redirect_to "/bid/", alert: "現在、開催されている入札会はありません" unless @open_now
   end
 
   def product_params
