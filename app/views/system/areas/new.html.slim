@@ -1,0 +1,5 @@
+- set_meta_tags title: "エリア新規登録"
+- breadcrumb  :system_areas_new
+
+= form_for @area, url: "/system/areas", method: :post do |f|
+  = render "form", { f: f, area: @area }

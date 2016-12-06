@@ -1,56 +1,6 @@
-- set_meta_tags title: "商品一覧"
-- breadcrumb  :system_companies
+- set_meta_tags title: "出品商品一覧"
+- breadcrumb  :system_products
 
-= form_tag method: :get do |f|
-  dl
-    dt 会社選択
-    dd = f.select_tag :company_id
+= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
 
-.container-fluid.list-menu
-  = link_to "/system/companies/new", class: "btn btn-success" do
-    span.glyphicon.glyphicon-plus
-    =< "新規登録"
-    
-  / = link_to "/system/companies.csv", class: "btn btn-warning" do
-  /   span.glyphicon.glyphicon-save-file
-  /   =< "エクスポート"
-
-- if @companies.blank?
-  div 商品がありませんでした
-- else
-  / .page-area
-  /   | #{number_with_delimiter(@pdatas.total_count)}件 : 
-  /   | #{number_with_delimiter(@pdatas.offset_value + 1)}件 〜 
-  /   | #{number_with_delimiter(@pdatas.offset_value + @pdatas.length)}件を表示中
-  / 
-  /   = paginate @pdatas
-  
-  .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
-      tr
-        th.id ID
-        th.id リストNo.
-        th ジャンル
-        th 商品名
-        th メーカー
-        th 型式
-        th 年式
-        th 作成日時
-        th 
-      - @companies.each do |c|
-        tr
-          td.id = c.id
-          td.id = c.no
-          td = link_to c.name, "/system/companies/#{c.id}/edit"
-          td = c.entry ? "◯" : "☓"
-          td = c.address
-          td = c.tel
-          td = c.fax 
-          td = mail_to c.mail
-          td = c.account
-          td = c.created_at
-          td
-            - message = "#{c.no} : #{c.name}\n\nこの会社を削除しますか？"
-            = link_to "/system/companies/#{c.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
-              span.glyphicon.glyphicon-remove
-              =< "削除"
+= render "/bid/products/list", { products: @products, search: @search } if @company

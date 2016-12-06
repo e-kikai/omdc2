@@ -1,69 +1,80 @@
-coffee:
-  
-- if f.object.errors.full_messages.present?
-  .alert.alert-danger
-    ul
-      - f.object.errors.full_messages.each do |msg|
-        li = msg
+.col-md-offset-2.col-md-8
+  - if f.object.errors.full_messages.present?
+    .alert.alert-danger
+      ul
+        - f.object.errors.full_messages.each do |msg|
+          li = msg
 
-table.table.table-hover.table-condensed.form-table
-  tr
-    th ID
-    td = f.object.id || "新規登録"
-  tr
-   th = f.label :list_no
-   td = f.object.list_no
-  tr
-    th = f.label :name
-    td = f.text_field :name, class: "form-control get_genre", required: "required"
+  table.table.table-hover.table-condensed.form-table
+    tr
+      th ID
+      td = f.object.id || "新規登録"
+    tr
+     th = f.label :list_no
+     td = f.object.list_no
+    tr
+      th = f.label :name
+      td = f.text_field :name, class: "form-control get_genre", required: "required"
+      
+    tr
+      th = f.label :maker
+      td = f.text_field :maker, class: "form-control get_genre"
+
+    tr
+      th = f.label :model
+      td = f.text_field :model, class: "form-control get_genre"
     
-  tr
-    th = f.label :maker
-    td = f.text_field :maker, class: "form-control get_genre"
+    tr
+      th = f.label :hitoyama
+      td.form-group
+        = f.check_box :hitoyama, {}, true, false
+        .help-block 一山や複数まとめて出品される場合はチェックしてください
 
-  tr
-    th = f.label :model
-    td = f.text_field :model, class: "form-control get_genre"
+    tr.form-inline
+      th = f.label :min_price
+      td = (f.number_field :min_price, class: "form-control", required: "required") + " 円"
 
-  tr.form-inline
-    th = f.label :min_price
-    td = (f.number_field :min_price, class: "form-control get_genre", required: "required") + " 円"
+    tr
+      th = label_tag :genre_id
+      td
+        = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control"
+        / = text_field_tag :genre, "", class: "form-control"
+        = link_to "ジャンル検索", "/bid/products/ml_get_genre.js", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/bid/products/ml_get_genre.js?' + $('input.get_genre').serialize()));"
+        span.genre_loading
+    tr
+      th = f.label :year
+      td = f.text_field :year, class: "form-control"
+      
+    tr
+      th = f.label :spec
+      td = f.text_area :spec, class: "form-control"
+      
+      
+    tr
+      th = f.label :condition
+      td = f.text_area :condition, class: "form-control", placeholder: "例) 「試運転化」「ジャンク品(部品取り用)」「ドリル✕10本」など\n商品の状態、詳細などを記入して下さい"
+          
+    tr
+      th = f.label :comment
+      td.form-group
+        = f.text_area :comment, class: "form-control"
+        .help-block お客様には表示されません
+    tr
+      th = f.label :display
+      td
+        - Product.displays.each do |k, v|
+          label.radio-inline = f.radio_button(:display, k, inline: true) + k
+        p.help-block お客様には表示されません
+          
+    / tr
+    /   th 画像
+    /   td
+      
+    tr
+      th = f.label :youtube
+      td = f.text_field :youtube, class: "form-control"
 
-  tr
-    th = label_tag :genre_id
-    td
-      = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control"
-      / = text_field_tag :genre, "", class: "form-control"
-      = link_to "ジャンル検索", "/bid/product/ml_get_genre.js?name=旋盤", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/bid/product/ml_get_genre.js?' + $('input.get_genre').serialize()));"
-      span.genre_loading
-  tr
-    th = f.label :year
-    td = f.text_field :year, class: "form-control"
+  = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-success center-block" do
+    span.glyphicon.glyphicon-save
+    =< "保存"
     
-  tr
-    th = f.label :spec
-    td = f.text_area :spec, class: "form-control"
-
-  tr
-    th = f.label :comment
-    td = f.text_area :comment, class: "form-control"
-    
-  tr
-    th = f.label :display
-    td
-      - Product.displays.each do |k, v|
-        label.radio-inline = f.radio_button(:display, k, inline: true) + k
-        
-  / tr
-  /   th 画像
-  /   td
-    
-  tr
-    th = f.label :youtube
-    td = f.text_field :youtube, class: "form-control"
-
-= f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-success center-block" do
-  span.glyphicon.glyphicon-save
-  =< "保存"
-  
-  

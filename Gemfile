@@ -18,6 +18,8 @@ gem 'coffee-rails', '~> 4.1.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jquery-turbolinks'
@@ -143,3 +145,12 @@ gem 'dropzonejs-rails'
 
 gem 'pdfkit'
 gem 'wkhtmltopdf-binary'
+
+# ファイルアップロード
+# gem 'refile', github: 'refile/refile', require: 'refile/rails'
+# gem 'refile-mini_magick', github: 'refile/refile-mini_magick'
+# gem 'sinatra', github: 'sinatra/sinatra', ref: "88a1ba7bfb2262b68391d2490dbb440184b9f838"
+
+gem 'carrierwave'
+gem 'rmagick'
+gem 'fog'

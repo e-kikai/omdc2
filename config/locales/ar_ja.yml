@@ -4,11 +4,13 @@ ja:
       open: 入札会
       company: 会員
       product: 商品
+      product_image: 商品画像
       bid: 入札
       system: 管理者
       genre: ジャンル
       large_genre: 中ジャンル
       xl_genre: 大ジャンル
+      area: エリア
     attributes:
       open:
         name:  入札会名
@@ -56,7 +58,12 @@ ja:
         min_price: 最低入札金額
         genre: ジャンル
         display: 出品区分
+        condition: 現状
         youtube: Youtube
+        hitoyama: 一山
+      product_image:
+        image: 画像ファイル
+        order_no: 並び順
       genre:
         name: ジャンル
         order_no: 並び順
@@ -64,3 +71,7 @@ ja:
         amount: 入札金額
         charge: 担当者
         comment: 備考欄
+      area:
+        name: エリア名
+        image: 画像
+        order_no: 並び順

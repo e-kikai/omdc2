@@ -1,61 +1,101 @@
 class System::ProductsController < System::ApplicationController
-  before_action :select_company
+  before_action :select_company_proudcuts
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
+  before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
 
   def index
-    @products = @company ? @company.products.order(:id) : []
   end
 
   def new
-    @product = @company.products.new
+    @product = @products.new if @company
   end
 
   def create
-    @product = @company.products.new(product_params)
+    @product = @products.new(product_params)
     if @product.save
-      redirect_to "/system/companies/", notice: "#{@company.name}を登録しました"
+      redirect_to "/system/products/", notice: "#{@product.name}を登録しました"
     else
       render :new
     end
   end
 
   def edit
-    redirect_to "/system/products/" unless @product
-    @product = @company.products.find(params[:id])
   end
 
   def update
-    @product = @company.products.find(params[:id])
     if @product.update(product_params)
-      redirect_to "/system/companies/", notice: "#{@company.name}を変更しました"
+      redirect_to "/system/products/", notice: "#{@product.name}を変更しました"
     else
       render :edit
     end
   end
 
   def destroy
-    @product = @company.products.find(params[:id])
     @product.soft_destroy!
     redirect_to "/system/products/", notice: "#{@product.name}を削除しました"
   end
 
+  def images
+    @products = @products.includes(:product_images)
+  end
+
+  def image_upload
+    product_image = @product.product_images.build
+    begin
+      ProductImage.transaction do
+        product_image.save!
+        product_image.update!(image: params[:image])
+      end
+      render status: 200, json: product_image
+    rescue ActiveRecord::RecordInvalid
+      render status: 500, json: product_image.errors.full_messages.to_s
+    end
+  end
+
+  def images_order
+    params[:images].each.with_index do |i, key|
+      @product.product_images.find(i).update(order_no: (key + 1) * 10)
+    end
+  end
+
+  def image_destroy
+    @product.product_images.find(params[:product_image_id]).destroy
+    respond_to do |format|
+      format.html
+      format.json { render :json =>  true }
+    end
+  end
+
   private
 
-  def select_company
-    @companies = Company.order(:no)
+  def select_company_proudcuts
+    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
 
-    unless @company = Company.find_by(id: params[:company_id])
+    session[:system_company_id] = params[:company_id] if params[:company_id].present?
+
+    if session[:system_company_id].present? && @company = Company.find_by(id: session[:system_company_id])
+      @search   = @open_now.products.where(company_id: session[:system_company_id]).search(params[:q])
+      @products = @search.result
+    else
+      session[:system_company_id] = nil
       flash[:notice] = "会社を選択してください"
     end
   end
 
   def check_open
-    redirect_to "/bid/", alert: "現在、開催されている入札会はありません" unless @open_now
+    redirect_to "/system/", alert: "現在、開催されている入札会はありません" unless @open_now
+  end
+
+  def check_entry_date
+    redirect_to "/system/", alert: "現在、出品期間ではありません" unless @open_now
+  end
+
+  def get_product
+    @product = @products.find(params[:id])
   end
 
   def product_params
-    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :comment, :min_price, :genre_id)
+    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
   end
-
 end

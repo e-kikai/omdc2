@@ -1,0 +1,134 @@
+coffee:
+  Dropzone.autoDiscover = false
+  
+  $ ->
+    $('.dropzone').dropzone 
+      uploadMultiple:  false
+      clickable:       true
+      addRemoveLinks:  true
+      maxFilesize:     5
+      maxFiles:        5
+      parallelUploads: 1
+      paramName:      'image'
+      acceptedFiles:  "image/jpeg"
+      init: ->
+        @on 'success', (file, json) ->
+          $(file.previewTemplate).find('.dz-remove').attr('id', json.id)
+          $(file.previewTemplate).attr('id', "images_" + json.id)
+
+        dorpzone = @
+        $(dorpzone.element).find(" .dzdata ").each (i, data) ->
+          $_data = $(data)
+          
+          mock = { name: $_data.attr("data-name"), type: 'image/jpeg' };
+          
+          dorpzone.files.push(mock);
+          dorpzone.emit('addedfile', mock);
+          dorpzone.createThumbnailFromUrl(mock, $_data.val());
+          dorpzone.emit('complete', mock);
+          dorpzone.emit('success', mock, { id: $_data.data("id") });
+          
+      removedfile: (file) ->
+        $_this      = $(file.previewTemplate)
+        id          = $_this.find('.dz-remove').attr('id')
+        product_id  = $_this.closest(".dropzone").data('product-id')
+        $_self      = $_this.closest(".dz-preview")
+        
+        if id
+          $.ajax
+            type: 'DELETE'
+            url: './' + product_id + '/' + id
+            success: (res) -> 
+              $_self.fadeOut()
+        else
+          $_self.fadeOut()
+          
+      dictDefaultMessage: '''
+        <h2><sapn class="glyphicon glyphicon-picture"></span></h2>
+        JPEGファイルをここにドロップするか<br />
+        ここをクリックして下さい (5枚まで)
+      '''
+      dictRemoveFile: "削除",
+      dictMaxFilesExceeded: "アップロードできる画像ファイルの数は、1商品に5枚までです"
+      
+    
+    # 並び替え
+    $('.dropzone').sortable
+      items: '> .dz-preview'
+      cursor: "move"
+      opacity: 0.4
+      update: ->
+        product_id = $(@).data('product-id')
+        $.ajax
+          url:      './' + product_id + '/images_order/'
+          type:     'PATCH'
+          dataType: 'text'
+          data: $(@).sortable('serialize') + '&authenticity_token=' + $('#authenticity_token').val()
+    
+scss:
+  .dropzone {
+    border: 1px dashed #b4bcc2;
+    border-radius: 4px;
+    padding: 8px;
+
+    .dz-message {
+      font-size: 16px;
+      text-align: center;
+      margin: 0;
+    }
+    
+    .dz-preview {
+      margin: 0 8px;
+      
+      .dz-image img {
+        width: 100%;
+      }
+    }
+  }
+  
+  td.imgs,
+  th.imgs {
+    width: 66%;
+  }
+
+.container-fluid.list-menu
+
+- if products.blank?
+  div 出品商品がありませんでした
+- else
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th.no 申込No.
+        th.no リストNo.
+        th 商品名/メーカー/型式
+        th 最低入札金額
+        th.imgs アップロード
+      - products.each do |p|
+        tr
+          td.no = p.app_no
+          td.no = p.list_no
+          td #{p.name} #{p.maker} #{p.model}
+          td.num = p.min_price.to_s(:delimited) + "円"
+          td.imgs
+            = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
+              / - p.product_images.each do |i|
+              /   .dz-preview.dz-processing.dz-image-preview.dz-success.dz-complete id="images_#{i.id}"
+              /     .dz-details
+              /       .dz-filename
+              /         span.data-dz-name #{i.image.file.original_filename}
+              /       .dz-size.data-dz-size
+              /     .dz-image
+              /       = image_tag i.image.thumb.url, alt: i.image.file.original_filename, class: "data-dz-thumbnail"
+              /     .dz-progress
+              /       span.dz-upload data-dz-uploadprogress=""
+              /     .dz-success-mark
+              /     .dz-error-mark
+              /     .dz-error-message
+              /       span data-dz-errormessage=""
+              /     = link_to "削除", "javascript:undefined;", "data-dz-remove" => "",  id: i.id, class: "dz-remove"
+              
+              - p.product_images.each do |i|
+                = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.original_filename, id: i.id }, class: :dzdata
+              .fallback
+                = file_field_tag(:image)

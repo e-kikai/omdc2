@@ -12,6 +12,7 @@
 #
 #= require jquery
 #= require jquery_ujs
+#= require jquery-ui/sortable
 #= require turbolinks
 #= require bootstrap
 # require jquery_nested_form
@@ -31,5 +32,6 @@ $(document).on 'ready, turbolinks:load', ->
   # フォーム共通 : datetimepicker
   $('input.datepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD'})
   $('input.datetimepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD HH:mm:ss'})
-  # # 検索結果ページ : テーブルスクロール制御
-  # FixedMidashi.create()
+
+  # テーブルスクロール制御
+  FixedMidashi.create()

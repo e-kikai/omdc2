@@ -1,0 +1,24 @@
+.print-pdf
+  h3 入札確認
+  - if @bids.blank?
+    div 入札がありませんでした
+  - else  
+    .scroll_div
+      table.table.table-striped.table-hover.table-condensed
+        tr
+          th リストNo.
+          th 商品名
+          th メーカー
+          th 型式
+          th 最低入札金額
+          th 入札金額
+          th 結果
+        - @bids.each do |b|
+          tr
+            td = b.product.list_no
+            td = b.product.name
+            td = b.product.maker
+            td = b.product.model 
+            td.num = b.product.min_price.to_s(:delimited) + "円"
+            td.num = b.amount.to_s(:delimited) + "円"
+            td = b.success? ? "◯" : "×"

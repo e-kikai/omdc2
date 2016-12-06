@@ -1,0 +1,8 @@
+- set_meta_tags title: "出品商品 変更"
+- breadcrumb  :system_products_edit, @product
+
+= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
+
+- if @company
+  = form_for @product, url: "/system/products", method: :pathc do |f|
+    = render "/bid/products/form", f: f

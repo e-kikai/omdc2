@@ -1,0 +1,70 @@
+.col-md-4.col-sm-12.col-md-offset-2
+  table.table.table-condensed.total-table
+    caption 落札代金請求書
+    tr
+      th 落札代金請求額(イ)
+      td.num = number_to_currency(success_products.sum(&:success_price))
+    tr
+      th デメ半(ロ)
+      td.num = number_to_currency(success_products.sum(&:deme_h))
+    tr
+      th 小計(イ)-(ロ)=(ハ)
+      td.num = number_to_currency(success_products.sum(&:success_price) - success_products.sum(&:deme_h))
+    tr
+      th 貴社受取手数料(ニ)
+      td.num = number_to_currency(success_products.sum(&:hanbai_fee))
+    tr
+      th 差引(ハ)-(ニ)
+      td.num = number_to_currency(success_products.sum(&:seikyu))
+    tr
+      th 消費税 : #{open_now.tax}%
+      td.num = number_to_currency(open_now.tax_calc(success_products.sum(&:seikyu)))
+    tr
+      th 差引落札請求額
+      td.num = number_to_currency(open_now.tax_total(success_products.sum(&:seikyu)))
+      
+.col-md-4.col-sm-12
+  table.table.table-condensed.total-table
+    caption 出品支払書
+    tr
+      th 出品支払額(イ)
+      td.num = number_to_currency(products.sum(&:success_price))
+    tr
+      th デメ半(ロ)
+      td.num = number_to_currency(products.sum(&:deme_h))
+    tr
+      th 小計(イ)-(ロ)=(ハ)
+      td.num = number_to_currency(products.sum(&:success_price) - products.sum(&:deme_h))
+    tr
+      th 出品料(ニ)組合手数料
+      td.num = number_to_currency products.sum(&:kumiai_fee)
+    tr
+      th 出品料(ニ)販売手数料
+      td.num = number_to_currency products.sum(&:hanbai_fee)
+    tr
+      th 出品料(ニ)出品手数料
+      td.num = number_to_currency products.sum(&:shuppin_fee)
+    tr
+      th 差引(ハ)-(ニ)
+      td.num = number_to_currency products.sum(&:shiharai)
+    tr
+      th 消費税 : #{open_now.tax}%
+      td.num = number_to_currency open_now.tax_calc(products.sum(&:shiharai))
+    tr
+      th 差引出品支払額
+      td.num = number_to_currency open_now.tax_total(products.sum(&:shiharai))
+      
+  table.table.table-condensed
+    tr
+      th 差引落札請求額
+      td.num = number_to_currency open_now.tax_total(success_products.sum(&:seikyu))
+      
+    tr
+      th 差引出品支払額
+      td.num = number_to_currency open_now.tax_total(products.sum(&:shiharai))
+      
+    tr
+      th 差引落札請求額
+      td.num = number_to_currency open_now.tax_total(success_products.sum(&:seikyu)) - open_now.tax_total(products.sum(&:shiharai))
+    
+      

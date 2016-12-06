@@ -1,0 +1,32 @@
+- set_meta_tags title: "エリア一覧"
+- breadcrumb  :system_areas
+
+ul.nav.nav-pills
+  li = link_to "/system/areas/new", class: "btn btn-default btn-square" do
+    span.glyphicon.glyphicon-plus
+    span.btn-content 新規登録
+
+- if @areas.blank?
+  div エリアがありませんでした
+- else
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th.id ID
+        th エリア名
+        th 画像
+        th.num 並び順
+        th 作成日時
+        th
+      - @areas.each do |a|
+        tr
+          td = a.id
+          td = link_to a.name, "/system/areas/#{a.id}/edit"
+          td = image_tag a.image.thumb.url, height: 180 if a.image?
+          td.num = number_with_delimiter(a.order_no)
+          td = a.created_at
+          td
+            - message = "#{a.name}\n\nこのエリアを削除しますか？"
+            = link_to "/system/areas/#{a.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
+              span.glyphicon.glyphicon-remove
+              =< "削除"

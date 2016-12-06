@@ -1,0 +1,6 @@
+- set_meta_tags title: "入札"
+- breadcrumb  :system_bids_new
+
+= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
+
+= render "/bid/bids/new", { open_now: @open_now, product: @product, bid: @bid, bids: @bids, search: @search } if @company

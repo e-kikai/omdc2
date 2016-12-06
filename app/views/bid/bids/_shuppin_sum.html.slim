@@ -1,0 +1,70 @@
+.scroll_div.table-responsive
+  table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    thead
+      tr
+        / th
+        th.no = sort_link search, :list_no,        "リストNo."
+        th = sort_link search, :genre_order_no, "商品名"
+        th = sort_link search, :maker,          "メーカー"
+        th = sort_link search, :model,          "型式"
+        th.sepa = sort_link search, :min_price, "最低入札金額"
+        th 入札数
+        th 落札会社
+        th 落札金額
+        th デメ半
+        th 出品区分
+        th 出品手数料
+        th 組合手数料
+        th 落札会社手数料
+        th 支払金額
+    - products.each do |p|
+      tr
+        / td = s.check_box :id_eq, {}, b.id
+        td.no = p.list_no
+        td = p.name
+        td = p.maker
+        td = p.model
+        td.num.sepa = number_to_currency(p.min_price)
+        
+        - if p.bid?
+          td.num = number_with_delimiter(p.bids.length)
+          td = p.success_bid.company.name
+          td.num = number_to_currency(p.success_bid.amount)
+          td.num = number_to_currency(p.deme_h)
+          td = p.display
+          td
+          td.num
+            = number_to_currency(p.kumiai_fee)
+            .percent #{p.kumiai_fee_per}%
+          td.num
+            . = number_to_currency(p.hanbai_fee)
+            .percent #{p.hanbai_fee_per}%
+          td.num = number_to_currency(p.shiharai)
+
+        - else
+          td
+          td
+          td
+          td 
+          td = p.display
+          td.num
+            - if p.shuppin_fee > 0
+              . = number_to_currency(p.shuppin_fee)
+              .percent #{p.shuppin_fee_per}%
+          td 
+          td 
+          td.num = number_to_currency(p.shiharai)
+    tfoot
+      tr
+        td colspan="12"
+        th 合計金額
+        / td.num  = number_to_currency(products.inject(0){ |sum, p| sum += p.shiharai })
+        td.num = number_to_currency(products.sum(&:shiharai))
+      tr
+        td colspan="12"
+        th 消費税 (#{open_now.tax}%)
+        td.num = number_to_currency(open_now.tax_calc(products.sum(&:shiharai)))
+      tr
+        td colspan="12"
+        th 差引出品支払額
+        td.num = number_to_currency(open_now.tax_total(products.sum(&:shiharai)))

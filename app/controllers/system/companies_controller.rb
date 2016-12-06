@@ -29,11 +29,11 @@ class System::CompaniesController < System::ApplicationController
     end
   end
 
-  def destroy
-    @company = Company.find(params[:id])
-    @company.soft_destroy!
-    redirect_to "/system/companies/", notice: "#{@company.name}を削除しました"
-  end
+  # def destroy
+  #   @company = Company.find(params[:id])
+  #   @company.soft_destroy!
+  #   redirect_to "/system/companies/", notice: "#{@company.name}を削除しました"
+  # end
 
   private
 

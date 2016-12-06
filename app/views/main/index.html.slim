@@ -1,7 +1,7 @@
 - if @open_now.present?
   .col-md-offset-3.col-md-6
     h4 = @open_now.name
-    table.table.table-condensed
+    table.table.table-condensed.info-table 
       tr
         th 下見期間
         td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.strftime('%m/%d')}
@@ -15,30 +15,39 @@
   .col-md-offset-2.col-md-8
     .
       = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
-        = label_tag :list_no, "リストNo.からさがす", class: :h4
-        .form-group
+        = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
+        .input-group
           = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
-        = submit_tag "検索", class: "btn btn-default"
+          span.input-group-btn
+            = button_tag type: :submit, class: "btn btn-default" do
+              .glyphicon.glyphicon-search
+              span.btn-content 検索
         
     .
       = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
-        = label_tag :list_no, "最低入札金額からさがす", class: :h4
-        .form-group
-          = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
-          = " 〜 "
+        = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
+        = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+        = " 〜 "
+        .input-group
           = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
-        = submit_tag "検索", class: "btn btn-default"
+          span.input-group-btn
+            = button_tag type: :submit, class: "btn btn-default" do
+              .glyphicon.glyphicon-search
+              span.btn-content 検索
         
     .
-      = form_tag "/search_by_ml", method: :get, class: "form-inline" do
-        = label_tag :list_no, "商品名からさがす", class: :h4
-        .form-group
-          = text_field_tag :name, params[:name], placeholder: "商品名", class: "form-control"
-        = submit_tag "検索", class: "btn btn-default"
+      = form_tag "/search", method: :get, class: "form-inline" do
+        = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
+        .input-group
+          = text_field_tag :keywords, params[:keywords], placeholder: "商品名", class: "form-control"
+          span.input-group-btn
+            = button_tag type: :submit, class: "btn btn-default" do
+              .glyphicon.glyphicon-search
+              span.btn-content 検索
 
         
   .col-md-offset-1.col-md-10
-    h4 ジャンルからさがす
+    h4 ◆ ジャンルからさがす
     .row
       - @all_xl_counts.each do |x, v|
         / col-sm-6.col-md-3.dropdown

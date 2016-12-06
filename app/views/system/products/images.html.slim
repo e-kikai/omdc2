@@ -1,0 +1,6 @@
+- set_meta_tags title: "画像登録"
+- breadcrumb  :system_something, "画像登録"
+
+= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
+
+= render "/bid/products/images", products: @products if @company

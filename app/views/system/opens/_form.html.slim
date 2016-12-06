@@ -1,3 +1,9 @@
+- if f.object.errors.full_messages.present?
+  .alert.alert-danger
+    ul
+      - f.object.errors.full_messages.each do |msg|
+        li = msg
+        
 table.table.table-hover.table-condensed.form-table
   tr
     th ID

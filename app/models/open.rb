@@ -45,4 +45,11 @@ class Open < ApplicationRecord
     Date.now === bid_start_at..bid_end_at ? true : false
   end
 
+  def tax_calc(val)
+    (BigDecimal(val.to_s) * BigDecimal((Float(tax) / 100).to_s)).floor
+  end
+
+  def tax_total(val)
+    val + tax_calc(val)
+  end
 end

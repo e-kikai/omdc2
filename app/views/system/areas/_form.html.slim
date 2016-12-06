@@ -1,0 +1,32 @@
+.col-md-offset-3.col-md-6
+  - if area.errors.full_messages.present?
+    .alert.alert-danger
+      ul
+        - area.errors.full_messages.each do |msg|
+          li = msg
+          
+  table.table.table-hover.table-condensed.form-table
+    tr
+      th ID
+      td = f.object.id || "新規登録"
+    tr
+      th = f.label :name
+      td = f.text_field :name, class: "form-control",  required: "required"
+      
+    tr
+      th = f.label :image
+      td
+        = f.file_field :image, class: "form-control"
+        - if area.image?
+          = image_tag area.image.thumb.url
+          label
+            = f.check_box :remove_image 
+            =< "画像を削除"
+
+    tr
+      th = f.label :order_no
+      td = f.number_field :order_no, class: "form-control",  required: "required"
+      
+  = f.button :button, data: { "disable-with" => "保存中..."}, class: "btn btn-success center-block" do
+    span.glyphicon.glyphicon-save
+    =< "保存"

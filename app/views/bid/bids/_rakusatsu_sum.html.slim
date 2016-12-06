@@ -1,0 +1,68 @@
+= search_form_for search, url: "rakusatsu_sum" do |s|
+  ul.nav.nav-pills
+    li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-print
+      span.btn-content 入札確認PDF
+      
+    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
+      
+  .scroll_div.table-responsive
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      thead
+        tr
+          th
+          th.no = sort_link search, :product_list_no,   "リストNo."
+          th = sort_link search, :genre_order_no,    "商品名"
+          th = sort_link search, :product_maker,     "メーカー"
+          th = sort_link search, :product_model,     "型式"
+          th = sort_link search, :product_min_price, "最低入札金額"
+          th = sort_link search, :amount,            "入札金額"
+          th = sort_link search, :comment,           "備考欄"
+          th.sepa = sort_link search, :created_at,   "入札日時"
+          
+          th 落札金額
+          th 結果
+          th デメ半
+          th 落札会社手数料
+          th 請求金額
+      - bids.each do |b|
+        tr
+          td = s.check_box :id_in, {multiple: true, include_hidden: false}, b.id
+          td.no = b.product.list_no
+          td = b.product.name
+          td = b.product.maker
+          td = b.product.model 
+          td.num = number_to_currency(b.product.min_price)
+          td.num = number_to_currency(b.amount)
+          td = b.comment
+          td.sepa = b.created_at
+          
+          td.num = number_to_currency(b.product.success_price)
+          td = b.success? ? "◯" : "×"
+      
+          - if b.success?
+            td.num = number_to_currency(b.product.deme_h)
+            td.num
+              . = number_to_currency(b.product.hanbai_fee)
+              .percent #{b.product.hanbai_fee_per}%
+            td.num = number_to_currency(b.product.seikyu)
+      
+          - else
+            td
+            td
+            td 
+      tfoot
+        tr
+          td colspan="11"
+          th 合計金額
+          td.num = number_to_currency(bids.sum{ |b| b.success? ? b.product.seikyu : 0 })
+        tr
+          td colspan="11"
+          th 消費税 (#{open_now.tax}%)
+          td.num = number_to_currency(open_now.tax_calc(bids.sum{ |b| b.success? ? b.product.seikyu : 0 }))
+        tr
+          td colspan="11"
+          th 差引出品支払額
+          td.num = number_to_currency(open_now.tax_total(bids.sum{ |b| b.success? ? b.product.seikyu : 0 }))

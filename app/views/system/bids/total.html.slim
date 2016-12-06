@@ -1,0 +1,6 @@
+- set_meta_tags title: "落札・出品集計"
+- breadcrumb  :system_something, "落札・出品集計"
+
+= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
+
+= render "/bid/bids/total", { open_now: @open_now, success_products: @success_products, products: @products } if @company

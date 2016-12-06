@@ -19,23 +19,32 @@
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
-        th.id リストNo.
-        th 商品名
-        th メーカー
-        th 型式
-        th 最低入札金額
+        th = sort_link @search, :list_no,        "リストNo."
+        th = sort_link @search, :genre_order_no, "商品名"
+        th = sort_link @search, :maker,          "メーカー"
+        th = sort_link @search, :model,          "型式"
+        th.sepa = sort_link @search, :min_price, "最低入札金額"
         th 入札数
         th 落札金額
+        th.sepa 落札会社
         th 自社入札金額
         th 結果
       - @pproducts.each do |p|
         tr
-          td.id = p.list_no
+          td.num = p.list_no
           td = p.name
           td = p.maker
           td = p.model 
-          td.num = p.min_price.to_s(:delimited) + "円"
-          td.num = p.bids.count if p.bids.count > 0
-          td.num = p.bids.maximum(:amount).to_s(:delimited) + "円" if p.bids.count > 0
-          td.num = p.bids.where(company: current_company).maximum(:amount).to_s
-          td
+          td.num.sepa = number_to_currency(p.min_price)
+          - if p.bid?
+            td.num = p.bids.count
+            td.num = number_to_currency(p.success_bid.amount)
+            td.sepa = p.success_bid.company.name rescue "aaa"
+            / td.num = number_with_delimiter(p.bids.where(company: current_company).maximum(:amount).to_s) + "円"
+            / td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
+          - else
+            td
+            td
+            td.sepa
+            td
+            td

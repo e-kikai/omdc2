@@ -10,6 +10,7 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require jquery-ui/sortable
  *= require bootstrap-select
  *= require bootstrap3-datetimepicker
  *= require dropzone/basic
@@ -28,6 +29,12 @@ header {
   .omdc-logo {
     padding: 2px 16px;
   }
+
+  &.navbar-default {
+    background-color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+  }
 }
 
 /// footer ///
@@ -44,15 +51,40 @@ footer {
   }
 }
 
+body {
+  background-color: #F4F6EB;
+}
+
+.breadcrumb {
+  background-color: #FFFFFF;
+}
+
+.search-label {
+  width: 240px;
+}
+
 table {
   & {
-    th.id {
-      width: 40px;
-    }
+    th {
+      &.id {
+        width: 40px;
+      }
 
-    td.id {
-      width: 40px;
-      text-align: right;
+      &.no {
+        width: 75px;
+      }
+
+      &.num {
+        width: 100px;
+        min-width: 100px;
+      }
+
+      &.name {
+        width: 150px;
+        min-width: 150px;
+      }
+
+      white-space: nowrap;
     }
 
     td {
@@ -61,33 +93,142 @@ table {
         text-align: right;
       }
 
+      &.no {
+        text-align: right;
+        width: 75px;
+      }
+
       &.num {
         text-align: right;
+        width: 100px;
+      }
+
+      &.name {
+        width: 150px;
+        min-width: 150px;
       }
     }
 
+    th.sepa,
+    td.sepa {
+      border-right: 3px double #ddd;
+    }
+  }
+
+  &.total-table {
+    caption {
+      text-align: center;
+    }
+
+    th {
+      background: #2B8B04;
+      color: #FFFFFF;
+      border: 1px solid #ddd;
+    }
+
+    td {
+      background: #FFFFFF;
+      border: 1px solid #ddd;
+    }
+  }
+
+  &.info-table {
+    background-color: #FFF;
   }
 
   &.form-table {
+    background-color: #EEE;
+
     input[type=number] {
       width: 120px;
       text-align: right;
     }
 
-    .required:after
-    {
+    .required:after {
       color: #D00;
       vertical-align: top;
       font-size: 80%;
       font-weight: normal;
       margin-left: 10px;
     }
+
+    th {
+      width: 130px;
+    }
+
+    textarea.form-control {
+      height: 100px;
+    }
   }
 
 }
 
-div.scroll_div { overflow: auto; }
+.btn-content {
+  margin-left: 4px;
+}
+
+.btn.btn-square {
+  width: 92px;
+  height: 69px;
+  text-align: center;
+  padding: 11px 0;
+  font-size: 12px;
+  color: #2B8B04;
+  border-radius: 0;
+  display: inline-block;
+  margin: 4px 4px 4px 0;
+  vertical-align: top;
+
+  span.glyphicon {
+    display: block;
+    font-size: 28px;
+    vertical-align: middle;
+    margin-bottom: 5px;
+  }
+
+  &.btn-twoline {
+    padding: 6px 0;
+    line-height: 1.1;
+  }
+
+  .btn-content {
+    margin-left: 0;
+  }
+}
+
+div.scroll_div { overflow: scroll; width: 100%; }
+
+.bid-menu {
+  .panel-body {
+    padding: 9px 0 9px 25px;
+  }
+}
+
+span.menu-title {
+  margin-left: 8px;
+}
 
 label.required abbr {
   color: #F00;
+}
+
+.arrow_area {
+  text-align: center;
+}
+
+.percent {
+  color: #777;
+  font-size: 90%;
+}
+
+.company_select-panel .panel-body {
+  background-color: #FFEFD5;
+
+  label {
+    width: 120px;
+  }
+
+  select {
+    width: 300px;
+  }
 }

@@ -1,11 +1,10 @@
 - set_meta_tags title: "会員一覧"
 - breadcrumb  :system_companies
 
-.container-fluid.list-menu
-  = link_to "/system/companies/new", class: "btn btn-success" do
+ul.nav.nav-pills
+  li = link_to "/system/companies/new", class: "btn btn-default btn-square" do
     span.glyphicon.glyphicon-plus
-    =< "新規登録"
-    
+    span.btn-content 新規会社登録
   / = link_to "/system/companies.csv", class: "btn btn-warning" do
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
@@ -33,7 +32,6 @@
         th メールアドレス
         th アカウント
         th 作成日時
-        th 
       - @companies.each do |c|
         tr
           td.id = c.id
@@ -46,8 +44,8 @@
           td = mail_to c.mail
           td = c.account
           td = c.created_at
-          td
-            - message = "#{c.no} : #{c.name}\n\nこの会社を削除しますか？"
-            = link_to "/system/companies/#{c.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
-              span.glyphicon.glyphicon-remove
-              =< "削除"
+          / td
+          /   - message = "#{c.no} : #{c.name}\n\nこの会社を削除しますか？"
+          /   = link_to "/system/companies/#{c.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
+          /     span.glyphicon.glyphicon-remove
+          /     =< "削除"

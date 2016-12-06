@@ -2,6 +2,7 @@ class Bid::ProductsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
   before_action :products
+  before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
 
   def index
   end
@@ -20,11 +21,9 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def edit
-    @product = @products.find(params[:id])
   end
 
   def update
-    @product = @products.find(params[:id])
     if @product.update(product_params)
       redirect_to "/bid/products/", notice: "#{@product.name}を変更しました"
     else
@@ -33,7 +32,6 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def destroy
-    @product = @products.find(params[:id])
     @product.soft_destroy!
     redirect_to "/bid/products/", notice: "#{@product.name}を削除しました"
   end
@@ -47,30 +45,34 @@ class Bid::ProductsController < Bid::ApplicationController
     end
   end
 
-  def imgs
+  def images
+    @products = @products.includes(:product_images)
   end
 
-  def pdf_test
+  def image_upload
+    product_image = @product.product_images.build
+    begin
+      ProductImage.transaction do
+        product_image.save!
+        product_image.update!(image: params[:image])
+      end
+      render status: 200, json: product_image
+    rescue ActiveRecord::RecordInvalid
+      render status: 500, json: product_image.errors.full_messages.to_s
+    end
+  end
+
+  def images_order
+    params[:images].each.with_index do |i, key|
+      @product.product_images.find(i).update(order_no: (key + 1) * 10)
+    end
+  end
+
+  def image_destroy
+    @product.product_images.find(params[:product_image_id]).destroy
     respond_to do |format|
       format.html
-      format.pdf do
-        # 詳細画面のHTMLを取得
-        html = render_to_string template: "/bid/products/pdf_test.html.slim"
-
-        # PDFKitを作成
-        kit = PDFKit.new(html, encoding: "UTF-8")
-        kit.stylesheets << "/usr/local/rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rails-assets-bootstrap-3.3.7/app/assets/stylesheets/bootstrap/bootstrap.scss"
-        # kit = PDFKit.new("http://192.168.33.110:8082/bid/products/pdf_test", encoding: "UTF-8")
-
-        # 画面にPDFを表示する
-        # to_pdfメソッドでPDFファイルに変換する
-        # 他には、to_fileメソッドでPDFファイルを作成できる
-        # disposition: "inline" によりPDFはダウンロードではなく画面に表示される
-        send_data kit.to_pdf,
-          filename:    "pdf_test.pdf",
-          type:        "application/pdf",
-          disposition: "inline"
-      end
+      format.json { render :json =>  true }
     end
   end
 
@@ -85,10 +87,15 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def products
-    @products = @open_now.products.where(company_id: current_company.id)
+    @search   = @open_now.products.search(params[:q])
+    @products = @search.result.where(company_id: current_company.id)
+  end
+
+  def get_product
+    @product = @products.find(params[:id])
   end
 
   def product_params
-    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :comment, :min_price, :genre_id, :youtube, :display)
+    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
   end
 end

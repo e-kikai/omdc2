@@ -1,0 +1,62 @@
+- set_meta_tags title: "集計一覧"
+- breadcrumb  :system_companies
+
+ul.nav.nav-pills
+  / = link_to "/system/companies.csv", class: "btn btn-warning" do
+  /   span.glyphicon.glyphicon-save-file
+  /   =< "エクスポート"
+
+- if @companies.blank?
+  div 入札情報がありませんでした
+- else
+  .scroll_div
+    / table.table.table-striped.table-hover _fixedhead="rows:1;cols:2"
+    table.table.table-striped.table-hover _fixedhead='rows:1;cols:2;box-shadow:2px 2px 2px 0 rgba(0,0,0,0.2)'
+      tr
+        th.id No.
+        th.name.sepa 会社名
+        th.num  落札代金請求額
+        th.num  デメ半
+        th.num  小計
+        th.num  貴社受取手数料
+        th.num  差引
+        th.num  消費税(8%)
+        th.num.sepa 差引落札請求額
+        th.num  出品支払額
+        th.num  デメ半
+        th.num  小計
+        th.num  組合手数料
+        th.num 販売手数料
+        th.num 出品手数料
+        th.num 差引
+        th.num 消費税(8%)
+        th.sepa 差引出品支払額
+        th 結果
+        th.num 金額
+        
+      - @companies.each do |c|
+        - next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
+        tr
+          td.id = c.no
+          td.name.sepa = c.name
+          td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:success_price))
+          td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:deme_h))
+          td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:success_price) - @company_products[c.id][:success_products].sum(&:deme_h))
+          td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:hanbai_fee))
+          td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:seikyu))
+          td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu)))
+          td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu)))
+          
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:success_price))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:deme_h))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:success_price) - @company_products[c.id][:products].sum(&:deme_h))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:kumiai_fee))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:hanbai_fee))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:shuppin_fee))
+          td.num = number_to_currency(@company_products[c.id][:products].sum(&:shiharai))
+          td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))
+          td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))
+          
+          td = @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:products].sum(&:seikyu) ? "支払" : "請求"
+          td.num = number_to_currency (@company_products[c.id][:products].sum(&:shiharai) - @company_products[c.id][:products].sum(&:seikyu)).abs
+          

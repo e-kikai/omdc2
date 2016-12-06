@@ -79,6 +79,47 @@ crumb :system_companies_edit do |company|
   parent :system_companies
 end
 
+crumb :system_areas do
+  link   "エリア一覧", "/system/areas/"
+  parent :system_root
+end
+
+crumb :system_areas_new do
+  link   "新規登録", "/system/areas/new"
+  parent :system_areas
+end
+
+crumb :system_areas_edit do |area|
+  link   "#{area.name}", "/system/areas/#{area.id}/edit"
+  parent :system_areas
+end
+
+crumb :system_products do
+  link   "出品商品一覧", "/system/products/"
+  parent :system_root
+end
+
+crumb :system_products_new do
+  link   "新規登録", "/system/products/new"
+  parent :system_products
+end
+
+crumb :system_products_edit do |product|
+  link   "#{product.name}", "/system/products/#{product.id}/edit"
+  parent :system_products
+end
+
+crumb :system_bids do
+  link   "入札履歴", "/system/bids"
+  parent :system_bids_new
+end
+
+crumb :system_bids_new do
+  link   "入札", "/system/bids/new"
+  parent :system_root
+end
+
+
 #### 組合員ページ ####
 crumb :bid_root do
   link "組合員メニュー", "/bid/"
@@ -102,4 +143,14 @@ end
 crumb :bid_products_edit do |product|
   link   "#{product.name}", "/bid/products/#{product.id}/edit"
   parent :bid_products
+end
+
+crumb :bid_bids do
+  link   "入札履歴", "/bid/bids"
+  parent :bid_bids_new
+end
+
+crumb :bid_bids_new do
+  link   "入札", "/bid/bids/new"
+  parent :bid_root
 end

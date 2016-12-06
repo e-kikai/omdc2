@@ -26,12 +26,14 @@ Rails.application.routes.draw do
   get  "genre/:genre_id"             => "products#index", as: :genre
 
   get  "detail/:id"      => "products#show"
-  get  "contact/:id"     => "products#contact"
-  post "contact/:id"     => "products#contact_do"
-  get  "contact_tel/:id" => "products#contact_tel"
+  # get  "contact/:id"     => "products#contact"
+  # post "contact/:id"     => "products#contact_do"
+  # get  "contact_tel/:id" => "products#contact_tel"
 
   get  "search_by_list_no" => "products#search_by_list_no"
-  get  "search_by_ml"      => "products#search_by_ml"
+  # get  "search_by_ml"      => "products#search_by_ml"
+
+  resources :wishlist, only: [:index, :create, :destroy]
 
   namespace :system do
     root to: "main#index"
@@ -40,8 +42,30 @@ Rails.application.routes.draw do
     patch  'edit_password' => 'main#update_password'
 
     resources :opens,     except: [:show]
-    resources :companies, except: [:show]
-    resources :products,  except: [:show]
+    resources :companies, except: [:show, :delete]
+    resources :areas,     except: [:show]
+    
+    resources :products, except: [:show] do
+      collection do
+        get    :images
+      end
+
+      member do
+        post   :image_upload
+        delete ":product_image_id" => :image_destroy
+        patch  :images_order
+      end
+    end
+
+    resources :bids, except: [:show, :edit, :update] do
+      collection do
+        get :results
+        get :rakusatsu_sum
+        get :shuppin_sum
+        get :total
+        get :total_list
+      end
+    end
   end
 
   namespace :bid do
@@ -52,14 +76,24 @@ Rails.application.routes.draw do
 
     resources :products, except: [:show] do
       collection do
-        get "ml_get_genre"
-        get "imgs"
-        get "pdf_test"
+        get    :ml_get_genre
+        get    :images
+      end
+
+      member do
+        post   :image_upload
+        delete ":product_image_id" => :image_destroy
+        patch  :images_order
       end
     end
-    # get       'product/ml_get_genre' => 'products#ml_get_genre'
 
-    resources :bids, except: [:show, :edit, :update]
-    get        'bids/results' => 'bids#results'
+    resources :bids, except: [:show, :edit, :update] do
+      collection do
+        get :results
+        get :rakusatsu_sum
+        get :shuppin_sum
+        get :total
+      end
+    end
   end
 end

@@ -1,0 +1,5 @@
+- set_meta_tags title: "エリア変更"
+- breadcrumb  :system_areas_edit, @area
+
+= form_for @area, url: "/system/areas/#{@area.id}", method: :patch do |f|
+  = render "form", { f: f, area: @area }

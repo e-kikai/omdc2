@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161106101800) do
+ActiveRecord::Schema.define(version: 20161205173245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "areas", force: :cascade do |t|
+    t.string   "name"
+    t.text     "image"
+    t.integer  "order_no"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["soft_destroyed_at"], name: "index_areas_on_soft_destroyed_at", using: :btree
+  end
 
   create_table "bids", force: :cascade do |t|
     t.integer  "product_id"
@@ -113,6 +123,15 @@ ActiveRecord::Schema.define(version: 20161106101800) do
     t.index ["soft_destroyed_at"], name: "index_opens_on_soft_destroyed_at", using: :btree
   end
 
+  create_table "product_images", force: :cascade do |t|
+    t.integer  "product_id", null: false
+    t.text     "image"
+    t.integer  "order_no"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_images_on_product_id", using: :btree
+  end
+
   create_table "products", force: :cascade do |t|
     t.integer  "open_id"
     t.integer  "company_id"
@@ -127,8 +146,8 @@ ActiveRecord::Schema.define(version: 20161106101800) do
     t.integer  "min_price"
     t.text     "comment"
     t.string   "jousetus"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "soft_destroyed_at"
     t.integer  "genre_id"
     t.float    "capacity"
@@ -138,7 +157,9 @@ ActiveRecord::Schema.define(version: 20161106101800) do
     t.string   "pdfs"
     t.string   "youtube"
     t.integer  "area_id"
-    t.integer  "display",           default: 0, null: false
+    t.integer  "display",           default: 0,     null: false
+    t.text     "condition"
+    t.boolean  "hitoyama",          default: false
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
     t.index ["open_id"], name: "index_products_on_open_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at", using: :btree
