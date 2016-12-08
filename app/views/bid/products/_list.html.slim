@@ -30,7 +30,7 @@
           td = p.year
           td.num = number_to_currency(p.min_price)
           td = p.comment
-          td = p.imgs.present? ? "◯" : "☓"
+          td = p.product_images.present? ? "◯" : "☓"
           td
             - message = "#{p.name}\n\nこの出品商品を削除しますか？"
             = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do

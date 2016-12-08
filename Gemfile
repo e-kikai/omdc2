@@ -5,7 +5,8 @@ source "https://rubygems.org"
 gem 'rails', '~> 5.0'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
-gem 'pg', '~> 0.18.4'
+gem 'pg', '= 0.18.4'
+# gem 'pg', '~> 0.19.0'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -77,6 +78,7 @@ gem 'devise'
 # gem 'devise-bootstrap-views'
 gem 'devise-i18n'
 # gem 'devise-i18n-views'
+gem 'devise-encryptable'
 
 # パンくず
 gem 'gretel'

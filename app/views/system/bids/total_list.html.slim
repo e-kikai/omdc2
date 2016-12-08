@@ -1,10 +1,15 @@
 - set_meta_tags title: "集計一覧"
 - breadcrumb  :system_companies
 
-ul.nav.nav-pills
-  / = link_to "/system/companies.csv", class: "btn btn-warning" do
-  /   span.glyphicon.glyphicon-save-file
-  /   =< "エクスポート"
+= form_tag({}, method: :get) do |s|
+  ul.nav.nav-pills
+    / li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
+    /   span.glyphicon.glyphicon-print
+    /   span.btn-content PDF
+      
+    li = button_tag :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
 
 - if @companies.blank?
   div 入札情報がありませんでした
@@ -20,7 +25,7 @@ ul.nav.nav-pills
         th.num  小計
         th.num  貴社受取手数料
         th.num  差引
-        th.num  消費税(8%)
+        th.num  消費税(#{@open_now.tax}%)
         th.num.sepa 差引落札請求額
         th.num  出品支払額
         th.num  デメ半
@@ -29,7 +34,7 @@ ul.nav.nav-pills
         th.num 販売手数料
         th.num 出品手数料
         th.num 差引
-        th.num 消費税(8%)
+        th.num 消費税(#{@open_now.tax}%)
         th.sepa 差引出品支払額
         th 結果
         th.num 金額
@@ -57,6 +62,8 @@ ul.nav.nav-pills
           td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))
           td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))
           
-          td = @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:products].sum(&:seikyu) ? "支払" : "請求"
-          td.num = number_to_currency (@company_products[c.id][:products].sum(&:shiharai) - @company_products[c.id][:products].sum(&:seikyu)).abs
+          td = @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? "支払" : "請求"
+          td.num
+            - total = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
+            = number_to_currency(total)
           

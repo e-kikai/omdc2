@@ -145,6 +145,7 @@ table {
     }
 
     .required:after {
+      content: "必須";
       color: #D00;
       vertical-align: top;
       font-size: 80%;

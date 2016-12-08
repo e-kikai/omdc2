@@ -13,7 +13,7 @@
      th = f.label :list_no
      td = f.object.list_no
     tr
-      th = f.label :name
+      th = f.label :name, class: :required
       td = f.text_field :name, class: "form-control get_genre", required: "required"
       
     tr
@@ -31,11 +31,11 @@
         .help-block 一山や複数まとめて出品される場合はチェックしてください
 
     tr.form-inline
-      th = f.label :min_price
+      th = f.label :min_price, class: :required
       td = (f.number_field :min_price, class: "form-control", required: "required") + " 円"
 
     tr
-      th = label_tag :genre_id
+      th = f.label :genre_id, "ジャンル", class: :required
       td
         = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control"
         / = text_field_tag :genre, "", class: "form-control"

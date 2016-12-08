@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161205173245) do
+ActiveRecord::Schema.define(version: 20161206175627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,24 +142,20 @@ ActiveRecord::Schema.define(version: 20161205173245) do
     t.string   "model"
     t.string   "year"
     t.string   "spec"
-    t.string   "area"
     t.integer  "min_price"
     t.text     "comment"
-    t.string   "jousetus"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.datetime "soft_destroyed_at"
     t.integer  "genre_id"
-    t.float    "capacity"
     t.string   "accessory"
-    t.string   "top_img"
-    t.string   "imgs"
     t.string   "pdfs"
     t.string   "youtube"
     t.integer  "area_id"
     t.integer  "display",           default: 0,     null: false
     t.text     "condition"
     t.boolean  "hitoyama",          default: false
+    t.datetime "carryout_at"
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
     t.index ["open_id"], name: "index_products_on_open_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at", using: :btree

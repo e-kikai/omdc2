@@ -41,5 +41,5 @@
         td = p.model 
         td = p.year
         td.num = p.min_price.to_s(:delimited) + "円"
-        td = p.area == "店頭" ? "堀川機械" : p.area
-        td = p.imgs.present? ? "◯" : "☓"
+        td = p.display == "店頭出品" ? p.company.try(:name) : p.area.try(:name)
+        td = p.product_images.present? ? "◯" : "☓"

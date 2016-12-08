@@ -81,6 +81,12 @@ class System::BidsController < ApplicationController
         }
       ]
     end.to_h
+
+    respond_to do |format|
+      format.html
+      format.pdf { export_pdf }
+      format.csv { export_csv }
+    end
   end
 
   private
