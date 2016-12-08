@@ -32,6 +32,8 @@ config/database.yml
 *.bowerrc
 bower.json
 
+public/uploads
+
 # Ignore pow environment settings
 <<<<<<< HEAD
 .powenv
