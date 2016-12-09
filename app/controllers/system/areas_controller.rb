@@ -1,4 +1,4 @@
-class System::AreasController < ApplicationController
+class System::AreasController < System::ApplicationController
   before_action :get_area, only: [:edit, :update, :destroy]
 
   def index

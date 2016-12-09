@@ -1,4 +1,4 @@
-class System::BidsController < ApplicationController
+class System::BidsController < System::ApplicationController
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
   before_action :select_company_bids, extract: [:results]
