@@ -18,6 +18,7 @@
 # require jquery_nested_form
 # require bootstrap-fileinput
 #= require fixed_midashi
+#= require jquery.ui.touch-punch
 # require bootstrap-select
 #= require moment
 #= require moment/locale/ja
