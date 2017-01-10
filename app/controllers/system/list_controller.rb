@@ -69,6 +69,8 @@ class System::ListController < ApplicationController
   end
 
   def select_company_proudcuts
+    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
+
     if params[:company_id].present? && @company = Company.find_by(id: params[:company_id])
       @search   = @open_now.products.listed.where(company_id: params[:company_id]).search(params[:q])
       @products = @search.result.order(:list_no)

@@ -9,7 +9,7 @@
           .panel-body
             .form-group
               = label_tag :company_id, "会社選択"
-              = select_tag :company_id, options_for_select(@companies, params[:company_id]), prompt: "すべての商品", class: "form-control"
+              = select_tag :company_id, options_for_select(@companies), prompt: "すべての商品", class: "form-control"
               
     = button_tag :submit, name: :format, value: :pdf, class: "btn btn-default btn-square btn-submit center-block" do
       span.glyphicon.glyphicon-print

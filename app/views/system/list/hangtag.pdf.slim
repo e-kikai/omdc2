@@ -81,6 +81,6 @@ scss:
       .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=hangtag"
       / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_html.html_safe
       
-    - break if i > 500
+    / - break if i > 500
     
   
