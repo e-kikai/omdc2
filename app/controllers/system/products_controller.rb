@@ -2,7 +2,9 @@ class System::ProductsController < System::ApplicationController
   before_action :select_company_proudcuts
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
-  before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
+  before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order, :list_no, :list_no_update, :carry_out, :carry_out_update]
+
+  include Exports
 
   def index
   end
@@ -67,6 +69,43 @@ class System::ProductsController < System::ApplicationController
     end
   end
 
+  def barcodes
+
+    respond_to do |format|
+      format.html { render "barcodes.pdf.slim" }
+      format.pdf { export_pdf }
+    end
+  end
+
+  def list_no
+    @areas = Area.order(:order_no)
+  end
+
+  def list_no_update
+    if @product.update(list_no_params)
+      redirect_to "/system/products/qr_fin", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
+    else
+      render :list_no
+    end
+  end
+
+  def carry_out
+  end
+
+  def carry_out_update
+    if @product.update(carry_out_params)
+      redirect_to "/system/products/qr_fin", notice: "#{@product.list_no} : #{@product.name}の出庫を確認しました"
+    else
+      render :list_no
+    end
+  end
+
+  def qr_fin
+  end
+
+
+
+
   private
 
   def select_company_proudcuts
@@ -97,5 +136,13 @@ class System::ProductsController < System::ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+  end
+
+  def list_no_params
+    params.require(:product).permit(:list_no, :area_id)
+  end
+
+  def carry_out_params
+    params.require(:product).permit(:carryout_at)
   end
 end

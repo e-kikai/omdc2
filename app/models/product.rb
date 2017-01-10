@@ -74,6 +74,33 @@ class Product < ApplicationRecord
     else
       "error : #{res}"
     end
+  rescue => e
+    "error : #{e.message}"
+  end
+
+  def self.search_genre(product)
+    if product[:name].blank?
+      # 0. 機械名がなければ、処理をしない
+      "error : 機械名を入力して下さい"
+    elsif genre = Genre.where.not(id: 390).order(id: :desc).find_by(name: product[:name])
+      # 1. 機械名 = ジャンル名の場合、そのままジャンルにする
+      genre.id
+    elsif pr = Product.where.not(genre_id: 390).order(id: :desc).where(name: product[:name], genre: product[:genre]).first
+      # 2. 過去の機械に同じname, modelのものがあれば、そのジャンル
+      pr.genre_id
+    elsif pr = Product.where.not(genre_id: 390).order(id: :desc).find_by(name: product[:name])
+      # 3. 過去の機械に同じnameのものがあれば、そのジャンル
+      pr.genre_id
+    else
+      # Product.ml_get_genre(product)
+      390
+    end
+  rescue => e
+    "error : #{e.message}"
+  end
+
+  def set_genre
+    genre_id = Product.search_genre(self)
   end
 
   def bid?

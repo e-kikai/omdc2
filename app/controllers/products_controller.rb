@@ -22,6 +22,16 @@ class ProductsController < ApplicationController
     @pproducts = @products.page(params[:page])
   end
 
+  def qr
+    if system_signed_in? && @open_now.status == :list
+      redirect_to "/system/products/list_no/#{params[:id]}/"
+    elsif system_signed_in? && @open_now.status == :carry_out
+      redirect_to "/system/products/carry_out/#{params[:id]}/"
+    else
+      redirect_to "/detail/#{params[:id]}/"
+    end
+  end
+
   def show
   end
 

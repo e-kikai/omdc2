@@ -37,7 +37,8 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def ml_get_genre
-    @genre_id = Product.ml_get_genre(params[:product])
+    # @genre_id = Product.ml_get_genre(params[:product])
+    @genre_id = Product.search_genre(params[:product])
 
     respond_to do |format|
       format.html { render plain: @genre_id.to_s}

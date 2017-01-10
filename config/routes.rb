@@ -25,7 +25,8 @@ Rails.application.routes.draw do
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
 
-  get  "detail/:id"      => "products#show"
+  get  "detail/:id" => "products#show"
+  get  "qr/:id"     => "products#qr"
   # get  "contact/:id"     => "products#contact"
   # post "contact/:id"     => "products#contact_do"
   # get  "contact_tel/:id" => "products#contact_tel"
@@ -44,10 +45,12 @@ Rails.application.routes.draw do
     resources :opens,     except: [:show]
     resources :companies, except: [:show, :delete]
     resources :areas,     except: [:show]
-    
+
     resources :products, except: [:show] do
       collection do
-        get    :images
+        get :images
+        get :barcodes
+        get :csv
       end
 
       member do
@@ -76,8 +79,11 @@ Rails.application.routes.draw do
 
     resources :products, except: [:show] do
       collection do
-        get    :ml_get_genre
-        get    :images
+        get   :ml_get_genre
+        get   :images
+        get   :csv
+        post  :csv => :csv_upload
+        patch :csv => :csv_import
       end
 
       member do

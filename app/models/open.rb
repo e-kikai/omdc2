@@ -34,16 +34,23 @@ class Open < ApplicationRecord
     case Date.now
     when entry_start_date..entry_end_date;         :entry
     when carry_in_start_date..carry_in_end_date;   :carry_in
-    when carry_in_end_date..preview_start_date;    :list
-    when preview_start_date..preview_end_end;      :preview
+    when carry_in_end_date..bid_start_at;          :list
+    when bid_start_at..bid_end_at;                 :bid
     when carry_out_start_date..carry_out_end_date; :carry_out
     else                                           :none
     end
   end
 
-  def bid?
-    Date.now === bid_start_at..bid_end_at ? true : false
+  def display?
+    if    [:bid, :carry_out].include? status; true
+    elsif status == :list && display == true; true
+    else;                                     false
+    end
   end
+
+  # def bid?
+  #   Date.now === bid_start_at..bid_end_at ? true : false
+  # end
 
   def tax_calc(val)
     (BigDecimal(val.to_s) * BigDecimal((Float(tax) / 100).to_s)).floor

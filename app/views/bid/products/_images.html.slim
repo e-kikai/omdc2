@@ -24,7 +24,8 @@ coffee:
           
           dorpzone.files.push(mock);
           dorpzone.emit('addedfile', mock);
-          dorpzone.createThumbnailFromUrl(mock, $_data.val());
+          # dorpzone.createThumbnailFromUrl(mock, $_data.val());
+          dorpzone.emit("thumbnail", mock, $_data.val());
           dorpzone.emit('complete', mock);
           dorpzone.emit('success', mock, { id: $_data.data("id") });
           
@@ -79,10 +80,6 @@ scss:
     
     .dz-preview {
       margin: 0 8px;
-      
-      .dz-image img {
-        width: 100%;
-      }
     }
   }
   
@@ -129,6 +126,6 @@ scss:
               /     = link_to "削除", "javascript:undefined;", "data-dz-remove" => "",  id: i.id, class: "dz-remove"
               
               - p.product_images.each do |i|
-                = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.original_filename, id: i.id }, class: :dzdata
+                = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
               .fallback
                 = file_field_tag(:image)

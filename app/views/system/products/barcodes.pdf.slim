@@ -1,0 +1,66 @@
+scss:
+  .hangtag {
+    border: 1px solid #000;
+    height: 25%;
+    width: 50%;
+    float: left;
+    position: relative;
+    paggin: 0;
+    
+    .name {
+      position: absolute;
+      top: 24mm;
+      font-size: 7mm;
+      width: 100%;
+
+      text-align: center;
+    }
+    
+    .info {
+      position: absolute;
+      top: 32mm;
+      width: 100%;
+      text-align: center;
+      font-family: sans-serif;
+    }
+    
+    .list_no {
+      position: absolute;
+      font-size: 18mm;
+      left: 2mm;
+    }
+    
+    .price_label {
+      position: absolute;
+      bottom: 3mm;
+      left: 2mm;
+      font-size: 4mm;
+    }
+    
+    .min_price {
+      position: absolute;
+      bottom: 0;
+      left: 30mm;
+      font-size: 10mm;
+    }
+    
+    .qr {
+      position: absolute;
+      bottom: 13mm;
+      left: 13mm;
+    }
+  }
+
+.print-pdf
+  - @open_now.products.order(:list_no).each.with_index do |p, i|
+    .hangtag
+      .name = p.name
+      .list_no = p.list_no
+      .price_label 最低入札金額
+      .min_price = number_with_delimiter p.min_price
+      .info #{p.maker} #{p.model} #{p.year}
+      .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
+      
+    - break if i > 14
+    
+  
