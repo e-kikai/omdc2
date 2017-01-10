@@ -49,7 +49,6 @@ Rails.application.routes.draw do
     resources :products, except: [:show] do
       collection do
         get :images
-        get :barcodes
         get :csv
       end
 
@@ -69,6 +68,20 @@ Rails.application.routes.draw do
         get :total_list
       end
     end
+
+    resources :list, only: [:index] do
+      collection do
+        get :hangtag
+        get :ef
+      end
+
+      member do
+        get :qr
+        get :list_no
+        get :carry_out
+      end
+    end
+
   end
 
   namespace :bid do

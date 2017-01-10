@@ -23,7 +23,7 @@ class ProductsController < ApplicationController
   end
 
   def qr
-    if system_signed_in? && @open_now.status == :list
+    if    system_signed_in? && @open_now.status == :list
       redirect_to "/system/products/list_no/#{params[:id]}/"
     elsif system_signed_in? && @open_now.status == :carry_out
       redirect_to "/system/products/carry_out/#{params[:id]}/"

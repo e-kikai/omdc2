@@ -115,6 +115,18 @@ table {
     }
   }
 
+  &.table-striped {
+    > tbody > tr {
+      &:nth-of-type(even) {
+        background-color: #fff;
+      }
+
+      td {
+        max-width: 120px;
+      }
+    }
+  }
+
   &.total-table {
     caption {
       text-align: center;
@@ -168,32 +180,39 @@ table {
   margin-left: 4px;
 }
 
-.btn.btn-square {
-  width: 92px;
-  height: 69px;
-  text-align: center;
-  padding: 11px 0;
-  font-size: 12px;
-  color: #2B8B04;
-  border-radius: 0;
-  display: inline-block;
-  margin: 4px 4px 4px 0;
-  vertical-align: top;
+.btn {
+  &.btn-square {
+    width: 92px;
+    height: 69px;
+    text-align: center;
+    padding: 11px 0;
+    font-size: 12px;
+    color: #2B8B04;
+    border-radius: 0;
+    display: inline-block;
+    margin: 4px 4px 4px 0;
+    vertical-align: top;
 
-  span.glyphicon {
+    span.glyphicon {
+      display: block;
+      font-size: 28px;
+      vertical-align: middle;
+      margin-bottom: 5px;
+    }
+
+    &.btn-twoline {
+      padding: 6px 0;
+      line-height: 1.1;
+    }
+
+    .btn-content {
+      margin-left: 0;
+    }
+  }
+
+  &.btn-submit {
     display: block;
-    font-size: 28px;
-    vertical-align: middle;
-    margin-bottom: 5px;
-  }
-
-  &.btn-twoline {
-    padding: 6px 0;
-    line-height: 1.1;
-  }
-
-  .btn-content {
-    margin-left: 0;
+    margin: auto;
   }
 }
 

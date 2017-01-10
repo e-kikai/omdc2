@@ -69,19 +69,19 @@
 
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/bids/new", class: "btn btn-default btn-square" do
+        li = link_to "/system/list/", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-list
           span.btn-content 申込一覧
-        li = link_to "/system/bids/", class: "btn btn-default btn-square btn-twoline" do
+        li = link_to "/system/list/ef", class: "btn btn-default btn-square btn-twoline" do
           span.glyphicon.glyphicon-tags
           span.btn-content エフバーコード<br />シール印刷
         li = link_to "/", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-barcode
           span.btn-content 入庫処理
-        li = link_to "/system/bids/", class: "btn btn-default btn-square" do
+        li = link_to "/system/list/index.csv", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-download-alt
           span.btn-content リストCSV
-        li = link_to "/", class: "btn btn-default btn-square btn-twoline" do
+        li = link_to "/system/list/hangtag", class: "btn btn-default btn-square btn-twoline" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 下げ札<br />シール印刷
 

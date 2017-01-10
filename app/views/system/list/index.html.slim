@@ -1,0 +1,33 @@
+- set_meta_tags title: "申込一覧"
+- breadcrumb  :system_something, "申込一覧"
+
+.container-fluid.list-menu
+
+- if @products.blank?
+  div 商品がありませんでした
+- else
+
+  = paginate @pproducts
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th.no = sort_link @search, :list_no,     "リストNo."
+        th.no = sort_link @search, :company_no,  "会社No.: 会社名"
+        th.no = sort_link @search, :app_no,      "申込No."
+        th = sort_link @search, :genre_order_no, "商品名"
+        th = sort_link @search, :maker,          "メーカー"
+        th = sort_link @search, :model,          "型式"
+        th = sort_link @search, :year,           "年式"
+        th = sort_link @search, :min_price,      "最低入札金額"
+        th = sort_link @search, :area_order_no,  "エリア"
+      - @pproducts.each do |p|
+        tr
+          td.no = p.list_no
+          td.no #{p.company.no} : #{p.company.name} 
+          td.no = p.app_no
+          td = p.name
+          td = p.maker
+          td = p.model 
+          td = p.year
+          td.num = number_to_currency(p.min_price)
+          td = p.area_name

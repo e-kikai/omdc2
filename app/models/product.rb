@@ -32,6 +32,10 @@ class Product < ApplicationRecord
     end
   }
 
+  scope :listed, -> {
+    where.not(list_no: nil)
+  }
+
   def self.ml_get_genre(product)
     workspaces = "42c03c07608247ef802a8ff6fce5b577"
     services   = "7bde3c5e52ac486e8cd3ea0b8d0f3c4f"
@@ -101,6 +105,16 @@ class Product < ApplicationRecord
 
   def set_genre
     genre_id = Product.search_genre(self)
+  end
+
+  def area_name
+    if display == "店頭出品"
+      company.name
+    elsif area.present?
+      area.name
+    else
+      "-"
+    end
   end
 
   def bid?
@@ -179,8 +193,6 @@ class Product < ApplicationRecord
   def seikyu
     bid? ? success_bid.amount - deme_h - hanbai_fee : 0
   end
-
-
 
   private
 

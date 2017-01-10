@@ -1,4 +1,22 @@
 scss:
+  table {
+    border-width: 0;
+    border-style: none;
+    border-color: #0000ff;
+    border-collapse: collapse;
+  }
+
+  td {
+    border-left: solid 2px #000;
+    padding: 0; 
+    margin: 0; 
+    width: 0px; 
+    height: 2px; 
+  }
+
+  td.black { border-color: #000; }
+  td.white { border-color: #FFF; }
+  
   .hangtag {
     border: 1px solid #000;
     height: 25%;
@@ -52,15 +70,17 @@ scss:
   }
 
 .print-pdf
-  - @open_now.products.order(:list_no).each.with_index do |p, i|
+  - @products.each.with_index do |p, i|
     .hangtag
       .name = p.name
       .list_no = p.list_no
       .price_label 最低入札金額
       .min_price = number_with_delimiter p.min_price
       .info #{p.maker} #{p.model} #{p.year}
-      .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
+      / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
+      .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=hangtag"
+      / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_html.html_safe
       
-    - break if i > 14
+    - break if i > 500
     
   

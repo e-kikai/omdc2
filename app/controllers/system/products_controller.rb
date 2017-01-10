@@ -69,25 +69,7 @@ class System::ProductsController < System::ApplicationController
     end
   end
 
-  def barcodes
-
-    respond_to do |format|
-      format.html { render "barcodes.pdf.slim" }
-      format.pdf { export_pdf }
-    end
-  end
-
-  def list_no
-    @areas = Area.order(:order_no)
-  end
-
-  def list_no_update
-    if @product.update(list_no_params)
-      redirect_to "/system/products/qr_fin", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
-    else
-      render :list_no
-    end
-  end
+  #############################################
 
   def carry_out
   end
@@ -99,10 +81,6 @@ class System::ProductsController < System::ApplicationController
       render :list_no
     end
   end
-
-  def qr_fin
-  end
-
 
 
 
@@ -138,11 +116,4 @@ class System::ProductsController < System::ApplicationController
     params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
   end
 
-  def list_no_params
-    params.require(:product).permit(:list_no, :area_id)
-  end
-
-  def carry_out_params
-    params.require(:product).permit(:carryout_at)
-  end
 end
