@@ -1,8 +1,10 @@
 class System::ListController < ApplicationController
   before_action :select_company_proudcuts, only: [:hangtag, :ef]
-  before_action :check_open
-  before_action :check_entry_date
-  before_action :get_product, only: [:qr, :list_no, :list_no_update, :carry_out, :carry_out_update]
+  before_action :check_open, except: [:qr]
+  before_action :check_entry_date, except: [:qr]
+  before_action :get_product, only: [:list_no, :list_no_update, :carry_out, :carry_out_update]
+
+  skip_before_action :get_open_now, only: [:qr]
 
   include Exports
 
@@ -27,7 +29,7 @@ class System::ListController < ApplicationController
   end
 
   def qr
-    data = RQRCode::QRCode.new("#{root_url}qr/#{@product.id}?place=#{params[:place]}", size: 4, level: :m).as_png(
+    data = RQRCode::QRCode.new("#{root_url}qr/#{params[:id]}?place=#{params[:place]}", size: 4, level: :m).as_png(
           resize_gte_to: false,
           resize_exactly_to: false,
           fill: 'white',
@@ -72,11 +74,11 @@ class System::ListController < ApplicationController
     @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
 
     if params[:company_id].present? && @company = Company.find_by(id: params[:company_id])
-      @search   = @open_now.products.listed.where(company_id: params[:company_id]).search(params[:q])
-      @products = @search.result.order(:list_no)
+      @search   = @open_now.products.includes(:company).listed.where(company_id: params[:company_id]).search(params[:q])
+      @products = @search.result.order("companies.no", :app_no)
     else
-      @search   = @open_now.products.listed.search(params[:q])
-      @products = @search.result.order(:list_no)
+      @search   = @open_now.products.includes(:company).listed.search(params[:q])
+      @products = @search.result.order("companies.no", :app_no)
     end
   end
 

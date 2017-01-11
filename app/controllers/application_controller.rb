@@ -1,12 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action {
-    @open_now       = Open.now.first
-    if @open_now
-      @entry_products = @open_now.products
-      @products       = @open_now.products.where.not(list_no: nil)
-    end
-  }
+  before_action :get_open_now
 
   layout 'layouts/application'
 
@@ -23,6 +17,15 @@ class ApplicationController < ActionController::Base
     case resource
     when System; "/system/login"
     else         "/bid/login"
+    end
+  end
+
+  private
+
+  def get_open_now
+    @open_now = Open.now.first
+    if @open_now
+      @products = @open_now.products.listed
     end
   end
 end

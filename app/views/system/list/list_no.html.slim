@@ -1,0 +1,16 @@
+- set_meta_tags title: "下げ札PDF出力"
+- breadcrumb  :system_something, "下げ札PDF出力"
+
+.container-fluid.list-menu
+  = form_tag  "", method: :get, class: "form-inline" do
+    .row
+      .col-md-offset-3.col-md-6
+        .panel.panel-default.company_select-panel
+          .panel-body
+            .form-group
+              = label_tag :company_id, "会社選択"
+              = select_tag :company_id, options_for_select(@companies), prompt: "すべての商品", class: "form-control"
+              
+    = button_tag :submit, name: :format, value: :pdf, class: "btn btn-default btn-square btn-submit center-block" do
+      span.glyphicon.glyphicon-print
+      span.btn-content PDF出力

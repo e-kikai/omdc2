@@ -1,0 +1,32 @@
+scss:
+  .ef {
+    border: 1px solid #000;
+    height: 12.5%;
+    width: 33%;
+    float: left;
+    position: relative;
+    paggin: 0;
+    
+    .app_no {
+      position: absolute;
+      bottom: 3mm;
+      left: 3mm;
+      font-size: 6mm;
+    }
+    
+    .qr {
+      position: absolute;
+      bottom: 3mm;
+      left: 20mm;
+    }
+  }
+
+.print-pdf
+  - @products.each.with_index do |p, i|
+    .ef
+      .app_no #{p.company.no}-#{p.app_no}
+      .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
+      
+    / - break if i > 500
+    
+  

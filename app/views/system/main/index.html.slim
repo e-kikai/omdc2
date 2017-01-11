@@ -27,6 +27,8 @@
       span.glyphicon.glyphicon-log-out
       span.btn-content ログアウト
       
+  .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 2).html_safe
+      
 .col-md-7.bid-menu
   .panel.panel-default
     .panel-heading

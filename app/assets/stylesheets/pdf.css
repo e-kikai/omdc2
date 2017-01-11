@@ -1,3 +1,7 @@
 .print-pdf .num {
   text-align: right;
 }
+
+.print-pdf {
+  font-family: "VL PGothic"
+}
