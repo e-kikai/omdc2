@@ -44,6 +44,13 @@ scss:
       font-size: 10mm;
     }
     
+    .app_no {
+      position: absolute;
+      bottom: 12mm;
+      right: 7mm;
+      font-size: 5mm;
+    }
+    
     .qr {
       position: absolute;
       bottom: 13mm;
@@ -58,6 +65,7 @@ scss:
       .list_no = p.list_no
       .price_label 最低入札金額
       .min_price = number_with_delimiter p.min_price
+      .app_no = "#{p.company.no}-#{p.app_no}"
       .info #{p.maker} #{p.model} #{p.year}
       / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
       .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=hangtag"
