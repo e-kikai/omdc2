@@ -1,5 +1,6 @@
 class System::ListController < ApplicationController
-  before_action :select_company_proudcuts, only: [:hangtag, :ef]
+  before_action :select_company_proudcuts, only: [:hangtag]
+  before_action :select_company_proudcuts_ef, only: [:ef]
   before_action :check_open, except: [:qr]
   before_action :check_entry_date, except: [:qr]
   before_action :get_product, only: [:edit, :update, :carry_out_update]
@@ -101,6 +102,17 @@ class System::ListController < ApplicationController
       @search   = @open_now.products.includes(:company).listed.where(company_id: params[:company_id]).search(params[:q])
     else
       @search   = @open_now.products.includes(:company).listed.search(params[:q])
+    end
+    @products = @search.result.order("companies.no", :app_no)
+  end
+
+  def select_company_proudcuts_ef
+    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
+
+    if params[:company_id].present? && @company = Company.find_by(id: params[:company_id])
+      @search   = @open_now.products.includes(:company).where(company_id: params[:company_id]).search(params[:q])
+    else
+      @search   = @open_now.products.includes(:company).search(params[:q])
     end
     @products = @search.result.order("companies.no", :app_no)
   end
