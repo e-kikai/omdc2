@@ -24,7 +24,7 @@ class System::ListController < ApplicationController
 
   def ef
     respond_to do |format|
-      format.html { render "ef.pdf.slim" }
+      format.html
       format.pdf { export_pdf }
     end
   end
