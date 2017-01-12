@@ -36,6 +36,10 @@ class Product < ApplicationRecord
     where.not(list_no: nil)
   }
 
+  scope :max_list_no, -> {
+    maximum(:list_no) || 0
+  }
+
   def self.ml_get_genre(product)
     workspaces = "42c03c07608247ef802a8ff6fce5b577"
     services   = "7bde3c5e52ac486e8cd3ea0b8d0f3c4f"
@@ -108,13 +112,17 @@ class Product < ApplicationRecord
   end
 
   def area_name
-    if display == "店頭出品"
+    if tento?
       company.name
     elsif area.present?
       area.name
     else
       "-"
     end
+  end
+
+  def tento?
+    display == "店頭出品" ? true : false
   end
 
   def bid?

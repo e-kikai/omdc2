@@ -69,16 +69,15 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :list, only: [:index] do
+    resources :list, only: [:index, :new, :edit, :update] do
       collection do
         get :hangtag
         get :ef
+        get :carry_out
       end
 
       member do
         get :qr
-        get :list_no
-        get :carry_out
       end
     end
 

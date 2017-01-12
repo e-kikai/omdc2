@@ -27,8 +27,10 @@
       span.glyphicon.glyphicon-log-out
       span.btn-content ログアウト
       
-  .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 2).html_safe
-      
+  hr
+  h4 管理者ログイン用QRコード
+  .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 3, color: "000", fill: "FFF").html_safe
+        
 .col-md-7.bid-menu
   .panel.panel-default
     .panel-heading
@@ -77,8 +79,8 @@
         li = link_to "/system/list/ef", class: "btn btn-default btn-square btn-twoline" do
           span.glyphicon.glyphicon-tags
           span.btn-content エフバーコード<br />シール印刷
-        li = link_to "/", class: "btn btn-default btn-square" do
-          span.glyphicon.glyphicon-barcode
+        li = link_to "/system/list/new", class: "btn btn-default btn-square" do
+          span.glyphicon.glyphicon-qrcode
           span.btn-content 入庫処理
         li = link_to "/system/list/index.csv", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-download-alt
@@ -131,6 +133,6 @@
           span.glyphicon.glyphicon-print
           span.btn-content 精算表印刷
         li = link_to "/system/bids/total", class: "btn btn-default btn-square" do
-          span.glyphicon.glyphicon-barcode
-          span.btn-content 出庫処理        
+          span.glyphicon.glyphicon-qrcode
+          span.btn-content 出庫処理
           

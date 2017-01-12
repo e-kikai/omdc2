@@ -29,13 +29,15 @@ class Open < ApplicationRecord
     where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id)
   }
 
+  require 'date'
+
   # 現在の入札会の状態を取得
   def status
-    case Date.now
+    case Time.now
     when entry_start_date..entry_end_date;         :entry
     when carry_in_start_date..carry_in_end_date;   :carry_in
     when carry_in_end_date..bid_start_at;          :list
-    when bid_start_at..bid_end_at;                 :bid
+    when bid_start_at.to_datetime..bid_end_at.to_datetime; :bid
     when carry_out_start_date..carry_out_end_date; :carry_out
     else                                           :none
     end

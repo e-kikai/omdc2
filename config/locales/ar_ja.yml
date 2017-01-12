@@ -61,6 +61,7 @@ ja:
         condition: 現状
         youtube: Youtube
         hitoyama: 一山
+        area_id: エリア
       product_image:
         image: 画像ファイル
         order_no: 並び順

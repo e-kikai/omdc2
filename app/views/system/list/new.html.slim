@@ -1,0 +1,19 @@
+- set_meta_tags title: "リストNo登録"
+- breadcrumb  :system_something, "リストNo登録"
+
+.row
+= form_tag({action: :new}, method: :get) do
+    .col-md-offset-3.col-md-6
+      .form-group
+        = label_tag :company_id, "会社選択"
+        = select_tag :company_id, options_for_select(@compaies_selector, params[:company_id]), prompt: "会社を選択", class: "form-control", onchange: "this.form.submit()"
+
+- if params[:company_id].present?
+  .row
+    .col-md-offset-3.col-md-6
+      .form-group
+        - if @products_selector.present?
+          = label_tag :id, "申込No."
+          = select_tag :id, options_for_select(@products_selector), prompt: "商品を選択", class: "form-control", onchange: "location.href='/system/list/' + $(this).val() + '/edit';"
+        - else
+          . この会社の商品は登録されていません

@@ -25,7 +25,7 @@
           td.no = p.list_no
           td.no #{p.company.no} : #{p.company.name} 
           td.no = p.app_no
-          td = p.name
+          td = link_to p.name, "/system/list/#{p.id}/edit"
           td = p.maker
           td = p.model 
           td = p.year
