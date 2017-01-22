@@ -42,10 +42,21 @@
           tr
             th 現状
             td = simple_format(@product.condition)
-    .form-group
-      = button_tag class: "btn btn-primary btn-lg" do
-        span.glyphicon.glyphicon-bookmark
-        =< "ウィッシュリストに追加"
+    .form-group id="wishlist_#{@product.id}"
+      - if Array(session[:wishlist]).include? @product.id
+        = link_to "/wishlist/", params: { id: @product.id }, method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create", style: "display:none;" do
+          span.glyphicon.glyphicon-bookmark
+          =< "ウィッシュリストに追加"
+        = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete" do
+          span.glyphicon.glyphicon-remove
+          =< "ウィッシュリストから削除"
+      - else
+        = button_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
+          span.glyphicon.glyphicon-bookmark
+          =< "ウィッシュリストに追加"
+        = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete", style: "display:none;" do
+          span.glyphicon.glyphicon-remove
+          =< "ウィッシュリストから削除"
         
     h4 商品に関する問い合わせについて
     .contact-info 商品に関する問い合わせは、入札を依頼される商社へお問い合せ下さい

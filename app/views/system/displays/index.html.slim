@@ -1,0 +1,21 @@
+- set_meta_tags title: "表示設定"
+- breadcrumb  :system_something, "表示設定"
+
+.container-fluid.list-menu
+
+- if @displays.blank?
+  div 表示設定がありませんでした
+- else
+  .col-md-offset-2.col-md-8
+    table.table.table-striped.table-hover.table-condensed
+      tr
+        th タイトル
+        th 表示設定
+      - @displays.each do |d|
+        tr
+          td = d.title
+          td
+            = form_for d, url: "/system/displays/#{d.id}", method: :patch, remote: true do |f|
+              = hidden_field_tag "authenticity_token", form_authenticity_token
+              label.radio-inline = f.radio_button(:display, false, inline: true, onchange: "this.form.submit()") + "非表示"
+              label.radio-inline = f.radio_button(:display, true, inline: true, onchange: "this.form.submit()") + "表示する"

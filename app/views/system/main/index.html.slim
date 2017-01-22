@@ -13,9 +13,9 @@
       span.glyphicon.glyphicon-map-marker
       span.btn-content エリア管理
 
-    li = link_to "/system/infos/", class: "btn btn-default btn-square" do
+    li = link_to "/system/displays/", class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-info-sign
-      span.btn-content 表示設定
+      span.btn-content 表示管理
     li = link_to "/system/infos/", class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-info-sign
       span.btn-content お知らせ一覧
@@ -29,7 +29,9 @@
       
   hr
   h4 管理者ログイン用QRコード
-  .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 3, color: "000", fill: "FFF").html_safe
+  / .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 3, color: "000", fill: "FFF").html_safe
+  / .qr = image_tag "#{root_url}qrcode.png?url=#{root_url}system/"
+  .qr = image_tag System.qrcode("#{root_url}system/")
         
 .col-md-7.bid-menu
   .panel.panel-default
@@ -82,7 +84,7 @@
         li = link_to "/system/list/new", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-qrcode
           span.btn-content 入庫処理
-        li = link_to "/system/list/index.csv", class: "btn btn-default btn-square" do
+        li = link_to "/system/list.csv", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-download-alt
           span.btn-content リストCSV
         li = link_to "/system/list/hangtag", class: "btn btn-default btn-square btn-twoline" do

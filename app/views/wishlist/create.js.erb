@@ -1,0 +1,8 @@
+$('.wishlist-create').hide();
+$('.wishlist-delete').show();
+
+$('<%= render "wishmodal", contents: "ウィッシュリストに登録しました" %>').modal('show');
+setTimeout(function() {
+  $('#wishmodal').modal('hide');
+  setTimeout(function() { $(".modal").remove(); }, 1000);
+}, 1500);

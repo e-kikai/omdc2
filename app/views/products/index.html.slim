@@ -11,7 +11,8 @@
   / = link_to "/system/companies.csv", class: "btn btn-warning" do
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
-.
+    
+.row
   = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |f|
     = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
     .form-group
@@ -41,5 +42,5 @@
         td = p.model 
         td = p.year
         td.num = p.min_price.to_s(:delimited) + "円"
-        td = p.display == "店頭出品" ? p.company.try(:name) : p.area.try(:name)
+        td = p.area_name
         td = p.product_images.present? ? "◯" : "☓"

@@ -12,9 +12,9 @@ class Bid < ApplicationRecord
 
   has_one    :success_bid, -> { successes }, class_name: Bid, through: :product
 
-  validate  :validate_amount
   validates :amount,      presence: true, numericality: { only_integer: true }
-
+  validate  :validate_amount
+  
   scope :successes, -> { order(amount: :desc, sameno: :desc, id: :asc) }
 
   def self.success_products
@@ -28,7 +28,7 @@ class Bid < ApplicationRecord
   private
 
   def validate_amount
-    errors[:amount] << ("入札金額が#{open.rate}円単位ではありません")          if amount % open.rate > 0
-    errors[:amount] << ("入札金額が#{product.min_price}円未満になっています")  if amount < product.min_price
+    errors[:amount] << ("入札金額が#{open.rate.to_s(:delimited)}円単位ではありません")          if amount.to_i % open.rate > 0
+    errors[:amount] << ("入札金額が#{product.min_price.to_s(:delimited)}円未満になっています")  if amount.to_i < product.min_price
   end
 end

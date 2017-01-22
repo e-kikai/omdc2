@@ -38,6 +38,25 @@ class System::ProductsController < System::ApplicationController
     redirect_to "/system/products/", notice: "#{@product.name}を削除しました"
   end
 
+  def csv
+  end
+
+  def csv_upload
+    redirect_to "/system/products/csv", alert: 'CSVファイルを選択してください' if params[:file].blank?
+
+    @res = @products.import_conf(params[:file])
+    redirect_to "/system/products/csv", alert: '商品情報がありませんでした' if @res.length == 0
+  end
+
+  def csv_import
+    num = csv_products_params.length
+
+    redirect_to "/system/products/csv", alert: '一括登録する商品がありません' if num == 0
+
+    @products.import(csv_products_params)
+    redirect_to("/system/products/", notice: "#{num.to_s}件の商品を一括登録しました")
+  end
+
   def images
     @products = @products.includes(:product_images)
   end
@@ -82,8 +101,6 @@ class System::ProductsController < System::ApplicationController
     end
   end
 
-
-
   private
 
   def select_company_proudcuts
@@ -114,6 +131,10 @@ class System::ProductsController < System::ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+  end
+
+  def csv_products_params
+    params.require(:products).map { |p| p.permit(:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)}
   end
 
 end

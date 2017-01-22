@@ -3,6 +3,9 @@
 .col-md-5
   div = current_company.name
   = render "/main/openinfo", open: @open_now
+  
+  hr
+  .infos = simple_format Info.comment(:bid)
 
   hr
   ul.nav.nav-pills

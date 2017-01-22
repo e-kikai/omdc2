@@ -10,4 +10,16 @@ class System < ApplicationRecord
 
   validates :name,                 presence: true
 
+  def self.qrcode(url)
+    RQRCode::QRCode.new(url, size: 4, level: :l).as_png(
+      resize_gte_to: false,
+      resize_exactly_to: false,
+      fill: 'white',
+      color: 'black',
+      size: 70,
+      border_modules: 0,
+      module_px_size: 2,
+      file: nil # path to write
+    ).to_data_url
+  end
 end

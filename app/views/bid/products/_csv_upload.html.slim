@@ -1,0 +1,47 @@
+.help-block
+  . エラーがある商品は登録されません
+          
+= form_tag({action: :csv_import}, method: :patch, class: 'form-horizontal') do
+  / = render "/bid/products/csv"
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1;cols:1'
+      tr
+        th 商品名
+        th エラー
+        th メーカー
+        th 型式
+        th 一山
+        th ジャンル
+        th 最低入札金額
+        th 年式
+        th 仕様
+        th 現状
+        th 備考欄
+        th 出品区分
+        th youtube
+
+      - @res.each do |p|
+        tr
+          td = p.name
+          td
+            - p.errors.full_messages.each do |msg|
+              li = msg
+          td = p.maker
+          td = p.model 
+          td = p.hitoyama ? "◯" : "☓"
+          td = p.genre.name
+          td.num = number_to_currency(p.min_price)
+          td = p.year
+          td = simple_format(p.spec)
+          td = simple_format(p.condition)
+          td = p.comment
+          td = p.display
+          td = p.youtube
+          
+        - if p.errors.blank?
+          - [:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama].each do |k|
+            = hidden_field_tag "products[][#{k}]", p[k]
+    
+    = button_tag(data: { "disable-with" => "保存..."}, class: "btn btn-default btn-square btn-submit center-block") do
+      span.glyphicon.glyphicon-save
+      =< "一括登録"

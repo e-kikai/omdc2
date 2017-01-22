@@ -1,0 +1,18 @@
+- set_meta_tags title: "お知らせ管理"
+- breadcrumb  :system_something, "お知らせ管理"
+
+.container-fluid.list-menu
+
+- if @infos.blank?
+  div お知らせ情報がありませんでした
+- else
+  .col-md-offset-2.col-md-8
+    table.table.table-striped.table-hover.table-condensed
+      tr
+        th タイトル
+        th 内容
+        th
+      - @infos.each do |i|
+        tr
+          td = link_to i.title, "/system/infos/#{i.id}/edit"
+          td style="width:60%;" = simple_format(i.comment)

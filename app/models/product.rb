@@ -17,9 +17,11 @@ class Product < ApplicationRecord
 
   enum display: { "一般出品" => 0, "常設コマ" => 10, "単品預り" => 20, "店頭出品" => 30 }
 
-  validate  :check_min_price_to_open
   validates :name,      presence: true
-  validates :min_price, presence: true, numericality: { only_integer: true }
+  validates :min_price, presence: true
+  validates :min_price, numericality: { only_integer: true }
+
+  validate  :check_min_price_to_open
 
   before_create :set_app_no
 
@@ -108,16 +110,15 @@ class Product < ApplicationRecord
   end
 
   def set_genre
-    genre_id = Product.search_genre(self)
+    self.genre_id = Product.search_genre(self)
+    self
   end
 
   def area_name
-    if tento?
-      company.name
-    elsif area.present?
-      area.name
-    else
-      "-"
+    case
+    when tento?;        company.name
+    when area.present?; area.name
+    else;               "-"
     end
   end
 
@@ -202,11 +203,39 @@ class Product < ApplicationRecord
     bid? ? success_bid.amount - deme_h - hanbai_fee : 0
   end
 
+  def self.import_conf(file)
+    res = []
+    CSV.foreach(file.path, { :headers => true, encoding: Encoding::SJIS }) do |row|
+      product = new(
+        name:      row[0],
+        maker:     row[1],
+        model:     row[2],
+        hitoyama:  row[3].present?,
+        min_price: row[4],
+        year:      row[5],
+        spec:      row[6],
+        condition: row[7],
+        comment:   row[8],
+        display:   row[9] || 0,
+        youtube:   row[10],
+      )
+      product.set_genre
+      product.valid?
+      res << product
+    end
+
+    res
+ end
+
+ def self.import(products)
+   products.each { |p| create(p) }
+ end
+
   private
 
   def check_min_price_to_open
-    errors[:min_price] << ("最低入札金額が#{open.rate}円単位ではありません")         if min_price % open.rate > 0
-    errors[:min_price] << ("最低入札金額が#{open.lower_price}円未満になっています")  if min_price < open.lower_price
+    errors[:min_price] << ("が#{open.rate.to_s(:delimited)}円単位ではありません")         if min_price.to_i % open.rate > 0
+    errors[:min_price] << ("が#{open.lower_price.to_s(:delimited)}円未満になっています")  if min_price.to_i < open.lower_price
   end
 
   def set_app_no

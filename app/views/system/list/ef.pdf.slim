@@ -23,10 +23,17 @@ scss:
   }
 
 .print-pdf
-  - @products.each.with_index do |p, i|
-    .ef
-      .app_no #{p.company.no}-#{p.app_no}
-      .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
+  - params[:num].to_i.times.each do |n|
+    - (1..24).each do |m|
+      .ef
+        .app_no #{@company.no}-#{n*24+m}
+        / .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
+        .qr = image_tag System.qrcode("#{root_url}qr?company_no=#{@company.no}&app_no=#{n*24+m}&place=ef")
+
+  / - @products.each.with_index do |p, i|
+  /   .ef
+  /     .app_no #{p.company.no}-#{p.app_no}
+  /     .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
       
     / - break if i > 500
     

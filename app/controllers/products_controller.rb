@@ -28,6 +28,8 @@ class ProductsController < ApplicationController
     # elsif system_signed_in? && @open_now.status == :carry_out
     #   redirect_to "/system/carry_out/#{params[:id]}/edit"
 
+    
+
     if system_signed_in?
       redirect_to "/system/list/#{params[:id]}/edit"
     else

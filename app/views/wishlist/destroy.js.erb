@@ -1,0 +1,10 @@
+$('.wishlist-create').show();
+$('#wishlist_<%= params[:id] %> .wishlist-delete').hide();
+
+$('<%= render "wishmodal", contents: "ウィッシュリストから削除しました" %>').modal('show');
+$('tr#wishlist_<%= params[:id] %>').remove();
+
+setTimeout(function() {
+  $('#wishmodal').modal('hide');
+  setTimeout(function() { $(".modal").remove(); }, 1000);
+}, 1500);

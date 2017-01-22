@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :system do
+    get 'displays/index'
+  end
+
   devise_for :systems,
     # controllers: { sessions: 'bamembers/sessions', },
     path:       'system',
@@ -16,6 +20,7 @@ Rails.application.routes.draw do
   root to: "main#index"
 
   get "mltest" => "main#get_ml_genre"
+  get "qrcode" => "main#qrcode"
 
   # resources :products, except: [:new, :create, :edit, :update, :destroy]
 
@@ -45,11 +50,15 @@ Rails.application.routes.draw do
     resources :opens,     except: [:show]
     resources :companies, except: [:show, :delete]
     resources :areas,     except: [:show]
+    resources :infos,     only: [:index, :edit, :update]
+    resources :displays,  only: [:index, :edit, :update]
 
     resources :products, except: [:show] do
       collection do
-        get :images
-        get :csv
+        get   :images
+        get   :csv
+        post  "csv" => :csv_upload
+        patch "csv" => :csv_import
       end
 
       member do
@@ -74,9 +83,6 @@ Rails.application.routes.draw do
         get :hangtag
         get :ef
         get :carry_out
-      end
-
-      member do
         get :qr
       end
     end
@@ -89,13 +95,16 @@ Rails.application.routes.draw do
     get    'edit_password' => 'main#edit_password'
     patch  'edit_password' => 'main#update_password'
 
+    get   'rule' => 'main#rule'
+    patch 'rule' => 'main#rule_update'
+
     resources :products, except: [:show] do
       collection do
         get   :ml_get_genre
         get   :images
         get   :csv
-        post  :csv => :csv_upload
-        patch :csv => :csv_import
+        post  "csv" => :csv_upload
+        patch "csv" => :csv_import
       end
 
       member do

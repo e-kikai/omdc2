@@ -1,49 +1,54 @@
 class System::ListController < ApplicationController
-  before_action :select_company_proudcuts, only: [:hangtag]
-  before_action :select_company_proudcuts_ef, only: [:ef]
-  before_action :check_open, except: [:qr]
-  before_action :check_entry_date, except: [:qr]
+  # before_action :select_company_proudcuts, only: [:hangtag]
+  # before_action :select_company_proudcuts_ef, only: [:ef]
+  before_action :get_companies_selector, only: [:hangtag, :ef]
+  before_action :check_open
+  before_action :check_entry_date
   before_action :get_product, only: [:edit, :update, :carry_out_update]
   before_action :get_selectors, only: [:new, :edit]
-
-  skip_before_action :get_open_now, only: [:qr]
 
   include Exports
 
   def index
-    @search    = @open_now.products.search(params[:q])
+    @search    = @open_now.products.includes(:company, :area).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.csv {
+        @products  = @products.listed
+        export_csv
+      }
+    end
   end
 
   def hangtag
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
+      format.pdf {
+        if @company = Company.find_by(id: params[:company_id])
+          @search   = @open_now.products.includes(:company).listed.where(company_id: params[:company_id]).search(params[:q])
+        else
+          # redirect_to({format: :html}, alert: "会社を選択して下さい")
+          @search   = @open_now.products.includes(:company).listed.search(params[:q])
+        end
+        @products = @search.result.order("companies.no", :app_no)
+        export_pdf
+      }
     end
   end
 
   def ef
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
-    end
-  end
-
-  def qr
-    data = RQRCode::QRCode.new("#{root_url}qr/#{params[:id]}?place=#{params[:place]}", size: 4, level: :m).as_png(
-          resize_gte_to: false,
-          resize_exactly_to: false,
-          fill: 'white',
-          color: 'black',
-          size: 70,
-          border_modules: 0,
-          module_px_size: 2,
-          file: nil # path to write
-          )
-
-    respond_to do |format|
-      format.png { send_data data, type: "image/png", disposition: 'inline' }
+      format.pdf {
+        if @company = Company.find_by(id: params[:company_id])
+          export_pdf
+        else
+          redirect_to({format: :html}, alert: "会社を選択して下さい")
+        end
+      }
     end
   end
 
@@ -95,34 +100,16 @@ class System::ListController < ApplicationController
     redirect_to "/system/", alert: "現在、出品期間ではありません" unless @open_now
   end
 
-  def select_company_proudcuts
-    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
-
-    if params[:company_id].present? && @company = Company.find_by(id: params[:company_id])
-      @search   = @open_now.products.includes(:company).listed.where(company_id: params[:company_id]).search(params[:q])
-    else
-      @search   = @open_now.products.includes(:company).listed.search(params[:q])
-    end
-    @products = @search.result.order("companies.no", :app_no)
-  end
-
-  def select_company_proudcuts_ef
-    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
-
-    if params[:company_id].present? && @company = Company.find_by(id: params[:company_id])
-      @search   = @open_now.products.includes(:company).where(company_id: params[:company_id]).search(params[:q])
-    else
-      @search   = @open_now.products.includes(:company).search(params[:q])
-    end
-    @products = @search.result.order("companies.no", :app_no)
-  end
-
   def get_product
     @product = @open_now.products.find(params[:id])
   end
 
-  def get_selectors
+  def get_companies_selector
     @compaies_selector = Company.order(:no).pluck("no || ' : ' || name", :id)
+  end
+
+  def get_selectors
+    get_companies_selector
     @areas_selector    = Area.order(:order_no).pluck(:name, :id)
   end
 

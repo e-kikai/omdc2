@@ -1,0 +1,23 @@
+- set_meta_tags title: "お知らせ #{@info.title} 変更"
+- breadcrumb  :system_something, "#{@info.title} 変更"
+
+= form_for @info, url: "/system/infos/#{@info.id}", method: :patch do |f|
+  .row
+    .col-md-offset-2.col-md-8
+      - if f.object.errors.full_messages.present?
+        .alert.alert-danger
+          ul
+            - f.object.errors.full_messages.each do |msg|
+              li = msg
+
+      table.table.table-hover.table-condensed.form-table
+        tr
+          th タイトル
+          td = @info.title
+        tr
+          th = f.label :comment
+          td = f.text_area :comment, class: "form-control"
+        
+  = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
+    span.glyphicon.glyphicon-save
+    span.btn-content 保存

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206175627) do
+ActiveRecord::Schema.define(version: 20170122073515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,17 @@ ActiveRecord::Schema.define(version: 20161206175627) do
     t.index ["soft_destroyed_at"], name: "index_companies_on_soft_destroyed_at", using: :btree
   end
 
+  create_table "displays", force: :cascade do |t|
+    t.string   "label"
+    t.string   "title"
+    t.boolean  "display",           default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["label"], name: "index_displays_on_label", using: :btree
+    t.index ["soft_destroyed_at"], name: "index_displays_on_soft_destroyed_at", using: :btree
+  end
+
   create_table "genres", force: :cascade do |t|
     t.string   "name"
     t.integer  "order_no"
@@ -84,6 +95,17 @@ ActiveRecord::Schema.define(version: 20161206175627) do
     t.datetime "soft_destroyed_at"
     t.index ["large_genre_id"], name: "index_genres_on_large_genre_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_genres_on_soft_destroyed_at", using: :btree
+  end
+
+  create_table "infos", force: :cascade do |t|
+    t.string   "label"
+    t.string   "title"
+    t.text     "comment"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["label"], name: "index_infos_on_label", using: :btree
+    t.index ["soft_destroyed_at"], name: "index_infos_on_soft_destroyed_at", using: :btree
   end
 
   create_table "large_genres", force: :cascade do |t|

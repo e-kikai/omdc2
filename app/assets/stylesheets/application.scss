@@ -243,6 +243,7 @@ label.required abbr {
 
 .company_select-panel .panel-body {
   background-color: #FFEFD5;
+  padding: 8px 15px;
 
   label {
     width: 120px;
@@ -251,4 +252,13 @@ label.required abbr {
   select {
     width: 300px;
   }
+}
+
+.fileinput-upload-button {
+  display: none;
+}
+
+.infos {
+  background: #FFF;
+  padding: 8px;
 }

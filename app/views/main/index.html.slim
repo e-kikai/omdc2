@@ -11,6 +11,9 @@
       tr
         th 搬出期間
         td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.strftime('%m/%d')}
+        
+    hr
+    .infos = simple_format Info.comment(:toppage)
   
   .col-md-offset-2.col-md-8
     .

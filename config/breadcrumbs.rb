@@ -109,6 +109,16 @@ crumb :system_products_edit do |product|
   parent :system_products
 end
 
+crumb :system_products_csv do
+  link   "CSV一括登録", "/system/products/csv"
+  parent :system_products
+end
+
+crumb :system_products_csv_upload do
+  link   "登録確認", "/system/products/csv"
+  parent :system_products_csv
+end
+
 crumb :system_bids do
   link   "入札履歴", "/system/bids"
   parent :system_bids_new
@@ -143,6 +153,17 @@ end
 crumb :bid_products_edit do |product|
   link   "#{product.name}", "/bid/products/#{product.id}/edit"
   parent :bid_products
+end
+
+crumb :bid_products_csv do
+  link   "CSV一括登録", "/bid/products/csv"
+  parent :bid_products
+end
+
+
+crumb :bid_products_csv_upload do
+  link   "登録確認", "/bid/products/csv"
+  parent :bid_products_csv
 end
 
 crumb :bid_bids do

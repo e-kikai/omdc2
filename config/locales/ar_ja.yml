@@ -11,6 +11,8 @@ ja:
       large_genre: 中ジャンル
       xl_genre: 大ジャンル
       area: エリア
+      info: お知らせ
+      display: 表示設定
     attributes:
       open:
         name:  入札会名
@@ -61,7 +63,7 @@ ja:
         condition: 現状
         youtube: Youtube
         hitoyama: 一山
-        area_id: エリア
+        area_id: 出品エリア
       product_image:
         image: 画像ファイル
         order_no: 並び順
@@ -76,3 +78,9 @@ ja:
         name: エリア名
         image: 画像
         order_no: 並び順
+      info:
+        title: タイトル
+        comment: 内容
+      display:
+        title: タイトル
+        display: 表示

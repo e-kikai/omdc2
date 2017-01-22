@@ -1,0 +1,5 @@
+- set_meta_tags title: "出品商品 CSV一括登録"
+- breadcrumb  :bid_products_csv
+
+= form_tag({action: :csv_upload}, multipart: true, method: :post, class: 'form-horizontal') do
+  = render "csv"

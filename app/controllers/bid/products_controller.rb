@@ -46,6 +46,25 @@ class Bid::ProductsController < Bid::ApplicationController
     end
   end
 
+  def csv
+  end
+
+  def csv_upload
+    redirect_to "/bid/products/csv", alert: 'CSVファイルを選択してください' if params[:file].blank?
+
+    @res = @products.import_conf(params[:file])
+    redirect_to "/bid/products/csv", alert: '商品情報がありませんでした' if @res.length == 0
+  end
+
+  def csv_import
+    num = csv_products_params.length
+
+    redirect_to "/bid/products/csv", alert: '一括登録する商品がありません' if num == 0
+
+    @products.import(csv_products_params)
+    redirect_to("/bid/products/", notice: "#{num.to_s}件の商品を一括登録しました")
+  end
+
   def images
     @products = @products.includes(:product_images)
   end
@@ -98,5 +117,9 @@ class Bid::ProductsController < Bid::ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+  end
+
+  def csv_products_params
+    params.require(:products).map { |p| p.permit(:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)}
   end
 end
