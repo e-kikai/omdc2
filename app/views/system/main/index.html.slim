@@ -115,7 +115,7 @@
       span.glyphicon.glyphicon-flag: span.menu-title 入札終了後
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/bids/results", class: "btn btn-default btn-square" do
+        li = link_to "/system/opens/#{@open_now.id}", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-list
           span.btn-content 落札結果一覧
         li = link_to "/system/bids/rakusatsu_sum", class: "btn btn-default btn-square" do

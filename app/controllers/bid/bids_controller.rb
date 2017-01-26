@@ -1,6 +1,6 @@
 class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
-  before_action :check_entry_date, extract: [:index]
+  before_action :check_entry, extract: [:index]
   before_action :bids
 
   include Exports
@@ -66,10 +66,6 @@ class Bid::BidsController < Bid::ApplicationController
 
   def check_open
     redirect_to "/bid/", notice: "現在、開催されている入札会はありません" unless @open_now
-  end
-
-  def check_entry_date
-    redirect_to "/bid/", notice: "現在、入札期間ではありません" unless @open_now
   end
 
   def bids

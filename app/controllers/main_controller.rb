@@ -1,5 +1,5 @@
 class MainController < ApplicationController
-  skip_before_action :get_open_now, only: [:qrcode]
+  # skip_before_action :get_open_now, only: [:qrcode]
 
   def index
     if @open_now

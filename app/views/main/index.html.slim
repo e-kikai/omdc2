@@ -1,144 +1,76 @@
 - if @open_now.present?
-  .col-md-offset-3.col-md-6
-    h4 = @open_now.name
-    table.table.table-condensed.info-table 
-      tr
-        th 下見期間
-        td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.strftime('%m/%d')}
-      tr
-        th 入札期間
-        td #{@open_now.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.strftime('%Y/%m/%d %H:%M')}
-      tr
-        th 搬出期間
-        td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.strftime('%m/%d')}
-        
-    hr
-    .infos = simple_format Info.comment(:toppage)
+  .row
+    .col-md-offset-3.col-md-6
+      h4 = @open_now.name
+      table.table.table-condensed.info-table 
+        tr
+          th 下見期間
+          td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.strftime('%m/%d')}
+        tr
+          th 入札期間
+          td #{@open_now.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.strftime('%Y/%m/%d %H:%M')}
+        tr
+          th 搬出期間
+          td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.strftime('%m/%d')}
+          
+      .infos = simple_format Info.comment(:toppage)
+      hr
   
-  .col-md-offset-2.col-md-8
-    .
-      = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
-        = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
-        .input-group
-          = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
-          span.input-group-btn
-            = button_tag type: :submit, class: "btn btn-default" do
-              .glyphicon.glyphicon-search
-              span.btn-content 検索
-        
-    .
-      = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
-        = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
-        = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
-        = " 〜 "
-        .input-group
-          = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
-          span.input-group-btn
-            = button_tag type: :submit, class: "btn btn-default" do
-              .glyphicon.glyphicon-search
-              span.btn-content 検索
-        
-    .
-      = form_tag "/search", method: :get, class: "form-inline" do
-        = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
-        .input-group
-          = text_field_tag :keywords, params[:keywords], placeholder: "商品名", class: "form-control"
-          span.input-group-btn
-            = button_tag type: :submit, class: "btn btn-default" do
-              .glyphicon.glyphicon-search
-              span.btn-content 検索
+  - if @open_now.display?
+    .col-md-offset-2.col-md-8
+      .
+        = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
+          = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
+          .input-group
+            = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
+            span.input-group-btn
+              = button_tag type: :submit, class: "btn btn-default" do
+                .glyphicon.glyphicon-search
+                span.btn-content 検索
+          
+      .
+        = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
+          = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
+          = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+          = " 〜 "
+          .input-group
+            = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+            span.input-group-btn
+              = button_tag type: :submit, class: "btn btn-default" do
+                .glyphicon.glyphicon-search
+                span.btn-content 検索
+          
+      .
+        = form_tag "/search", method: :get, class: "form-inline" do
+          = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
+          .input-group
+            = text_field_tag :keywords, params[:keywords], placeholder: "商品名", class: "form-control"
+            span.input-group-btn
+              = button_tag type: :submit, class: "btn btn-default" do
+                .glyphicon.glyphicon-search
+                span.btn-content 検索
 
-        
-  .col-md-offset-1.col-md-10
-    h4 ◆ ジャンルからさがす
+          
+    .col-md-offset-1.col-md-10
+      h4 ◆ ジャンルからさがす
+      .row
+        - @all_xl_counts.each do |x, v|
+          .col-sm-6.col-md-3
+            .panel.panel-default
+              .list-group style="height:200px;overflow:auto;"
+                  = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
+                    = x[1]
+                    .badge.pull-right = v
+                  - @all_large_counts.each do |l, v2|
+                    - if l[1] == x[0]
+                      = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
+                        = l[2]
+                        .badge.pull-right = v2
+  - else
     .row
-      - @all_xl_counts.each do |x, v|
-        / col-sm-6.col-md-3.dropdown
-          / .thumbnail.dropdown-toggle data-toggle="dropdown"
-          /   h4
-          /     = x[1]
-          /     .badge.pull-right = v
-          /   = image_tag "http://www.zenkiren.net/media/machine/f_20160824180900_0.jpg", style: "width:100%;"
-          / ul.dropdown-menu
-          /   - @all_large_counts.each do |l, v2|
-          /     - if l[1] == x[0]
-          /       li = link_to "/large_genre/#{l[0]}" do
-          /         = l[2]
-          /         .badge.pull-right = v2
-          /   li.divider
-          /   li = link_to "すべての#{x[1]}", "/xl_genre/#{x[0]}"
-        .col-sm-6.col-md-3
-          .panel.panel-default
-            .list-group style="height:200px;overflow:auto;"
-                = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
-                  = x[1]
-                  .badge.pull-right = v
-                - @all_large_counts.each do |l, v2|
-                  - if l[1] == x[0]
-                    = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
-                      = l[2]
-                      .badge.pull-right = v2
-
-    / ul.nav.nav-tabs
-    /   li.active = link_to "すべて", "#all", data: {toggle: :tab}
-    /   li = link_to "第1展示場 1F", "#t1f1", data: {toggle: :tab}
-    /   li = link_to "第1展示場 2F", "#t1f2", data: {toggle: :tab}
-    /   li = link_to "第2展示場", "#t2", data: {toggle: :tab}
-    /   li = link_to "屋外", "#out", data: {toggle: :tab}
-    /   li = link_to "店頭", "#shop", data: {toggle: :tab}
-    / .tab-content
-    /   .tab-pane.active#all
-    /     - @all_xl_counts.each do |x, v|
-    /       li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}"
-    /       ul
-    /         - @all_large_counts.each do |l, v2|
-    /           - if l[1] == x[0]
-    /             li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}"
-    /   .tab-pane#t1f1
-    /     - @xl_counts.each do |x, v|
-    /       - if x[2] == "第1展示場 1F"
-    /         li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}/ar/#{x[2]}"
-    /         ul
-    /           - @large_counts.each do |l, v2|
-    /             - if l[3] == "第1展示場 1F" && l[1] == x[0]
-    /               li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}/ar/#{l[3]}"
-    / 
-    /   .tab-pane#t1f2
-    /     - @xl_counts.each do |x, v|
-    /       - if x[2] == "第1展示場 2F"
-    /         li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}/ar/#{x[2]}"
-    /         ul
-    /           - @large_counts.each do |l, v2|
-    /             - if l[3] == "第1展示場 2F" && l[1] == x[0]
-    /               li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}/ar/#{l[3]}"
-    / 
-    /   .tab-pane#t2
-    /     - @xl_counts.each do |x, v|
-    /       - if x[2] == "第2展示場"
-    /         li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}/ar/#{x[2]}"
-    /         ul
-    /           - @large_counts.each do |l, v2|
-    /             - if l[3] == "第2展示場" && l[1] == x[0]
-    /               li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}/ar/#{l[3]}"
-    / 
-    /   .tab-pane#out
-    /     - @xl_counts.each do |x, v|
-    /       - if x[2] == "屋外"
-    /         li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}/ar/#{x[2]}"
-    /         ul
-    /           - @large_counts.each do |l, v2|
-    /             - if l[3] == "屋外" && l[1] == x[0]
-    /               li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}/ar/#{l[3]}"
-    / 
-    /   .tab-pane#shop
-    /     - @xl_counts.each do |x, v|
-    /       - if x[2] == "店頭"
-    /         li = link_to "#{x[1]} (#{v})", "/search/x/#{x[0]}/ar/#{x[2]}"
-    /         ul
-    /           - @large_counts.each do |l, v2|
-    /             - if l[3] == "店頭" && l[1] == x[0]
-    /               li = link_to "#{l[2]} (#{v2})", "/search/l/#{l[0]}/ar/#{l[3]}"
-
+      .alert.alert-success
+        span.glyphicon.glyphicon-info-sign
+        =< "出品商品の検索は、下見期間までしばらくお待ち下さい (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
 - else
   .alert.alert-success
     span.glyphicon.glyphicon-info-sign

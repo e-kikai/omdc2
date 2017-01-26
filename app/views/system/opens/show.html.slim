@@ -1,0 +1,43 @@
+- set_meta_tags title: "#{@open.name} 落札結果一覧"
+- breadcrumb  :system_opens_show, @open
+
+- if @pproducts.blank?
+  div 入札がありませんでした
+- else
+  = search_form_for @search, url: "/system/opens/#{@open.id}" do |s|
+    ul.nav.nav-pills
+      li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+        span.glyphicon.glyphicon-download-alt
+        span.btn-content CSV出力
+    
+  = paginate @pproducts
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      tr
+        th = sort_link @search, :list_no,        "リストNo."
+        th = sort_link @search, :genre_order_no, "商品名"
+        th = sort_link @search, :maker,          "メーカー"
+        th = sort_link @search, :model,          "型式"
+        th.sepa = sort_link @search, :min_price, "最低入札金額"
+        th 入札数
+        th 落札金額
+        th 落札会社
+        th 同額札
+      - @pproducts.each do |p|
+        tr
+          td.num = p.list_no
+          td = p.name
+          td = p.maker
+          td = p.model 
+          td.num.sepa = number_to_currency(p.min_price)
+          - if p.bid?
+            td.num = p.bids.count
+            td.num = number_to_currency(p.success_bid.amount)
+            td = p.success_bid.company.name
+            td
+              
+          - else
+            td
+            td
+            td
+            td

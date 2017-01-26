@@ -24,8 +24,16 @@ class ApplicationController < ActionController::Base
 
   def get_open_now
     @open_now = Open.now.first
-    if @open_now
-      @products = @open_now.products.listed
+    @products = @open_now.products.listed if @open_now
+  end
+
+  def check_open
+    redirect_to "/", notice: "現在、開催されている入札会はありません" unless @open_now
+  end
+
+  def check_display
+    unless @open_now.display?
+      redirect_to "/", notice: "下見期間開始前です (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
     end
   end
 end

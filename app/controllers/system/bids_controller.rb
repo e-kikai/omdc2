@@ -1,7 +1,7 @@
 class System::BidsController < System::ApplicationController
   before_action :check_open
-  before_action :check_entry_date, extract: [:index]
-  before_action :select_company_bids, extract: [:results]
+  before_action :check_entry_date, except: [:index]
+  before_action :select_company_bids, except: [:results]
 
   include Exports
 

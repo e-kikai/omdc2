@@ -1,4 +1,6 @@
 class System::OpensController < System::ApplicationController
+  include Exports
+
   def index
     @opens = Open.order(:bid_end_at)
   end
@@ -33,6 +35,20 @@ class System::OpensController < System::ApplicationController
     @open = Open.find(params[:id])
     @open.soft_destroy!
     redirect_to "/system/opens/", notice: "#{@open.name}を削除しました"
+  end
+
+  def show
+    @open      = Open.find(params[:id])
+    redirect_to "/system/opens/", alert: "#{@open.name}はまだ終了していません" if @open.bid_end_at > Time.now
+
+    @search    = @open.products.includes(:bids, :company, :genre, :large_genre, :xl_genre).search(params[:q])
+    @products  = @search.result.order(:list_no)
+    @pproducts = @products.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@open.name}_result.csv" }
+    end
   end
 
   private

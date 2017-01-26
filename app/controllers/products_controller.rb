@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :check_open
+  before_action :check_display
   before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
 
   def index
@@ -28,7 +29,7 @@ class ProductsController < ApplicationController
     # elsif system_signed_in? && @open_now.status == :carry_out
     #   redirect_to "/system/carry_out/#{params[:id]}/edit"
 
-    
+
 
     if system_signed_in?
       redirect_to "/system/list/#{params[:id]}/edit"
@@ -67,10 +68,6 @@ class ProductsController < ApplicationController
   # end
 
   private
-
-  def check_open
-    redirect_to "/", alert: "現在、開催されている入札会はありません" unless @open_now
-  end
 
   def get_product
     @product = @products.find(params[:id])

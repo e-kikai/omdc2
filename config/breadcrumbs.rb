@@ -54,6 +54,11 @@ crumb :system_opens do
   parent :system_root
 end
 
+crumb :system_opens_show do |open|
+  link   "#{open.name} 落札結果一覧", "/system/opens/#{open.id}"
+  parent :system_opens
+end
+
 crumb :system_opens_new do
   link   "新規登録", "/system/opens/new"
   parent :system_opens

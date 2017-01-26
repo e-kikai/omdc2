@@ -1,5 +1,7 @@
 class WishlistController < ApplicationController
   before_action :check_open
+  before_action :check_display
+
   before_action :init_wishlist
 
   include Exports
@@ -33,9 +35,5 @@ class WishlistController < ApplicationController
 
   def init_wishlist
     (session[:wishlist] ||= []).uniq!
-  end
-
-  def check_open
-    redirect_to "/", alert: "現在、開催されている入札会はありません" unless @open_now
   end
 end

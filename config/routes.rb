@@ -47,7 +47,7 @@ Rails.application.routes.draw do
     get    'edit_password' => 'main#edit_password'
     patch  'edit_password' => 'main#update_password'
 
-    resources :opens,     except: [:show]
+    resources :opens
     resources :companies, except: [:show, :delete]
     resources :areas,     except: [:show]
     resources :infos,     only: [:index, :edit, :update]
