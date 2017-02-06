@@ -47,7 +47,11 @@ Rails.application.routes.draw do
     get    'edit_password' => 'main#edit_password'
     patch  'edit_password' => 'main#update_password'
 
-    resources :opens
+    resources :opens do
+      member do
+        get "detail/:product_id" => :result_detail
+      end
+    end
     resources :companies, except: [:show, :delete]
     resources :areas,     except: [:show]
     resources :infos,     only: [:index, :edit, :update]
@@ -122,5 +126,7 @@ Rails.application.routes.draw do
         get :total
       end
     end
+
+    resources :opens, only: [:index, :show]
   end
 end

@@ -1,16 +1,27 @@
 .container.list-menu
   .col-md-offset-2.col-md-8
+    - if bid.present? && bid.errors.full_messages.present?
+      .alert.alert-danger
+        ul
+          - bid.errors.full_messages.each do |msg|
+            li = msg
+    - elsif product.blank? && params[:list_no].present?
+      .alert.alert-danger: ul: li リストNo.#{params[:list_no]}の商品はありませんでした
+    - elsif @over.present?
+      .alert.alert-warning: ul: li <注意> 入札金額が最低入札金額(#{number_to_currency(product.min_price)})の5倍を超えています。入札しますか？
+    
     .panel.panel-default
       .panel-heading 入札
       .panel-body
         h5 1. 入札したい商品のリストNo.を入力して下さい
         = form_tag({ action: :new }, method: :get, class: "form-inline") do |f|
-          .form-group
             = label_tag      :list_no, "リストNo.を入力"
-            = text_field_tag :list_no, params[:list_no], class: "form-control"
-          = button_tag :button, data: { "disable-with" => "検索中..." }, class: "btn btn-success" do
-            span.glyphicon.glyphicon-search
-            =< "決定"
+            .input-group
+              = text_field_tag :list_no, params[:list_no], class: "form-control"
+              span.input-group-btn
+                = button_tag :button, data: { "disable-with" => "検索中..." }, class: "btn btn-success" do
+                  span.glyphicon.glyphicon-search
+                  =< "決定"
         - if product
           hr
           h5 2. 入札金額と備考欄を入力して「入札する」をクリックしてください
@@ -31,7 +42,9 @@
               td.num = number_to_currency(product.min_price)
               
           = form_for bid, url: "./", method: :post do |f|
-            = f.hidden_field :product_id
+            = hidden_field_tag :list_no, params[:list_no]
+            / = f.hidden_field :product_id
+            = hidden_field_tag :overcheck, @over
             .form-group.form-inline
               = f.label        :amount, style: "width:100px;"
               = (f.number_field :amount, class: "form-control") + " 円 (入札金額は#{number_to_currency(open_now.rate)}単位で入力して下さい)"
@@ -40,14 +53,12 @@
               = f.text_field :comment, class: "form-control"
             .form-group.form-inline
               = label_tag "", "入札", style: "width:100px;"
-              = f.button :button, data: { "disable-with" => "入札中..." }, class: "btn btn-success" do
+              = f.button :button, data: { "disable-with" => "入札中..." }, class: "btn btn-default btn-square" do
                 span.glyphicon.glyphicon-pencil
                 =< "入札する"
     
-h4 入札履歴
-- if bids.blank?
-  div 入札がありませんでした
-- else  
+- if bids.present?
+  h4 入札履歴
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
@@ -60,7 +71,6 @@ h4 入札履歴
         th 入札金額
         th 備考欄
         th 入札日時
-        / th 
       - bids.each do |b|
         tr
           td.no = b.product.list_no
@@ -72,8 +82,3 @@ h4 入札履歴
           td.num = number_to_currency(b.amount)
           td = b.comment
           td = b.created_at
-          / td
-          /   - message = "#{b.product.name}\n\nこの入札を取り消しますか？"
-          /   = link_to "/bid/bids/#{b.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
-          /     span.glyphicon.glyphicon-remove
-          /     =< "取消"

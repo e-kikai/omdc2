@@ -1,20 +1,9 @@
 - set_meta_tags title: "落札結果"
 - breadcrumb  :bid_products
-    
-  / = link_to "/system/companies.csv", class: "btn btn-warning" do
-  /   span.glyphicon.glyphicon-save-file
-  /   =< "エクスポート"
 
 - if @pproducts.blank?
   div 入札がありませんでしたa
 - else
-  / .page-area
-  /   | #{number_with_delimiter(@pdatas.total_count)}件 : 
-  /   | #{number_with_delimiter(@pdatas.offset_value + 1)}件 〜 
-  /   | #{number_with_delimiter(@pdatas.offset_value + @pdatas.length)}件を表示中
-  / 
-  /   = paginate @pdatas
-  
   = paginate @pproducts
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
@@ -40,8 +29,12 @@
             td.num = p.bids.count
             td.num = number_to_currency(p.success_bid.amount)
             td.sepa = p.success_bid.company.name rescue "aaa"
-            / td.num = number_with_delimiter(p.bids.where(company: current_company).maximum(:amount).to_s) + "円"
-            / td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
+            - if my_amount = p.bids.where(company: current_company).maximum(:amount)
+              td.num = number_to_currency(my_amount)
+              td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
+            - else
+              td
+              td
           - else
             td
             td

@@ -13,7 +13,7 @@
           th 搬出期間
           td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.strftime('%m/%d')}
           
-      .infos = simple_format Info.comment(:toppage)
+      .infos = simple_format(Info.comment(:toppage))
       hr
   
   - if @open_now.display?

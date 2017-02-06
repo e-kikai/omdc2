@@ -1,7 +1,8 @@
 class System::ProductsController < System::ApplicationController
-  before_action :select_company_proudcuts
   before_action :check_open
   before_action :check_entry_date, extract: [:index]
+  before_action :get_companies_selector
+  before_action :products
   before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order, :list_no, :list_no_update, :carry_out, :carry_out_update]
 
   include Exports
@@ -103,13 +104,23 @@ class System::ProductsController < System::ApplicationController
 
   private
 
-  def select_company_proudcuts
-    @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
+  # def select_company_proudcuts
+  #   @companies = Company.order(:no).pluck("no || ' : ' || name", :id)
+  #
+  #   session[:system_company_id] = params[:company_id] if params[:company_id].present?
+  #
+  #   if session[:system_company_id].present? && @company = Company.find_by(id: session[:system_company_id])
+  #     @search   = @open_now.products.where(company_id: session[:system_company_id]).search(params[:q])
+  #     @products = @search.result
+  #   else
+  #     session[:system_company_id] = nil
+  #     flash[:notice] = "会社を選択してください"
+  #   end
+  # end
 
-    session[:system_company_id] = params[:company_id] if params[:company_id].present?
-
-    if session[:system_company_id].present? && @company = Company.find_by(id: session[:system_company_id])
-      @search   = @open_now.products.where(company_id: session[:system_company_id]).search(params[:q])
+  def products
+    if @company.present?
+      @search   = @open_now.products.where(company: @company).search(params[:q])
       @products = @search.result
     else
       session[:system_company_id] = nil

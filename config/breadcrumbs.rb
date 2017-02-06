@@ -29,7 +29,7 @@ crumb :genre do |genre|
 end
 
 crumb :detail do |product|
-  link "#{product.name} #{product.maker} #{product.model} 商品詳細", "/detail/#{product.id}"
+  link "No.#{product.list_no} #{product.name} 商品詳細", "/detail/#{product.id}"
   parent :genre, product.genre
 end
 
@@ -57,6 +57,11 @@ end
 crumb :system_opens_show do |open|
   link   "#{open.name} 落札結果一覧", "/system/opens/#{open.id}"
   parent :system_opens
+end
+
+crumb :system_opens_result_detail do |product|
+  link   "No.#{product.list_no} #{product.name} 入札詳細", "/system/opens/#{product.open.id}/detail/#{product.id}"
+  parent :system_opens_show, product.open
 end
 
 crumb :system_opens_new do
@@ -165,7 +170,6 @@ crumb :bid_products_csv do
   parent :bid_products
 end
 
-
 crumb :bid_products_csv_upload do
   link   "登録確認", "/bid/products/csv"
   parent :bid_products_csv
@@ -179,4 +183,14 @@ end
 crumb :bid_bids_new do
   link   "入札", "/bid/bids/new"
   parent :bid_root
+end
+
+crumb :bid_opens do
+  link   "過去の入札会一覧", "/bid/opens/"
+  parent :bid_root
+end
+
+crumb :bid_opens_show do |open|
+  link   "#{open.name} 落札結果一覧", "/system/opens/#{open.id}"
+  parent :bid_opens
 end

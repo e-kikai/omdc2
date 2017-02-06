@@ -9,7 +9,8 @@ class Product < ApplicationRecord
   has_one    :xl_genre,    through: :large_genre
   belongs_to :area
 
-  has_many :bids,           -> { successes }
+  # has_many :bids,           -> { successes }
+  has_many :bids
   has_one  :success_bid,    -> { successes }, class_name: Bid
 
   has_many :product_images, -> { order(:order_no, :id) }
@@ -24,6 +25,7 @@ class Product < ApplicationRecord
   validate  :check_min_price_to_open
 
   before_create :set_app_no
+  before_save   :reform_youtube
 
   scope :with_keywords, -> keywords {
     if keywords.present?
@@ -241,5 +243,13 @@ class Product < ApplicationRecord
   def set_app_no
     last_no = self.open.products.where(company_id: company_id).where.not(app_no: nil).order(:app_no).last.try(:app_no) || 0
     self.app_no = last_no + 1
+  end
+
+  def reform_youtube
+    self.youtube = case self.youtube
+    when /watch\?v\=([a-zA-Z0-9-+]+)/;  $1
+    when /youtu\.be\/([a-zA-Z0-9-+]+)/; $1
+    else self.youtube
+    end
   end
 end

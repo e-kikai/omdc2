@@ -5,4 +5,4 @@
         = form_tag  "", method: :get, class: "form-inline" do
           .form-group
             = label_tag :company_id, "会社選択"
-            = select_tag :company_id, options_for_select(companies, company_id), prompt: "会社を選択", class: "form-control", onchange: "this.form.submit()"
+            = select_tag :company_id, options_for_select(companies_selector, company_id), prompt: "会社を選択", class: "form-control", onchange: "this.form.submit()"

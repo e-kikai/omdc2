@@ -1,30 +1,31 @@
 class System::BidsController < System::ApplicationController
   before_action :check_open
   before_action :check_entry_date, except: [:index]
-  before_action :select_company_bids, except: [:results]
+  before_action :get_companies_selector, except: [:results]
+  before_action :bids, except: [:results]
+  before_action :bid_init, only: [:new, :create]
 
   include Exports
 
   def index
     respond_to do |format|
       format.html
-      format.pdf { export_pdf nil, "/bid/bids/index.pdf" }
-      format.csv { export_csv nil, "/bid/bids/index.csv" }
+      format.pdf { export_pdf "#{@open_now.name}_入札確認.pdf", "/bid/bids/index.pdf" }
+      format.csv { export_csv "#{@open_now.name}_入札確認.csv", "/bid/bids/index.csv" }
     end
   end
 
   def new
-    @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
-    @bid     = @product.bids.new(company: current_company) if @product
   end
 
   def create
-    @bid = @bids.new(bid_params)
-    if @bid.save
+    @bid.assign_attributes(bid_params)
+    if params[:overcheck].to_i != @bid.amount && @over = @bid.check_5time
+      render :new
+    elsif @bid.present? && @bid.save
       redirect_to "/system/bids/new", notice: "#{@bid.product.name}に入札しました"
     else
-      @bid = @open_now.products.find_by(id: bid_params[:product_id])
-      render :index
+      render :new
     end
   end
 
@@ -41,8 +42,8 @@ class System::BidsController < System::ApplicationController
 
       respond_to do |format|
         format.html
-        format.pdf { export_pdf nil, "/bid/bids/rakusatsu_sum.pdf" }
-        format.csv { export_csv nil, "/bid/bids/rakusatsu_sum.csv" }
+        format.pdf { export_pdf "#{@open_now.name}_落札確認.pdf", "/bid/bids/rakusatsu_sum.pdf" }
+        format.csv { export_csv "#{@open_now.name}_落札確認.csv", "/bid/bids/rakusatsu_sum.csv" }
       end
     end
   end
@@ -84,8 +85,8 @@ class System::BidsController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
-      format.csv { export_csv }
+      format.pdf { export_pdf "#{@open_now.name}_集計一覧.csv" }
+      format.csv { export_csv "#{@open_now.name}_集計一覧.csv" }
     end
   end
 
@@ -111,6 +112,16 @@ class System::BidsController < System::ApplicationController
 
   def check_entry_date
     redirect_to "/system/", notice: "現在、入札期間ではありません" unless @open_now
+  end
+
+  def bids
+    @search = @open_now.bids.where(company: @company).includes(:product, :genre).search(params[:q])
+    @bids   = @search.result.order(created_at: :desc)
+  end
+
+  def bid_init
+    @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
+    @bid     = @product.bids.new(company: @company) if @product
   end
 
   def bid_params

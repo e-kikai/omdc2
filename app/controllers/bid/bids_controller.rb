@@ -2,29 +2,29 @@ class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_entry, extract: [:index]
   before_action :bids
+  before_action :bid_init, only: [:new, :create]
 
   include Exports
 
   def index
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
-      format.csv { export_csv }
+      format.pdf { export_pdf "#{@open_now.name}_入札確認.pdf" }
+      format.csv { export_csv "#{@open_now.name}_入札確認.csv" }
     end
   end
 
   def new
-    @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
-    @bid     = @product.bids.new(company: current_company) if @product
   end
 
   def create
-    @bid = @bids.new(bid_params)
-    if @bid.save
+    @bid.assign_attributes(bid_params)
+    if params[:overcheck].to_i != @bid.amount && @over = @bid.check_5time
+      render :new
+    elsif @bid.present? && @bid.save
       redirect_to "/bid/bids/new", notice: "#{@bid.product.name}に入札しました"
     else
-      @bid = @open_now.products.find_by(id: bid_params[:product_id])
-      render :index
+      render :new
     end
   end
 
@@ -40,8 +40,8 @@ class Bid::BidsController < Bid::ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
-      format.csv { export_csv }
+      format.pdf { export_pdf "#{@open_now.name}_落札確認.pdf" }
+      format.csv { export_csv "#{@open_now.name}_落札確認.csv" }
     end
   end
 
@@ -69,8 +69,13 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def bids
-    @search = @open_now.bids.where(company: current_company).search(params[:q])
+    @search = @open_now.bids.where(company: current_company).includes(:product, :genre).search(params[:q])
     @bids   = @search.result.order(created_at: :desc)
+  end
+
+  def bid_init
+    @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
+    @bid     = @product.bids.new(company: current_company) if @product
   end
 
   def bid_params

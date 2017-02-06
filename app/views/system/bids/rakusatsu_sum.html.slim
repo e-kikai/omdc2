@@ -1,6 +1,6 @@
 - set_meta_tags title: "落札結果 出品集計"
 - breadcrumb  :system_something, "落札結果 落札集計"
 
-= render "/system/main/select_company", { companies: @companies, company_id: session[:system_company_id] }
+= render "/system/main/select_company", { companies_selector: @companies_selector, company_id: session[:system_company_id] }
 
 = render "/bid/bids/rakusatsu_sum", { open_now: @open_now, bids: @bids, search: @search } if @company

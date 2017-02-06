@@ -26,7 +26,7 @@
       - @pproducts.each do |p|
         tr
           td.num = p.list_no
-          td = p.name
+          td = link_to_if p.bid?, p.name, "/system/opens/#{@open.id}/detail/#{p.id}"
           td = p.maker
           td = p.model 
           td.num.sepa = number_to_currency(p.min_price)

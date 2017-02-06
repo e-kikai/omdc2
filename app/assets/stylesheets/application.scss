@@ -176,6 +176,14 @@ table {
 
 }
 
+.field_with_errors {
+  display: inline;
+
+  .form-control {
+    background-color: #f2dede;
+  }
+}
+
 .btn-content {
   margin-left: 4px;
 }

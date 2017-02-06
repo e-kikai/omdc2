@@ -12,6 +12,9 @@
     li = link_to "/bid/manual", class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-info-sign
       span.btn-content マニュアル
+    li = link_to "/bid/opens", class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-list
+      span.btn-content 過去の落札結果
     li = link_to "/bid/edit_password", class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-edit
       span.btn-content パスワード変更
@@ -63,7 +66,7 @@
       span.glyphicon.glyphicon-flag: span.menu-title 入札終了後
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/bid/bids/results", class: "btn btn-default btn-square" do
+        li = link_to "/bid/opens/#{@open_now.id}/", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-list
           span.btn-content 落札結果一覧
         li = link_to "/bid/bids/rakusatsu_sum", class: "btn btn-default btn-square" do

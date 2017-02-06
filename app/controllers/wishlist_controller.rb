@@ -13,7 +13,7 @@ class WishlistController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf }
+      format.pdf { export_pdf "#{@open_now.name}_入札依頼書.pdf" }
     end
   end
 
