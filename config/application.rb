@@ -12,6 +12,10 @@ require "action_cable/engine"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
+require "charwidth"
+require "charwidth/string"
+require "charwidth/active_record"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -29,7 +33,7 @@ module Omdc2
 
     config.active_record.default_timezone = :local
     config.time_zone = 'Tokyo'
-    
+
     config.generators do |g|
       g.test_framework :rspec,
         fixtures: true,
