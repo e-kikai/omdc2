@@ -8,6 +8,10 @@ class System::ProductsController < System::ApplicationController
   include Exports
 
   def index
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@open_now.name}_#{@company.name}_出品商品一覧.csv", "/bid/products/index.csv" }
+    end
   end
 
   def new

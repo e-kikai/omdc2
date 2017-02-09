@@ -50,10 +50,11 @@ class Open < ApplicationRecord
   end
 
   def display?
-    if    [:bid, :carry_out].include? status;                true
-    elsif status == :list && Display.check(:search) == true; true
-    else;                                                    false
-    end
+    # if    [:bid, :carry_out].include? status;                true
+    # elsif status == :list && Display.check(:search) == true; true
+    # else;                                                    false
+    # end
+    true
   end
 
   def result_list?

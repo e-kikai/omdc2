@@ -1,9 +1,12 @@
-
-.container-fluid.list-menu
-  = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
+ul.nav.nav-pills
+  li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
     span.glyphicon.glyphicon-plus
-    =< "新規登録"
-
+    span.btn-content 新規登録
+    
+  li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content CSV出力
+    
 - if products.blank?
   div 出品商品がありませんでした
 - else
