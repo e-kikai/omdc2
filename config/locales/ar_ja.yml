@@ -48,6 +48,13 @@ ja:
         entry: 出品可否
         account: ログインアカウント
         password: パスワード
+        password_confirmation: パスワード確認
+        current_password: 現在のパスワード
+      system:
+        account: ログインアカウント
+        password: パスワード
+        password_confirmation: パスワード確認
+        current_password: 現在のパスワード
       product:
         list_no: リストNo.
         name: 商品名

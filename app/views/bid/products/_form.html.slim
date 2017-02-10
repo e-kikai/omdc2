@@ -74,7 +74,7 @@
       th = f.label :youtube
       td = f.text_field :youtube, class: "form-control"
 
-  = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-success center-block" do
+  = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
     span.glyphicon.glyphicon-save
-    =< "保存"
+    span.btn-content 保存
     

@@ -107,7 +107,8 @@
 
   .col-sm-12.col-md-6
     - if @product.youtube.present?
-      .youtube-area <iframe width="560" height="315" src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen></iframe>
+      .youtube-area.embed-responsive.embed-responsive-16by9
+        iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
     .imgs-area
       - if @product.product_images.size > 0
         - @product.product_images.each do |i|

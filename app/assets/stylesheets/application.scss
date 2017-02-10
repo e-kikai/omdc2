@@ -63,6 +63,15 @@ body {
   width: 240px;
 }
 
+label.required:after {
+  content: "必須";
+  color: #D00;
+  vertical-align: top;
+  font-size: 80%;
+  font-weight: normal;
+  margin-left: 10px;
+}
+
 table {
   & {
     th {
@@ -154,15 +163,6 @@ table {
     input[type=number] {
       width: 120px;
       text-align: right;
-    }
-
-    .required:after {
-      content: "必須";
-      color: #D00;
-      vertical-align: top;
-      font-size: 80%;
-      font-weight: normal;
-      margin-left: 10px;
     }
 
     th {
