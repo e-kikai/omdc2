@@ -29,12 +29,19 @@ class ProductsController < ApplicationController
     # elsif system_signed_in? && @open_now.status == :carry_out
     #   redirect_to "/system/carry_out/#{params[:id]}/edit"
 
+    product_id = if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
+      product = Product.find_by(open_id: $1, company_id: $2, app_no: $3)
+      raise "#{params[:key]} 商品情報がありません" if product.blank?
 
+      product.id
+    else
+      params[:id]
+    end
 
     if system_signed_in?
-      redirect_to "/system/list/#{params[:id]}/edit"
+      redirect_to "/system/list/#{product_id}/edit"
     else
-      redirect_to "/detail/#{params[:id]}/"
+      redirect_to "/detail/#{product_id}/"
     end
   end
 

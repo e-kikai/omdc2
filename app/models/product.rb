@@ -92,24 +92,26 @@ class Product < ApplicationRecord
 
   def self.search_genre(product)
     products = Product.where.not(genre_id: 390).order(id: :desc)
-    model_reg = product[:model].gsub(/[^0-9a-zA-Z]+/, "%")
+
+    name      = product[:name].normalize_charwidth.strip
+    model_reg = product[:model].normalize_charwidth.strip.gsub(/[^0-9a-zA-Z]+/, "%")
 
     if product[:name].blank?
       # 0. 機械名がなければ、処理をしない
       "error : 機械名を入力して下さい"
-    elsif genre = Genre.where.not(id: 390).order(id: :desc).find_by(name: product[:name])
+    elsif genre = Genre.where.not(id: 390).order(id: :desc).find_by(name: name)
       # 1. 機械名 = ジャンル名の場合
       genre.id
-    elsif model_reg.present? && pr = products.where(name: product[:name]).where(" products.model ILIKE ? ", "#{model_reg}%").first
+    elsif model_reg.present? && pr = products.where(name: name).where(" products.model ILIKE ? ", "#{model_reg}%").first
       # 2. 同じname, modelのもの
       pr.genre_id
-    elsif pr = products.find_by(name: product[:name])
+    elsif pr = products.find_by(name: name)
       # 3. 同じnameのもの
       pr.genre_id
-    elsif pr = products.where(" products.name ILIKE ? ", "#{product[:name]}%").first
+    elsif pr = products.where(" products.name ILIKE ? ", "#{name}%").first
       # 4. nameをILIKE検索(前方一致)
       pr.genre_id
-    elsif pr = products.where(" products.name ILIKE ? ", "%#{product[:name]}%").first
+    elsif pr = products.where(" products.name ILIKE ? ", "%#{name}%").first
       # 5. nameをILIKE検索(中間一致)
       pr.genre_id
     elsif model_reg.present? && pr = products.where(" products.model ILIKE ? ", "#{model_reg}%").first

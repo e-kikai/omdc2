@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   get  "genre/:genre_id"             => "products#index", as: :genre
 
   get  "detail/:id" => "products#show"
-  get  "qr/:id"     => "products#qr"
+  get  "qr"         => "products#qr"
   # get  "contact/:id"     => "products#contact"
   # post "contact/:id"     => "products#contact_do"
   # get  "contact_tel/:id" => "products#contact_tel"

@@ -81,7 +81,7 @@ scss:
       / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
       / .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=hangtag"
       / .qr = image_tag "#{root_url}qrcode.png?url=#{root_url}qr/#{p.id}?place=hangtag"
-      .qr = image_tag System.qrcode("#{root_url}qr/#{p.id}?place=hangtag")
+      .qr = image_tag System.qrcode("#{root_url}qr?id=#{p.id}&place=hangtag")
       / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_html.html_safe
 
       
