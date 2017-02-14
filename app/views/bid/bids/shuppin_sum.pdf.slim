@@ -1,0 +1,18 @@
+.print-pdf
+  h4 #{@open_now.name} #{@company.name} 元引き一覧
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed
+      tr
+        th リストNo.
+        th 商品名
+        th メーカー
+        th 型式
+        th 最低入札金額
+      - @products.each do |p|
+        - if !p.bid? && p.display == "一般出品"
+          tr
+            td = p.list_no
+            td = p.name
+            td = p.maker
+            td = p.model 
+            td.num = number_to_currency(p.min_price)

@@ -30,7 +30,7 @@ class System::BidsController < System::ApplicationController
   end
 
   def results
-    @search    = @open_now.products.includes(:bids).search(params[:q])
+    @search    = @open_now.products.listed.includes(:bids).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
   end
@@ -50,14 +50,14 @@ class System::BidsController < System::ApplicationController
 
   def shuppin_sum
     if @company
-      @search   = @open_now.products.where(company: @company).includes(:genre, :success_bid).search(params[:q])
+      @search   = @open_now.products.listed.where(company: @company).includes(:genre, :success_bid).search(params[:q])
       @products = @search.result.order(:list_no)
     end
   end
 
   def total
     if @company
-      @products         = @open_now.products.where(company: @company).includes(:success_bid)
+      @products         = @open_now.products.listed.where(company: @company).includes(:success_bid)
       @success_products = @open_now.bids.where(company: @company).includes(:product, :success_bid).success_products
     end
   end

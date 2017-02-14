@@ -29,7 +29,7 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def results
-    @search    = @open_now.products.includes(:bids).search(params[:q])
+    @search    = @open_now.products.listed.includes(:bids).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
   end
@@ -37,23 +37,35 @@ class Bid::BidsController < Bid::ApplicationController
   def rakusatsu_sum
     @search   = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid).search(params[:q])
     @bids     = @search.result.order(:created_at)
-
+    @company  = current_company
+    
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_落札確認.pdf" }
+      format.pdf {
+        if params[:hikitori]
+          export_pdf "#{@open_now.name}_引取指図書.pdf", "/bid/bids/hikitori"
+        else
+          export_pdf "#{@open_now.name}_落札確認.pdf"
+        end
+      }
       format.csv { export_csv "#{@open_now.name}_落札確認.csv" }
     end
   end
 
   def shuppin_sum
-    @search   = @open_now.products.where(company: current_company).includes(:genre, :success_bid).search(params[:q])
+    @search   = @open_now.products.listed.where(company: current_company).includes(:genre, :success_bid).search(params[:q])
     @products = @search.result.order(:list_no)
+    @company  = current_company
+
+    respond_to do |format|
+      format.html
+      format.pdf { export_pdf "#{@open_now.name}_元引き一覧.pdf" }
+    end
   end
 
   def total
-    @products         = @open_now.products.where(company: current_company).includes(:success_bid)
+    @products         = @open_now.products.listed.where(company: current_company).includes(:success_bid)
     @success_products = @open_now.bids.where(company: current_company).includes(:product, :success_bid).success_products
-
   end
 
   def destroy

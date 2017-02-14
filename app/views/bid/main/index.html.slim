@@ -78,3 +78,10 @@
         li = link_to "/bid/bids/total", class: "btn btn-default btn-square" do
           span.glyphicon.glyphicon-file
           span.btn-content 落札・出品集計
+        li = link_to "/bid/bids/rakusatsu_sum.pdf?hikitori=1", class: "btn btn-default btn-square" do
+          span.glyphicon.glyphicon-print
+          span.btn-content 引取指図書PDF
+
+        li = link_to "/bid/bids/shuppin_sum.pdf", class: "btn btn-default btn-square" do
+          span.glyphicon.glyphicon-print
+          span.btn-content 元引き一覧PDF
