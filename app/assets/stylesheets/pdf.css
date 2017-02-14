@@ -3,5 +3,10 @@
 }
 
 .print-pdf {
-  font-family: "VL PGothic"
+  font-family: "VL PGothic";
+}
+
+.print-pdf th,
+.print-pdf td {
+  font-size: 3mm;
 }

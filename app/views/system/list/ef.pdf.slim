@@ -1,10 +1,23 @@
 scss:
+  .ef-area {
+    //top: 12.5mm;
+    //left: 6mm;
+    //width: 198mm;
+    //height: 271.2mm;
+    
+    // background: orange;
+    position: relative;
+    
+    page-break-before: always;
+  }
+  
   .ef {
-    border: 1px solid #000;
+    // border: 1px dotted #333;
     height: 12.5%;
-    width: 33%;
+    width: 33.3333333%;
     float: left;
     position: relative;
+    // display: inline-block;
     paggin: 0;
     font-family: "VL PGothic", sans-serif;
     
@@ -12,21 +25,27 @@ scss:
       position: absolute;
       bottom: 3mm;
       left: 3mm;
-      font-size: 10mm;
+      font-size: 8mm;
     }
     
     .qr {
       position: absolute;
-      top: 10mm;
-      right: 5mm;
+      bottom: 3mm;
+      right: 3mm;
+      
+      img {
+        width: 15mm;
+        height: 15mm;
+      }
     }
   }
 
 .print-pdf
   - params[:num].to_i.times.each do |n|
-    - (1..24).each do |m|
-      .ef
-        .app_no #{@company.no}-#{n*24+m}
-        / .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
-        .qr = image_tag System.qrcode("#{root_url}qr?key=#{@open_now.id}-#{@company.no}-#{n*24+m}&place=ef")
+    .ef-area
+      - (1..24).each do |m|
+        .ef
+          .app_no #{@company.no}-#{n*24+m}
+          / .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=ef"
+          .qr = image_tag System.qrcode("#{root_url}qr?key=#{@open_now.id}-#{@company.no}-#{n*24+m}&place=ef")
   

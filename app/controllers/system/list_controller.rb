@@ -34,7 +34,7 @@ class System::ListController < ApplicationController
           @search   = @open_now.products.includes(:company).listed.search(params[:q])
         end
         @products = @search.result.order("companies.no", :app_no)
-        export_pdf
+        export_pdf("hangtag.pdf", "/system/list/hangtag", margin_top: "0mm", margin_right: "0mm", margin_bottom: "0mm", margin_left: "0mm")
       }
     end
   end

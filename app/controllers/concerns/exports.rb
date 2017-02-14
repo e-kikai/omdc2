@@ -11,8 +11,8 @@ module Exports
   end
 
   # 共通PDFエクスポート処理
-  def export_pdf(filename = nil, path = nil)
-    kit = PDFKit.new(render_to_string(path, layout: false), encoding: "UTF-8")
+  def export_pdf(filename = nil, path = nil, options = {})
+    kit = PDFKit.new(render_to_string(path, layout: false), options)
 
     kit.stylesheets << "#{Rails.root}/vendor/assets/stylesheets/bootstrap_for_pdf.min.css"
     kit.stylesheets << "#{Rails.root}/app/assets/stylesheets/pdf.css"
