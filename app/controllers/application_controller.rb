@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
 
   layout 'layouts/application'
 
+  class Forbidden < ActionController::ActionControllerError; end
+  class IpAddressRejected < ActionController::ActionControllerError; end
+
+  include ErrorHandlers if Rails.env.production? or Rails.env.staging?
+  # include ErrorHandlers
+
   # ログイン後のリンク先
   def after_sign_in_path_for(resource)
     case resource
@@ -23,8 +29,8 @@ class ApplicationController < ActionController::Base
   private
 
   def get_open_now
-    @open_now = Open.now.first
-    @products = @open_now.products.listed if @open_now
+    @open_now = Open.now.first || Open.new
+    @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
   end
 
   def check_open

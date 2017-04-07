@@ -3,6 +3,11 @@
 
 = render "/system/main/select_company", { companies_selector: @companies_selector, company_id: session[:system_company_id] }
 
+ul.nav.nav-pills
+  li = link_to "/system/products.csv?output=import_all", class: "btn btn-default btn-square" do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content 更新用CSV(全取得)
+    
 - if @company
   = form_tag({action: :csv_upload}, multipart: true, method: :post, class: 'form-horizontal') do
     = render "/bid/products/csv"

@@ -1,6 +1,13 @@
 class System::CompaniesController < System::ApplicationController
+  include Exports
+
   def index
     @companies = Company.order(:no)
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "companies.csv" }
+    end
   end
 
   def new
@@ -22,7 +29,9 @@ class System::CompaniesController < System::ApplicationController
 
   def update
     @company = Company.find(params[:id])
-    if @company.update(company_params)
+    par = company_params
+    par.delete(:password) if par[:password].blank?
+    if @company.update(par)
       redirect_to "/system/companies/", notice: "#{@company.name}を変更しました"
     else
       render :edit

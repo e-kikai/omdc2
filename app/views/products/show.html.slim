@@ -8,7 +8,7 @@
       .panel-body
         table.table.table-condensed.table-detail
           tr
-            th リストNo.
+            th No.
             td = @product.list_no
           tr
             th ジャンル
@@ -24,7 +24,7 @@
             td #{@product.model}
           tr
             th 最低入札金額
-            td #{number_with_delimiter(@product.min_price)}円
+            td = number_to_currency(@product.min_price)
           tr
             th 年式
             td = @product.year
@@ -51,15 +51,20 @@
           span.glyphicon.glyphicon-remove
           =< "ウィッシュリストから削除"
       - else
-        = button_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
+        = link_to "/wishlist/", params: { id: @product.id }, method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
           span.glyphicon.glyphicon-bookmark
           =< "ウィッシュリストに追加"
         = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete", style: "display:none;" do
           span.glyphicon.glyphicon-remove
           =< "ウィッシュリストから削除"
+      - if company_signed_in?
+        = link_to "/bid/bids/new?list_no=#{@product.list_no}", target: "_blank", class: "btn btn-success btn-lg" do
+          span.glyphicon.glyphicon-pencil
+          span.btn-content 入札ページへリンク
         
     h4 商品に関する問い合わせについて
     .contact-info 商品に関する問い合わせは、入札を依頼される商社へお問い合せ下さい
+    
         
     / .form-group
     /   = button_tag :button, class: "btn btn-warning btn-lg", data: { toggle: :modal, target: "#sampleModal" } do
@@ -103,7 +108,7 @@
                     = image_tag "noimg_thumb.png", style: "width:100%;"
                   .list_no No. #{p.list_no}
                   .name #{p.name} #{p.maker} #{p.model}
-                .price #{number_with_delimiter(p.min_price)}円
+                .price = number_to_currency(p.min_price)
 
   .col-sm-12.col-md-6
     - if @product.youtube.present?
@@ -112,6 +117,6 @@
     .imgs-area
       - if @product.product_images.size > 0
         - @product.product_images.each do |i|
-          = image_tag i.image.view.url, style: "width:100%;"
+          = image_tag i.image.view.url
       - else
-        = image_tag "noimg_view.png", style: "width:100%;"
+        = image_tag "noimg_view.png"

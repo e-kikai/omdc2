@@ -1,20 +1,31 @@
-- if @open_now.present?
+- if @open_now.persisted?
   .row
-    .col-md-offset-3.col-md-6
-      h4 = @open_now.name
+    h4 = @open_now.name
+    .col-md-6.col-sm-12
       table.table.table-condensed.info-table 
         tr
+          th 主催者
+          td = @open_now.owner
+        tr
+          th 開催場所
+          td
+            . = @open_now.place
+            . = @open_now.addr
+        tr
+          th 連絡先
+          td TEL : #{@open_now.tel} FAX : #{@open_now.fax}
+        tr
           th 下見期間
-          td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.strftime('%m/%d')}
+          td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.try(:strftime, '%m/%d')}
         tr
           th 入札期間
-          td #{@open_now.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.strftime('%Y/%m/%d %H:%M')}
+          td #{@open_now.bid_start_at.try(:strftime, '%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.try(:strftime, '%Y/%m/%d %H:%M')}
         tr
           th 搬出期間
-          td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.strftime('%m/%d')}
-          
+          td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.try(:strftime, '%m/%d')}
+    .col-md-6.col-sm-12
       .infos = simple_format(Info.comment(:toppage))
-      hr
+    hr
   
   - if @open_now.display?
     .col-md-offset-2.col-md-8
@@ -24,7 +35,7 @@
           .input-group
             = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
             span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-default" do
+              = button_tag type: :submit, class: "btn btn-info" do
                 .glyphicon.glyphicon-search
                 span.btn-content 検索
           
@@ -36,7 +47,7 @@
           .input-group
             = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
             span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-default" do
+              = button_tag type: :submit, class: "btn btn-info" do
                 .glyphicon.glyphicon-search
                 span.btn-content 検索
           
@@ -46,7 +57,7 @@
           .input-group
             = text_field_tag :keywords, params[:keywords], placeholder: "商品名", class: "form-control"
             span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-default" do
+              = button_tag type: :submit, class: "btn btn-info" do
                 .glyphicon.glyphicon-search
                 span.btn-content 検索
 

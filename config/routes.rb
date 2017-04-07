@@ -4,33 +4,28 @@ Rails.application.routes.draw do
   end
 
   devise_for :systems,
-    # controllers: { sessions: 'bamembers/sessions', },
     path:       'system',
     path_names: {sign_in: 'login', sign_out: 'logout'},
     only:       [:sessions]
-
-  # root to: "bamember/main#index"
 
   devise_for :companies,
     path:       'bid',
     path_names: {sign_in: 'login', sign_out: 'logout'},
     only:       [:sessions]
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: "main#index"
 
   get "mltest" => "main#get_ml_genre"
   get "qrcode" => "main#qrcode"
 
-  # resources :products, except: [:new, :create, :edit, :update, :destroy]
-
-  # get  "search(/x/:xl_genre_id_eq)(/l/:large_genre_id_eq)(/ar/:area_eq)" => "products#index", as: :search
   get  "search"                      => "products#index", as: :search
   get  "xl_genre/:xl_genre_id"       => "products#index", as: :xl_genre
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
 
   get  "detail/:id" => "products#show"
+  get  "images/:id" => "products#images"
+
   get  "qr"         => "products#qr"
   # get  "contact/:id"     => "products#contact"
   # post "contact/:id"     => "products#contact_do"
@@ -74,7 +69,7 @@ Rails.application.routes.draw do
 
     resources :bids, except: [:show, :edit, :update] do
       collection do
-        get :results
+        # get :results
         get :rakusatsu_sum
         get :shuppin_sum
         get :total
@@ -109,6 +104,7 @@ Rails.application.routes.draw do
         get   :csv
         post  "csv" => :csv_upload
         patch "csv" => :csv_import
+        get   :sim
       end
 
       member do
@@ -120,13 +116,16 @@ Rails.application.routes.draw do
 
     resources :bids, except: [:show, :edit, :update] do
       collection do
-        get :results
+        # get :results
         get :rakusatsu_sum
         get :shuppin_sum
         get :total
+        get :motobiki
       end
     end
 
     resources :opens, only: [:index, :show]
   end
+
+  get '*path' => 'application#routing_error'
 end

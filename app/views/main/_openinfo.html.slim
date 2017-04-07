@@ -1,4 +1,4 @@
-- if open.blank?
+- if open.new_record?
   div 現在開催されている入札会はありません
 - else
   h4 = open.name
@@ -27,3 +27,8 @@
     tr
       th 支払日
       td #{open.payment_date}
+      
+  = link_to "/", class: "btn btn-default btn-square btn-search #{:disabled unless open.display?}", target: "_blank" do
+    span.glyphicon.glyphicon-search
+    span.btn-content #{open.name} 商品検索ページ
+      

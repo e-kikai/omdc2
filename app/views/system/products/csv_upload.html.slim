@@ -1,11 +1,11 @@
 - set_meta_tags title: "出品商品 CSV一括登録確認"
 - breadcrumb  :system_products_csv_upload
 
-.row
-  .col-md-offset-3.col-md-6
-    .panel.panel-default.company_select-panel
-      .panel-body
-        = label_tag :company_id, "会社名"
-        = "#{@company.no} : #{@company.name}"
+/ .row
+/   .col-md-offset-3.col-md-6
+/     .panel.panel-default.company_select-panel
+/       .panel-body
+/         = label_tag :company_id, "会社名"
+/         = "#{@company.no} : #{@company.name}"
 
-= render "/bid/products/csv_upload"
+= render "/system/products/csv_upload"

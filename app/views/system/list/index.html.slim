@@ -6,28 +6,47 @@
 - if @products.blank?
   div 商品がありませんでした
 - else
+  = search_form_for @search, url: "" do |s|
+    = s.hidden_field :s, value: params.dig(:q, :s)
 
-  = paginate @pproducts
-  .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
-      tr
-        th.no = sort_link @search, :list_no,     "リストNo."
-        th.no = sort_link @search, :company_no,  "会社No.: 会社名"
-        th.no = sort_link @search, :app_no,      "申込No."
-        th = sort_link @search, :genre_order_no, "商品名"
-        th = sort_link @search, :maker,          "メーカー"
-        th = sort_link @search, :model,          "型式"
-        th = sort_link @search, :year,           "年式"
-        th = sort_link @search, :min_price,      "最低入札金額"
-        th = sort_link @search, :area_order_no,  "エリア"
-      - @pproducts.each do |p|
+    .col-md-4
+      table.table.table-condensed.info-table 
         tr
-          td.no = p.list_no
-          td.no #{p.company.no} : #{p.company.name} 
-          td.no = p.app_no
-          td = link_to p.name, "/system/list/#{p.id}/edit"
-          td = p.maker
-          td = p.model 
-          td = p.year
-          td.num = number_to_currency(p.min_price)
-          td = p.area_name
+          th 出品会社数
+          td = number_with_delimiter(@company_count) + "社"
+        tr
+          th 出品点数
+          td = number_with_delimiter(@count) + "件"
+        tr
+          th 出品金額合計
+          td = number_to_currency @min_price_sum
+    ul.nav.nav-pills
+      li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+        span.glyphicon.glyphicon-download-alt
+        span.btn-content CSV出力
+              
+    .row
+      = paginate @pproducts
+    .scroll_div
+      table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+        tr
+          th.id = s.sort_link :list_no,     "No."
+          th.no = s.sort_link :company_no,  "会社No.: 会社名"
+          th.no = s.sort_link :app_no,      "申込No."
+          th = s.sort_link :genre_order_no, "商品名"
+          th = s.sort_link :maker,          "メーカー"
+          th = s.sort_link :model,          "型式"
+          th = s.sort_link :year,           "年式"
+          th = s.sort_link :min_price,      "最低入札金額"
+          th = s.sort_link :area_order_no,  "エリア"
+        - @pproducts.each do |p|
+          tr
+            td.id = p.list_no
+            td.no #{p.company.no} : #{p.company.name} 
+            td.no = p.app_no
+            td = link_to p.name, "/system/list/#{p.id}/edit"
+            td = p.maker
+            td = p.model 
+            td = p.year
+            td.num = number_to_currency(p.min_price)
+            td = p.area_name

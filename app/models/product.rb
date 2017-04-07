@@ -9,9 +9,12 @@ class Product < ApplicationRecord
   has_one    :xl_genre,    through: :large_genre
   belongs_to :area
 
-  # has_many :bids,           -> { successes }
   has_many :bids
-  has_one  :success_bid,    -> { successes }, class_name: Bid
+  # has_one  :success_bid,     -> { success }, class_name: Bid
+  has_one :success_bid, class_name: ViewSuccessBid
+
+  # has_one  :bid_sums,        -> { sums }, class_name: Bid
+  has_one  :success_company, through: :success_bid, source: :company, class_name: Company
 
   has_many :product_images, -> { order(:order_no, :id) }
   has_one  :top_image,      -> { order(:order_no, :id) }, class_name: ProductImage
@@ -42,6 +45,10 @@ class Product < ApplicationRecord
 
   scope :max_list_no, -> {
     maximum(:list_no) || 0
+  }
+
+  scope :bids_sums, -> {
+    joins("LEFT JOIN (#{Bid.sums.to_sql}) bs ON bs.product_id = products.id").select("*, bids_count, bids_max_amount")
   }
 
   def self.ml_get_genre(product)
@@ -146,7 +153,11 @@ class Product < ApplicationRecord
   end
 
   def bid?
-    success_bid.present? ? true : false
+    if new_record?
+      bids.first.present? ? true : false
+    else
+      success_bid.present? ? true : false
+    end
   end
 
   def success_price
@@ -154,7 +165,11 @@ class Product < ApplicationRecord
   end
 
   def deme
-    bid? ? success_price - min_price : 0
+    if new_record?
+      bids.first.amount - min_price
+    else
+      bid? ? success_price - min_price : 0
+    end
   end
 
   def deme_h
@@ -195,7 +210,7 @@ class Product < ApplicationRecord
   end
 
   def shuppin_fee_per
-    if bid? || display != "一般出品"
+    if !new_record? && (bid? || display != "一般出品")
       nil
     else
       per = case min_price
@@ -207,7 +222,7 @@ class Product < ApplicationRecord
   end
 
   def shuppin_fee
-    if bid? || display != "一般出品"
+    if !new_record? && (bid? || display != "一般出品")
       0
     else
       shuppin_fee_per.present? ? min_price * shuppin_fee_per / 100 : 30_000
@@ -225,30 +240,69 @@ class Product < ApplicationRecord
   def self.import_conf(file)
     res = []
     CSV.foreach(file.path, { :headers => true, encoding: Encoding::SJIS }) do |row|
-      product = new(
-        name:      row[0],
-        maker:     row[1],
-        model:     row[2],
-        hitoyama:  row[3].present?,
-        min_price: row[4],
-        year:      row[5],
-        spec:      row[6],
-        condition: row[7],
-        comment:   row[8],
-        display:   row[9] || 0,
-        youtube:   row[10],
-      )
-      product.set_genre
+      product = find_or_initialize_by(app_no: row[0])
+
+      product.attributes =  {
+        name:      row[1],
+        maker:     row[2],
+        model:     row[3],
+        hitoyama:  row[4].present?,
+        min_price: row[5],
+        year:      row[6],
+        spec:      row[7],
+        condition: row[8],
+        comment:   row[9],
+        display:   row[10] || 0,
+        youtube:   row[11],
+        soft_destroyed_at: row[12].present? ? Time.now : nil,
+      }
+
+      product.set_genre if product.genre_id.blank?
       product.valid?
       res << product
     end
 
     res
- end
+  end
 
- def self.import(products)
-   products.each { |p| create(p) }
- end
+  def self.import(products)
+    products.each do |p|
+      find_or_initialize_by(app_no: p[:app_no]).update!(p)
+    end
+  end
+
+  def self.import_conf_by_system(file)
+    res = []
+    CSV.foreach(file.path, { :headers => true, encoding: Encoding::SJIS }) do |row|
+      next if row[0].blank?
+      next unless company = Company.find_by(no: row[0])
+      product = company.products.find_or_initialize_by(app_no: row[1])
+
+      product.attributes =  {
+        list_no:   row[2],
+        name:      row[3],
+        maker:     row[4],
+        model:     row[5],
+        hitoyama:  row[6].present?,
+        min_price: row[7],
+        year:      row[8],
+        spec:      row[9],
+        condition: row[10],
+        comment:   row[11],
+        display:   row[12] || 0,
+        youtube:   row[13],
+        soft_destroyed_at: row[14].present? ? Time.now : nil,
+      }
+
+
+      product.set_genre if product.new_record?
+
+      product.valid?
+      res << product
+    end
+
+    res
+  end
 
   private
 

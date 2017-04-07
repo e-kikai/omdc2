@@ -1,6 +1,7 @@
 class Bid::ProductsController < Bid::ApplicationController
   before_action :check_open
-  before_action :check_entry_date, extract: [:index]
+  before_action :check_entry,       except: [:index, :images, :image_upload, :images_order, :image_destroy, :sim]
+  before_action :check_entry_start, only: [:index, :images, :image_upload, :images_order, :image_destroy]
   before_action :products
   before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
 
@@ -9,7 +10,13 @@ class Bid::ProductsController < Bid::ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open_now.name}_出品商品一覧.csv", "/bid/products/index.csv" }
+      format.csv {
+        if params[:output] == "import"
+          export_csv "#{@open_now.name}_一括更新用.csv", "/bid/products/import.csv"
+        else
+          export_csv "#{@open_now.name}_出品商品一覧.csv", "/bid/products/index.csv"
+        end
+      }
     end
   end
 
@@ -102,19 +109,19 @@ class Bid::ProductsController < Bid::ApplicationController
     end
   end
 
+  def sim
+    if params[:min_price] && params[:amount]
+      @product = @open_now.products.new({min_price: params[:min_price], display: "一般出品"})
+      @product.bids.new({amount: params[:amount]})
+      @product.valid?
+    end
+  end
+
   private
 
-  def check_open
-    redirect_to "/bid/", alert: "現在、開催されている入札会はありません" unless @open_now
-  end
-
-  def check_entry_date
-    redirect_to "/bid/", alert: "現在、出品期間ではありません" unless @open_now
-  end
-
   def products
-    @search   = @open_now.products.search(params[:q])
-    @products = @search.result.where(company_id: current_company.id)
+    @search   = @open_now.products.where(company_id: current_company.id).search(params[:q])
+    @products = @search.result
   end
 
   def get_product
@@ -126,6 +133,6 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def csv_products_params
-    params.require(:products).map { |p| p.permit(:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)}
+    params.require(:products).map { |p| p.permit(:app_no, :name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama, :soft_destroyed_at)}
   end
 end

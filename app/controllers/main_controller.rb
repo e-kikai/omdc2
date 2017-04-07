@@ -8,7 +8,7 @@ class MainController < ApplicationController
         .group("large_genres.id", "large_genres.xl_genre_id", "large_genres.name", "large_genres.order_no")
         .order("large_genres.order_no").count
 
-      @search = @open_now.products.search
+      @search = @open_now.products.listed.search
     end
   end
 end

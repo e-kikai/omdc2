@@ -13,8 +13,21 @@ table.table.table-hover.table-condensed.form-table
     td = f.text_field :name, class: "form-control"
     
   tr
-    th = f.label :owner
+    th = f.label :owner, class: :required
     td = f.text_field :owner, class: "form-control"
+    
+  tr
+    th = f.label :place, class: :required
+    td = f.text_field :place, class: "form-control"
+  tr
+    th = f.label :addr, class: :required
+    td = f.text_field :addr, class: "form-control"
+  tr
+    th = f.label :tel, class: :required
+    td = f.text_field :tel, class: "form-control"
+  tr
+    th = f.label :fax, class: :required
+    td = f.text_field :fax, class: "form-control"
 
   tr
     th: label.required 登録期間
@@ -73,6 +86,6 @@ table.table.table-hover.table-condensed.form-table
     td
       = f.number_field :tax, class: "form-control"
       = " %"
-= f.button data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-success center-block" do
+= f.button data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-default btn-square btn-submit center-block" do
   span.glyphicon.glyphicon-save
-  =< "保存"
+  span.btn-content 保存

@@ -64,7 +64,6 @@
       td.num = number_to_currency open_now.tax_total(products.sum(&:shiharai))
       
     tr
-      th 差引落札請求額
-      td.num = number_to_currency open_now.tax_total(success_products.sum(&:seikyu)) - open_now.tax_total(products.sum(&:shiharai))
+      th = products.sum(&:shiharai) > success_products.sum(&:seikyu) ? "出品支払額" : "落札請求額"
+      td.num = number_to_currency (open_now.tax_total(products.sum(&:shiharai)) - open_now.tax_total(success_products.sum(&:seikyu))).abs
     
-      

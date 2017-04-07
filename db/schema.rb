@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170122073515) do
+ActiveRecord::Schema.define(version: 20170402013449) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,27 +121,31 @@ ActiveRecord::Schema.define(version: 20170122073515) do
   end
 
   create_table "opens", force: :cascade do |t|
-    t.string   "name",                 default: "",         null: false
-    t.string   "owner",                default: "大阪機械団地組合", null: false
+    t.string   "name",                 default: "",                   null: false
+    t.string   "owner",                default: "大阪機械団地組合",           null: false
     t.integer  "lower_price",          default: 20000
     t.integer  "rate",                 default: 1000
     t.integer  "tax",                  default: 8
-    t.date     "entry_start_date",                          null: false
-    t.date     "entry_end_date",                            null: false
-    t.date     "carry_in_start_date",                       null: false
-    t.date     "carry_in_end_date",                         null: false
-    t.date     "preview_start_date",                        null: false
-    t.date     "preview_end_date",                          null: false
-    t.datetime "bid_start_at",                              null: false
-    t.datetime "bid_end_at",                                null: false
-    t.datetime "user_bid_end_at",                           null: false
-    t.date     "carry_out_start_date",                      null: false
-    t.date     "carry_out_end_date",                        null: false
-    t.date     "billing_date",                              null: false
-    t.date     "payment_date",                              null: false
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.date     "entry_start_date",                                    null: false
+    t.date     "entry_end_date",                                      null: false
+    t.date     "carry_in_start_date",                                 null: false
+    t.date     "carry_in_end_date",                                   null: false
+    t.date     "preview_start_date",                                  null: false
+    t.date     "preview_end_date",                                    null: false
+    t.datetime "bid_start_at",                                        null: false
+    t.datetime "bid_end_at",                                          null: false
+    t.datetime "user_bid_end_at",                                     null: false
+    t.date     "carry_out_start_date",                                null: false
+    t.date     "carry_out_end_date",                                  null: false
+    t.date     "billing_date",                                        null: false
+    t.date     "payment_date",                                        null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.datetime "soft_destroyed_at"
+    t.text     "place",                default: "大阪機械卸業団地協同組合 共同展示場", null: false
+    t.text     "addr",                 default: "東大阪市本庄中2-2-38",      null: false
+    t.text     "tel",                  default: "06-6747-7528",       null: false
+    t.text     "fax",                  default: "06-6747-7529",       null: false
     t.index ["soft_destroyed_at"], name: "index_opens_on_soft_destroyed_at", using: :btree
   end
 

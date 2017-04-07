@@ -1,16 +1,18 @@
-.scroll_div.table-responsive
+.scroll_div
   table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
     thead
       tr
         / th
-        th.no = sort_link search, :list_no,        "リストNo."
-        th = sort_link search, :genre_order_no, "商品名"
-        th = sort_link search, :maker,          "メーカー"
-        th = sort_link search, :model,          "型式"
-        th.sepa = sort_link search, :min_price, "最低入札金額"
-        th 入札数
-        th 落札会社
-        th 落札金額
+        th.id = sort_link search, :list_no,         "No."
+        th = sort_link search, :genre_order_no,     "商品名"
+        th = sort_link search, :maker,              "メーカー"
+        th = sort_link search, :model,              "型式"
+        th.sepa = sort_link search, :min_price,     "最低入札金額"
+        
+        th = sort_link search, :success_bid_count,  "入札数"
+        th = sort_link search, :success_company_no, "落札会社"
+        th = sort_link search, :success_bid_amount, "落札金額"
+
         th デメ半
         th 出品区分
         th 出品手数料
@@ -20,14 +22,14 @@
     - products.each do |p|
       tr
         / td = s.check_box :id_eq, {}, b.id
-        td.no = p.list_no
+        td.id = p.list_no
         td = p.name
         td = p.maker
         td = p.model
         td.num.sepa = number_to_currency(p.min_price)
         
-        - if p.bid?
-          td.num = number_with_delimiter(p.bids.length)
+        - if p.success_bid.present?
+          td.num = number_with_delimiter(p.success_bid.count)
           td = p.success_bid.company.name
           td.num = number_to_currency(p.success_bid.amount)
           td.num = number_to_currency(p.deme_h)

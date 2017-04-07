@@ -5,6 +5,7 @@
   div 入札がありませんでした
 - else
   = search_form_for search, url: "" do |s|
+    = s.hidden_field :s, value: params.dig(:q, :s)
     ul.nav.nav-pills
       li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
         span.glyphicon.glyphicon-print
@@ -18,20 +19,20 @@
       table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
         tr
           th
-          th.no = sort_link search, :product_list_no,   "リストNo."
-          th = sort_link search, :genre_order_no,    "商品名"
-          th = sort_link search, :product_maker,     "メーカー"
-          th = sort_link search, :product_model,     "型式"
-          th = sort_link search, :product_year,      "年式"
-          th = sort_link search, :product_min_price, "最低入札金額"
-          th = sort_link search, :amount,            "入札金額"
-          th = sort_link search, :comment,           "備考欄"
-          th = sort_link search, :created_at,        "入札日時"
+          th.id = s.sort_link :product_list_no, "No."
+          th = s.sort_link :genre_order_no,     "商品名"
+          th = s.sort_link :product_maker,      "メーカー"
+          th = s.sort_link :product_model,      "型式"
+          th = s.sort_link :product_year,       "年式"
+          th = s.sort_link :product_min_price,  "最低入札金額"
+          th = s.sort_link :amount,             "入札金額"
+          th = s.sort_link :comment,            "備考欄"
+          th = s.sort_link :created_at,         "入札日時"
           th
         - bids.each do |b|
           tr
             td = s.check_box :id_in, {multiple: true, include_hidden: false}, b.id
-            td.no = b.product.list_no
+            td.id = b.product.list_no
             td = b.product.name
             td = b.product.maker
             td = b.product.model 

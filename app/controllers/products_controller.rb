@@ -1,7 +1,9 @@
 class ProductsController < ApplicationController
   before_action :check_open
   before_action :check_display
-  before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
+  before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do, :images]
+
+  include Exports
 
   def index
     queries = if params[:xl_genre_id].present?
@@ -17,18 +19,18 @@ class ProductsController < ApplicationController
       params[:q]
     end
 
-    @search = @open_now.products.with_keywords(params[:keywords]).search(queries)
+    @search = @products.with_keywords(params[:keywords]).search(queries)
 
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@open_now.name}_検索結果.csv" }
+    end
   end
 
   def qr
-    # if system_signed_in? && @open_now.status == :list
-    #   redirect_to "/system/list/#{params[:id]}/edit"
-    # elsif system_signed_in? && @open_now.status == :carry_out
-    #   redirect_to "/system/carry_out/#{params[:id]}/edit"
-
     product_id = if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
       product = Product.find_by(open_id: $1, company_id: $2, app_no: $3)
       raise "#{params[:key]} 商品情報がありません" if product.blank?
@@ -46,6 +48,9 @@ class ProductsController < ApplicationController
   end
 
   def show
+  end
+
+  def images
   end
 
   # def contact

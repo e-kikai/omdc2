@@ -1,41 +1,43 @@
-ul.nav.nav-pills
-  li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
-    span.glyphicon.glyphicon-plus
-    span.btn-content 新規登録
-    
-  li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
-    span.glyphicon.glyphicon-download-alt
-    span.btn-content CSV出力
-    
-- if products.blank?
-  div 出品商品がありませんでした
-- else
-  .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
-      tr
-        th.no = sort_link search, :app_no,      "申込No."
-        th.no = sort_link search, :list_no,     "リストNo."
-        th = sort_link search, :genre_order_no, "商品名"
-        th = sort_link search, :maker,          "メーカー"
-        th = sort_link search, :model,          "型式"
-        th = sort_link search, :year,           "年式"
-        th = sort_link search, :min_price,      "最低入札金額"
-        th = sort_link search, :comment,        "備考欄"
-        th 画像
-        th 
-      - products.each do |p|
+= search_form_for search, url: "" do |s|
+  = s.hidden_field :s, value: params.dig(:q, :s)
+  ul.nav.nav-pills
+    li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
+      span.glyphicon.glyphicon-plus
+      span.btn-content 新規登録
+      
+    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
+      
+  - if products.blank?
+    div 出品商品がありませんでした
+  - else
+    .scroll_div
+      table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
         tr
-          td.no = p.app_no
-          td.no = p.list_no
-          td = link_to p.name, { action: :edit, id: p.id }
-          td = p.maker
-          td = p.model 
-          td = p.year
-          td.num = number_to_currency(p.min_price)
-          td = p.comment
-          td = p.product_images.present? ? "◯" : "☓"
-          td
-            - message = "#{p.name}\n\nこの出品商品を削除しますか？"
-            = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
-              span.glyphicon.glyphicon-remove
-              =< "削除"
+          th.id = s.sort_link :app_no,      "申込No."
+          th.id = s.sort_link :list_no,     "No."
+          th = s.sort_link :genre_order_no, "商品名"
+          th = s.sort_link :maker,          "メーカー"
+          th = s.sort_link :model,          "型式"
+          th = s.sort_link :year,           "年式"
+          th = s.sort_link :min_price,      "最低入札金額"
+          th = s.sort_link :comment,        "備考欄"
+          th 画像
+          th 
+        - products.each do |p|
+          tr
+            td.id = p.app_no
+            td.id = p.list_no
+            td = link_to p.name, { action: :edit, id: p.id }
+            td = p.maker
+            td = p.model 
+            td = p.year
+            td.num = number_to_currency(p.min_price)
+            td = p.comment
+            td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+            td
+              - message = "#{p.name}\n\nこの出品商品を削除しますか？"
+              = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
+                span.glyphicon.glyphicon-remove
+                =< "削除"

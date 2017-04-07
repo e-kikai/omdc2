@@ -55,7 +55,7 @@
               th 入札金額
               th 同額No.
               th 落札
-            - @product.bids.successes.each.with_index do |b, i|
+            - @product.bids.order(amount: :desc, sameno: :desc).each.with_index do |b, i|
               tr
                 td = b.company.name
                 td.num = number_to_currency(b.amount)

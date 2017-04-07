@@ -10,13 +10,13 @@ class Bid::OpensController < Bid::ApplicationController
   def show
     redirect_to "/bid/opens/", alert: "#{@open.name}はまだ終了していません" if @open.bid_end_at > Time.now
 
-    @search    = @open.products.includes(:bids, :company, :genre, :large_genre, :xl_genre).search(params[:q])
+    @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open.name}_result.csv" }
+      format.csv { export_csv "#{@open.name}_落札結果一覧.csv" }
     end
   end
 

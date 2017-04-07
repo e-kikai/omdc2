@@ -37,7 +37,8 @@
         th.num 消費税(#{@open_now.tax}%)
         th.sepa 差引出品支払額
         th 結果
-        th.num 金額
+        th.num 落札請求額
+        th.num 出品支払額
         
       - @companies.each do |c|
         - next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
@@ -62,8 +63,13 @@
           td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))
           td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))
           
-          td = @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? "支払" : "請求"
-          td.num
-            - total = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
-            = number_to_currency(total)
+          - total = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
           
+          - if @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu)
+            td 支払
+            td.num
+            td.num = number_to_currency(total) 
+          - else
+            td 請求
+            td.num = number_to_currency(total) 
+            td.num

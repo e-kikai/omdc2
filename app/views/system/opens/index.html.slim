@@ -2,9 +2,9 @@
 - breadcrumb  :system_opens
 
 .container-fluid.list-menu
-  = link_to({action: "new"}, class: "btn btn-success") do
+  = link_to({action: "new"}, class: "btn btn-default btn-square") do
     span.glyphicon.glyphicon-plus
-    =< "新規登録"
+    span.btn-content 新規登録
     
   / = link_to({format: :csv}, class: "btn btn-warning") do
   /   span.glyphicon.glyphicon-save-file

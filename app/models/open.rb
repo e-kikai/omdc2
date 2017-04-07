@@ -29,44 +29,33 @@ class Open < ApplicationRecord
     where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id)
   }
 
-  require 'date'
-
-  # 現在の入札会の状態を取得
-  def status
-    case Time.now
-    when entry_start_date..entry_end_date;                 :entry
-    when carry_in_start_date..carry_in_end_date;           :carry_in
-    when carry_in_end_date..bid_start_at;                  :list
-    when bid_start_at.to_datetime..bid_end_at.to_datetime; :bid
-    when carry_out_start_date..carry_out_end_date;         :carry_out
-    else                                                   :none
-    end
-  end
-
-  def check(status)
-    case status
-    when :result_list; Time.now === bid_end_at.to_datetime..carry_out_end_date && Display.check(:result_list)
-    end
-  end
-
   def display?
-    # if    [:bid, :carry_out].include? status;                true
-    # elsif status == :list && Display.check(:search) == true; true
-    # else;                                                    false
-    # end
-    true
+    ((carry_in_end_date..bid_start_at).cover?(Time.now) && Display.check(:search)) ||
+    (Time.now > bid_start_at) rescue false
+  end
+
+  def bid?
+    (bid_start_at..bid_end_at).cover?(Time.now) rescue false
+  end
+
+  def bid_start?
+    Time.now > bid_start_at rescue false
   end
 
   def result_list?
-    if status == :carry_out && Display.check(:result_list) == true; true
-    else;                                                           false
-    end
+    Time.now > bid_end_at && Display.check(:result_sum) rescue false
   end
 
   def result_sum?
-    if status == :carry_out && Display.check(:result_list) == true; true
-    else;                                                           false
-    end
+    Time.now > bid_end_at && Display.check(:result_list) rescue false
+  end
+
+  def entry?
+    (entry_start_date..entry_end_date).cover?(Time.now) rescue false
+  end
+
+  def entry_start?
+    Time.now > entry_start_date rescue false
   end
 
   def tax_calc(val)
@@ -75,5 +64,9 @@ class Open < ApplicationRecord
 
   def tax_total(val)
     val + tax_calc(val)
+  end
+
+  def filename
+    name.gsub(/[^0-9A-Za-z]/, "")
   end
 end

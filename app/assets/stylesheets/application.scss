@@ -155,6 +155,7 @@ table {
 
   &.info-table {
     background-color: #FFF;
+    margin-bottom: 16px;
   }
 
   &.form-table {
@@ -174,6 +175,11 @@ table {
     }
   }
 
+}
+
+.form-inline input[type=number].form-control {
+  width: 120px;
+  text-align: right;
 }
 
 .field_with_errors {
@@ -224,7 +230,8 @@ table {
   }
 }
 
-div.scroll_div { overflow: scroll; width: 100%; }
+// div.scroll_div { overflow: scroll; width: 100%; }
+// div.scroll_div { overflow: auto; }
 
 .bid-menu {
   .panel-body {
@@ -269,4 +276,32 @@ label.required abbr {
 .infos {
   background: #FFF;
   padding: 8px;
+}
+
+#page-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+hr {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.btn.btn-square.btn-search {
+  margin: 0;
+  width: 100%;
+}
+
+.imgs-area {
+  img {
+    width: 100%;
+  }
+}
+
+table.bid-table {
+  td.image img {
+    width: 100%;
+  }
 }

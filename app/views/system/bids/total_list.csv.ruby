@@ -18,12 +18,15 @@ res = %w(
   消費税
   差引出品支払額
   結果
-  金額
+  落札請求額
+  出品支払額
 ).to_csv
 
 @companies.each do |c|
   next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
-  res << [
+
+  total = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
+  res << ([
     c.no,
     c.name,
     (@company_products[c.id][:success_products].sum(&:success_price)),
@@ -43,11 +46,9 @@ res = %w(
     (@company_products[c.id][:products].sum(&:shiharai)),
     (@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai))),
     (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai))),
-
-    @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? "支払" : "請求",
-
-    (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
-  ].to_csv
+  ] + (
+    @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? ["支払", "", total] : ["請求", total, ""]
+  )).to_csv
 end
 
 res

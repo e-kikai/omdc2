@@ -53,16 +53,16 @@
       span.glyphicon.glyphicon-tag: span.menu-title 出品商品申し込み
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/products/new", class: "btn btn-default btn-square" do
+        li = link_to "/system/products/new", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-plus
           span.btn-content 新規登録
-        li = link_to "/system/products/csv", class: "btn btn-default btn-square" do
+        li = link_to "/system/products/csv", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-upload
           span.btn-content CSV一括登録
-        li = link_to "/system/products/images", class: "btn btn-default btn-square" do
+        li = link_to "/system/products/images", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-picture
           span.btn-content 画像登録
-        li = link_to "/system/products/", class: "btn btn-default btn-square" do
+        li = link_to "/system/products/", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 一覧
       ul.nav.nav-pills.nav-stacked
@@ -75,19 +75,19 @@
 
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/list/", class: "btn btn-default btn-square" do
+        li = link_to "/system/list/", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 申込一覧
-        li = link_to "/system/list/ef", class: "btn btn-default btn-square btn-twoline" do
+        li = link_to "/system/list/ef", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-tags
           span.btn-content QRコードエフ<br />シール印刷
-        li = link_to "/system/list/new", class: "btn btn-default btn-square" do
+        li = link_to "/system/list/new", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-qrcode
           span.btn-content 入庫処理
-        li = link_to "/system/list.csv", class: "btn btn-default btn-square" do
+        li = link_to "/system/list.csv", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-download-alt
           span.btn-content リストCSV
-        li = link_to "/system/list/hangtag", class: "btn btn-default btn-square btn-twoline" do
+        li = link_to "/system/list/hangtag", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 下げ札<br />シール印刷
 
@@ -98,15 +98,12 @@
       span.glyphicon.glyphicon-pencil: span.menu-title 入札
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/bids/new", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/new", class: "btn btn-default btn-square #{:disabled unless @open_now.bid_start?}" do
           span.glyphicon.glyphicon-pencil
           span.btn-content 入札
-        li = link_to "/system/bids/", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/", class: "btn btn-default btn-square #{:disabled unless @open_now.bid_start?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 入札履歴
-        li = link_to "/", class: "btn btn-default btn-square", target: "_blank" do
-          span.glyphicon.glyphicon-search
-          span.btn-content 商品検索
 
   .arrow_area: span.glyphicon.glyphicon-chevron-down
         
@@ -115,26 +112,26 @@
       span.glyphicon.glyphicon-flag: span.menu-title 入札終了後
     .panel-body
       ul.nav.nav-pills
-        li = link_to "/system/opens/#{@open_now.id}", class: "btn btn-default btn-square" do
+        li = link_to "/system/opens/#{@open_now.id}", class: "btn btn-default btn-square #{:disabled unless @open_now.result_list?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 落札結果一覧
-        li = link_to "/system/bids/rakusatsu_sum", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/rakusatsu_sum", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 落札個別計算表
-        li = link_to "/system/bids/shuppin_sum", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/shuppin_sum", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 出品個別計算表
-        li = link_to "/system/bids/total", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/total", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-file
           span.btn-content 落札・出品集計
           
-        li = link_to "/system/bids/total_list", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/total_list", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 集計一覧
-        li = link_to "/system/bids/total", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/total", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-print
           span.btn-content 精算表印刷
-        li = link_to "/system/bids/total", class: "btn btn-default btn-square" do
+        li = link_to "/system/bids/total", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-qrcode
           span.btn-content 出庫処理
           

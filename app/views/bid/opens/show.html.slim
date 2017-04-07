@@ -1,43 +1,68 @@
 - set_meta_tags title: "落札結果"
 - breadcrumb  :bid_products
 
-- if @pproducts.blank?
-  div 入札がありませんでしたa
-- else
-  = paginate @pproducts
-  .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
-      tr
-        th = sort_link @search, :list_no,        "リストNo."
-        th = sort_link @search, :genre_order_no, "商品名"
-        th = sort_link @search, :maker,          "メーカー"
-        th = sort_link @search, :model,          "型式"
-        th.sepa = sort_link @search, :min_price, "最低入札金額"
-        th 入札数
-        th 落札金額
-        th.sepa 落札会社
-        th 自社入札金額
-        th 結果
-      - @pproducts.each do |p|
-        tr
-          td.num = p.list_no
-          td = p.name
-          td = p.maker
-          td = p.model 
-          td.num.sepa = number_to_currency(p.min_price)
-          - if p.bid?
-            td.num = p.bids.count
-            td.num = number_to_currency(p.success_bid.amount)
-            td.sepa = p.success_bid.company.name rescue "aaa"
-            - if my_amount = p.bids.where(company: current_company).maximum(:amount)
-              td.num = number_to_currency(my_amount)
-              td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
-            - else
-              td
-              td
-          - else
-            td
-            td
-            td.sepa
-            td
-            td
+= search_form_for @search, url: "/bid/opens/#{@open.id}", class: "form-inline" do |s|
+  = s.hidden_field :s, value: params.dig(:q, :s)
+  ul.nav.nav-pills
+    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
+
+  .row
+    = label_tag :list_no, "ジャンル ", class: :h4
+    .form-group
+      = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
+            
+      = label_tag :list_no, "最低入札金額 ", class: :h4
+      .form-group
+        = s.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+        = " 〜 "
+        = s.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+        
+        = button_tag type: :submit, class: "btn btn-info" do
+          .glyphicon.glyphicon-search
+          span.btn-content 検索
+          
+  - if @pproducts.blank?
+    div 該当の出品商品はありませんでした
+  - else
+      = paginate @pproducts
+      .scroll_div
+        table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+          tr
+            th.id = s.sort_link :list_no,              "No."
+            th = s.sort_link :genre_order_no,          "ジャンル"
+            th = s.sort_link :genre_order_no,          "商品名"
+            th = s.sort_link :maker,                   "メーカー"
+            th = s.sort_link :model,                   "型式"
+            th.sepa = s.sort_link :min_price,          "最低入札金額"
+            th = s.sort_link :success_bid_count,       "入札数"
+            th = s.sort_link :success_bid_amount,      "落札金額"
+            th.sepa = s.sort_link :success_company_no, "落札会社"
+            th 自社入札金額
+            th 結果
+          - @pproducts.each do |p|
+            tr
+              td.id = p.list_no
+              td = p.genre.name
+              td = p.name
+              td = p.maker
+              td = p.model 
+              td.num.sepa = number_to_currency(p.min_price)
+              - if p.success_bid.present?
+                td.num = p.success_bid.count
+                td.num = number_to_currency(p.success_bid.amount)
+                td.sepa = p.success_company.name
+              
+                - if my_amount = p.bids.where(company: current_company).maximum(:amount)
+                  td.num = number_to_currency(my_amount)
+                  td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
+                - else
+                  td
+                  td
+              - else
+                td
+                td
+                td.sepa
+                td
+                td

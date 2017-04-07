@@ -6,6 +6,7 @@
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1;cols:1'
       tr
+        th 申込No.
         th 商品名
         th エラー
         th メーカー
@@ -19,9 +20,11 @@
         th 備考欄
         th 出品区分
         th youtube
+        th 削除
 
       - @res.each do |p|
         tr
+          td = p.app_no.presence || "新規"
           td = p.name
           td
             - p.errors.full_messages.each do |msg|
@@ -37,9 +40,10 @@
           td = p.comment
           td = p.display
           td = p.youtube
+          td = "◯" if p.soft_destroyed_at.present?
           
         - if p.errors.blank?
-          - [:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama].each do |k|
+          - [:app_no, :name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama, :soft_destroyed_at].each do |k|
             = hidden_field_tag "products[][#{k}]", p[k]
     
     = button_tag(data: { "disable-with" => "保存..."}, class: "btn btn-default btn-square btn-submit center-block") do

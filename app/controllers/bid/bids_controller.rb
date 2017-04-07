@@ -1,7 +1,11 @@
 class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
-  before_action :check_entry, extract: [:index]
-  before_action :bids
+  before_action :check_bid,         only: [:index, :new, :create, :destroy]
+  before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
+
+  before_action :bids, only: [:index, :total, :rakusatsu_sum]
+  before_action :products, only: [:shuppin_sum, :total]
+
   before_action :bid_init, only: [:new, :create]
 
   include Exports
@@ -28,17 +32,9 @@ class Bid::BidsController < Bid::ApplicationController
     end
   end
 
-  def results
-    @search    = @open_now.products.listed.includes(:bids).search(params[:q])
-    @products  = @search.result.order(:list_no)
-    @pproducts = @products.page(params[:page])
-  end
-
   def rakusatsu_sum
-    @search   = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid).search(params[:q])
-    @bids     = @search.result.order(:created_at)
     @company  = current_company
-    
+
     respond_to do |format|
       format.html
       format.pdf {
@@ -53,19 +49,33 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def shuppin_sum
-    @search   = @open_now.products.listed.where(company: current_company).includes(:genre, :success_bid).search(params[:q])
-    @products = @search.result.order(:list_no)
+    @products = @products.order(:list_no)
+    @company  = current_company
+
+    # respond_to do |format|
+    #   format.html
+    #   format.pdf { export_pdf "#{@open_now.name}_元引き一覧.pdf" }
+    # end
+  end
+
+  def total
+    @products         = @products
+    @success_products = @bids.success_products
+  end
+
+  def motobiki
+    @search   = @open_now.products.listed.includes(:success_bid, :success_company, :area, :company).search(params[:q])
+    relation  = @search.result
+
+    @products = relation.where(company: current_company, display: "一般出品", view_success_bids: { product_id: nil }).or(relation.where(view_success_bids: { company_id: current_company.id }))
+
     @company  = current_company
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_元引き一覧.pdf" }
+      format.csv { export_csv "#{@open_now.name}_引取・元引き一覧.csv" }
+      format.pdf { export_pdf "#{@open_now.name}_引取・元引き一覧.pdf" }
     end
-  end
-
-  def total
-    @products         = @open_now.products.listed.where(company: current_company).includes(:success_bid)
-    @success_products = @open_now.bids.where(company: current_company).includes(:product, :success_bid).success_products
   end
 
   def destroy
@@ -76,13 +86,14 @@ class Bid::BidsController < Bid::ApplicationController
 
   private
 
-  def check_open
-    redirect_to "/bid/", notice: "現在、開催されている入札会はありません" unless @open_now
+  def bids
+    @search = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid).search(params[:q])
+    @bids   = @search.result.order(created_at: :desc)
   end
 
-  def bids
-    @search = @open_now.bids.where(company: current_company).includes(:product, :genre).search(params[:q])
-    @bids   = @search.result.order(created_at: :desc)
+  def products
+    @search   = @open_now.products.listed.where(company_id: current_company.id).includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre).search(params[:q])
+    @products = @search.result
   end
 
   def bid_init

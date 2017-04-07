@@ -12,7 +12,7 @@ scss:
     .scroll_div
       table.table.table-striped.table-hover.table-condensed
         tr
-          th リストNo.
+          th.id No.
           th 商品名
           th メーカー
           th 型式
@@ -20,7 +20,7 @@ scss:
           th 入札金額
         - @products.each do |p|
           tr
-            td = p.list_no
+            td.id = p.list_no
             td = p.name
             td = p.maker
             td = p.model 

@@ -1,3 +1,19 @@
+coffee:
+  $ ->
+    $('#check-youtube').click ->
+      youtube = $('input.youtube').val()
+      
+      if !youtube
+        alert "Youtubeの動画IDを入力してください"
+        retur false
+      
+      if youtube.match(/watch\?v\=([a-zA-Z0-9-+]+)/)
+        youtube = RegExp.$1
+      else if youtube.match(/youtu\.be\/([a-zA-Z0-9-+]+)/)
+        youtube = RegExp.$1
+    
+      window.open().location.href = "https://www.youtube.com/watch?v=" + youtube
+
 .col-md-offset-2.col-md-8
   - if f.object.errors.full_messages.present?
     .alert.alert-danger
@@ -49,10 +65,9 @@
       th = f.label :spec
       td = f.text_area :spec, class: "form-control"
       
-      
     tr
       th = f.label :condition
-      td = f.text_area :condition, class: "form-control", placeholder: "例) 「試運転化」「ジャンク品(部品取り用)」「ドリル✕10本」など\n商品の状態、詳細などを記入して下さい"
+      td = f.text_area :condition, class: "form-control", placeholder: "例) 「試運転可」「ジャンク品(部品取り用)」「ドリル✕10本」など\n商品の状態、詳細などを記入して下さい"
           
     tr
       th = f.label :comment
@@ -66,13 +81,13 @@
           label.radio-inline = f.radio_button(:display, k, inline: true) + k
         p.help-block お客様には表示されません
           
-    / tr
-    /   th 画像
-    /   td
-      
     tr
       th = f.label :youtube
-      td = f.text_field :youtube, class: "form-control"
+      td
+        = f.text_field :youtube, class: "form-control youtube"
+        = button_tag type: :button, id: "check-youtube", class: "btn btn-primary" do
+            span.glyphicon.glyphicon-film
+            span.btn-content Youtube確認
 
   = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
     span.glyphicon.glyphicon-save

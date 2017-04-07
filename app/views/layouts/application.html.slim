@@ -9,11 +9,18 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
     = csrf_meta_tags
 
-  body
+  body onLoad="FixedMidashi.create();"
     header.navbar.navbar-default.container-fluid role="navigation"
       .navbar-header
         = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo"
-      .navbar-collapse.collapse
+        
+        button.navbar-toggle data-toggle="collapse" data-target="#navbar-collapse-1"
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+          
+      #navbar-collapse-1.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
           li = link_to "/wishlist" do 
             .glyphicon.glyphicon-list
@@ -21,7 +28,10 @@ html
           li = link_to "http://www.omdc.or.jp/?page_id=542", target: "_blank" do 
             .glyphicon.glyphicon-question-sign
             span.btn-content 入札会FAQ
-
+          li = link_to "/bid/", target: "_blank" do 
+            .glyphicon.glyphicon-star-empty
+            span.btn-content 組合員ページ
+            
     .container
       = raw breadcrumbs style: :bootstrap, semantic: true
 
@@ -39,3 +49,7 @@ html
       = yield
 
     footer.container-fluid Copyright &copy; #{Time.now.year} OMDC, All Rights reserved.
+
+    = button_tag "", class: "btn btn-default btn-square", id: "page-top" do
+      span.glyphicon.glyphicon-arrow-up
+      span.btn-content 一番上に戻る

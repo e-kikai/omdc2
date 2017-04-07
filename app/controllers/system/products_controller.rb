@@ -10,7 +10,17 @@ class System::ProductsController < System::ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open_now.name}_#{@company.name}_出品商品一覧.csv", "/bid/products/index.csv" }
+      format.csv {
+        if params[:output] == "import"
+          export_csv "#{@open_now.name}_#{@company.no}_#{@company.name}_一括更新用.csv", "/system/products/import.csv"
+        elsif params[:output] == "import_all"
+          @search   = @open_now.products.search(params[:q])
+          @products = @search.result.order(:list_no)
+          export_csv "#{@open_now.name}_一括更新用(全取得).csv", "/system/products/import.csv"
+        else
+          export_csv "#{@open_now.name}_#{@company.no}_#{@company.name}_出品商品一覧.csv", "/bid/products/index.csv"
+        end
+      }
     end
   end
 
@@ -49,7 +59,7 @@ class System::ProductsController < System::ApplicationController
   def csv_upload
     redirect_to "/system/products/csv", alert: 'CSVファイルを選択してください' if params[:file].blank?
 
-    @res = @products.import_conf(params[:file])
+    @res = @open_now.products.import_conf_by_system(params[:file])
     redirect_to "/system/products/csv", alert: '商品情報がありませんでした' if @res.length == 0
   end
 
@@ -58,7 +68,9 @@ class System::ProductsController < System::ApplicationController
 
     redirect_to "/system/products/csv", alert: '一括登録する商品がありません' if num == 0
 
-    @products.import(csv_products_params)
+    csv_products_params.each do |p|
+      @open_now.products.find_or_initialize_by(company_id: p[:company_id], app_no: p[:app_no]).update!(p)
+    end
     redirect_to("/system/products/", notice: "#{num.to_s}件の商品を一括登録しました")
   end
 
@@ -149,7 +161,7 @@ class System::ProductsController < System::ApplicationController
   end
 
   def csv_products_params
-    params.require(:products).map { |p| p.permit(:name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)}
+    params.require(:products).map { |p| p.permit(:company_id, :list_no, :app_no, :name, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama, :soft_destroyed_at)}
   end
 
 end

@@ -6,7 +6,7 @@
     .scroll_div
       table.table.table-striped.table-hover.table-condensed
         tr
-          th リストNo.
+          th.id No.
           th 商品名
           th メーカー
           th 型式
@@ -15,7 +15,7 @@
           th 結果
         - @bids.each do |b|
           tr
-            td = b.product.list_no
+            td.id = b.product.list_no
             td = b.product.name
             td = b.product.maker
             td = b.product.model 

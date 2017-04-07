@@ -17,8 +17,8 @@
               .checkbox-inline
                 = f.check_box :remember_me
                 = f.label :remember_me
-            = f.button type:"submit", class: 'btn btn-primary center-block', data: {disable_with: 'ログイン中・・・' } do
+            = f.button type:"submit", class: 'btn btn-default btn-square btn-submit center-block', data: {disable_with: 'ログイン中・・・' } do
               span.glyphicon.glyphicon-log-in
-              =< "ログイン"
+              span.btn-content ログイン
       / = render "company_users/shared/links"
       

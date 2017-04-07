@@ -5,9 +5,9 @@ ul.nav.nav-pills
   li = link_to "/system/companies/new", class: "btn btn-default btn-square" do
     span.glyphicon.glyphicon-plus
     span.btn-content 新規会社登録
-  / = link_to "/system/companies.csv", class: "btn btn-warning" do
-  /   span.glyphicon.glyphicon-save-file
-  /   =< "エクスポート"
+  li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content CSV出力
 
 - if @companies.blank?
   div 会社がありませんでした
@@ -22,7 +22,7 @@ ul.nav.nav-pills
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
-        th.id ID
+        / th.id ID
         th.id No.
         th 会社名
         th 出品
@@ -34,7 +34,7 @@ ul.nav.nav-pills
         th 作成日時
       - @companies.each do |c|
         tr
-          td.id = c.id
+          / td.id = c.id
           td.id = c.no
           td = link_to c.name, "/system/companies/#{c.id}/edit"
           td = c.entry ? "◯" : "☓"

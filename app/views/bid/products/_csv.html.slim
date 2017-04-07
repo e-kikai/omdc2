@@ -23,14 +23,19 @@ ul.nav.nav-pills
   li = link_to "/products_template.csv", class: "btn btn-default btn-square" do
     span.glyphicon.glyphicon-download-alt
     span.btn-content テンプレートCSV
+  li = link_to({action: :index, format: :csv, output: :import}, class: "btn btn-default btn-square") do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content 更新用CSV
       
-.col-md-6.col-md-offset-3
+.col-md-8.col-md-offset-2
    .form-group
      = label_tag :csv, "CSVファイル"
      = file_field_tag :file, class: "js-csv-upload", required: "required"
      .help-block
-       . 機械名、最低入札金額は必須です
-       . ジャンルは自動判別します
+       li 機械名、最低入札金額は必須です
+       li ジャンルは自動判別します
+       li 一山は、空白だと「×」、何か入力されていると「◯」になります
+       li 出品区分は、「一般出品」「常設コマ」「単品預り」「店頭出品」のいずれかを入力してください
    
    = button_tag(data: { "disable-with" => "アップロード中..."}, class: "btn btn-default btn-square btn-submit center-block") do
      span.glyphicon.glyphicon-upload

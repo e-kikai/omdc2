@@ -1,6 +1,9 @@
 class System::BidsController < System::ApplicationController
   before_action :check_open
-  before_action :check_entry_date, except: [:index]
+  before_action :check_bid_start,   only: [:index, :new, :create, :destroy]
+  before_action :check_result_list, only: [:results]
+  before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :total_list]
+
   before_action :get_companies_selector, except: [:results]
   before_action :bids, except: [:results]
   before_action :bid_init, only: [:new, :create]
@@ -10,8 +13,8 @@ class System::BidsController < System::ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_入札確認.pdf", "/bid/bids/index.pdf" }
-      format.csv { export_csv "#{@open_now.name}_入札確認.csv", "/bid/bids/index.csv" }
+      format.pdf { export_pdf "#{@open_now.name}_入札履歴.pdf", "/bid/bids/index.pdf" }
+      format.csv { export_csv "#{@open_now.name}_入札履歴.csv", "/bid/bids/index.csv" }
     end
   end
 
@@ -29,12 +32,6 @@ class System::BidsController < System::ApplicationController
     end
   end
 
-  def results
-    @search    = @open_now.products.listed.includes(:bids).search(params[:q])
-    @products  = @search.result.order(:list_no)
-    @pproducts = @products.page(params[:page])
-  end
-
   def rakusatsu_sum
     if @company
       @search   = @open_now.bids.where(company: @company).includes(:product, :genre, :success_bid).search(params[:q])
@@ -50,7 +47,7 @@ class System::BidsController < System::ApplicationController
 
   def shuppin_sum
     if @company
-      @search   = @open_now.products.listed.where(company: @company).includes(:genre, :success_bid).search(params[:q])
+      @search   = @open_now.products.listed.where(company: @company).includes(:genre, :success_bid, :success_company).search(params[:q])
       @products = @search.result.order(:list_no)
     end
   end
@@ -85,7 +82,7 @@ class System::BidsController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_集計一覧.csv" }
+      format.pdf { export_pdf "#{@open_now.name}_集計一覧.pdf" }
       format.csv { export_csv "#{@open_now.name}_集計一覧.csv" }
     end
   end
@@ -104,14 +101,6 @@ class System::BidsController < System::ApplicationController
       session[:system_company_id] = nil
       flash[:notice] = "会社を選択してください"
     end
-  end
-
-  def check_open
-    redirect_to "/system/", notice: "現在、開催されている入札会はありません" unless @open_now
-  end
-
-  def check_entry_date
-    redirect_to "/system/", notice: "現在、入札期間ではありません" unless @open_now
   end
 
   def bids

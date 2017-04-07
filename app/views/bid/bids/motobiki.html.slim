@@ -1,0 +1,36 @@
+- set_meta_tags title: "落札結果 引取・元引き一覧"
+- breadcrumb  :bid_something, "落札結果 引取・元引き一覧"
+
+= search_form_for @search, url: "motobiki" do |s|
+  = s.hidden_field :s, value: params.dig(:q, :s)
+  ul.nav.nav-pills
+    li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-print
+      span.btn-content 引取・元引PDF
+      
+    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
+      
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      thead
+        tr
+          / th
+          th.id = s.sort_link :list_no,         "No."
+          th = s.sort_link :genre_order_no,     "商品名"
+          th = s.sort_link :maker,              "メーカー"
+          th = s.sort_link :model,              "型式"
+          th.sepa = s.sort_link :min_price,     "最低入札金額"
+          
+          th = "内容"
+          th = s.sort_link :area_name, "出品場所"
+      - @products.each do |p|
+        tr
+          td.id = p.list_no
+          td = p.name
+          td = p.maker
+          td = p.model
+          td.num.sepa = number_to_currency(p.min_price)
+          td = p.success_company.blank? ? "元引き" : "引取"
+          td = p.area_name

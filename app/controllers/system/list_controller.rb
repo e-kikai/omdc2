@@ -14,11 +14,15 @@ class System::ListController < ApplicationController
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
 
+    @count         = @products.count
+    @company_count = @products.distinct.count(:company_id)
+    @min_price_sum = @products.sum(:min_price)
+
     respond_to do |format|
       format.html
       format.csv {
         @products  = @products.listed
-        export_csv
+        export_csv "#{@open_now.name}_出品一覧.csv"
       }
     end
   end
@@ -60,8 +64,8 @@ class System::ListController < ApplicationController
   end
 
   def edit
-    # デフォルト値
-    @product.list_no ||= @open_now.products.max_list_no + 1
+    # @product.list_no ||= @open_now.products.max_list_no + 1 # デフォルト値
+
     @product.area_id ||= session[:system_area_id]
 
     @products          = @open_now.products.includes(:company).where(company_id: @product.company_id).order(:app_no)
@@ -78,16 +82,16 @@ class System::ListController < ApplicationController
       end
     end
 
-    session[:system_area_id] = list_no_params[:area_id]
+    lp = list_no_params
+    session[:system_area_id] = lp[:area_id]
 
-    if @product.update(list_no_params)
+    lp[:list_no] = @open_now.products.max_list_no + 1 if lp[:list_no].blank? # デフォルト値
+
+    if @product.update(lp)
       redirect_to "/system/list/#{@product.id}/edit", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
     else
       render :list_no
     end
-  end
-
-  def qr_fin
   end
 
   private

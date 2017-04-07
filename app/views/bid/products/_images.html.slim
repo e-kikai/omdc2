@@ -71,6 +71,7 @@ scss:
     border: 1px dashed #b4bcc2;
     border-radius: 4px;
     padding: 8px;
+    min-height: 132px;
 
     .dz-message {
       font-size: 16px;
@@ -79,7 +80,23 @@ scss:
     }
     
     .dz-preview {
-      margin: 0 8px;
+      margin: 0 4px;
+      width: 100px;
+      
+      .dz-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        
+        img {
+          min-width: 100px;
+          min-height: 100px;
+        }
+      }
+      
+      .dz-size {
+        display: none;
+      }
     }
   }
   
@@ -96,36 +113,52 @@ scss:
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
-        th.no 申込No.
-        th.no リストNo.
-        th 商品名/メーカー/型式
-        th 最低入札金額
-        th.imgs アップロード
+        / th.id 申込No.
+        / th.id No.
+        / th 商品名/メーカー/型式
+        / th 最低入札金額
+        / th.imgs アップロード
+        th
+          .col-md-4 商品情報
+          .col-md-8
       - products.each do |p|
         tr
-          td.no = p.app_no
-          td.no = p.list_no
-          td #{p.name} #{p.maker} #{p.model}
-          td.num = p.min_price.to_s(:delimited) + "円"
-          td.imgs
-            = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
-              / - p.product_images.each do |i|
-              /   .dz-preview.dz-processing.dz-image-preview.dz-success.dz-complete id="images_#{i.id}"
-              /     .dz-details
-              /       .dz-filename
-              /         span.data-dz-name #{i.image.file.original_filename}
-              /       .dz-size.data-dz-size
-              /     .dz-image
-              /       = image_tag i.image.thumb.url, alt: i.image.file.original_filename, class: "data-dz-thumbnail"
-              /     .dz-progress
-              /       span.dz-upload data-dz-uploadprogress=""
-              /     .dz-success-mark
-              /     .dz-error-mark
-              /     .dz-error-message
-              /       span data-dz-errormessage=""
-              /     = link_to "削除", "javascript:undefined;", "data-dz-remove" => "",  id: i.id, class: "dz-remove"
+          td 
+            .col-md-4
+              span #{p.app_no} : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)} 
+              = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
+                span.glyphicon.glyphicon-link
+                span 確認
+            .col-md-8 
+              = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
+                - p.product_images.each do |i|
+                  = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
+                .fallback
+                  = file_field_tag(:image)
               
-              - p.product_images.each do |i|
-                = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
-              .fallback
-                = file_field_tag(:image)
+          / td.no = p.app_no
+          / td.no = p.list_no
+          / td #{p.name} #{p.maker} #{p.model}
+          / td.num = number_to_currency p.min_price
+          / td.imgs
+          /   = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
+          /     / - p.product_images.each do |i|
+          /     /   .dz-preview.dz-processing.dz-image-preview.dz-success.dz-complete id="images_#{i.id}"
+          /     /     .dz-details
+          /     /       .dz-filename
+          /     /         span.data-dz-name #{i.image.file.original_filename}
+          /     /       .dz-size.data-dz-size
+          /     /     .dz-image
+          /     /       = image_tag i.image.thumb.url, alt: i.image.file.original_filename, class: "data-dz-thumbnail"
+          /     /     .dz-progress
+          /     /       span.dz-upload data-dz-uploadprogress=""
+          /     /     .dz-success-mark
+          /     /     .dz-error-mark
+          /     /     .dz-error-message
+          /     /       span data-dz-errormessage=""
+          /     /     = link_to "削除", "javascript:undefined;", "data-dz-remove" => "",  id: i.id, class: "dz-remove"
+          /     
+          /     - p.product_images.each do |i|
+          /       = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
+          /     .fallback
+          /       = file_field_tag(:image)

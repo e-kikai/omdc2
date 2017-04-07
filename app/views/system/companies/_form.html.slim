@@ -3,7 +3,7 @@ table.table.table-hover.table-condensed.form-table
     th ID
     td = f.object.id || "新規登録"
   tr
-    th = f.label :name
+    th = f.label :name, class: :required
     td = f.text_field :name, class: "form-control",  required: "required"
     
   tr
@@ -47,7 +47,7 @@ table.table.table-hover.table-condensed.form-table
     td = f.text_area :memo, class: "form-control"
     
   tr
-    th = f.label :entry
+    th = f.label :entry, class: :required
     td
       label.radio-inline
         = f.radio_button :entry, true
@@ -56,21 +56,22 @@ table.table.table-hover.table-condensed.form-table
         = f.radio_button :entry, false
         | 不可
     tr
-      th = f.label :account
+      th = f.label :account, class: :required
       td = f.text_field :account, class: "form-control", required: "required"
       
   - if f.object.id.blank?
     tr
-      th = f.label :password
+      th = f.label :password, class: :required
       td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上", required: "required"
-  / - else
-  /   tr
-  /     th = f.label :password, "パスワード変更"
-  /     td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上"
-  /   tr
-  /     th = f.label :password_confirmation, "パスワード変更(確認)"
-  /     td = f.password_field :password_confirmation, class: "form-control", placeholder: "確認用"
+  - else
+    tr
+      th = f.label :password, "パスワード変更"
+      td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上"
+    / tr
+    /   th = f.label :password_confirmation, "パスワード変更(確認)"
+    /   td = f.password_field :password_confirmation, class: "form-control", placeholder: "確認用"
 
-= f.button :button, data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-success center-block" do
+= f.button :button, data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-default btn-square btn-submit center-block" do
   span.glyphicon.glyphicon-save
-  =< "保存"
+  span.btn-content 保存
+  

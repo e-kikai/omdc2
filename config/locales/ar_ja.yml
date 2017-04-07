@@ -33,6 +33,10 @@ ja:
         lower_price: 最低入札金額
         rate: 入札金額単位
         tax: 消費税率
+        place: "開催場所"
+        addr: "開催住所"
+        tel: "TEL"
+        fax: "FAX"
       company:
         name: 会社名
         no: '会社No.'

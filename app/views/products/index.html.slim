@@ -12,35 +12,45 @@
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
     
-.row
-  = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |f|
+= search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |s|
+  = s.hidden_field :s, value: params.dig(:q, :s)
+  ul.nav.nav-pills
+    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+      span.glyphicon.glyphicon-download-alt
+      span.btn-content CSV出力
+
+  .row
     = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
     .form-group
-      = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+      = s.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
       = " 〜 "
-      = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
-    = submit_tag "検索", class: "btn btn-default"
+      .input-group
+        = s.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+        span.input-group-btn
+          = button_tag type: :submit, class: "btn btn-info" do
+            .glyphicon.glyphicon-search
+            span.btn-content 検索
 
-= paginate @pproducts
+  = paginate @pproducts
 
-.scroll_div
-  table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
-    tr
-      th = sort_link @search, :list_no,   "リストNo."
-      th = sort_link @search, :name,      "商品名"
-      th = sort_link @search, :maker,     "メーカー"
-      th = sort_link @search, :model,     "型式"
-      th = sort_link @search, :year,      "年式"
-      th = sort_link @search, :min_price, "最低入札金額"
-      th = sort_link @search, :area,      "展示場所"
-      th = sort_link @search, :imgs,      "画像"
-    - @pproducts.each do |p|
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
-        td = p.list_no
-        td = link_to p.name, "/detail/#{p.id}"
-        td = p.maker
-        td = p.model 
-        td = p.year
-        td.num = p.min_price.to_s(:delimited) + "円"
-        td = p.area_name
-        td = p.product_images.present? ? "◯" : "☓"
+        th.id = s.sort_link :list_no,   "No."
+        th = s.sort_link :name,      "商品名"
+        th = s.sort_link :maker,     "メーカー"
+        th = s.sort_link :model,     "型式"
+        th = s.sort_link :year,      "年式"
+        th = s.sort_link :min_price, "最低入札金額"
+        th = s.sort_link :area,      "展示場所"
+        th = s.sort_link :imgs,      "画像"
+      - @pproducts.each do |p|
+        tr
+          td.id = p.list_no
+          td = link_to p.name, "/detail/#{p.id}"
+          td = p.maker
+          td = p.model 
+          td = p.year
+          td.num = p.min_price.to_s(:delimited) + "円"
+          td = p.area_name
+          td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?

@@ -36,3 +36,18 @@ $(document).on 'ready, turbolinks:load', ->
 
   # テーブルスクロール制御
   FixedMidashi.create()
+
+  $_topBtn = $('#page-top')
+  $_topBtn.hide()
+
+  # スクロールが100に達したらボタン表示
+  $(window).scroll ->
+    if $(this).scrollTop() > 100
+      $_topBtn.fadeIn()
+    else
+      $_topBtn.fadeOut()
+
+  # スクロールしてトップ
+  $_topBtn.click ->
+    $('body,html').animate({ scrollTop: 0 }, 500)
+    return false
