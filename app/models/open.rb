@@ -55,7 +55,7 @@ class Open < ApplicationRecord
   end
 
   def entry_start?
-    Time.now > entry_start_date rescue false
+    Time.now > entry_start_date.to_time rescue false
   end
 
   def tax_calc(val)
