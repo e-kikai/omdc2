@@ -30,7 +30,7 @@ class Open < ApplicationRecord
   }
 
   def display?
-    ((carry_in_end_date..bid_start_at).cover?(Time.now) && Display.check(:search)) ||
+    ((carry_in_end_date.to_time..bid_start_at).cover?(Time.now) && Display.check(:search)) ||
     (Time.now > bid_start_at) rescue false
   end
 
@@ -51,7 +51,7 @@ class Open < ApplicationRecord
   end
 
   def entry?
-    (entry_start_date..entry_end_date).cover?(Time.now) rescue false
+    (entry_start_date.to_time..entry_end_date.to_time).cover?(Time.now) rescue false
   end
 
   def entry_start?

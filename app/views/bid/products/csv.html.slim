@@ -1,5 +1,13 @@
 - set_meta_tags title: "出品商品 CSV一括登録"
 - breadcrumb  :bid_products_csv
 
+ul.nav.nav-pills
+  li = link_to "/products_template.csv", class: "btn btn-default btn-square" do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content テンプレートCSV
+  li = link_to({action: :index, format: :csv, output: :import}, class: "btn btn-default btn-square") do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content 更新用CSV
+    
 = form_tag({action: :csv_upload}, multipart: true, method: :post, class: 'form-horizontal') do
   = render "csv"

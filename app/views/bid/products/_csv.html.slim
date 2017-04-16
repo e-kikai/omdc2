@@ -18,14 +18,6 @@ coffee:
           <span class="glyphicon glyphicon-alert"></span>アップロードできるファイル形式はCSVです。
         </span>
       '''
-
-ul.nav.nav-pills
-  li = link_to "/products_template.csv", class: "btn btn-default btn-square" do
-    span.glyphicon.glyphicon-download-alt
-    span.btn-content テンプレートCSV
-  li = link_to({action: :index, format: :csv, output: :import}, class: "btn btn-default btn-square") do
-    span.glyphicon.glyphicon-download-alt
-    span.btn-content 更新用CSV
       
 .col-md-8.col-md-offset-2
    .form-group

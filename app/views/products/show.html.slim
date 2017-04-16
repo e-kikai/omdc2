@@ -44,14 +44,14 @@
             td = simple_format(@product.condition)
     .form-group id="wishlist_#{@product.id}"
       - if Array(session[:wishlist]).include? @product.id
-        = link_to "/wishlist/", params: { id: @product.id }, method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create", style: "display:none;" do
+        = link_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create", style: "display:none;" do
           span.glyphicon.glyphicon-bookmark
           =< "ウィッシュリストに追加"
         = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete" do
           span.glyphicon.glyphicon-remove
           =< "ウィッシュリストから削除"
       - else
-        = link_to "/wishlist/", params: { id: @product.id }, method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
+        = link_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
           span.glyphicon.glyphicon-bookmark
           =< "ウィッシュリストに追加"
         = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete", style: "display:none;" do

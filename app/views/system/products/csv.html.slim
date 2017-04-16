@@ -4,6 +4,12 @@
 = render "/system/main/select_company", { companies_selector: @companies_selector, company_id: session[:system_company_id] }
 
 ul.nav.nav-pills
+  li = link_to "/system_products_template.csv", class: "btn btn-default btn-square" do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content テンプレートCSV
+  li = link_to({action: :index, format: :csv, output: :import}, class: "btn btn-default btn-square") do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content 更新用CSV
   li = link_to "/system/products.csv?output=import_all", class: "btn btn-default btn-square" do
     span.glyphicon.glyphicon-download-alt
     span.btn-content 更新用CSV(全取得)
