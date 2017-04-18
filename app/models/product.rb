@@ -100,8 +100,8 @@ class Product < ApplicationRecord
   def self.search_genre(product)
     products = Product.where.not(genre_id: 390).order(id: :desc)
 
-    name      = product[:name].normalize_charwidth.strip
-    model_reg = product[:model].normalize_charwidth.strip.gsub(/[^0-9a-zA-Z]+/, "%")
+    name      = product[:name].to_s.normalize_charwidth.strip
+    model_reg = product[:model].to_s.normalize_charwidth.strip.gsub(/[^0-9a-zA-Z]+/, "%")
 
     if product[:name].blank?
       # 0. 機械名がなければ、処理をしない
@@ -257,7 +257,8 @@ class Product < ApplicationRecord
         soft_destroyed_at: row[12].present? ? Time.now : nil,
       }
 
-      product.set_genre if product.genre_id.blank?
+      product.set_genre if product.new_record?
+
       product.valid?
       res << product
     end
@@ -293,7 +294,6 @@ class Product < ApplicationRecord
         youtube:   row[13],
         soft_destroyed_at: row[14].present? ? Time.now : nil,
       }
-
 
       product.set_genre if product.new_record?
 
