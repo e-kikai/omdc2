@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :check_open
   before_action :check_display
-  before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do, :images]
+  before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
 
   include Exports
 
@@ -41,7 +41,11 @@ class ProductsController < ApplicationController
     end
 
     if system_signed_in?
-      redirect_to "/system/list/#{product_id}/edit"
+      if @open_now.bid_end?
+        redirect_to "/system/list/#{product_id}/edit"
+      else
+        redirect_to "/system/list/#{product_id}/edit"
+      end
     else
       redirect_to "/detail/#{product_id}/"
     end
@@ -51,6 +55,7 @@ class ProductsController < ApplicationController
   end
 
   def images
+      @product = @open_now.products.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
   end
 
   # def contact

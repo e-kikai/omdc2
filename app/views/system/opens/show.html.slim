@@ -1,8 +1,7 @@
 - set_meta_tags title: "#{@open.name} 落札結果一覧"
 - breadcrumb  :system_opens_show, @open
 
-
-= search_form_for @search, url: "/system/opens/#{@open.id}" do |s|
+= search_form_for @search, url: "/system/opens/#{@open.id}", class: "form-inline" do |s|
   = s.hidden_field :s, value: params.dig(:q, :s)
   ul.nav.nav-pills
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do

@@ -42,6 +42,10 @@ class Open < ApplicationRecord
     Time.now > bid_start_at rescue false
   end
 
+  def bid_end?
+    Time.now > bid_end_at rescue false
+  end
+
   def result_list?
     Time.now > bid_end_at && Display.check(:result_sum) rescue false
   end
