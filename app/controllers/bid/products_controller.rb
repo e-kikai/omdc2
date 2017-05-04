@@ -49,16 +49,6 @@ class Bid::ProductsController < Bid::ApplicationController
     redirect_to "/bid/products/", notice: "#{@product.name}を削除しました"
   end
 
-  def ml_get_genre
-    # @genre_id = Product.ml_get_genre(params[:product])
-    @genre_id = Product.search_genre(params[:product])
-
-    respond_to do |format|
-      format.html { render plain: @genre_id.to_s}
-      format.js { }
-    end
-  end
-
   def csv
   end
 

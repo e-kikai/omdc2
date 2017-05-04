@@ -53,9 +53,11 @@ coffee:
     tr
       th = f.label :genre_id, "ジャンル", class: :required
       td
-        = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control"
+        = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control", required: "required"
         / = text_field_tag :genre, "", class: "form-control"
-        = link_to "ジャンル検索", "/bid/products/ml_get_genre.js", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/bid/products/ml_get_genre.js?' + $('input.get_genre').serialize()));"
+        = link_to "/bid/products/ml_get_genre.js", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/ml_get_genre.js?' + $('input.get_genre').serialize()));" do
+          span.glyphicon.glyphicon-search
+          span.btn-content ジャンル検索
         span.genre_loading
     tr
       th = f.label :year

@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
   get  "detail/:id" => "products#show"
   get  "images/:id" => "products#images"
+  get  "ml_get_genre" => "products#ml_get_genre"
+
 
   get  "qr"         => "products#qr"
   # get  "contact/:id"     => "products#contact"
@@ -99,7 +101,6 @@ Rails.application.routes.draw do
 
     resources :products, except: [:show] do
       collection do
-        get   :ml_get_genre
         get   :images
         get   :csv
         post  "csv" => :csv_upload

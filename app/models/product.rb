@@ -2,9 +2,9 @@ class Product < ApplicationRecord
   soft_deletable
   default_scope { without_soft_destroyed }
 
-  belongs_to :open
+  belongs_to :open,    required: true
   belongs_to :company, required: true
-  belongs_to :genre
+  belongs_to :genre,   required: true
   has_one    :large_genre, through: :genre
   has_one    :xl_genre,    through: :large_genre
   belongs_to :area
@@ -318,8 +318,8 @@ class Product < ApplicationRecord
 
   def reform_youtube
     self.youtube = case self.youtube
-    when /watch\?v\=([a-zA-Z0-9-+]+)/;  $1
-    when /youtu\.be\/([a-zA-Z0-9-+]+)/; $1
+    when /watch\?v\=([a-zA-Z0-9\-+]+)/;  $1
+    when /youtu\.be\/([a-zA-Z0-9\-+]+)/; $1
     else self.youtube
     end
   end
