@@ -4,7 +4,7 @@
   res = [p.list_no, p.xl_genre.id, p.xl_genre.name, p.large_genre.id, p.large_genre.name, p.genre_id, p.genre.name,
     p.name, p.maker, p.model, p.min_price]
   res += if p.bid?
-    [p.success_bid.count, p.success_bid.amount, p.success_company.no, p.success_company.name, p.success_bid.same_count]
+    [p.bids_count, p.success_bid.amount, p.success_company.no, p.success_company.name]
   else
     []
   end

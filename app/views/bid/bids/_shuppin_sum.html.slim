@@ -9,7 +9,7 @@
         th = sort_link search, :model,              "型式"
         th.sepa = sort_link search, :min_price,     "最低入札金額"
         
-        th = sort_link search, :success_bid_count,  "入札数"
+        th = sort_link search, :bids_count,  "入札数"
         th = sort_link search, :success_company_no, "落札会社"
         th = sort_link search, :success_bid_amount, "落札金額"
 
@@ -29,8 +29,8 @@
         td.num.sepa = number_to_currency(p.min_price)
         
         - if p.success_bid.present?
-          td.num = number_with_delimiter(p.success_bid.count)
-          td = p.success_bid.company.name
+          td.num = number_with_delimiter(p.bids_count)
+          td = p.success_company.name
           td.num = number_to_currency(p.success_bid.amount)
           td.num = number_to_currency(p.deme_h)
           td = p.display

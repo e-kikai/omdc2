@@ -36,10 +36,10 @@
           th = s.sort_link :maker,                       "メーカー"
           th = s.sort_link :model,                       "型式"
           th.sepa = s.sort_link :min_price,              "最低入札金額"
-          th = s.sort_link :success_bid_count,           "入札数"
+          th = s.sort_link :bids_count,           "入札数"
           th = s.sort_link :success_bid_amount,          "落札金額"
           th = s.sort_link :success_company_no,          "落札会社"
-          th.sepa = s.sort_link :success_bid_same_count, "同額札"
+          th.sepa = s.sort_link :same_count, "同額札"
           th = s.sort_link :carryout_at,                 "出庫日時"
         - @pproducts.each do |p|
           tr
@@ -50,10 +50,10 @@
             td = p.model 
             td.num.sepa = number_to_currency(p.min_price)
             - if p.success_bid.present?
-              td.num = p.success_bid.count
+              td.num = p.bids_count
               td.num = number_to_currency(p.success_bid.amount)
               td = p.success_company.name
-              td.sepa = p.success_bid.same_count
+              td.sepa = p.same_count if p.same_count > 1
                 
             - else
               td

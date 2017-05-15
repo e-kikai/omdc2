@@ -11,7 +11,9 @@ class Product < ApplicationRecord
 
   has_many :bids
   # has_one  :success_bid,     -> { success }, class_name: Bid
-  has_one :success_bid, class_name: ViewSuccessBid
+  # has_one :success_bid, class_name: ViewSuccessBid
+  has_one :view_success_bid
+  belongs_to :success_bid, class_name: Bid, foreign_key: :success_bid_id
 
   # has_one  :bid_sums,        -> { sums }, class_name: Bid
   has_one  :success_company, through: :success_bid, source: :company, class_name: Company

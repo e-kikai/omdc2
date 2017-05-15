@@ -70,7 +70,21 @@ class Open < ApplicationRecord
     val + tax_calc(val)
   end
 
-  def filename
-    name.gsub(/[^0-9A-Za-z]/, "")
+  # def filename
+  #   name.gsub(/[^0-9A-Za-z]/, "")
+  # end
+
+  def result_sum
+    products.listed.includes(:view_success_bid).each do |p|
+      next if p.view_success_bid.blank?
+
+      p.update(
+        success_bid_id: p.view_success_bid.id,
+        bids_count:     p.view_success_bid.count,
+        same_count:     p.view_success_bid.same_count,
+      )
+    end
+
+    self.update(result: true)
   end
 end

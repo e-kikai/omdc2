@@ -1,5 +1,5 @@
 - set_meta_tags title: "落札結果"
-- breadcrumb  :bid_products
+- breadcrumb  :bid_opens_show, @open
 
 = search_form_for @search, url: "/bid/opens/#{@open.id}", class: "form-inline" do |s|
   = s.hidden_field :s, value: params.dig(:q, :s)
@@ -36,7 +36,7 @@
             th = s.sort_link :maker,                   "メーカー"
             th = s.sort_link :model,                   "型式"
             th.sepa = s.sort_link :min_price,          "最低入札金額"
-            th = s.sort_link :success_bid_count,       "入札数"
+            th = s.sort_link :bids_count,              "入札数"
             th = s.sort_link :success_bid_amount,      "落札金額"
             th.sepa = s.sort_link :success_company_no, "落札会社"
             th 自社入札金額
@@ -50,7 +50,7 @@
               td = p.model 
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
-                td.num = p.success_bid.count
+                td.num = p.bids_count
                 td.num = number_to_currency(p.success_bid.amount)
                 td.sepa = p.success_company.name
               

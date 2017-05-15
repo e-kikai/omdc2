@@ -2,6 +2,7 @@ class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_bid,         only: [:index, :new, :create, :destroy]
   before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
+  before_action :calc_result,       only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
 
   before_action :bids, only: [:index, :total, :rakusatsu_sum]
   before_action :products, only: [:shuppin_sum, :total]
@@ -87,7 +88,7 @@ class Bid::BidsController < Bid::ApplicationController
   private
 
   def bids
-    @search = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid).search(params[:q])
+    @search = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid, :product_company).search(params[:q])
     @bids   = @search.result.order(created_at: :desc)
   end
 
@@ -99,6 +100,10 @@ class Bid::BidsController < Bid::ApplicationController
   def bid_init
     @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
     @bid     = @product.bids.new(company: current_company) if @product
+  end
+
+  def calc_result
+    @open_now.result_sum unless @open_now.result
   end
 
   def bid_params

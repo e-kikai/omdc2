@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504125416) do
+ActiveRecord::Schema.define(version: 20170511054111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 20170504125416) do
     t.text     "addr",                 default: "東大阪市本庄中2-2-38",      null: false
     t.text     "tel",                  default: "06-6747-7528",       null: false
     t.text     "fax",                  default: "06-6747-7529",       null: false
+    t.boolean  "result",               default: false,                null: false
     t.index ["soft_destroyed_at"], name: "index_opens_on_soft_destroyed_at", using: :btree
   end
 
@@ -182,6 +183,9 @@ ActiveRecord::Schema.define(version: 20170504125416) do
     t.text     "condition"
     t.boolean  "hitoyama",          default: false
     t.datetime "carryout_at"
+    t.integer  "bids_count",        default: 0
+    t.integer  "same_count",        default: 0
+    t.integer  "success_bid_id"
     t.index ["company_id"], name: "index_products_on_company_id", using: :btree
     t.index ["open_id"], name: "index_products_on_open_id", using: :btree
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at", using: :btree

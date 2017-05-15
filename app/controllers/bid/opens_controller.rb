@@ -10,6 +10,8 @@ class Bid::OpensController < Bid::ApplicationController
   def show
     redirect_to "/bid/opens/", alert: "#{@open.name}はまだ終了していません" if @open.bid_end_at > Time.now
 
+    @open.result_sum unless @open.result
+
     @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])

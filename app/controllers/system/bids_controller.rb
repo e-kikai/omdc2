@@ -3,6 +3,7 @@ class System::BidsController < System::ApplicationController
   before_action :check_bid_start,   only: [:index, :new, :create, :destroy]
   before_action :check_result_list, only: [:results]
   before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :total_list]
+  before_action :calc_result,       only: [:rakusatsu_sum, :shuppin_sum, :total, :total_list]
 
   before_action :get_companies_selector, except: [:results]
   before_action :bids, except: [:results]
@@ -66,8 +67,8 @@ class System::BidsController < System::ApplicationController
   end
 
   def total_list
-    all_products = @open_now.products.includes(:success_bid)
-    all_bids     = @open_now.bids.includes(:product, :success_bid)
+    all_products = @open_now.products.includes(:success_bid, :success_company, :company)
+    all_bids     = @open_now.bids.includes(:product, :success_bid, :product_company, :company)
     @companies = Company.order(:no)
 
     @company_products = @companies.map do |c|
@@ -82,7 +83,7 @@ class System::BidsController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_集計一覧.pdf" }
+      format.pdf { export_pdf "#{@open_now.name}_精算表.pdf" }
       format.csv { export_csv "#{@open_now.name}_集計一覧.csv" }
     end
   end
@@ -111,6 +112,10 @@ class System::BidsController < System::ApplicationController
   def bid_init
     @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
     @bid     = @product.bids.new(company: @company) if @product
+  end
+
+  def calc_result
+    @open_now.result_sum unless @open_now.result
   end
 
   def bid_params
