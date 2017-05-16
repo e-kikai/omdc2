@@ -27,6 +27,6 @@ module ErrorHandlers
 
   def rescue500(e)
     @exception = e
-    render '/errors/error_500', status: 500
+    render 'errors/error_500', status: 500
   end
 end
