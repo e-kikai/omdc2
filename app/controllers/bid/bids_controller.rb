@@ -65,10 +65,10 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def motobiki
-    @search   = @open_now.products.listed.includes(:success_bid, :success_company, :area, :company).search(params[:q])
+    @search   = @open_now.products.listed.includes(:success_bid, :success_company, :area, :company).order(:list_no).search(params[:q])
     relation  = @search.result
 
-    @products = relation.where(company: current_company, display: "一般出品", view_success_bids: { product_id: nil }).or(relation.where(view_success_bids: { company_id: current_company.id }))
+    @products = relation.where(company: current_company, display: "一般出品", success_bid_id: nil).or(relation.where(success_bid_id: Bid.where(company_id: current_company.id)))
 
     @company  = current_company
 

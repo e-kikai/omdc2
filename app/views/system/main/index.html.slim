@@ -134,7 +134,7 @@
         li = link_to "/system/bids/total_list.pdf", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-print
           span.btn-content 精算表印刷
-        li = link_to "/system/bids/total", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
+        li = link_to "/system/list/carryout", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-qrcode
           span.btn-content 出庫処理
           

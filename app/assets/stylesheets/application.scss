@@ -207,6 +207,12 @@ table {
     margin: 4px 4px 4px 0;
     vertical-align: top;
 
+    &.btn-danger {
+      color: #d9534f;
+      background-color: #FFF;
+      border-color: #ccc;
+    }
+
     span.glyphicon {
       display: block;
       font-size: 28px;

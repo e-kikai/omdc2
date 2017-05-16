@@ -1,10 +1,10 @@
 class System::ListController < ApplicationController
   # before_action :select_company_proudcuts, only: [:hangtag]
   # before_action :select_company_proudcuts_ef, only: [:ef]
-  before_action :get_companies_selector, only: [:hangtag, :ef]
+  before_action :get_companies_selector, only: [:hangtag, :ef, :carryout_new, :carryout_edit]
   before_action :check_open
   before_action :check_entry_date
-  before_action :get_product, only: [:edit, :update, :carry_out_update]
+  before_action :get_product, only: [:edit, :update, :carryout_edit, :carryout_update, :carryout_destroy]
   before_action :get_selectors, only: [:new, :edit]
 
   include Exports
@@ -56,6 +56,7 @@ class System::ListController < ApplicationController
     end
   end
 
+  ### 入庫処理 ###
   def new
     if params[:company_id].present?
       @products          = @open_now.products.includes(:company).where(company_id: params[:company_id]).order(:app_no)
@@ -94,6 +95,41 @@ class System::ListController < ApplicationController
     end
   end
 
+  ### 出庫処理 ###
+  def carryout_new
+    if params[:company_id].present?
+      relation   = @open_now.products.listed.includes(:success_bid).references(:bids).order(:list_no)
+
+      @products_selector = relation.where(success_bid_id: Bid.where(company_id: params[:company_id]))
+        .pluck("'(引取) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+
+      @products_selector += relation.where(company_id: params[:company_id], display: "一般出品", success_bid_id: nil)
+        .pluck("'(元引) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+    end
+  end
+
+  def carryout_edit
+    @company_id = @product.success_bid_id.present? ? @product.success_bid.company_id : @product.company_id
+
+    relation   = @open_now.products.listed.includes(:success_bid).references(:bids).order(:list_no)
+
+    @products_selector = relation.where(success_bid_id: Bid.where(company_id: @company_id))
+      .pluck("'(引取) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+
+    @products_selector += relation.where(company_id: @company_id, display: "一般出品", success_bid_id: nil)
+      .pluck("'(元引) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+  end
+
+  def carryout_update
+    @product.update(carryout_at: Time.now)
+    redirect_to "/system/list/carryout/#{@product.id}", notice: "No. #{@product.list_no} : #{@product.name}の出庫確認しました"
+  end
+
+  def carryout_destroy
+    @product.update(carryout_at: nil)
+    redirect_to "/system/list/carryout/#{@product.id}", notice: "No. #{@product.list_no} : #{@product.name}の出庫をキャンセルしました"
+  end
+
   private
 
   def check_open
@@ -119,9 +155,5 @@ class System::ListController < ApplicationController
 
   def list_no_params
     params.require(:product).permit(:list_no, :area_id)
-  end
-
-  def carry_out_params
-    params.require(:product).permit(:carryout_at)
   end
 end

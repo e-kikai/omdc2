@@ -42,7 +42,7 @@ class ProductsController < ApplicationController
 
     if system_signed_in?
       if @open_now.bid_end?
-        redirect_to "/system/list/#{product_id}/edit"
+        redirect_to "/system/list/carryout/#{product_id}"
       else
         redirect_to "/system/list/#{product_id}/edit"
       end

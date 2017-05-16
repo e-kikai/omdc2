@@ -85,6 +85,11 @@ Rails.application.routes.draw do
         get :ef
         get :carry_out
         get :qr
+
+        get    "carryout" => :carryout_new
+        get    "carryout/:id" => :carryout_edit
+        patch  "carryout/:id" => :carryout_update
+        delete "carryout/:id" => :carryout_destroy
       end
     end
 
