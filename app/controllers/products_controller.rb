@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
 
   def qr
     product_id = if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
-      product = Product.find_by(open_id: $1, company: {no: $2}, app_no: $3)
+      product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)
       raise "#{params[:key]} 商品情報がありません" if product.blank?
 
       product.id
