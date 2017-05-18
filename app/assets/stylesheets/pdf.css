@@ -1,9 +1,14 @@
+@font-face {
+  font-family: vlg;
+  src: url(VL-PGothic-Regular.ttf);
+}
+
 .print-pdf .num {
   text-align: right;
 }
 
 .print-pdf {
-  font-family: "VL PGothic";
+  font-family: vlg;
 }
 
 .print-pdf th,

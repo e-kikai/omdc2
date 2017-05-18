@@ -28,6 +28,8 @@ module Omdc2
 
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.assets.paths << "#{Rails}/vendor/assets/fonts"
+
     I18n.available_locales = I18n.available_locales.push(:ja)
     config.i18n.default_locale = :ja
 
