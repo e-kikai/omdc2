@@ -17,6 +17,7 @@
         tr
           th.id = s.sort_link :app_no,      "申込No."
           th.id = s.sort_link :list_no,     "No."
+          th = s.sort_link :genre_order_no, "ジャンル"
           th = s.sort_link :genre_order_no, "商品名"
           th = s.sort_link :maker,          "メーカー"
           th = s.sort_link :model,          "型式"
@@ -29,6 +30,7 @@
           tr
             td.id = p.app_no
             td.id = p.list_no
+            td = p.genre.name
             td = link_to p.name, { action: :edit, id: p.id }
             td = p.maker
             td = p.model 
