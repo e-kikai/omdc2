@@ -4,7 +4,7 @@ class Bid::BidsController < Bid::ApplicationController
   before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
   before_action :calc_result,       only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
 
-  before_action :bids, only: [:index, :total, :rakusatsu_sum]
+  before_action :bids
   before_action :products, only: [:shuppin_sum, :total]
 
   before_action :bid_init, only: [:new, :create]
