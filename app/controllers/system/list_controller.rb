@@ -49,7 +49,7 @@ class System::ListController < ApplicationController
       format.html
       format.pdf {
         if @company = Company.find_by(id: params[:company_id])
-          export_pdf
+          # export_pdf
         else
           redirect_to({format: :html}, alert: "会社を選択して下さい")
         end
