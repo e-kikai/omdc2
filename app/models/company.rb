@@ -26,4 +26,8 @@ class Company < ApplicationRecord
   def self.find_for_authentication(warden_conditions)
     without_soft_destroyed.where(account: warden_conditions[:account]).first
   end
+
+  def name_remove_kabu
+    name.gsub(/[（(][株有][）)]/, "")
+  end
 end

@@ -75,7 +75,7 @@ class System::BidsController < System::ApplicationController
       [
         c.id,
         {
-          products:         all_products.where(company: c),
+          products:         all_products.where(company: c).order(:list_no),
           success_products: all_bids.where(company: c).success_products
         }
       ]
@@ -83,7 +83,8 @@ class System::BidsController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_精算表.pdf" }
+      # format.pdf { export_pdf "#{@open_now.name}_精算表.pdf" }
+      format.pdf
       format.csv { export_csv "#{@open_now.name}_集計一覧.csv" }
     end
   end

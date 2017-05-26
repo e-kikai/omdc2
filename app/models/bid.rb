@@ -23,7 +23,7 @@ class Bid < ApplicationRecord
   # scope :sums, -> { select(:product_id, "count(*) as bids_count", "max(amount) as bids_max_amount").group(:product_id) }
 
   def self.success_products
-    select(&:success?).map(&:product)
+    select(&:success?).map(&:product).sort_by(&:list_no)
   end
 
   def success?

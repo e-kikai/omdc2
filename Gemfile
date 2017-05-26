@@ -148,6 +148,10 @@ gem 'dropzonejs-rails'
 gem 'pdfkit'
 gem 'wkhtmltopdf-binary'
 
+gem 'prawn'
+gem 'prawn-table'
+gem 'prawn-rails'
+
 gem 'rqrcode_png'
 
 # ファイルアップロード

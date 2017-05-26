@@ -1,0 +1,101 @@
+scss:
+  .hangtag {
+    // border: 1px dotted #333;
+
+    height: 25%;
+    width: 50%;
+    float: left;
+    position: relative;
+    paggin: 0;
+    
+    .name {
+      position: absolute;
+      top: 13mm;
+      font-size: 5.5mm;
+      width: 100%;
+
+      text-align: center;
+      
+      &.mini {
+        font-size: 4mm;
+      }
+    }
+    
+    .info {
+      position: absolute;
+      top: 22mm;
+      width: 100%;
+      text-align: center;
+      font-size: 3.5mm;
+      line-height: 1.1;
+    }
+    
+    .list_no {
+      position: absolute;
+      font-size: 10mm;
+      left: 8mm;
+    }
+    
+    .price_label {
+      position: absolute;
+      bottom: 4mm;
+      left: 8mm;
+      font-size: 4mm;
+    }
+    
+    .min_price {
+      position: absolute;
+      bottom: 3mm;
+      left: 34mm;
+      font-size: 8mm;
+    }
+    
+    .app_no {
+      position: absolute;
+      bottom: 12mm;
+      right: 7mm;
+      font-size: 4mm;
+    }
+    
+    .qr {
+      position: absolute;
+      bottom: 13mm;
+      left: 8mm;
+      
+      img {
+        width: 15mm;
+        height: 15mm;
+      }
+    }
+  }
+  
+  .page-break {
+    clear: both;
+    page-break-after:always;
+    &:last-child {
+      page-break-after: avoid;
+    }
+  }
+
+.print-pdf
+  - @products.each.with_index do |p, i|
+    - if i != 0 && p.company.no != @products[i-1].company.no
+      .page-break
+      
+    .hangtag
+      .name class="#{:mini if p.name.length > 13}" = truncate(p.name, length: 20, omission: "…")
+      .list_no = p.list_no
+      .price_label 最低入札金額
+      .min_price = number_with_delimiter p.min_price
+      .app_no = "#{p.company.no}-#{p.app_no}"
+      .info = truncate("#{p.maker} #{p.model} #{p.year}", length: 60, omission: "…")
+      / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_svg(module_size: 2).html_safe
+      / .qr = image_tag "#{root_url}system/list/#{p.id}/qr.png?place=hangtag"
+      / .qr = image_tag "#{root_url}qrcode.png?url=#{root_url}qr/#{p.id}?place=hangtag"
+      .qr = image_tag System.qrcode("#{root_url}qr?id=#{p.id}&place=hangtag")
+      / .qr = RQRCode::QRCode.new("#{root_url}qr/#{p.id}?place=hangtag", size: 4, level: :m).as_html.html_safe
+
+      
+    / - break if i > 500
+    
+  

@@ -22,4 +22,23 @@ class System < ApplicationRecord
       file: nil # path to write
     ).to_data_url
   end
+
+  def self.qrcode_temp(url)
+    qr = RQRCode::QRCode.new(url, size: 3, level: :l).as_png(
+      resize_gte_to: false,
+      resize_exactly_to: false,
+      fill: 'white',
+      color: 'black',
+      size: 30,
+      border_modules: 0,
+      module_px_size: 1,
+      file: nil # path to write
+    ).to_s
+
+    file = Tempfile.open(["qr", ".png"])
+    file.binmode
+    file.write(qr)
+    file.size
+    file.path
+  end
 end
