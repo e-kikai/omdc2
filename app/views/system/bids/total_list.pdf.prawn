@@ -44,55 +44,55 @@ prawn_document do |pdf|
       end
     end
 
-  #   if @company_products[c.id][:products].present?
-  #     pdf.start_new_page layout: :landscape
-  #     pdf.text "#{c.name} 出品個別計算書"
-  #
-  #     arr = [%w|No. 商品名 最低入札金額 落札金額 落札会社 デメ半 出品区分 出品手数料 % 組合手数料 % 落札会社手数料 % 支払金額 備考欄|] +
-  #     @company_products[c.id][:products].map do |p|
-  #       [p.list_no, p.name, number_with_delimiter(p.min_price),
-  #         number_with_delimiter(p.success_price), p.success_company.try(:name_remove_kabu), number_with_delimiter(p.deme_h),
-  #         p.display, number_with_delimiter(p.shuppin_fee), number_with_delimiter(p.shuppin_fee_per),
-  #         number_with_delimiter(p.kumiai_fee), number_with_delimiter(p.kumiai_fee_per), number_with_delimiter(p.hanbai_fee),
-  #         number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
-  #     end + [
-  #       [ {content: "", colspan: 9}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 2}, number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai))],
-  #       [ {content: "", colspan: 11}, {content: "消費税 : #{@open_now.tax}%", colspan: 2}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))],
-  #       [ {content: "", colspan: 11}, {content: "差引出品支払額", colspan: 2}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))],
-  #     ]
-  #
-  #     pdf.table arr, {
-  #       header: true,
-  #     } do |t|
-  #       t.cells.style(size: 9)
-  #
-  #       t.columns(0).style(width: 35,  align: :right)
-  #       t.columns(1).style(width: 80, align: :left)
-  #       t.columns(2).style(width: 60, align: :right)
-  #       t.columns(3).style(width: 60, align: :right)
-  #       t.columns(4).style(width: 60, align: :left)
-  #       t.columns(5).style(width: 60, align: :right)
-  #
-  #       t.columns(6).style(width: 50, align: :left)
-  #       t.columns(7).style(width: 60, align: :right)
-  #       t.columns(8).style(width: 25, align: :right)
-  #       t.columns(9).style(width: 60, align: :right)
-  #       t.columns(10).style(width: 25, align: :right)
-  #       t.columns(11).style(width: 60, align: :right)
-  #       t.columns(12).style(width: 25, align: :right)
-  #       t.columns(13).style(width: 60, align: :right)
-  #       t.columns(14).style(width: 48, align: :left)
-  #
-  #       t.row(0).style(align: :left)
-  #
-  #       t.row(0).columns([2, 11]).style(size: 7)
-  #
-  #       t.row(-1).columns(0).border_width = 0
-  #       t.row(-2).columns(0).border_width = 0
-  #       t.row(-3).columns(0).border_width = 0
-  #     end
-  #   end
-  #
+    if @company_products[c.id][:products].present?
+      pdf.start_new_page layout: :landscape
+      pdf.text "#{c.name} 出品個別計算書"
+
+      arr = [%w|No. 商品名 最低入札金額 落札金額 落札会社 デメ半 出品区分 出品手数料 % 組合手数料 % 落札会社手数料 % 支払金額 備考欄|] +
+      @company_products[c.id][:products].map do |p|
+        [p.list_no, p.name, number_with_delimiter(p.min_price),
+          number_with_delimiter(p.success_price), p.success_company.try(:name_remove_kabu), number_with_delimiter(p.deme_h),
+          p.display, number_with_delimiter(p.shuppin_fee), number_with_delimiter(p.shuppin_fee_per),
+          number_with_delimiter(p.kumiai_fee), number_with_delimiter(p.kumiai_fee_per), number_with_delimiter(p.hanbai_fee),
+          number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
+      end + [
+        [ {content: "", colspan: 9}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 2}, number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai))],
+        [ {content: "", colspan: 11}, {content: "消費税 : #{@open_now.tax}%", colspan: 2}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))],
+        [ {content: "", colspan: 11}, {content: "差引出品支払額", colspan: 2}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))],
+      ]
+
+      pdf.table arr, {
+        header: true,
+      } do |t|
+        t.cells.style(size: 9)
+
+        t.columns(0).style(width: 35,  align: :right)
+        t.columns(1).style(width: 80, align: :left)
+        t.columns(2).style(width: 60, align: :right)
+        t.columns(3).style(width: 60, align: :right)
+        t.columns(4).style(width: 60, align: :left)
+        t.columns(5).style(width: 60, align: :right)
+
+        t.columns(6).style(width: 50, align: :left)
+        t.columns(7).style(width: 60, align: :right)
+        t.columns(8).style(width: 25, align: :right)
+        t.columns(9).style(width: 60, align: :right)
+        t.columns(10).style(width: 25, align: :right)
+        t.columns(11).style(width: 60, align: :right)
+        t.columns(12).style(width: 25, align: :right)
+        t.columns(13).style(width: 60, align: :right)
+        t.columns(14).style(width: 48, align: :left)
+
+        t.row(0).style(align: :left)
+
+        t.row(0).columns([2, 11]).style(size: 7)
+
+        t.row(-1).columns(0).border_width = 0
+        t.row(-2).columns(0).border_width = 0
+        t.row(-3).columns(0).border_width = 0
+      end
+    end
+
   end
 
   @companies.each do |c|
