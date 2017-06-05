@@ -1,11 +1,11 @@
 prawn_document do |pdf|
-  @companies.each do |c|
-    next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
-
-    pdf.start_new_page layout: :portrait
-    pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
-    pdf.text "#{c.name} 領収書"
-
+  # @companies.each do |c|
+  #   next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
+  #
+  #   pdf.start_new_page layout: :portrait
+  #   pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
+  #   pdf.text "#{c.name} 領収書"
+  #
   #   if @company_products[c.id][:success_products].present?
   #     pdf.start_new_page layout: :landscape
   #     pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
@@ -94,69 +94,69 @@ prawn_document do |pdf|
   #   end
   #
   # end
-  #
-  # @companies.each do |c|
-  #   next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
-  #   sashihiki = @company_products[c.id][:success_products].sum(&:seikyu) - @company_products[c.id][:products].sum(&:shiharai)
-  #   next if sashihiki <= 0
-  #
-  #
-  #   pdf.start_new_page layout: :portrait, margin: [8.mm]
-  #   pdf.font "vendor/assets/fonts/ipaexm.ttf"
-  #
-  #   [0, 148.mm].each do |side|
-  #     pdf.bounding_box([0, side + (132.5).mm], width: 194.mm, height: (132.5).mm) do
-  #       pdf.stroke_bounds
-  #
-  #       pdf.text_box "#{c.name} 御中", {size: 16, at: [12.mm, (132.5- 16).mm]}
-  #       pdf.stroke_line [12.mm, (132.5- 23).mm], [70.mm, (132.5- 23).mm]
-  #       pdf.text_box (side == 0 ? "領収証(控)" : "領収証"), {size: 26, at: [0, (132.5- 27).mm], align: :center}
-  #       pdf.text_box "下記の通り、御社の#{@open_now.name}の清算金額を領収いたしました。", {size: 12, at: [8.mm, (132.5- 38).mm]}
-  #       pdf.text_box "記", {size: 12, at: [8.mm, (132.5- 52).mm], align: :center}
-  #
-  #       pdf.bounding_box([8.mm, 212], width: 178.mm, height: 42.mm) do
-  #         arr = [
-  #           %w|請求金額(税抜) 消費税 合計請求金額|,
-  #           [number_to_currency(sashihiki), number_to_currency(@open_now.tax_calc(sashihiki)), number_to_currency(@open_now.tax_total(sashihiki))]
-  #         ]
-  #         pdf.table arr do |t|
-  #           t.cells.style(size: 15)
-  #
-  #           t.row(0).style(size: 12, align: :center, valign: :middle)
-  #           t.row(1).style(size: 16, height: 13.mm, align: :right, valign: :center)
-  #
-  #           t.columns(0).style(width: 65.mm)
-  #           t.columns(1).style(width: 43.mm)
-  #           t.columns(2).style(width: 70.mm)
-  #         end
-  #       end
-  #
-  #       pdf.bounding_box([8.mm, 50.mm], width: 56.mm, height: 42.mm) do
-  #         arr = [ [{content: "内訳", rowspan: 2}, "", "現金"], ["", "小切手"] ]
-  #         pdf.table arr do |t|
-  #           t.cells.style(size: 12, align: :center)
-  #
-  #           t.row([0, 1]).style(height: 8.mm)
-  #
-  #           t.columns(0).style(width: 17.mm, valign: :center)
-  #           t.columns(1).style(width: 8.mm)
-  #           t.columns(2).style(width: 26.mm)
-  #         end
-  #       end
-  #
-  #       pdf.bounding_box([8.mm, 50.mm], width: 178.mm, height: 42.mm) do
-  #         # pdf.stroke_bounds
-  #
-  #         pdf.default_leading 8
-  #
-  #         pdf.text "以上", size: 12, align: :right
-  #         pdf.text "平成　　年　　月　　日", size: 12, align: :right
-  #         pdf.text "大阪機械卸業団地協同組合", size: 14, align: :right
-  #         pdf.text "〒573-0965 東大阪市本庄西2-5-10", size: 12, align: :right
-  #         pdf.text "TEL 06-6747-7521　FAX 06-6747-7525", size: 12, align: :right
-  #       end
-  #     end
-  #   end
+
+  @companies.each do |c|
+    next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
+    sashihiki = @company_products[c.id][:success_products].sum(&:seikyu) - @company_products[c.id][:products].sum(&:shiharai)
+    next if sashihiki <= 0
+
+
+    pdf.start_new_page layout: :portrait, margin: [8.mm]
+    pdf.font "vendor/assets/fonts/ipaexm.ttf"
+
+    [0, 148.mm].each do |side|
+      pdf.bounding_box([0, side + (132.5).mm], width: 194.mm, height: (132.5).mm) do
+        pdf.stroke_bounds
+
+        pdf.text_box "#{c.name} 御中", {size: 16, at: [12.mm, (132.5- 16).mm]}
+        pdf.stroke_line [12.mm, (132.5- 23).mm], [70.mm, (132.5- 23).mm]
+        pdf.text_box (side == 0 ? "領収証(控)" : "領収証"), {size: 26, at: [0, (132.5- 27).mm], align: :center}
+        pdf.text_box "下記の通り、御社の#{@open_now.name}の清算金額を領収いたしました。", {size: 12, at: [8.mm, (132.5- 38).mm]}
+        pdf.text_box "記", {size: 12, at: [8.mm, (132.5- 52).mm], align: :center}
+
+        pdf.bounding_box([8.mm, 212], width: 178.mm, height: 42.mm) do
+          arr = [
+            %w|請求金額(税抜) 消費税 合計請求金額|,
+            [number_to_currency(sashihiki), number_to_currency(@open_now.tax_calc(sashihiki)), number_to_currency(@open_now.tax_total(sashihiki))]
+          ]
+          pdf.table arr do |t|
+            t.cells.style(size: 15)
+
+            t.row(0).style(size: 12, align: :center, valign: :middle)
+            t.row(1).style(size: 16, height: 13.mm, align: :right, valign: :center)
+
+            t.columns(0).style(width: 65.mm)
+            t.columns(1).style(width: 43.mm)
+            t.columns(2).style(width: 70.mm)
+          end
+        end
+
+        pdf.bounding_box([8.mm, 50.mm], width: 56.mm, height: 42.mm) do
+          arr = [ [{content: "内訳", rowspan: 2}, "", "現金"], ["", "小切手"] ]
+          pdf.table arr do |t|
+            t.cells.style(size: 12, align: :center)
+
+            t.row([0, 1]).style(height: 8.mm)
+
+            t.columns(0).style(width: 17.mm, valign: :center)
+            t.columns(1).style(width: 8.mm)
+            t.columns(2).style(width: 26.mm)
+          end
+        end
+
+        pdf.bounding_box([8.mm, 50.mm], width: 178.mm, height: 42.mm) do
+          # pdf.stroke_bounds
+
+          pdf.default_leading 8
+
+          pdf.text "以上", size: 12, align: :right
+          pdf.text "平成　　年　　月　　日", size: 12, align: :right
+          pdf.text "大阪機械卸業団地協同組合", size: 14, align: :right
+          pdf.text "〒573-0965 東大阪市本庄西2-5-10", size: 12, align: :right
+          pdf.text "TEL 06-6747-7521　FAX 06-6747-7525", size: 12, align: :right
+        end
+      end
+    end
   end
 
 end
