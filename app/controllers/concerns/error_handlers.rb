@@ -17,16 +17,16 @@ module ErrorHandlers
 
   def rescue403(e)
     @exception = e
-    render 'errors/error_403', status: 403
+    render 'errors/error_403.html.slim', status: 403
   end
 
   def rescue404(e)
     @exception = e
-    render 'errors/error_404', status: 404
+    render 'errors/error_404.html.slim', status: 404
   end
 
   def rescue500(e)
     @exception = e
-    render 'errors/error_500', status: 500
+    render 'errors/error_500.html.slim', status: 500
   end
 end
