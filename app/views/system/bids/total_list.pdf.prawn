@@ -1,49 +1,49 @@
 prawn_document do |pdf|
-  # @companies.each do |c|
-  #   next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
-  #
-  #   pdf.start_new_page layout: :portrait
-  #   pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
-  #   pdf.text "#{c.name} 領収書"
-  #
-  #   if @company_products[c.id][:success_products].present?
-  #     pdf.start_new_page layout: :landscape
-  #     pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
-  #
-  #     pdf.text "#{c.name} 落札個別計算書"
-  #
-  #     arr = [%w|No. 商品名 最低入札金額 落札金額 デメ半 落札会社手数料 % 請求金額 備考欄|] +
-  #     @company_products[c.id][:success_products].map do |p|
-  #       [p.list_no, p.name, number_with_delimiter(p.min_price), number_with_delimiter(p.success_bid.amount), number_with_delimiter(p.deme_h), number_with_delimiter(p.hanbai_fee), number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
-  #     end + [
-  #       [ {content: "", colspan: 4}, "落札数 : #{@company_products[c.id][:success_products].length}", {content: "合計金額", colspan: 2}, number_with_delimiter(@company_products[c.id][:success_products].sum(&:seikyu))],
-  #       [ {content: "", colspan: 5}, {content: "消費税 : #{@open_now.tax}%", colspan: 2}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu)))],
-  #       [ {content: "", colspan: 5}, {content: "差引落札請求額", colspan: 2}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu)))],
-  #     ]
-  #
-  #     pdf.table arr, {
-  #       header: true,
-  #     } do |t|
-  #       t.cells.style(size: 10)
-  #
-  #       t.columns(0).style(width: 50,  align: :right)
-  #       t.columns(1).style(width: 120, align: :left)
-  #       t.columns(2).style(width: 80, align: :right)
-  #       t.columns(3).style(width: 80, align: :right)
-  #       t.columns(4).style(width: 80, align: :right)
-  #       t.columns(5).style(width: 80, align: :right)
-  #       t.columns(6).style(width: 24, align: :right)
-  #       t.columns(7).style(width: 80, align: :right)
-  #       t.columns(8).style(width: 160, align: :left)
-  #
-  #       t.row(0).style(align: :left)
-  #
-  #       t.row(-1).columns(0).border_width = 0
-  #       t.row(-2).columns(0).border_width = 0
-  #       t.row(-3).columns(0).border_width = 0
-  #     end
-  #   end
-  #
+  @companies.each do |c|
+    next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
+
+    pdf.start_new_page layout: :portrait
+    pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
+    pdf.text "#{c.name} 領収書"
+
+    if @company_products[c.id][:success_products].present?
+      pdf.start_new_page layout: :landscape
+      pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
+
+      pdf.text "#{c.name} 落札個別計算書"
+
+      arr = [%w|No. 商品名 最低入札金額 落札金額 デメ半 落札会社手数料 % 請求金額 備考欄|] +
+      @company_products[c.id][:success_products].map do |p|
+        [p.list_no, p.name, number_with_delimiter(p.min_price), number_with_delimiter(p.success_bid.amount), number_with_delimiter(p.deme_h), number_with_delimiter(p.hanbai_fee), number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
+      end + [
+        [ {content: "", colspan: 4}, "落札数 : #{@company_products[c.id][:success_products].length}", {content: "合計金額", colspan: 2}, number_with_delimiter(@company_products[c.id][:success_products].sum(&:seikyu))],
+        [ {content: "", colspan: 5}, {content: "消費税 : #{@open_now.tax}%", colspan: 2}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu)))],
+        [ {content: "", colspan: 5}, {content: "差引落札請求額", colspan: 2}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu)))],
+      ]
+
+      pdf.table arr, {
+        header: true,
+      } do |t|
+        t.cells.style(size: 10)
+
+        t.columns(0).style(width: 50,  align: :right)
+        t.columns(1).style(width: 120, align: :left)
+        t.columns(2).style(width: 80, align: :right)
+        t.columns(3).style(width: 80, align: :right)
+        t.columns(4).style(width: 80, align: :right)
+        t.columns(5).style(width: 80, align: :right)
+        t.columns(6).style(width: 24, align: :right)
+        t.columns(7).style(width: 80, align: :right)
+        t.columns(8).style(width: 160, align: :left)
+
+        t.row(0).style(align: :left)
+
+        t.row(-1).columns(0).border_width = 0
+        t.row(-2).columns(0).border_width = 0
+        t.row(-3).columns(0).border_width = 0
+      end
+    end
+
   #   if @company_products[c.id][:products].present?
   #     pdf.start_new_page layout: :landscape
   #     pdf.text "#{c.name} 出品個別計算書"
@@ -93,7 +93,7 @@ prawn_document do |pdf|
   #     end
   #   end
   #
-  # end
+  end
 
   @companies.each do |c|
     next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
