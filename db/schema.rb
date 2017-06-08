@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170511054111) do
+ActiveRecord::Schema.define(version: 20170608150200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20170511054111) do
 
   create_table "opens", force: :cascade do |t|
     t.string   "name",                 default: "",                   null: false
-    t.string   "owner",                default: "大阪機械団地組合",           null: false
+    t.string   "owner",                default: "大阪機械卸業団地協同組合",       null: false
     t.integer  "lower_price",          default: 20000
     t.integer  "rate",                 default: 1000
     t.integer  "tax",                  default: 8
