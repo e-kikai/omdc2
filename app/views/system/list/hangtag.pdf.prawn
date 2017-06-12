@@ -3,8 +3,8 @@ prawn_document do |pdf|
   sage_height = 841.89 / 4
 
   i = 0
-  @products.each do |p|
-    if i % 8 == 0 || p.company.no != @products[i-1].company.no
+  @products.each.with_index do |p, j|
+    if i % 8 == 0 || p.company.no != @products[j-1].company.no
       pdf.start_new_page layout: :portrait, margin: [0]
       pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
       i = 0
@@ -30,7 +30,8 @@ prawn_document do |pdf|
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 14, at: [0, 24], valign: :bottom}
         pdf.text_box number_with_delimiter(p.min_price), {size: 27, at: [100, 50], valign: :bottom}
-        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [212, 45]}
+
+        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [200, 45]}
       end
     end
 
