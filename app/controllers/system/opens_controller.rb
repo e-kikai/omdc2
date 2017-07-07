@@ -4,7 +4,7 @@ class System::OpensController < System::ApplicationController
   include Exports
 
   def index
-    @opens = Open.order(:bid_end_at)
+    @opens = Open.order(bid_end_at: :desc)
   end
 
   def new
@@ -44,6 +44,8 @@ class System::OpensController < System::ApplicationController
     @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
+
+    @max_list_no = @open.products.listed.maximum(:list_no)
 
     respond_to do |format|
       format.html

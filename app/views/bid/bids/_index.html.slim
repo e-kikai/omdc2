@@ -27,6 +27,7 @@
           th = s.sort_link :product_min_price,  "最低入札金額"
           th = s.sort_link :amount,             "入札金額"
           th = s.sort_link :comment,            "備考欄"
+          th 
           th = s.sort_link :created_at,         "入札日時"
           th
         - bids.each do |b|
@@ -40,9 +41,13 @@
             td.num = b.product.min_price.to_s(:delimited) + "円"
             td.num = b.amount.to_s(:delimited) + "円"
             td = b.comment
+            td
+              = link_to({ action: :edit, id: b.id }, class: "btn btn-info") do
+                span.glyphicon.glyphicon-pencil
+                span.btn-content 訂正
             td = b.created_at
             td
               - message = "#{b.product.name}\n\nこの入札を取り消しますか？"
               = link_to({ action: :destroy, id: b.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
                 span.glyphicon.glyphicon-remove
-                =< "取消"
+                span.btn-content 取消

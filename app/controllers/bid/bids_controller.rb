@@ -1,6 +1,6 @@
 class Bid::BidsController < Bid::ApplicationController
   before_action :check_open
-  before_action :check_bid,         only: [:index, :new, :create, :destroy]
+  before_action :check_bid,         only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
   before_action :calc_result,       only: [:rakusatsu_sum, :shuppin_sum, :total, :motobiki]
 
@@ -8,6 +8,7 @@ class Bid::BidsController < Bid::ApplicationController
   before_action :products, only: [:shuppin_sum, :total]
 
   before_action :bid_init, only: [:new, :create]
+  before_action :get_bid, only: [:edit, :update, :destroy]
 
   include Exports
 
@@ -27,9 +28,23 @@ class Bid::BidsController < Bid::ApplicationController
     if params[:overcheck].to_i != @bid.amount && @over = @bid.check_5time
       render :new
     elsif @bid.present? && @bid.save
-      redirect_to "/bid/bids/new", notice: "#{@bid.product.name}に入札しました"
+      redirect_to "/bid/bids/new", notice: "#{@bid.product.list_no} : #{@bid.product.name}に入札しました"
     else
       render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    @bid.assign_attributes(bid_params)
+    if params[:overcheck].to_i != @bid.amount && @over = @bid.check_5time
+      render :edit
+    elsif @bid.save
+      redirect_to "/bid/bids/", notice: "#{@bid.product.list_no} : #{@bid.product.name}の入札を訂正しました"
+    else
+      render :edit
     end
   end
 
@@ -80,7 +95,6 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def destroy
-    @bid = @bids.find(params[:id])
     @bid.soft_destroy!
     redirect_to "/bid/bids/", notice: "#{@bid.product.name}の入札を取り消しました"
   end
@@ -100,6 +114,10 @@ class Bid::BidsController < Bid::ApplicationController
   def bid_init
     @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
     @bid     = @product.bids.new(company: current_company) if @product
+  end
+
+  def get_bid
+    @bid = @bids.find(params[:id])
   end
 
   def calc_result

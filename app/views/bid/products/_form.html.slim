@@ -26,6 +26,9 @@ coffee:
       th ID
       td = f.object.id || "新規登録"
     tr
+      th = f.label :app_no
+      td = f.object.app_no
+    tr
      th = f.label :list_no
      td = f.object.list_no
     tr
@@ -48,7 +51,7 @@ coffee:
 
     tr.form-inline
       th = f.label :min_price, class: :required
-      td = (f.number_field :min_price, class: "form-control", required: "required") + " 円"
+      td = (f.text_field :min_price, class: "form-control price", required: "required") + " 円"
 
     tr
       th = f.label :genre_id, "ジャンル", class: :required

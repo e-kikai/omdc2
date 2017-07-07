@@ -51,3 +51,31 @@ $(document).on 'ready, turbolinks:load', ->
   $_topBtn.click ->
     $('body,html').animate({ scrollTop: 0 }, 500)
     return false
+
+  # カンマ区切り処理 : フォーカスを得たとき
+  $("input.price").focus ->
+    $(@).val(priceUnformat($(@).val()))
+
+  # カンマ区切り処理 : フォーカスを失ったとき
+  $("input.price").blur ->
+    $(@).val(priceFormat($(@).val()))
+
+  # カンマ区切り処理 : 初期化
+  $("input.price").each ->
+    $(this).triggerHandler "blur"
+
+  # カンマ区切り処理 : フォームのアップロード
+  $("form").submit ->
+    $(@).find("input.price").each ->
+      $(this).triggerHandler "focus"
+
+priceUnformat = (str) ->
+  num = new String(str).replace(/[^0-9]/g, "")
+  num = "" if num == '0'
+  return num
+
+priceFormat = (str) ->
+  num = "" + priceUnformat(str)
+  while num != (num = num.replace(/^(-?\d+)(\d{3})/, "$1,$2"))
+    num
+  return num

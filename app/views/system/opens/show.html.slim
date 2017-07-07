@@ -7,6 +7,15 @@
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
       span.btn-content CSV出力
+  
+  .row
+    - 1.step @max_list_no, 100 do |no|
+      - lt_no = [@max_list_no, no + 99].min
+      .list_no-link
+        - if params.dig(:q, :list_no_gteq) == no.to_s
+          strong #{no} 〜 #{lt_no}
+        - else
+          = link_to "#{no} 〜 #{lt_no}", "/system/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
       
   .row
     = label_tag :list_no, "ジャンル ", class: :h4
@@ -14,10 +23,10 @@
       = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
             
       = label_tag :list_no, "最低入札金額 ", class: :h4
-      .form-group
-        = s.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+      .form-group.form-priceinterval
+        = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control form-inline price"
         = " 〜 "
-        = s.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+        = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control form-inline price"
         
         = button_tag type: :submit, class: "btn btn-info" do
           .glyphicon.glyphicon-search

@@ -23,10 +23,10 @@ Rails.application.routes.draw do
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
 
-  get  "detail/:id" => "products#show"
-  get  "images/:id" => "products#images"
+  get  "detail/:id"   => "products#show"
+  get  "images/:id"   => "products#images"
   get  "ml_get_genre" => "products#ml_get_genre"
-
+  get  "bid_list"     => "products#bid_list"
 
   get  "qr"         => "products#qr"
   # get  "contact/:id"     => "products#contact"
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :bids, except: [:show, :edit, :update] do
+    resources :bids, except: [:show] do
       collection do
         # get :results
         get :rakusatsu_sum
@@ -120,7 +120,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :bids, except: [:show, :edit, :update] do
+    resources :bids, except: [:show] do
       collection do
         # get :results
         get :rakusatsu_sum

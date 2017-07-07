@@ -9,15 +9,29 @@
       span.btn-content CSV出力
 
   .row
+    => link_to "すべての商品", "/bid/opens/#{@open.id}", class: "btn btn-info"
+    => link_to "自社が出品した商品のみ", "/bid/opens/#{@open.id}?q[company_id_eq]=#{current_company.id}", class: "btn btn-info"
+    = link_to "自社が落札した商品", "/bid/opens/#{@open.id}?q[success_company_id_eq]=#{current_company.id}", class: "btn btn-info"
+
+  .row
+    - 1.step @max_list_no, 100 do |no|
+      - lt_no = [@max_list_no, no + 99].min
+      .list_no-link
+        - if params.dig(:q, :list_no_gteq) == no.to_s
+          strong #{no} 〜 #{lt_no}
+        - else
+          = link_to "#{no} 〜 #{lt_no}", "/bid/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
+          
+  .row
     = label_tag :list_no, "ジャンル ", class: :h4
     .form-group
       = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
             
       = label_tag :list_no, "最低入札金額 ", class: :h4
-      .form-group
-        = s.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
+      .form-group.form-priceinterval
+        = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
         = " 〜 "
-        = s.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
+        = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
         
         = button_tag type: :submit, class: "btn btn-info" do
           .glyphicon.glyphicon-search
@@ -35,6 +49,7 @@
             th = s.sort_link :genre_order_no,          "商品名"
             th = s.sort_link :maker,                   "メーカー"
             th = s.sort_link :model,                   "型式"
+            th 画像
             th.sepa = s.sort_link :min_price,          "最低入札金額"
             th = s.sort_link :bids_count,              "入札数"
             th = s.sort_link :success_bid_amount,      "落札金額"
@@ -48,6 +63,7 @@
               td = p.name
               td = p.maker
               td = p.model 
+              td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
                 td.num = p.bids_count

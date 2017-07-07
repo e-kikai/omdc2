@@ -30,6 +30,20 @@ class ProductsController < ApplicationController
     end
   end
 
+  def bid_list
+    @search = @products.search(params[:q])
+
+    @products  = @search.result.order(:list_no)
+    @pproducts = @products.page(params[:page])
+
+    @max_list_no = @open_now.products.listed.maximum(:list_no)
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@open_now.name}_検索結果.csv" }
+    end
+  end
+
   def qr
     product_id = if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
       product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)

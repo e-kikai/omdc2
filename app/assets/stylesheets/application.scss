@@ -161,11 +161,6 @@ table {
   &.form-table {
     background-color: #EEE;
 
-    input[type=number] {
-      width: 120px;
-      text-align: right;
-    }
-
     th {
       width: 130px;
     }
@@ -177,7 +172,8 @@ table {
 
 }
 
-.form-inline input[type=number].form-control {
+input[type=number],
+input.price {
   width: 120px;
   text-align: right;
 }
@@ -310,4 +306,26 @@ table.bid-table {
   td.image img {
     width: 100%;
   }
+}
+
+.list_no-link {
+  display: inline-block;
+  width: 108px;
+}
+
+.form-priceinterval {
+  margin-bottom: 0;
+  vertical-align: middle;
+
+  input[type=text] {
+    display: inline-block;
+    width: 100px;
+  }
+
+  .input-group {
+    display: inline-table;
+    vertical-align: middle;
+    width: 172px;
+  }
+
 }

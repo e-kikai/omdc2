@@ -142,6 +142,16 @@ class Product < ApplicationRecord
     self
   end
 
+  def set_display(string)
+    self.display = Product.displays.first[1]
+    Product.displays.each do |k, v|
+      if k =~ /#{string}/
+        self.display = v
+        break
+      end
+    end
+  end
+
   def area_name
     case
     when tento?;        company.name
@@ -254,12 +264,12 @@ class Product < ApplicationRecord
         spec:      row[7],
         condition: row[8],
         comment:   row[9],
-        display:   row[10] || 0,
         youtube:   row[11],
         soft_destroyed_at: row[12].present? ? Time.now : nil,
       }
 
-      product.set_genre if product.new_record?
+      product.set_display(row[10])
+      product.set_genre if product.genre_id == 390
 
       product.valid?
       res << product
@@ -292,12 +302,12 @@ class Product < ApplicationRecord
         spec:      row[9],
         condition: row[10],
         comment:   row[11],
-        display:   row[12] || 0,
         youtube:   row[13],
         soft_destroyed_at: row[14].present? ? Time.now : nil,
       }
 
-      product.set_genre if product.new_record?
+      product.set_display(row[12])
+      product.set_genre if product.genre_id == 390
 
       product.valid?
       res << product

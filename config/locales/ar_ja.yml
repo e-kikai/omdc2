@@ -60,6 +60,7 @@ ja:
         password_confirmation: パスワード確認
         current_password: 現在のパスワード
       product:
+        app_no: 申込No.
         list_no: リストNo.
         name: 商品名
         maker: メーカー

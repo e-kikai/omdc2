@@ -29,7 +29,11 @@
   
   - if @open_now.display?
     .col-md-offset-2.col-md-8
-      .
+      .row
+        h4
+          = "◆ "
+          = link_to "出品商品リスト(リストNo.順)", "/bid_list"
+      .row
         = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
           = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
           .input-group
@@ -39,19 +43,20 @@
                 .glyphicon.glyphicon-search
                 span.btn-content 検索
           
-      .
+      .row
         = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
           = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
-          = f.number_field :min_price_gteq, placeholder: "〜以上", class: "form-control"
-          = " 〜 "
-          .input-group
-            = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
-            span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-info" do
-                .glyphicon.glyphicon-search
-                span.btn-content 検索
+          .form-group.form-priceinterval
+            = f.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
+            = " 〜 "
+            .input-group
+              = f.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
+              span.input-group-btn
+                = button_tag type: :submit, class: "btn btn-info" do
+                  .glyphicon.glyphicon-search
+                  span.btn-content 検索
           
-      .
+      .row
         = form_tag "/search", method: :get, class: "form-inline" do
           = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
           .input-group

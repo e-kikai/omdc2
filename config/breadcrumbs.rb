@@ -33,10 +33,10 @@ crumb :detail do |product|
   parent :genre, product.genre
 end
 
-crumb :contact do |product|
-  link "メールで問い合わせ", "/contact/#{product.id}"
-  parent :detail, product
-end
+# crumb :contact do |product|
+#   link "メールで問い合わせ", "/contact/#{product.id}"
+#   parent :detail, product
+# end
 
 
 ### 管理者画面 ###
@@ -134,6 +134,11 @@ crumb :system_bids do
   parent :system_bids_new
 end
 
+crumb :system_bids_edit do
+  link   "入札訂正", "/system/bids/edit"
+  parent :system_bids
+end
+
 crumb :system_bids_new do
   link   "入札", "/system/bids/new"
   parent :system_root
@@ -178,6 +183,11 @@ end
 crumb :bid_bids do
   link   "入札履歴", "/bid/bids"
   parent :bid_bids_new
+end
+
+crumb :bid_bids_edit do
+  link   "入札訂正", "/bid/bids/edit"
+  parent :bid_bids
 end
 
 crumb :bid_bids_new do

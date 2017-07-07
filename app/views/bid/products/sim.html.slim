@@ -14,15 +14,19 @@ h4 出品商品 支払・請求シミュレータ
           th 落札結果
           th
         tr
-          td = (number_field_tag :min_price, params[:min_price], class: "form-control min_price", required: "required") + " 円"
-          td = (number_field_tag :amount, params[:amount], class: "form-control amount", required: "required") + " 円"
+          td = (text_field_tag :min_price, params[:min_price], class: "form-control min_price price", required: "required") + " 円"
+          td = (text_field_tag :amount, params[:amount], class: "form-control amount price", required: "required") + " 円"
           td = button_tag type: :submit, data: { "disable-with" => "計算中..." }, class: "btn btn-info center-block" do
             span.glyphicon.glyphicon-jpy
             span.btn-content 計算
     p 最低出品金額 : #{number_to_currency(@open_now.lower_price)}、 入札単位 : #{number_to_currency(@open_now.rate)}
   
-
-- if @product.present?
+- if @errors.present?
+  .alert.alert-danger
+    span.glyphicon.glyphicon-alert
+      - @errors.each do |msg|
+        li = msg
+- elsif @product.present?
   .row
     .arrow_area: span.glyphicon.glyphicon-chevron-down
     
@@ -36,22 +40,35 @@ h4 出品商品 支払・請求シミュレータ
         th 落札会社手数料
         th 事務局手数料
         th.sepa 計算結果
-        th 出品手数料
       tr
-        th 出品支払額
-        td.num rowspan="2" = number_to_currency @product.min_price
+        th 商品を落札した場合、事務局に支払う金額
+
+        td.num rowspan="3" = number_to_currency @product.min_price
         td.num rowspan="2" = number_to_currency @product.bids.first.amount
         td.num rowspan="2" = number_to_currency @product.deme_h
-        td.num rowspan="2" #{number_to_currency(@product.hanbai_fee)}<br />(#{@product.hanbai_fee_per}%)
-        td.num #{number_to_currency(@product.kumiai_fee)} (#{@product.kumiai_fee_per}%)
-        td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.kumiai_fee - @product.hanbai_fee)
-        td.num #{number_to_currency(@product.shuppin_fee)}#{@product.shuppin_fee_per.present? ? " (#{@product.shuppin_fee_per}%)" : ""}
-      tr
-        th 落札請求額
+        td.num rowspan="2"
+          . = number_to_currency(@product.hanbai_fee)
+          .percent #{@product.hanbai_fee_per}%
         td.num --
         td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.hanbai_fee)
+
+      tr
+        th 出品商品が落札された場合、事務局からもらう金額
+        td.num
+          . = number_to_currency(@product.kumiai_fee)
+          .percent #{@product.kumiai_fee_per}%
+        td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.kumiai_fee - @product.hanbai_fee)
+        
+      tr
+        th 出品商品が未落札の場合、元引き手数料
         td.num --
-      
+        td.num --
+        td.num --
+        td.num
+          . = number_to_currency(@product.shuppin_fee)
+          .percent #{@product.shuppin_fee_per}%
+        td.num #{number_to_currency(@product.shuppin_fee)}
+        
 .col-md-offset-1.col-md-10
   = button_tag type: :button, class: "btn btn-danger center-block", onclick: "window.close();return false;" do
     span.glyphicon.glyphicon-remove

@@ -1,13 +1,15 @@
 class System::BidsController < System::ApplicationController
   before_action :check_open
-  before_action :check_bid_start,   only: [:index, :new, :create, :destroy]
+  before_action :check_bid_start,   only: [:index, :new, :create, :destroy, :edit, :update, :destroy]
   before_action :check_result_list, only: [:results]
   before_action :check_result_sum,  only: [:rakusatsu_sum, :shuppin_sum, :total, :total_list]
   before_action :calc_result,       only: [:rakusatsu_sum, :shuppin_sum, :total, :total_list]
 
   before_action :get_companies_selector, except: [:results]
   before_action :bids, except: [:results]
+
   before_action :bid_init, only: [:new, :create]
+  before_action :get_bid, only: [:edit, :update, :destroy]
 
   include Exports
 
@@ -30,6 +32,20 @@ class System::BidsController < System::ApplicationController
       redirect_to "/system/bids/new", notice: "#{@bid.product.name}に入札しました"
     else
       render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    @bid.assign_attributes(bid_params)
+    if params[:overcheck].to_i != @bid.amount && @over = @bid.check_5time
+      render :edit
+    elsif @bid.save
+      redirect_to "/system/bids/", notice: "#{@bid.product.list_no} : #{@bid.product.name}の入札を訂正しました"
+    else
+      render :edit
     end
   end
 
@@ -61,7 +77,6 @@ class System::BidsController < System::ApplicationController
   end
 
   def destroy
-    @bid = @bids.find(params[:id])
     @bid.soft_destroy!
     redirect_to "/system/bids/", notice: "#{@bid.product.name}の入札を取り消しました"
   end
@@ -113,6 +128,10 @@ class System::BidsController < System::ApplicationController
   def bid_init
     @product = params[:list_no].present? ? @open_now.products.find_by(list_no: params[:list_no]) : nil
     @bid     = @product.bids.new(company: @company) if @product
+  end
+
+  def get_bid
+    @bid = @bids.find(params[:id])
   end
 
   def calc_result

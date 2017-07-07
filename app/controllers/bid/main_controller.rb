@@ -1,6 +1,7 @@
 class Bid::MainController < Bid::ApplicationController
   skip_before_action :check_rule, only: [:rule, :rule_update]
   skip_before_action :authenticate_company!, only: [:rule, :rule_update]
+  skip_before_action :check_default_password, only: [:rule, :rule_update, :edit_password, :update_password]
 
   def index
   end

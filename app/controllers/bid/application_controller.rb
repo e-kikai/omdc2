@@ -1,9 +1,16 @@
 class Bid::ApplicationController < ApplicationController
   before_action :check_rule
   before_action :authenticate_company!
+  before_action :check_default_password
 
   def check_rule
     redirect_to "/bid/rule" if session[:bid_rule].blank? || session[:bid_rule] < (Time.now - 12.hours)
+  end
+
+  def check_default_password
+    if current_company.valid_password? "ikomamember"
+      redirect_to "/bid/edit_password", notice: "初期パスワード「ikomamember」は、必ず変更する必要があります。\nパスワード変更をよろしくお願いします。"
+    end
   end
 
   private

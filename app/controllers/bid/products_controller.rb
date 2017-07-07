@@ -2,8 +2,12 @@ class Bid::ProductsController < Bid::ApplicationController
   before_action :check_open
   before_action :check_entry,       except: [:index, :images, :image_upload, :images_order, :image_destroy, :sim]
   before_action :check_entry_start, only: [:index, :images, :image_upload, :images_order, :image_destroy]
-  before_action :products
-  before_action :get_product, only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
+  before_action :products,          except: [:sim]
+  before_action :get_product,       only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
+
+  skip_before_action :check_rule, only: [:sim]
+  skip_before_action :authenticate_company!, only: [:sim]
+  skip_before_action :check_default_password, only: [:sim]
 
   include Exports
 
@@ -103,7 +107,12 @@ class Bid::ProductsController < Bid::ApplicationController
     if params[:min_price] && params[:amount]
       @product = @open_now.products.new({min_price: params[:min_price], display: "一般出品"})
       @product.bids.new({amount: params[:amount]})
-      @product.valid?
+
+      @errors = []
+      @errors << "落札結果が最低入札金額より低く設定されています"     if params[:min_price].to_i > params[:amount].to_i
+      @errors << "最低入札金額が最低出品金額より低く設定されています" if params[:min_price].to_i < @open_now.lower_price
+      @errors << "最低入札金額が入札単位になっていません"             if params[:min_price].to_i % @open_now.rate != 0
+      @errors << "落札結果が入札単位になっていません"                 if params[:amount].to_i % @open_now.rate != 0
     end
   end
 
@@ -111,7 +120,7 @@ class Bid::ProductsController < Bid::ApplicationController
 
   def products
     @search   = @open_now.products.where(company_id: current_company.id).search(params[:q])
-    @products = @search.result
+    @products = @search.result.order(:app_no)
   end
 
   def get_product
