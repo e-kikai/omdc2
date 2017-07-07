@@ -66,6 +66,12 @@ class System::BidsController < System::ApplicationController
     if @company
       @search   = @open_now.products.listed.where(company: @company).includes(:genre, :success_bid, :success_company).search(params[:q])
       @products = @search.result.order(:list_no)
+
+      respond_to do |format|
+        format.html
+        format.csv { export_csv "#{@open_now.name}_出品集計.csv", "/bid/bids/shuppin_sum.csv" }
+      end
+
     end
   end
 

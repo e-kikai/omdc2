@@ -24,6 +24,7 @@
           th.sepa = s.sort_link :min_price,     "最低入札金額"
           
           th = "内容"
+          th = "備考欄"
           th = s.sort_link :area_name, "出品場所"
       - @products.each do |p|
         tr
@@ -33,4 +34,5 @@
           td = p.model
           td.num.sepa = number_to_currency(p.min_price)
           td = p.success_company.blank? ? "元引き" : "引取"
+          td = p.success_company.blank? ? p.comment : p.success_bid.comment
           td = p.area_name

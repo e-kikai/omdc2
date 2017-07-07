@@ -68,10 +68,10 @@ class Bid::BidsController < Bid::ApplicationController
     @products = @products.order(:list_no)
     @company  = current_company
 
-    # respond_to do |format|
-    #   format.html
-    #   format.pdf { export_pdf "#{@open_now.name}_元引き一覧.pdf" }
-    # end
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@open_now.name}_出品集計.csv" }
+    end
   end
 
   def total

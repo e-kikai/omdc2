@@ -20,3 +20,6 @@
             td = b.product.model 
             td.num = b.product.min_price.to_s(:delimited) + "円"
             td.num = b.amount.to_s(:delimited) + "円"
+        td colspan="4"
+        th 入札金額合計
+        td.num = @bids.sum(:amount).to_s(:delimited) + "円"
