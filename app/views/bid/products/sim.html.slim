@@ -3,6 +3,24 @@ scss:
   header {
     display: none;
   }
+  
+  .quesction {
+      text-decoration: underline;
+      color: #47E;
+      cursor: help;
+    &:hover {
+      color: #b22;
+    }
+  }
+  
+  .popover {
+    max-width: none;
+  }
+  
+javascript:
+  $(function () {
+    $('[data-toggle="popover"]').popover({html: true});
+  });  
 h4 出品商品 支払・請求シミュレータ
 
 .row
@@ -41,7 +59,11 @@ h4 出品商品 支払・請求シミュレータ
         th 事務局手数料
         th.sepa 計算結果
       tr
-        th 商品を落札した場合、事務局に支払う金額
+        th
+          | 商品を落札した場合、事務局に支払う金額
+          =< content_tag :a, class: :quesction, title: "事務局に支払う金額 計算方法", data: { toggle: :popover, placement: :bottom, content: "デメ半③ ＝ (落札金額 - 最低入札金額) × 50%<hr />落札会社手数料④ ＝ 最低入札金額 × 手数料率⑥<hr />事務局に支払う金額 = 落札金額 - デメ半③ - 落札会社への手数料④"} do
+            span.glyphicon.glyphicon-question-sign
+            | 計算方法
 
         td.num rowspan="3" = number_to_currency @product.min_price
         td.num rowspan="2" = number_to_currency @product.bids.first.amount
@@ -53,14 +75,22 @@ h4 出品商品 支払・請求シミュレータ
         td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.hanbai_fee)
 
       tr
-        th 出品商品が落札された場合、事務局からもらう金額
+        th
+          | 出品商品が落札された場合、事務局からもらう金額
+          =< content_tag :a, class: :quesction, title: "事務局からもらう金額 計算方法", data: { toggle: :popover, placement: :bottom, content: "デメ半③ ＝ (落札金額 - 最低入札金額) × 50%<hr />落札会社手数料④ ＝ 最低入札金額 × 手数料率⑥<hr />事務局手数料⑤ ＝ 最低入札金額 × 手数料率⑥<hr />事務局からもらう金額 = 最低入札金額 + デメ半③ - 落札会社への手数料④ - 事務局手数料⑤"} do
+            span.glyphicon.glyphicon-question-sign
+            | 計算方法
         td.num
           . = number_to_currency(@product.kumiai_fee)
           .percent #{@product.kumiai_fee_per}%
         td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.kumiai_fee - @product.hanbai_fee)
         
       tr
-        th 出品商品が未落札の場合、元引き手数料
+        th
+          | 出品商品が未落札の場合、元引き手数料
+          =< content_tag :a, class: :quesction, title: "元引き手数料 計算方法", data: { toggle: :popover, placement: :bottom, content: "元引き手数料 ＝ 最低入札金額 × 手数料率"} do
+            span.glyphicon.glyphicon-question-sign
+            | 計算方法
         td.num --
         td.num --
         td.num --

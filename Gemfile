@@ -162,3 +162,5 @@ gem 'rqrcode_png'
 gem 'carrierwave'
 gem 'rmagick'
 gem 'fog'
+
+gem 'google-analytics-rails'

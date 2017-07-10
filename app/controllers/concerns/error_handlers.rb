@@ -15,18 +15,29 @@ module ErrorHandlers
 
   private
 
-  def rescue403(e)
-    @exception = e
+  def rescue403(e = nil)
+    logging(e)
     render 'errors/error_403.html.slim', status: 403
   end
 
-  def rescue404(e)
-    @exception = e
+  def rescue404(e= nil)
+    logging(e)
     render 'errors/error_404.html.slim', status: 404
   end
 
-  def rescue500(e)
-    @exception = e
+  def rescue500(e= nil)
+    logging(e)
     render 'errors/error_500.html.slim', status: 500
+  end
+
+  private
+
+  def logging(e = nil)
+    if e
+      logger.error e
+      logger.error e.backtrace.join("\n")
+    end
+
+    @exception = e
   end
 end
