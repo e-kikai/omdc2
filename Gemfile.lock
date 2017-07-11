@@ -128,7 +128,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (1.8.0)
+    faker (1.8.2)
       i18n (~> 0.5)
     ffi (1.9.18)
     fission (0.5.0)
@@ -260,7 +260,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (1.11.1)
+    fog-vsphere (1.11.2)
       fog-core
       rbvmomi (~> 1.9)
     fog-xenserver (0.3.0)
@@ -274,6 +274,7 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     google-analytics-rails (1.1.1)
+    google-analytics-turbolinks (0.0.5)
     gretel (3.0.9)
       rails (>= 3.1.0)
     hirb (0.7.3)
@@ -554,6 +555,7 @@ DEPENDENCIES
   faker
   fog
   google-analytics-rails
+  google-analytics-turbolinks
   gretel
   hirb
   hirb-unicode
