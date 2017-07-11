@@ -23,19 +23,23 @@
           = link_to "#{no} 〜 #{lt_no}", "/bid/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
           
   .row
+    = label_tag :list_no, "キーワード検索 ", class: :h4
+    .form-group
+      = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
+    
     = label_tag :list_no, "ジャンル ", class: :h4
     .form-group
       = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
             
-      = label_tag :list_no, "最低入札金額 ", class: :h4
-      .form-group.form-priceinterval
-        = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
-        = " 〜 "
-        = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
-        
-        = button_tag type: :submit, class: "btn btn-info" do
-          .glyphicon.glyphicon-search
-          span.btn-content 検索
+    = label_tag :list_no, "最低入札金額 ", class: :h4
+    .form-group.form-priceinterval
+      = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
+      = " 〜 "
+      = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
+      
+      = button_tag type: :submit, class: "btn btn-info" do
+        .glyphicon.glyphicon-search
+        span.btn-content 検索
           
   - if @pproducts.blank?
     div 該当の出品商品はありませんでした

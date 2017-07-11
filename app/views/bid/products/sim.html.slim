@@ -1,4 +1,4 @@
-- set_meta_tags title: "出品商品 支払・請求シミュレータ"
+- set_meta_tags title: "落札金額シミュレータ"
 scss:
   header {
     display: none;
@@ -21,7 +21,7 @@ javascript:
   $(function () {
     $('[data-toggle="popover"]').popover({html: true});
   });  
-h4 出品商品 支払・請求シミュレータ
+h4 落札金額シミュレータ
 
 .row
   .col-md-offset-3.col-md-6
@@ -76,8 +76,8 @@ h4 出品商品 支払・請求シミュレータ
 
       tr
         th
-          | 出品商品が落札された場合、事務局からもらう金額
-          =< content_tag :a, class: :quesction, title: "事務局からもらう金額 計算方法", data: { toggle: :popover, placement: :bottom, content: "デメ半③ ＝ (落札金額 - 最低入札金額) × 50%<hr />落札会社手数料④ ＝ 最低入札金額 × 手数料率⑥<hr />事務局手数料⑤ ＝ 最低入札金額 × 手数料率⑥<hr />事務局からもらう金額 = 最低入札金額 + デメ半③ - 落札会社への手数料④ - 事務局手数料⑤"} do
+          | 出品商品が落札された場合、支払われる金額
+          =< content_tag :a, class: :quesction, title: "支払われる金額 計算方法", data: { toggle: :popover, placement: :bottom, content: "デメ半③ ＝ (落札金額 - 最低入札金額) × 50%<hr />落札会社手数料④ ＝ 最低入札金額 × 手数料率⑥<hr />事務局手数料⑤ ＝ 最低入札金額 × 手数料率⑥<hr />事務局からもらう金額 = 最低入札金額 + デメ半③ - 落札会社への手数料④ - 事務局手数料⑤"} do
             span.glyphicon.glyphicon-question-sign
             | 計算方法
         td.num

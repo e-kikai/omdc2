@@ -60,7 +60,7 @@
         = form_tag "/search", method: :get, class: "form-inline" do
           = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
           .input-group
-            = text_field_tag :keywords, params[:keywords], placeholder: "商品名", class: "form-control"
+            = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
             span.input-group-btn
               = button_tag type: :submit, class: "btn btn-info" do
                 .glyphicon.glyphicon-search
