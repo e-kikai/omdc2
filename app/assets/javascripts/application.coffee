@@ -24,6 +24,7 @@
 #= require moment/locale/ja
 #= require bootstrap3-datetimepicker
 #= require dropzone
+#= require google-analytics-turbolinks
 #= require_tree .
 $(document).on 'ready, turbolinks:load', ->
   # # フォーム共通 : フォーム自動全選択
