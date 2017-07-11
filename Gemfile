@@ -164,3 +164,4 @@ gem 'rmagick'
 gem 'fog'
 
 gem 'google-analytics-rails'
+gem 'google-analytics-turbolinks'
