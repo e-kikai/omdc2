@@ -1,11 +1,11 @@
 class ProductsController < ApplicationController
-  before_action :check_open
-  before_action :check_display
+  before_action :check_open,    except: [:images]
+  before_action :check_display, except: [:images]
   before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
 
   # before_action :fluent_before, only: [:show]
   # after_action  :fluent_log, only: [:show]
-  
+
   include Exports
 
   def index
@@ -72,7 +72,7 @@ class ProductsController < ApplicationController
   end
 
   def images
-      @product = @open_now.products.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
+      @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
   end
 
   # def contact
