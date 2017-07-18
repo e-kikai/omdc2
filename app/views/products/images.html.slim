@@ -1,7 +1,7 @@
 - set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} 画像一覧"
 
 .container-fluid.list-menu
-  .col-sm-12.col-md-12
+  .col-lg-offset-1.col-lg-10.col-md-12
     .panel.panel-default
       .panel-body
         table.table.table-condensed.table-detail
@@ -18,7 +18,7 @@
             th 最低入札金額
             td #{number_with_delimiter(@product.min_price)}円
 
-  .col-sm-12.col-md-12
+  .col-lg-offset-1.col-lg-10.col-md-12
     - if @product.youtube.present?
       .youtube-area.embed-responsive.embed-responsive-16by9
         iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"

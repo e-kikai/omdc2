@@ -11,19 +11,19 @@ class ProductImage < ApplicationRecord
     end
   end
 
-  def self.dump(filename)
-    CSV.foreach(filename) do |row|
-      begin
-        ProductImage.transaction do
-          img = Product.find(row[0]).product_images.new
-          img.save!
-          puts "http://122.103.211.133/bid_list/media/img/#{row[1]}"
-          img.remote_image_url = "http://122.103.211.133/bid_list/media/img/#{row[1]}"
-          img.save!
-        end
-      rescue => e
-        puts e.message
-      end
-    end
-  end
+  # def self.dump(filename)
+  #   CSV.foreach(filename) do |row|
+  #     begin
+  #       ProductImage.transaction do
+  #         img = Product.find(row[0]).product_images.new
+  #         img.save!
+  #         puts "http://122.103.211.133/bid_list/media/img/#{row[1]}"
+  #         img.remote_image_url = "http://122.103.211.133/bid_list/media/img/#{row[1]}"
+  #         img.save!
+  #       end
+  #     rescue => e
+  #       puts e.message
+  #     end
+  #   end
+  # end
 end

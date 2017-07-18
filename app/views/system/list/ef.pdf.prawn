@@ -13,8 +13,10 @@ prawn_document do |pdf|
       pdf.bounding_box([((m - 1) % 3 * ef_width), ((8 - (m - 1) .div(3) ) * ef_height)], width: ef_width, height: ef_height) do
         # pdf.stroke_bounds
 
-        pdf.text "#{@company.no}-#{n*24+m}", size: 28, valign: :center
-        pdf.image System.qrcode_temp("#{root_url}qr?key=#{@open_now.id}-#{@company.no}-#{n*24+m}&place=ef"), at: [130, 71], width: 50
+        pdf.bounding_box([0, ef_height], width: 120, height: ef_height) do
+          pdf.text "#{@company.no}-#{n*24+m}", size: 28, valign: :center
+        end
+        pdf.image System.qrcode_temp("#{root_url}qr?key=#{@open_now.id}-#{@company.no}-#{n*24+m}&place=ef"), at: [120, 79], width: 64
       end
     end
   end
