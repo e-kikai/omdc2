@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
-  before_action :check_open,    except: [:images]
-  before_action :check_display, except: [:images]
+  before_action :check_open,    except: [:images, :ml_get_genre]
+  before_action :check_display, except: [:images, :ml_get_genre]
   before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
 
-  # before_action :fluent_before, only: [:show]
-  # after_action  :fluent_log, only: [:show]
+  before_action :fluent_before, only: [:show]
+  after_action  :fluent_log,    only: [:show]
 
   include Exports
 
@@ -116,36 +116,33 @@ class ProductsController < ApplicationController
     @product = @products.find(params[:id])
   end
 
-  # def fluent_before
-  #   @start_time = Time.now
-  # end
-  #
-  # def fluent_log
-  #   next if @product.blank?
-  #
-  #   Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
-  #   channel = {
-  #     start_time:   @start_time,
-  #     response:     Time.now - @start_time,
-  #     method:       request.request_method,
-  #     request_path: request.fullpath,
-  #     ip:           request.ip,
-  #     referer:      request.referer,
-  #     UA:           request.user_agent,
-  #
-  #     product:      @product.attributes,
-  #
-  #
-  #     # controller:   controller_name,
-  #     # action:       action_name,
-  #     # params:       params,
-  #     # user:         current_company_user.presence.try(:attributes),
-  #     # company_user_id: current_company_user.presence.try(:id),
-  #     # machine:      @machine.try(:attributes),
-  #   }
-  #
-  #   Fluent::Logger.post("ekikai", channel)
-  #
-  #   # throw channel
-  # end
+  def fluent_before
+    @start_time = Time.now
+  end
+
+  def fluent_log
+    if @product.present?
+      Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
+      channel = {
+        start_time:   @start_time,
+        response:     Time.now - @start_time,
+        method:       request.request_method,
+        request_path: request.fullpath,
+        ip:           request.ip,
+        referer:      request.referer,
+        UA:           request.user_agent,
+
+        genre_id:       @product.genre_id,
+        genre:          @product.genre.name,
+        large_genre_id: @product.large_genre.id,
+        large_genre:    @product.large_genre.name,
+        xl_genre_id:    @product.xl_genre.id,
+        xl_genre:       @product.xl_genre.name,
+      }.merge @product.attributes
+
+      Fluent::Logger.post("omdc2", channel)
+    end
+
+    # throw channel
+  end
 end

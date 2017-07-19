@@ -25,7 +25,7 @@ prawn_document do |pdf|
         pdf.font "vendor/assets/fonts/ipaexm.ttf"
         pdf.text "#{p.maker} #{p.year} #{p.model}", {size: 11, align: :center}
 
-        pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [0, 60]
+        pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [0, 80]
 
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 14, at: [0, 24], valign: :bottom}
