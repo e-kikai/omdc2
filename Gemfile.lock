@@ -62,7 +62,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
-    bullet (5.5.1)
+    bullet (5.6.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     byebug (9.0.6)
@@ -128,11 +128,13 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (1.8.2)
+    faker (1.8.4)
       i18n (~> 0.5)
     ffi (1.9.18)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
+    fluent-logger (0.7.1)
+      msgpack (>= 1.0.0, < 2)
     fog (1.40.0)
       fog-aliyun (>= 0.1.0)
       fog-atmos
@@ -327,6 +329,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
     minitest (5.10.2)
+    msgpack (1.1.0)
     multi_json (1.12.1)
     nested_form (0.3.2)
     net-scp (1.2.1)
@@ -344,7 +347,7 @@ GEM
     prawn (2.2.2)
       pdf-core (~> 0.7.0)
       ttfunk (~> 1.5)
-    prawn-rails (1.0.0)
+    prawn-rails (1.0.1)
       prawn
       prawn-table
       rails (>= 3.1.0)
@@ -451,7 +454,11 @@ GEM
       rspec-support (~> 3.6.0)
     rspec-support (3.6.0)
     rubyzip (1.2.1)
-    sass (3.4.25)
+    sass (3.5.1)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
     sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
       sass (~> 3.1)
@@ -553,6 +560,7 @@ DEPENDENCIES
   dropzonejs-rails
   factory_girl_rails
   faker
+  fluent-logger
   fog
   google-analytics-rails
   google-analytics-turbolinks

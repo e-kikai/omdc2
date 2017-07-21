@@ -121,27 +121,33 @@ class ProductsController < ApplicationController
   end
 
   def fluent_log
-    # if @product.present?
-    #   Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
-    #   channel = {
-    #     start_time:   @start_time,
-    #     response:     Time.now - @start_time,
-    #     method:       request.request_method,
-    #     request_path: request.fullpath,
-    #     ip:           request.ip,
-    #     referer:      request.referer,
-    #     UA:           request.user_agent,
-    #
-    #     genre_id:       @product.genre_id,
-    #     genre:          @product.genre.name,
-    #     large_genre_id: @product.large_genre.id,
-    #     large_genre:    @product.large_genre.name,
-    #     xl_genre_id:    @product.xl_genre.id,
-    #     xl_genre:       @product.xl_genre.name,
-    #   }.merge @product.attributes
-    #
-    #   Fluent::Logger.post("omdc2", channel)
-    # end
+    if @product.present?
+      Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
+      channel = {
+        start_time:   @start_time,
+        response:     Time.now - @start_time,
+        # method:       request.request_method,
+        # request_path: request.fullpath,
+        ip:           request.ip,
+        # referer:      request.referer,
+        UA:           request.user_agent,
+
+        genre_id:       @product.genre_id,
+        genre:          @product.genre.name,
+        large_genre_id: @product.large_genre.id,
+        large_genre:    @product.large_genre.name,
+        xl_genre_id:    @product.xl_genre.id,
+        xl_genre:       @product.xl_genre.name,
+
+        company_id:     @product.company_id,
+        company:        @product.company.try(:name),
+
+        area_id:        @product.area_id,
+        area:           @product.area.try(:name),
+      }.merge(@product.attributes.slice("id", "no", "name", "maker", "model", "year", "min_price"))
+
+      Fluent::Logger.post("omdc2", channel)
+    end
 
     # throw channel
   end
