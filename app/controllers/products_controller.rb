@@ -144,7 +144,7 @@ class ProductsController < ApplicationController
 
         area_id:        @product.area_id,
         area:           @product.area.try(:name),
-      }.merge(@product.attributes.slice("id", "no", "name", "maker", "model", "year", "min_price"))
+      }.merge(@product.attributes.slice("id", "list_no", "name", "maker", "model", "year", "min_price"))
 
       Fluent::Logger.post("omdc2", channel)
     end
