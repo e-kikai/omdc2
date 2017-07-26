@@ -55,7 +55,7 @@ class Open < ApplicationRecord
   end
 
   def entry?
-    (entry_start_date.to_time..entry_end_date.to_time).cover?(Time.now) rescue false
+    (entry_start_date..entry_end_date).cover?(Date.today) rescue false
   end
 
   def entry_start?
