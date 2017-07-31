@@ -64,7 +64,7 @@ class ProductsController < ApplicationController
         redirect_to "/system/list/#{product_id}/edit"
       end
     else
-      redirect_to "/detail/#{product_id}/?ref=qr"
+      redirect_to "/detail/#{product_id}/?ref=#{params[:place]}"
     end
   end
 
@@ -129,7 +129,7 @@ class ProductsController < ApplicationController
         # method:       request.request_method,
         # request_path: request.fullpath,
         ip:             request.remote_ip,
-        # referer:      request.referer,
+        referer:        request.referer,
         UA:             request.user_agent,
 
         ref:            params[:ref],
