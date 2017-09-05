@@ -226,6 +226,7 @@ prawn_document do |pdf|
     next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
     next if @company_products[c.id][:success_products].sum(&:seikyu) <= @company_products[c.id][:products].sum(&:shiharai)
     sashihiki = (@company_products[c.id][:products].sum(&:shiharai) - @company_products[c.id][:success_products].sum(&:seikyu)).abs
+    total     = (@open_now.tax_total(products.sum(&:shiharai)) - @open_now.tax_total(success_products.sum(&:seikyu))).abs
 
     pdf.start_new_page layout: :portrait, margin: [8.mm]
     pdf.font "vendor/assets/fonts/ipaexm.ttf"
@@ -243,7 +244,7 @@ prawn_document do |pdf|
         pdf.bounding_box([8.mm, 212], width: 178.mm, height: 42.mm) do
           arr = [
             %w|請求金額(税抜) 消費税 合計請求金額|,
-            [number_with_delimiter(sashihiki), number_with_delimiter(@open_now.tax_calc(sashihiki)), number_with_delimiter(@open_now.tax_total(sashihiki))]
+            [number_with_delimiter(sashihiki), number_with_delimiter(total - sashihiki), number_with_delimiter(total)]
           ]
           pdf.table arr do |t|
             t.cells.style(size: 15)
