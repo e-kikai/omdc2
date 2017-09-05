@@ -179,7 +179,7 @@ prawn_document do |pdf|
           number_with_delimiter(p.success_price), p.success_company.try(:name_remove_kabu), number_with_delimiter(p.deme_h),
           p.display, number_with_delimiter(p.shuppin_fee), number_with_delimiter(p.shuppin_fee_per),
           number_with_delimiter(p.kumiai_fee), number_with_delimiter(p.kumiai_fee_per), number_with_delimiter(p.hanbai_fee),
-          number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
+          number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.shiharai), ""]
       end + [
         [ {content: "", colspan: 8}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 3}, number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai))],
         [ {content: "", colspan: 10}, {content: "消費税 : #{@open_now.tax}%", colspan: 3}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))],
