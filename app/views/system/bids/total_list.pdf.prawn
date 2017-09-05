@@ -226,7 +226,7 @@ prawn_document do |pdf|
     next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
     next if @company_products[c.id][:success_products].sum(&:seikyu) <= @company_products[c.id][:products].sum(&:shiharai)
     sashihiki = (@company_products[c.id][:products].sum(&:shiharai) - @company_products[c.id][:success_products].sum(&:seikyu)).abs
-    total     = (@open_now.tax_total(products.sum(&:shiharai)) - @open_now.tax_total(success_products.sum(&:seikyu))).abs
+    total     = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
 
     pdf.start_new_page layout: :portrait, margin: [8.mm]
     pdf.font "vendor/assets/fonts/ipaexm.ttf"
