@@ -149,7 +149,9 @@ scss:
         .company 機械団地共同展示場 御中
         .open-name = @open_now.name
         .open-author 事務局発行
-        .comment 下記商品を引取りいたします。
+        .comment
+          span 下記商品を引取りいたします。
+          span =< " (出品エリア : #{b.product.area_name})"
         table.product-table
           tr.header
             td.no リストNo.

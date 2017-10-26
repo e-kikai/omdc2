@@ -56,7 +56,7 @@ prawn_document do |pdf|
 
     end
 
-    pdf.bounding_box([88.mm, 224.mm], width: 76.mm, height: 120.mm) do
+    pdf.bounding_box([82.mm, 224.mm], width: 82.mm, height: 120.mm) do
       # pdf.stroke_bounds
 
       pdf.text "出品支払書", size: 14, align: :center
@@ -86,7 +86,7 @@ prawn_document do |pdf|
         header: false,
       } do |t|
         t.columns(0).style(width: 46.mm, align: :left, padding: 4)
-        t.columns(1).style(width: 30.mm, align: :right, padding: 4)
+        t.columns(1).style(width: 36.mm, align: :right, padding: 4)
 
         t.row(-4).style(size: 14, border_width: 0, padding: 2, padding_top: 18)
         t.row(-3).style(size: 14, border_width: 0, padding: 2, padding_bottom: 18)
@@ -138,9 +138,12 @@ prawn_document do |pdf|
       @company_products[c.id][:success_products].map do |p|
         [p.list_no, p.name, number_with_delimiter(p.min_price), number_with_delimiter(p.success_bid.amount), number_with_delimiter(p.deme_h), number_with_delimiter(p.hanbai_fee), number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.seikyu), ""]
       end + [
-        [ {content: "", colspan: 4}, "落札数 : #{@company_products[c.id][:success_products].length}", {content: "合計金額", colspan: 2}, number_with_delimiter(@company_products[c.id][:success_products].sum(&:seikyu))],
-        [ {content: "", colspan: 5}, {content: "消費税 : #{@open_now.tax}%", colspan: 2}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu)))],
-        [ {content: "", colspan: 5}, {content: "差引落札請求額", colspan: 2}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu)))],
+        [ {content: "", colspan: 4}, "落札数 : #{@company_products[c.id][:success_products].length}", {content: "合計金額"},
+          {content: number_with_delimiter(@company_products[c.id][:success_products].sum(&:seikyu)), colspan: 2}],
+        [ {content: "", colspan: 5}, {content: "消費税 : #{@open_now.tax}%"},
+          {content: number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu))), colspan: 2}],
+        [ {content: "", colspan: 5}, {content: "差引落札請求額"},
+          {content: number_with_delimiter(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))), colspan: 2}],
       ]
 
       pdf.table arr, {
@@ -181,9 +184,12 @@ prawn_document do |pdf|
           number_with_delimiter(p.kumiai_fee), number_with_delimiter(p.kumiai_fee_per), number_with_delimiter(p.hanbai_fee),
           number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.shiharai), ""]
       end + [
-        [ {content: "", colspan: 8}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 3}, number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai))],
-        [ {content: "", colspan: 10}, {content: "消費税 : #{@open_now.tax}%", colspan: 3}, number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))],
-        [ {content: "", colspan: 10}, {content: "差引出品支払額", colspan: 3}, number_with_delimiter(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))],
+        [ {content: "", colspan: 7}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 3},
+         {content: number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai)), colspan: 2}],
+        [ {content: "", colspan: 9}, {content: "消費税 : #{@open_now.tax}%", colspan: 3},
+          {content: number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai))), colspan: 2}],
+        [ {content: "", colspan: 9}, {content: "差引出品支払額", colspan: 3},
+          {content: number_with_delimiter(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai))), colspan: 2}],
       ]
 
       pdf.table arr, {

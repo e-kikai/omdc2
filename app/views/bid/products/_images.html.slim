@@ -110,14 +110,15 @@ scss:
 - if products.blank?
   div 出品商品がありませんでした
 - else
+  .sort_area
+    = search_form_for search, url: "" do |s|
+      = s.hidden_field :s, value: params.dig(:q, :s)
+      span => s.sort_link :app_no,  "申込No.でソート"
+      span => s.sort_link :list_no, "リストNo.でソート"
+
   .scroll_div
     table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
       tr
-        / th.id 申込No.
-        / th.id No.
-        / th 商品名/メーカー/型式
-        / th 最低入札金額
-        / th.imgs アップロード
         th
           .col-md-4 商品情報
           .col-md-8
@@ -135,30 +136,4 @@ scss:
                   = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
                 .fallback
                   = file_field_tag(:image)
-              
-          / td.no = p.app_no
-          / td.no = p.list_no
-          / td #{p.name} #{p.maker} #{p.model}
-          / td.num = number_to_currency p.min_price
-          / td.imgs
-          /   = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
-          /     / - p.product_images.each do |i|
-          /     /   .dz-preview.dz-processing.dz-image-preview.dz-success.dz-complete id="images_#{i.id}"
-          /     /     .dz-details
-          /     /       .dz-filename
-          /     /         span.data-dz-name #{i.image.file.original_filename}
-          /     /       .dz-size.data-dz-size
-          /     /     .dz-image
-          /     /       = image_tag i.image.thumb.url, alt: i.image.file.original_filename, class: "data-dz-thumbnail"
-          /     /     .dz-progress
-          /     /       span.dz-upload data-dz-uploadprogress=""
-          /     /     .dz-success-mark
-          /     /     .dz-error-mark
-          /     /     .dz-error-message
-          /     /       span data-dz-errormessage=""
-          /     /     = link_to "削除", "javascript:undefined;", "data-dz-remove" => "",  id: i.id, class: "dz-remove"
-          /     
-          /     - p.product_images.each do |i|
-          /       = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
-          /     .fallback
-          /       = file_field_tag(:image)
+            

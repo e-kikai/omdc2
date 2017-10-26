@@ -24,6 +24,9 @@ html
           
       #navbar-collapse-1.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
+          li = link_to "javascript:window.print();" do 
+            .glyphicon.glyphicon-print
+            span.btn-content ページを印刷
           li = link_to "/wishlist" do 
             .glyphicon.glyphicon-list
             span.btn-content ウィッシュリスト

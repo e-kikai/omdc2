@@ -26,11 +26,13 @@ class Bid::ProductsController < Bid::ApplicationController
 
   def new
     @product = @products.new
+    @product.genre_id = session[:new_genre_id]
   end
 
   def create
     @product = @products.new(product_params)
     if @product.save
+      session[:new_genre_id] = @product.genre_id
       redirect_to "/bid/products/", notice: "#{@product.name}を登録しました"
     else
       render :new

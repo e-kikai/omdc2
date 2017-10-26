@@ -103,7 +103,7 @@ class Bid::BidsController < Bid::ApplicationController
 
   def bids
     @search = @open_now.bids.where(company: current_company).includes(:product, :genre, :success_bid, :product_company).search(params[:q])
-    @bids   = @search.result.order(created_at: :desc)
+    @bids   = @search.result.order("products.list_no", created_at: :asc)
   end
 
   def products

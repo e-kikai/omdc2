@@ -30,36 +30,37 @@ class Open < ApplicationRecord
   }
 
   def display?
+    fullopen? ||
     ((carry_in_end_date.to_time..bid_start_at).cover?(Time.now) && Display.check(:search)) ||
     (Time.now > bid_start_at) rescue false
   end
 
   def bid?
-    (bid_start_at..bid_end_at).cover?(Time.now) rescue false
+    fullopen? || ((bid_start_at..bid_end_at).cover?(Time.now)) rescue false
   end
 
   def bid_start?
-    Time.now > bid_start_at rescue false
+    fullopen? || (Time.now > bid_start_at) rescue false
   end
 
   def bid_end?
-    Time.now > bid_end_at rescue false
+    fullopen? || (Time.now > bid_end_at )rescue false
   end
 
   def result_list?
-    Time.now > bid_end_at && Display.check(:result_sum) rescue false
+    fullopen? || (Time.now > bid_end_at && Display.check(:result_sum)) rescue false
   end
 
   def result_sum?
-    Time.now > bid_end_at && Display.check(:result_list) rescue false
+    fullopen? || (Time.now > bid_end_at && Display.check(:result_list)) rescue false
   end
 
   def entry?
-    (entry_start_date..entry_end_date).cover?(Date.today) rescue false
+    fullopen? || ((entry_start_date..entry_end_date).cover?(Date.today))rescue false
   end
 
   def entry_start?
-    Time.now > entry_start_date.to_time rescue false
+    fullopen? || (Time.now > entry_start_date.to_time) rescue false
   end
 
   def tax_calc(val)
@@ -82,5 +83,12 @@ class Open < ApplicationRecord
     end
 
     self.update(result: true)
+  end
+
+  private
+
+  def fullopen?
+    true  if Rails.env.staging?
+    true  if Rails.env.development?
   end
 end
