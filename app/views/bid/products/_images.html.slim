@@ -67,39 +67,6 @@ coffee:
           data: $(@).sortable('serialize') + '&authenticity_token=' + $('#authenticity_token').val()
     
 scss:
-  .dropzone {
-    border: 1px dashed #b4bcc2;
-    border-radius: 4px;
-    padding: 8px;
-    min-height: 132px;
-
-    .dz-message {
-      font-size: 16px;
-      text-align: center;
-      margin: 0;
-    }
-    
-    .dz-preview {
-      margin: 0 4px;
-      width: 100px;
-      
-      .dz-image {
-        width: 100px;
-        height: 100px;
-        border-radius: 8px;
-        
-        img {
-          min-width: 100px;
-          min-height: 100px;
-        }
-      }
-      
-      .dz-size {
-        display: none;
-      }
-    }
-  }
-  
   td.imgs,
   th.imgs {
     width: 66%;
@@ -126,7 +93,10 @@ scss:
         tr
           td 
             .col-md-4
-              span #{p.app_no} : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)} 
+              span 商品No. #{p.app_no}
+              - if p.list_no.present?
+                span = "(リストNo. #{p.app_no})" 
+              span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
               = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
                 span.glyphicon.glyphicon-link
                 span 確認

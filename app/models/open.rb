@@ -88,7 +88,7 @@ class Open < ApplicationRecord
   private
 
   def fullopen?
-    true  if Rails.env.staging?
-    true  if Rails.env.development?
+    Rails.env.staging?
+    # dRails.env.development? || Rails.env.staging?
   end
 end
