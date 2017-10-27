@@ -89,6 +89,6 @@ class Open < ApplicationRecord
 
   def fullopen?
     Rails.env.staging?
-    # dRails.env.development? || Rails.env.staging?
+    Rails.env.development? || Rails.env.staging?
   end
 end

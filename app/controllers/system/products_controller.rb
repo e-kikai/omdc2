@@ -12,13 +12,13 @@ class System::ProductsController < System::ApplicationController
       format.html
       format.csv {
         if params[:output] == "import"
-          export_csv "#{@open_now.name}_#{@company.no}_#{@company.name}_一括更新用.csv", "/system/products/import.csv"
+          export_csv "#{@company.no}_update_products.csv", "/system/products/import.csv"
         elsif params[:output] == "import_all"
           @search   = @open_now.products.search(params[:q])
           @products = @search.result.order(:list_no)
-          export_csv "#{@open_now.name}_一括更新用(全取得).csv", "/system/products/import.csv"
+          export_csv "all_products.csv", "/system/products/import.csv"
         else
-          export_csv "#{@open_now.name}_#{@company.no}_#{@company.name}_出品商品一覧.csv", "/bid/products/index.csv"
+          export_csv "#{@company.no}_products.csv", "/bid/products/index.csv"
         end
       }
     end

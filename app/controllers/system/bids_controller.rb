@@ -16,8 +16,8 @@ class System::BidsController < System::ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.pdf { export_pdf "#{@open_now.name}_入札履歴.pdf", "/bid/bids/index.pdf" }
-      format.csv { export_csv "#{@open_now.name}_入札履歴.csv", "/bid/bids/index.csv" }
+      format.pdf { export_pdf "#{@open_now.name}_bids.pdf", "/bid/bids/index.pdf" }
+      format.csv { export_csv "#{@open_now.name}_bids.csv", "/bid/bids/index.csv" }
     end
   end
 
@@ -56,8 +56,8 @@ class System::BidsController < System::ApplicationController
 
       respond_to do |format|
         format.html
-        format.pdf { export_pdf "#{@open_now.name}_落札確認.pdf", "/bid/bids/rakusatsu_sum.pdf" }
-        format.csv { export_csv "#{@open_now.name}_落札確認.csv", "/bid/bids/rakusatsu_sum.csv" }
+        format.pdf { export_pdf "rakusatsu.pdf", "/bid/bids/rakusatsu_sum.pdf" }
+        format.csv { export_csv "rakusatsu.csv", "/bid/bids/rakusatsu_sum.csv" }
       end
     end
   end
@@ -69,7 +69,7 @@ class System::BidsController < System::ApplicationController
 
       respond_to do |format|
         format.html
-        format.csv { export_csv "#{@open_now.name}_出品集計.csv", "/bid/bids/shuppin_sum.csv" }
+        format.csv { export_csv "shuppin.csv", "/bid/bids/shuppin_sum.csv" }
       end
 
     end
@@ -106,7 +106,7 @@ class System::BidsController < System::ApplicationController
       format.html
       # format.pdf { export_pdf "#{@open_now.name}_精算表.pdf" }
       format.pdf
-      format.csv { export_csv "#{@open_now.name}_集計一覧.csv" }
+      format.csv { export_csv "total.csv" }
     end
   end
 

@@ -16,9 +16,9 @@ class Bid::ProductsController < Bid::ApplicationController
       format.html
       format.csv {
         if params[:output] == "import"
-          export_csv "#{@open_now.name}_一括更新用.csv", "/bid/products/import.csv"
+          export_csv "update_products.csv", "/bid/products/import.csv"
         else
-          export_csv "#{@open_now.name}_出品商品一覧.csv", "/bid/products/index.csv"
+          export_csv "products.csv", "/bid/products/index.csv"
         end
       }
     end

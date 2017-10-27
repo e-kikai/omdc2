@@ -43,3 +43,8 @@
               = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
                 span.glyphicon.glyphicon-remove
                 =< "削除"
+        tr
+          td colspan="6"
+          td 合計金額
+          td.num = number_to_currency(products.sum(:min_price))
+          td colspan=3

@@ -22,7 +22,7 @@ class System::ListController < ApplicationController
       format.html
       format.csv {
         @products  = @products.listed
-        export_csv "#{@open_now.name}_出品一覧.csv"
+        export_csv "products_list.csv"
       }
     end
   end

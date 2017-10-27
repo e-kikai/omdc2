@@ -21,7 +21,7 @@ class Bid::OpensController < Bid::ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open.name}_落札結果一覧.csv" }
+      format.csv { export_csv "results.csv" }
     end
   end
 
