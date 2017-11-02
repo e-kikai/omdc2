@@ -93,6 +93,8 @@
       - elsif @product.area.try(:image)
         = image_tag @product.area.image.view.url, style: "width:100%;"
     
+    div = link_to image_tag("dst_01.jpg", style:"width: 100%;display:block;margin: 16px auto;"), "https://www.deadstocktool.com/", target: "_blank"
+
     - if @products.where(genre: @product.genre).limit(100)
       h4 この商品と同じジャンルの商品
       .same-area style="overflow-x:scroll;border:1px solid #CCC;"
