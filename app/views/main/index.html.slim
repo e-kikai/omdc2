@@ -1,6 +1,12 @@
+
 - if @open_now.persisted?
   .row
-    h4 = @open_now.name
+    .col-md-6.col-sm-12
+      h4 = @open_now.name
+    .col-md-6.col-sm-12
+      .pull-right = link_to image_tag("dst_05.jpg"), "https://www.deadstocktool.com/?ref=omdc2", target: "_blank"
+
+  .row
     .col-md-6.col-sm-12
       table.table.table-condensed.info-table 
         tr
@@ -28,7 +34,7 @@
     hr
   
   - if @open_now.display?
-    .col-md-offset-1.col-md-7
+    .col-md-offset-2.col-md-8
       .row
         h4
           = "◆ "
@@ -66,9 +72,6 @@
                 .glyphicon.glyphicon-search
                 span.btn-content 検索
 
-    .col-md-3 = link_to image_tag("dst_04.jpg", style: "width:240px;"), "https://www.deadstocktool.com/", target: "_blank"
-    .col-md-12 = link_to image_tag("dst_01.jpg", style:"display:block;margin: 16px auto;"), "https://www.deadstocktool.com/", target: "_blank"
-
     .col-md-offset-1.col-md-10
       h4 ◆ ジャンルからさがす
       .row
@@ -93,6 +96,3 @@
   .alert.alert-success
     span.glyphicon.glyphicon-info-sign
     =< "現在、入札会は開催されていません"
-    
-.col-md-12 = link_to image_tag("dst_01.jpg", style:"display:block;margin: 16px auto;"), "https://www.deadstocktool.com/", target: "_blank"
-
