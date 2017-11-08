@@ -2,5 +2,5 @@
 - breadcrumb  :system_something, "画像登録"
 
 = render "/system/main/select_company", { companies_selector: @companies_selector, company_id: session[:system_company_id] }
-
-= render "/bid/products/images", products: @products if @company
+  
+= render "/bid/products/images", {products: @products, search: @search} if @company
