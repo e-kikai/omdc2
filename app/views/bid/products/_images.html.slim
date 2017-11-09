@@ -95,7 +95,7 @@ scss:
             .col-md-4
               span 商品No. #{p.app_no}
               - if p.list_no.present?
-                span = "(リストNo. #{p.app_no})" 
+                span = "(リストNo. #{p.list_no})" 
               span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
               = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
                 span.glyphicon.glyphicon-link
