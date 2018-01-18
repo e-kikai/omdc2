@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :xl_genre do
-    
+
   end
 end

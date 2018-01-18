@@ -83,7 +83,8 @@ class Bid::BidsController < Bid::ApplicationController
     @search   = @open_now.products.listed.includes(:success_bid, :success_company, :area, :company).order(:list_no).search(params[:q])
     relation  = @search.result
 
-    @products = relation.where(company: current_company, display: "一般出品", success_bid_id: nil).or(relation.where(success_bid_id: Bid.where(company_id: current_company.id)))
+    # @products = relation.where(company: current_company, display: "一般出品", success_bid_id: nil).or(relation.where(success_bid_id: Bid.where(company_id: current_company.id)))
+    @products = relation.where(company: current_company, display: ["一般出品", "常設コマ", "単品預り"], success_bid_id: nil).or(relation.where(success_bid_id: Bid.where(company_id: current_company.id)))
 
     @company  = current_company
 

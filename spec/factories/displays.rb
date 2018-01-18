@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :display do
-    
+
   end
 end

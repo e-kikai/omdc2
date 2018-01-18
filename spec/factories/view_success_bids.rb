@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :view_success_bid do
-    
+
   end
 end

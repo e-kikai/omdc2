@@ -1,5 +1,5 @@
-- set_meta_tags title: "QRコードエフPDF出力"
-- breadcrumb  :system_something, "QRコードエフPDF出力"
+- set_meta_tags title: "バーコードエフPDF出力"
+- breadcrumb  :system_something, "バーコードエフPDF出力"
 
 .container-fluid.list-menu
   = form_tag  "", method: :get do
@@ -8,13 +8,13 @@
         .form-group
           = label_tag :company_id, "会社選択"
           = select_tag :company_id, options_for_select(@compaies_selector), prompt: "すべての商品", class: "form-control"
-              
+
     .row
       .col-md-offset-3.col-md-6
         .form-group
           = label_tag :num, "出力枚数"
           = select_tag :num, options_for_select((1..50).map { |n| ["#{n}枚 (〜 No.#{n*24})", n] }, params[:num]), class: "form-control"
-                      
+
     = button_tag :submit, name: :format, value: :pdf, class: "btn btn-default btn-square btn-submit center-block" do
       span.glyphicon.glyphicon-print
       span.btn-content PDF出力

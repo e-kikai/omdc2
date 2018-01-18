@@ -137,7 +137,7 @@ class System::ProductsController < System::ApplicationController
   def products
     if @company.present?
       @search   = @open_now.products.where(company: @company).search(params[:q])
-      @products = @search.result.order(:app_no)
+      @products = @search.result.order(app_no: :desc)
     else
       session[:system_company_id] = nil
       flash[:notice] = "会社を選択してください"

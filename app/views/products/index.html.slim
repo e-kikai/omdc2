@@ -7,13 +7,15 @@
   - breadcrumb  :genre, @genre
 - else
   - breadcrumb  :search, params[:q]
-    
+
   / = link_to "/system/companies.csv", class: "btn btn-warning" do
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
-    
+
 = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |s|
   = s.hidden_field :s, value: params.dig(:q, :s)
+  = hidden_field_tag :keywords, params[:keywords]
+  
   ul.nav.nav-pills
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
@@ -49,7 +51,7 @@
           td.id = p.list_no
           td = link_to p.name, "/detail/#{p.id}"
           td = p.maker
-          td = p.model 
+          td = p.model
           td = p.year
           td.num = p.min_price.to_s(:delimited) + "円"
           td = p.area_name

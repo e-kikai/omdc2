@@ -1,38 +1,43 @@
 - set_meta_tags title: "リストNo登録"
 - breadcrumb  :system_something, "リストNo登録"
 
-.row
-  = form_tag({action: :new}, method: :get) do
-    .col-md-offset-3.col-md-6
-      .form-group
-        = label_tag :company_id, "会社選択"
-        = select_tag :company_id, options_for_select(@compaies_selector, @product.company_id), prompt: "会社を選択", class: "form-control", onchange: "this.form.submit()"
+/ coffee:
+/   $ ->
+/     $('#key').focus()
+/
+/ .row
+/   = form_tag({action: :new}, method: :get) do
+/     .col-md-offset-3.col-md-6
+/       .form-group
+/         = label_tag :key, "バーコード"
+/         = text_field_tag :key, params[:key], prompt: "バーコード", class: "form-control"
 
-- if @product.company_id.present?
-  .row
+.row
+  = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
     .col-md-offset-3.col-md-6
       .form-group
-        - if @products_selector.present?
-          = label_tag :id, "申込No."
-          = select_tag :id, options_for_select(@products_selector, params[:id]), prompt: "商品を選択", class: "form-control", onchange: "location.href='/system/list/' + $(this).val() + '/edit';"
+        = label_tag :company_id, "出品会社"
+        . = @product.company.name
+
+      .form-group
+      = label_tag :company_id, "申込No."
+      . = "#{@product.app_no} :#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
+
+      .form-group
+        = f.label :list_no
+        = f.number_field :list_no, class: "form-control", placeholder: "新規(最後尾に追加)"
+
+      .form-group
+        = f.label :area_id
+        - if @product.tento?
+          . 店頭出品
         - else
-          . この会社の商品は登録されていません
-      
-- if @product.present?
-  .row
-    = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
-      .col-md-offset-3.col-md-6
-        .form-group
-          = f.label :list_no
-          = f.number_field :list_no, class: "form-control", placeholder: "新規(最後尾に追加)"
-          
-        .form-group
-          = f.label :area_id
-          - if @product.tento?
-            . 店頭出品
-          - else
-            = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: "form-control"}
-              
-        = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
-          span.glyphicon.glyphicon-save
-          span.btn-content リストNo登録
+          = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: "form-control"}
+
+      = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
+        span.glyphicon.glyphicon-save
+        span.btn-content リストNo登録
+
+      = link_to "/system/list/new", class: "btn btn-default btn-square btn-submit pull-left" do
+        span.glyphicon.glyphicon-left
+        span.btn-content 戻る

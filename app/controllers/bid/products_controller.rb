@@ -122,7 +122,7 @@ class Bid::ProductsController < Bid::ApplicationController
 
   def products
     @search   = @open_now.products.where(company_id: current_company.id).search(params[:q])
-    @products = @search.result.order(:app_no)
+    @products = @search.result.order(app_no: :desc)
   end
 
   def get_product

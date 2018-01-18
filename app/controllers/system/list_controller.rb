@@ -59,9 +59,20 @@ class System::ListController < ApplicationController
 
   ### 入庫処理 ###
   def new
-    if params[:company_id].present?
-      @products          = @open_now.products.includes(:company).where(company_id: params[:company_id]).order(:app_no)
-      @products_selector = @products.order(:app_no).pluck("app_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id) if @products.present?
+    # if params[:company_id].present?
+    #   @products          = @open_now.products.includes(:company).where(company_id: params[:company_id]).order(:app_no)
+    #   @products_selector = @products.order(:app_no).pluck("app_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id) if @products.present?
+    # end
+
+    if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
+      product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)
+      if product.blank?
+        flash[:alert] =  "#{params[:key]} 商品情報がありません"
+      else
+        redirect_to "/system/list/#{product.id}/edit"
+      end
+    else
+      flash[:alert] = "#{params[:key]} バーコードのフォーマットが違います" unless params[:key].blank?
     end
   end
 
@@ -90,9 +101,9 @@ class System::ListController < ApplicationController
     lp[:list_no] = @open_now.products.max_list_no + 1 if lp[:list_no].blank? # デフォルト値
 
     if @product.update(lp)
-      redirect_to "/system/list/#{@product.id}/edit", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
+      redirect_to "/system/list/new", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
     else
-      render :list_no
+      render :edit
     end
   end
 

@@ -5,8 +5,9 @@ source "https://rubygems.org"
 gem 'rails', '~> 5.0'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
-gem 'pg', '= 0.18.4'
+# gem 'pg', '= 0.18.4'
 # gem 'pg', '~> 0.19.0'
+gem 'pg'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -58,13 +59,17 @@ group :development, :test do
 
   # RSpec
   gem 'rspec-rails', '~> 3.5'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
 end
 
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
+end
+
+group :development do
+  gem 'rails-erd'
 end
 
 gem 'ransack'
@@ -167,3 +172,6 @@ gem 'google-analytics-rails'
 gem 'google-analytics-turbolinks'
 
 gem 'fluent-logger'
+
+# バーコード
+gem 'barby'

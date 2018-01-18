@@ -4,14 +4,16 @@
     li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
       span.glyphicon.glyphicon-plus
       span.btn-content 新規登録
-      
+
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
       span.btn-content CSV出力
-      
+
   - if products.blank?
     div 出品商品がありませんでした
   - else
+    div 項目名をクリックすると、ソートすることができます
+
     .scroll_div
       table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
         tr
@@ -25,7 +27,7 @@
           th = s.sort_link :min_price,      "最低入札金額"
           th = s.sort_link :comment,        "備考欄"
           th 画像
-          th 
+          th
         - products.each do |p|
           tr
             td.id = p.app_no
@@ -33,7 +35,7 @@
             td = p.genre.name
             td = link_to p.name, { action: :edit, id: p.id }
             td = p.maker
-            td = p.model 
+            td = p.model
             td = p.year
             td.num = number_to_currency(p.min_price)
             td = p.comment

@@ -23,7 +23,8 @@ class ProductImageUploader < CarrierWave::Uploader::Base
   end
 
   version :view do
-    process :resize_to_fit => [640, 480]
+    # process :resize_to_fit => [640, 480]
+    process :resize_to_fit => [640, 640]
   end
 
   def extension_white_list

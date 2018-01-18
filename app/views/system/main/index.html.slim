@@ -1,4 +1,4 @@
-- set_meta_tags title: "管理者メニュー"    
+- set_meta_tags title: "管理者メニュー"
 
 .col-md-5
   div = current_system.name
@@ -29,13 +29,13 @@
     li = link_to "/system/logout",method: :delete, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-log-out
       span.btn-content ログアウト
-      
+
   hr
   h4 管理者ログイン用QRコード
   / .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 3, color: "000", fill: "FFF").html_safe
   / .qr = image_tag "#{root_url}qrcode.png?url=#{root_url}system/"
   .qr = image_tag System.qrcode("#{root_url}system/")
-        
+
 .col-md-7.bid-menu
   .panel.panel-default
     .panel-heading
@@ -50,7 +50,7 @@
           span.btn-content 一覧
 
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-  
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-tag: span.menu-title 出品商品申し込み
@@ -71,7 +71,7 @@
       ul.nav.nav-pills.nav-stacked
 
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-    
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-file: span.menu-title リスト作成
@@ -83,9 +83,9 @@
           span.btn-content 申込一覧
         li = link_to "/system/list/ef", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-tags
-          span.btn-content QRコードエフ<br />シール印刷
+          span.btn-content バーコードエフ<br />シール印刷
         li = link_to "/system/list/new", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
-          span.glyphicon.glyphicon-qrcode
+          span.glyphicon.glyphicon-barcode
           span.btn-content 入庫処理
         li = link_to "/system/list.csv", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-download-alt
@@ -95,7 +95,7 @@
           span.btn-content 下げ札<br />シール印刷
 
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-      
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-pencil: span.menu-title 入札
@@ -109,7 +109,7 @@
           span.btn-content 入札履歴
 
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-        
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-flag: span.menu-title 入札終了後
@@ -127,7 +127,7 @@
         li = link_to "/system/bids/total", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-file
           span.btn-content 落札・出品集計
-          
+
         li = link_to "/system/bids/total_list", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 集計一覧
@@ -137,4 +137,3 @@
         li = link_to "/system/list/carryout", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-qrcode
           span.btn-content 出庫処理
-          
