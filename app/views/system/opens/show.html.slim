@@ -7,7 +7,7 @@
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
       span.btn-content CSV出力
-  
+
   .row
     - 1.step @max_list_no, 100 do |no|
       - lt_no = [@max_list_no, no + 99].min
@@ -16,22 +16,22 @@
           strong #{no} 〜 #{lt_no}
         - else
           = link_to "#{no} 〜 #{lt_no}", "/system/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
-      
+
   .row
     = label_tag :list_no, "ジャンル ", class: :h4
     .form-group
-      = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
-            
+      = s.grouped_collection_select :large_genre_id_eq, XlGenre.all.includes(:large_genres), :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
+
       = label_tag :list_no, "最低入札金額 ", class: :h4
       .form-group.form-priceinterval
         = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control form-inline price"
         = " 〜 "
         = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control form-inline price"
-        
+
         = button_tag type: :submit, class: "btn btn-info" do
           .glyphicon.glyphicon-search
           span.btn-content 検索
-    
+
   - if @pproducts.blank?
     div 該当の出品商品はありませんでした
   - else
@@ -56,14 +56,14 @@
             td = p.genre.name
             td = link_to_if p.success_bid.present?, p.name, "/system/opens/#{@open.id}/detail/#{p.id}"
             td = p.maker
-            td = p.model 
+            td = p.model
             td.num.sepa = number_to_currency(p.min_price)
             - if p.success_bid.present?
               td.num = p.bids_count
               td.num = number_to_currency(p.success_bid.amount)
               td = p.success_company.name
               td.sepa = p.same_count if p.same_count > 1
-                
+
             - else
               td
               td

@@ -8,8 +8,9 @@
     p.company.name, p.area_name]
   if p.bid?
     res += [p.bids_count, p.success_bid.amount, p.success_company.no, p.success_company.name]
-    if my_amount = p.bids.where(company: current_company).maximum(:amount)
-      res += [my_amount, p.success_bid.company.id == current_company.id ? "◯" : "☓"]
+    # if my_amount = p.bids.where(company: current_company).maximum(:amount)
+    if b = @my_bids.find { |b| b.product_id == p.id }
+      res += [b.amount, p.success_bid.company.id == current_company.id ? "◯" : "☓"]
     end
   end
   res.to_csv

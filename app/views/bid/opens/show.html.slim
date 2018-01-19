@@ -3,6 +3,7 @@
 
 = search_form_for @search, url: "/bid/opens/#{@open.id}", class: "form-inline" do |s|
   = s.hidden_field :s, value: params.dig(:q, :s)
+
   ul.nav.nav-pills
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
@@ -11,7 +12,8 @@
   .row
     => link_to "すべての商品", "/bid/opens/#{@open.id}", class: "btn btn-info"
     => link_to "自社が出品した商品のみ", "/bid/opens/#{@open.id}?q[company_id_eq]=#{current_company.id}", class: "btn btn-info"
-    = link_to "自社が落札した商品", "/bid/opens/#{@open.id}?q[success_company_id_eq]=#{current_company.id}", class: "btn btn-info"
+    => link_to "自社が落札した商品", "/bid/opens/#{@open.id}?q[success_company_id_eq]=#{current_company.id}", class: "btn btn-info"
+    = link_to "同額札があり落札できなかった商品", "/bid/opens/#{@open.id}?q[success_company_id_not_eq]=#{current_company.id}&q[same_count_gt]=1&q[bids_company_id_eq]=#{current_company.id}", class: "btn btn-info"
 
   .row
     - 1.step @max_list_no, 100 do |no|
@@ -21,26 +23,26 @@
           strong #{no} 〜 #{lt_no}
         - else
           = link_to "#{no} 〜 #{lt_no}", "/bid/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
-          
+
   .row
     = label_tag :list_no, "キーワード検索 ", class: :h4
     .form-group
       = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
-    
+
     = label_tag :list_no, "ジャンル ", class: :h4
     .form-group
-      = s.grouped_collection_select :large_genre_id_eq, XlGenre.all, :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
-            
+      = s.grouped_collection_select :large_genre_id_eq, XlGenre.all.includes(:large_genres), :large_genres, :name, :id, :name, {include_blank: "すべてのジャンル"}, class: "form-control"
+
     = label_tag :list_no, "最低入札金額 ", class: :h4
     .form-group.form-priceinterval
       = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
       = " 〜 "
       = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
-      
+
       = button_tag type: :submit, class: "btn btn-info" do
         .glyphicon.glyphicon-search
         span.btn-content 検索
-          
+
   - if @pproducts.blank?
     div 該当の出品商品はありませんでした
   - else
@@ -66,16 +68,17 @@
               td = p.genre.name
               td = p.name
               td = p.maker
-              td = p.model 
+              td = p.model
               td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
                 td.num = p.bids_count
                 td.num = number_to_currency(p.success_bid.amount)
                 td.sepa = p.success_company.name
-              
-                - if my_amount = p.bids.where(company: current_company).maximum(:amount)
-                  td.num = number_to_currency(my_amount)
+
+                / - if my_amount = p.bids.where(company: current_company).maximum(:amount)
+                - if b = @my_bids.find { |b| b.product_id == p.id }
+                  td.num = number_to_currency(b.amount)
                   td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
                 - else
                   td

@@ -41,7 +41,7 @@ class System::OpensController < System::ApplicationController
 
     @open.result_sum unless @open.result
 
-    @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre).search(params[:q])
+    @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre, :area).search(params[:q])
     @products  = @search.result.order(:list_no)
     @pproducts = @products.page(params[:page])
 
