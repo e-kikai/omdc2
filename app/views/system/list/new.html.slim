@@ -7,13 +7,13 @@ coffee:
     # setTimeout( ->
     #   $('#key').focus()
     # , 100)
-    $('body').on 'click', ->
+    $('.container').on 'click', ->
       $('#key').focus()
 
 .row
   = form_tag({action: :new}, method: :get) do
     .col-md-offset-3.col-md-6
-      .form-group style="margin-bottom:100px;"
+      .form-group style="margin-bottom:160px;"
         = label_tag :key, "バーコード"
         = text_field_tag :key, "", prompt: "バーコード", class: "form-control input-lg"
 
