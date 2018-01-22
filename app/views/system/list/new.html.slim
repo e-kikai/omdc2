@@ -10,7 +10,9 @@ coffee:
     $('.container').on 'click', ->
       $('#key').focus()
 
-    $('.container').click()
+    setTimeout ->
+      $('.container').click()
+    , 100
 
 .row
   = form_tag({action: :new}, method: :get) do
