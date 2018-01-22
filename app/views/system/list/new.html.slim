@@ -4,9 +4,13 @@
 coffee:
   $ ->
     # $('#key').focus()
-    setTimeout( ->
+    # setTimeout( ->
+    #   $('#key').focus()
+    # , 100)
+    $('body').on 'click', ->
       $('#key').focus()
-    , 100)
+
+    $('body').click()
 
 .row
   = form_tag({action: :new}, method: :get) do
