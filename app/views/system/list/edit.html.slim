@@ -10,7 +10,7 @@
 /     .col-md-offset-3.col-md-6
 /       .form-group
 /         = label_tag :key, "バーコード"
-/         = text_field_tag :key, params[:key], prompt: "バーコード", class: "form-control"
+/         = text_field_tag :key, params[:key], prompt: "バーコード", class: "form-control input-lg"
 
 .row
   = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
@@ -39,5 +39,5 @@
         span.btn-content リストNo登録
 
       = link_to "/system/list/new", class: "btn btn-default btn-square btn-submit pull-left" do
-        span.glyphicon.glyphicon-left
+        span.glyphicon.glyphicon-arrow-left
         span.btn-content 戻る

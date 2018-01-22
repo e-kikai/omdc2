@@ -67,12 +67,12 @@ class System::ListController < ApplicationController
     if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
       product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)
       if product.blank?
-        flash[:alert] =  "#{params[:key]} 商品情報がありません"
+        flash.now[:alert] =  "#{params[:key]} 商品情報がありません"
       else
         redirect_to "/system/list/#{product.id}/edit"
       end
     else
-      flash[:alert] = "#{params[:key]} バーコードのフォーマットが違います" unless params[:key].blank?
+      flash.now[:alert] = "#{params[:key]} バーコードのフォーマットが違います" unless params[:key].blank?
     end
   end
 
