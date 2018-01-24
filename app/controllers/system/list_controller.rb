@@ -64,15 +64,16 @@ class System::ListController < ApplicationController
     #   @products_selector = @products.order(:app_no).pluck("app_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id) if @products.present?
     # end
 
-    if params[:key] =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
+    key = params[:key].to_s.normalize_charwidth.gsub(/[―ー−‐]/, '-').strip
+    if key =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
       product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)
       if product.blank?
-        flash.now[:alert] =  "#{params[:key]} 商品情報がありません"
+        flash.now[:alert] =  "#{key} 商品情報がありません"
       else
         redirect_to "/system/list/#{product.id}/edit"
       end
     else
-      flash.now[:alert] = "#{params[:key]} バーコードのフォーマットが違います" unless params[:key].blank?
+      flash.now[:alert] = "#{key} バーコードのフォーマットが違います" unless key.blank?
     end
   end
 
