@@ -17,6 +17,6 @@ coffee:
         = text_field_tag :key, "", prompt: "バーコード", class: "form-control input-lg"
         = text_field_tag :dummy, "", class: "form-control input-lg", style: "display:none;"
 
-      = button_tag :submit, class: "btn btn-default btn-square btn-submit center-block" do
+      = button_tag type: :button, onclick: "submit();", class: "btn btn-default btn-square btn-submit center-block" do
         span.glyphicon.glyphicon-search
         span.btn-content バーコード検索
