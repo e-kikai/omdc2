@@ -157,7 +157,7 @@ class System::ProductsController < System::ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+    params.require(:product).permit(:name, :app_no, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
   end
 
   def csv_products_params

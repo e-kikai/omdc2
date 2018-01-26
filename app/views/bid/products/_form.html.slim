@@ -2,16 +2,16 @@ coffee:
   $ ->
     $('#check-youtube').click ->
       youtube = $('input.youtube').val()
-      
+
       if !youtube
         alert "Youtubeの動画IDを入力してください"
         retur false
-      
+
       if youtube.match(/watch\?v\=([a-zA-Z0-9-+]+)/)
         youtube = RegExp.$1
       else if youtube.match(/youtu\.be\/([a-zA-Z0-9-+]+)/)
         youtube = RegExp.$1
-    
+
       window.open().location.href = "https://www.youtube.com/watch?v=" + youtube
 
 .col-md-offset-2.col-md-8
@@ -27,14 +27,18 @@ coffee:
       td = f.object.id || "新規登録"
     tr
       th = f.label :app_no
-      td = f.object.app_no
+      td
+        - if request.path =~ /system/
+          = f.text_field :app_no, class: "form-control"
+        - else
+          = f.object.app_no
     tr
-     th = f.label :list_no
-     td = f.object.list_no
+      th = f.label :list_no
+      td = f.object.list_no
     tr
       th = f.label :name, class: :required
       td = f.text_field :name, class: "form-control get_genre", required: "required"
-      
+
     tr
       th = f.label :maker
       td = f.text_field :maker, class: "form-control get_genre"
@@ -42,7 +46,7 @@ coffee:
     tr
       th = f.label :model
       td = f.text_field :model, class: "form-control get_genre"
-    
+
     tr
       th = f.label :hitoyama
       td.form-group
@@ -65,15 +69,15 @@ coffee:
     tr
       th = f.label :year
       td = f.text_field :year, class: "form-control"
-      
+
     tr
       th = f.label :spec
       td = f.text_area :spec, class: "form-control"
-      
+
     tr
       th = f.label :condition
       td = f.text_area :condition, class: "form-control", placeholder: "例) 「試運転可」「ジャンク品(部品取り用)」「ドリル✕10本」など\n商品の状態、詳細などを記入して下さい"
-          
+
     tr
       th = f.label :comment
       td.form-group
@@ -85,7 +89,7 @@ coffee:
         - Product.displays.each do |k, v|
           label.radio-inline = f.radio_button(:display, k, inline: true) + k
         p.help-block お客様には表示されません
-          
+
     tr
       th = f.label :youtube
       td
@@ -97,4 +101,3 @@ coffee:
   = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
     span.glyphicon.glyphicon-save
     span.btn-content 保存
-    

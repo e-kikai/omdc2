@@ -20,8 +20,8 @@
         . = @product.company.name
 
       .form-group
-      = label_tag :company_id, "申込No."
-      . = "#{@product.app_no} :#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
+        = label_tag :app_no, "申込No."
+        . = "#{@product.app_no} :#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
 
       .form-group
         = f.label :list_no

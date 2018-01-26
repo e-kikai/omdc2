@@ -324,7 +324,8 @@ class Product < ApplicationRecord
   end
 
   def set_app_no
-    last_no = self.open.products.where(company_id: company_id).where.not(app_no: nil).order(:app_no).last.try(:app_no) || 0
+    # last_no = self.open.products.where(company_id: company_id).where.not(app_no: nil).order(:app_no).last.try(:app_no) || 0
+    last_no = self.open.products.where(company_id: company_id).maximum(:app_no) || 0
     self.app_no = last_no + 1
   end
 
