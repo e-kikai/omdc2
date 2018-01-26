@@ -87,7 +87,7 @@
         li = link_to "/system/list/new", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-barcode
           span.btn-content 入庫処理
-        li = link_to "/system/list.csv", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
+        li = link_to "/system/list.csv?list_no=1", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
           span.glyphicon.glyphicon-download-alt
           span.btn-content リストCSV
         li = link_to "/system/list/hangtag", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.entry_start?}" do

@@ -21,7 +21,7 @@ class System::ListController < ApplicationController
     respond_to do |format|
       format.html
       format.csv {
-        @products  = @products.listed
+        @products  = @products.listed if params[:list_no].present?
         export_csv "products_list.csv"
       }
     end
