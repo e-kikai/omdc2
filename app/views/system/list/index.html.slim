@@ -33,6 +33,7 @@
           th.id = s.sort_link :list_no,     "No."
           th.no = s.sort_link :company_no,  "会社No.: 会社名"
           th.no = s.sort_link :app_no,      "申込No."
+          th = s.sort_link :genre_order_no, "ジャンル"
           th = s.sort_link :genre_order_no, "商品名"
           th = s.sort_link :maker,          "メーカー"
           th = s.sort_link :model,          "型式"
@@ -44,6 +45,7 @@
             td.id = p.list_no
             td.no #{p.company.no} : #{p.company.name}
             td.no = p.app_no
+            td = p.genre.name
             td = link_to p.name, "/system/products/#{p.id}/edit?company_id=#{p.company_id}"
             td = p.maker
             td = p.model
