@@ -24,12 +24,12 @@ class System < ApplicationRecord
   end
 
   def self.qrcode_temp(url)
-    qr = RQRCode::QRCode.new(url, size: 5, level: :l).as_png(
+    qr = RQRCode::QRCode.new(url, size: 6, level: :h).as_png(
       resize_gte_to: false,
       resize_exactly_to: false,
       fill: 'white',
       color: 'black',
-      size: 64,
+      size: 82,
       border_modules: 0,
       module_px_size: 1,
       file: nil # path to write

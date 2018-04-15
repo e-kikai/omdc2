@@ -1,4 +1,8 @@
 class ProductsController < ApplicationController
+  require 'resolv'
+
+  ROBOTS = /(google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/
+
   before_action :check_open,    except: [:images, :ml_get_genre]
   before_action :check_display, except: [:images, :ml_get_genre]
   before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
@@ -122,33 +126,41 @@ class ProductsController < ApplicationController
 
   def fluent_log
     if @product.present?
-      Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
-      channel = {
-        start_time:   @start_time,
-        response:       Time.now - @start_time,
-        # method:       request.request_method,
-        # request_path: request.fullpath,
-        ip:             request.remote_ip,
-        referer:        request.referer,
-        UA:             request.user_agent,
+      ip     = request.env["HTTP_X_FORWARDED_FOR"] || request.remote_ip
+      host   = (Resolv.getname(ip) rescue "")
 
-        ref:            params[:ref],
+      if host !~ ROBOTS && ip.present?
+        Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
+        channel = {
+          start_time:     @start_time,
+          response:       Time.now - @start_time,
+          # method:       request.request_method,
+          # request_path: request.fullpath,
+          # ip:             request.remote_ip,
+          ip:             ip,
+          host:           host,
 
-        genre_id:       @product.genre_id,
-        genre:          @product.genre.name,
-        large_genre_id: @product.large_genre.id,
-        large_genre:    @product.large_genre.name,
-        xl_genre_id:    @product.xl_genre.id,
-        xl_genre:       @product.xl_genre.name,
+          referer:        request.referer,
+          UA:             request.user_agent,
 
-        company_id:     @product.company_id,
-        company:        @product.company.try(:name),
+          ref:            params[:ref],
 
-        area_id:        @product.area_id,
-        area:           @product.area.try(:name),
-      }.merge(@product.attributes.slice("id", "list_no", "name", "maker", "model", "year", "min_price"))
+          genre_id:       @product.genre_id,
+          genre:          @product.genre.name,
+          large_genre_id: @product.large_genre.id,
+          large_genre:    @product.large_genre.name,
+          xl_genre_id:    @product.xl_genre.id,
+          xl_genre:       @product.xl_genre.name,
 
-      Fluent::Logger.post("omdc2", channel)
+          company_id:     @product.company_id,
+          company:        @product.company.try(:name),
+
+          area_id:        @product.area_id,
+          area:           @product.area.try(:name),
+        }.merge(@product.attributes.slice("id", "list_no", "name", "maker", "model", "year", "min_price"))
+
+        Fluent::Logger.post("omdc2", channel)
+      end
     end
 
     # throw channel
