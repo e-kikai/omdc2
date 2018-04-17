@@ -19,20 +19,21 @@ prawn_document do |pdf|
       pdf.bounding_box([6.mm, sage_height - 6.mm], width: sage_width - 12.mm, height: sage_height- 12.mm) do
         # pdf.stroke_bounds
 
-        pdf.text p.list_no, {size: 45}
+        pdf.text p.list_no, {size: 48}
+        pdf.text "　", {size: 12, align: :center}
         pdf.text "#{p.name}", {size: 21, align: :center}
 
         pdf.font "vendor/assets/fonts/ipaexm.ttf"
         pdf.text "#{p.maker} #{p.year} #{p.model}", {size: 13, align: :center}
 
-        pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [300, 85]
+        pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [320, 262]
 
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 17, at: [0, 60]}
         pdf.text_box "￥#{number_with_delimiter(p.min_price)}", {size: 27, at: [110, 68]}
         pdf.text_box "落札会社 :", {size: 27, at: [0, 30]}
 
-        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [300, 245]}
+        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [320, 16]}
       end
     end
 

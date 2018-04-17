@@ -129,7 +129,7 @@ class ProductsController < ApplicationController
       ip     = request.env["HTTP_X_FORWARDED_FOR"] || request.remote_ip
       host   = (Resolv.getname(ip) rescue "")
 
-      if host !~ ROBOTS && host.present?
+      if host.present? && host !~ ROBOTS
         Fluent::Logger::FluentLogger.open(nil, host: 'localhost', port: 24224)
         channel = {
           start_time:     @start_time,
