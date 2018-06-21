@@ -10,7 +10,7 @@ prawn_document do |pdf|
     pdf.start_new_page layout: :portrait, margin: [(12.9).mm, 6.mm]
     pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
 
-    # pdf.stroke_axis
+    pdf.stroke_axis
 
     (1..24).each do |m|
       pdf.bounding_box([((m - 1) % 3 * ef_width), ((8 - (m - 1) .div(3) ) * ef_height)], width: ef_width, height: ef_height) do
@@ -18,8 +18,8 @@ prawn_document do |pdf|
 
         ### 文字 ###
         pdf.bounding_box([16, 96], width: 120, height: 40) do
-          pdf.text "#{@open_now.id}-", size: 13
-          pdf.text "#{@company.no}-#{n*24+m}", size: 26
+          pdf.draw_text "#{@open_now.id}-", size: 13
+          pdf.draw_text "#{@company.no}-#{n*24+m}", size: 26
         end
 
         ### バーコード ###
