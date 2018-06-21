@@ -18,8 +18,10 @@ prawn_document do |pdf|
 
         ### 文字 ###
         pdf.bounding_box([16, 96], width: 120, height: 40) do
-          pdf.draw_text "#{@open_now.id}-", size: 13
-          pdf.draw_text "#{@company.no}-#{n*24+m}", size: 26
+          pdf.stroke_bounds
+
+          pdf.text "#{@open_now.id}-", size: 13
+          pdf.text "#{@company.no}-#{n*24+m}", size: 26
         end
 
         ### バーコード ###
