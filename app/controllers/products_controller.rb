@@ -126,7 +126,8 @@ class ProductsController < ApplicationController
 
   def fluent_log
     if @product.present?
-      ip     = request.env["HTTP_X_FORWARDED_FOR"] || request.remote_ip
+      # ip     = request.env["HTTP_X_FORWARDED_FOR"] || request.remote_ip
+      ip     = request.env["HTTP_X_FORWARDED_FOR"].split(",").first.strip || request.remote_ip
       host   = (Resolv.getname(ip) rescue "")
 
       if host.present? && host !~ ROBOTS

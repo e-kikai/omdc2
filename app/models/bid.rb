@@ -27,7 +27,7 @@ class Bid < ApplicationRecord
   end
 
   def success?
-    success_bid.id == id ? true : false
+    success_bid_id == id ? true : false
   end
 
   def check_5time

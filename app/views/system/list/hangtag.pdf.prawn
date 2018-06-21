@@ -1,3 +1,5 @@
+require 'stringio'
+
 prawn_document do |pdf|
   sage_height = 595.28 / 2
   sage_width  = 841.89 / 2
@@ -26,7 +28,31 @@ prawn_document do |pdf|
         pdf.font "vendor/assets/fonts/ipaexm.ttf"
         pdf.text "#{p.maker} #{p.year} #{p.model}", {size: 15, align: :center}
 
-        pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [320, 262]
+        # pdf.image System.qrcode_temp("#{root_url}qr?id=#{p.id}&place=hangtag"), at: [320, 262]
+        # print_qr_code("#{root_url}qr?id=#{p.id}&place=hangtag", extent: 96, stroke: false, pos: [320, 262])
+        # pdf.qrcode(RQRCode::QRCode.new("#{root_url}qr?id=#{p.id}&place=hangtag", size: 6, level: :l).as_png(
+        #   resize_gte_to: false,
+        #   resize_exactly_to: false,
+        #   fill: 'white',
+        #   color: 'black',
+        #   size: 50,
+        #   border_modules: 0,
+        #   module_px_size: 1,
+        #   file: nil # path to write
+        # ))
+
+        qr_image =
+        RQRCode::QRCode.new("#{root_url}qr?id=#{p.id}&place=hangtag", size: 6, level: :l).as_png(
+              resize_gte_to: false,
+              resize_exactly_to: false,
+              fill: 'white',
+              color: 'black',
+              size: 50,
+              border_modules: 0,
+              module_px_size: 1,
+              file: nil # path to write
+            ).to_s
+        pdf.image StringIO.new(qr_image), at: [320, 262]
 
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 17, at: [0, 60]}

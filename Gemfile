@@ -156,8 +156,9 @@ gem 'wkhtmltopdf-binary'
 gem 'prawn'
 gem 'prawn-table'
 gem 'prawn-rails'
+gem 'prawn-qrcode'
 
-gem 'rqrcode_png'
+# gem 'rqrcode_png'
 
 # ファイルアップロード
 # gem 'refile', github: 'refile/refile', require: 'refile/rails'

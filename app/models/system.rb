@@ -24,7 +24,7 @@ class System < ApplicationRecord
   end
 
   def self.qrcode_temp(url)
-    qr = RQRCode::QRCode.new(url, size: 6, level: :m).as_png(
+    qr = RQRCode::QRCode.new(url, size: 6, level: :l).as_png( 
       resize_gte_to: false,
       resize_exactly_to: false,
       fill: 'white',
