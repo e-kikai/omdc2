@@ -7,7 +7,7 @@ gem 'rails', '~> 5.0'
 # gem 'sqlite3'
 # gem 'pg', '= 0.18.4'
 # gem 'pg', '~> 0.19.0'
-gem 'pg'
+gem 'pg', '~> 0.21'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
