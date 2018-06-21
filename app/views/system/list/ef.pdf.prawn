@@ -17,11 +17,11 @@ prawn_document do |pdf|
         pdf.stroke_bounds
 
         ### 文字 ###
-        pdf.bounding_box([16, 96], width: 120, height: 40) do
+        pdf.bounding_box([16, 96], width: 140, height: 40) do
           pdf.stroke_bounds
 
-          pdf.text "#{@open_now.id}-", size: 13
-          pdf.text "#{@company.no}-#{n*24+m}", size: 26
+          pdf.text "#{@open_now.id}-", size: 12
+          pdf.text "#{@company.no}-#{n*24+m}", size: 25
         end
 
         ### バーコード ###
