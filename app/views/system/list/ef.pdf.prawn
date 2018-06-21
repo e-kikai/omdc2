@@ -14,11 +14,11 @@ prawn_document do |pdf|
 
     (1..24).each do |m|
       pdf.bounding_box([((m - 1) % 3 * ef_width), ((8 - (m - 1) .div(3) ) * ef_height)], width: ef_width, height: ef_height) do
-        pdf.stroke_bounds
+        # pdf.stroke_bounds
 
         ### 文字 ###
-        pdf.bounding_box([16, 96], width: 140, height: 40) do
-          pdf.stroke_bounds
+        pdf.bounding_box([16, 96], width: 150, height: 40) do
+          # pdf.stroke_bounds
 
           pdf.text "#{@open_now.id}-", size: 12
           pdf.text "#{@company.no}-#{n*24+m}", size: 25
