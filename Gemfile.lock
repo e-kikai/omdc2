@@ -456,9 +456,6 @@ GEM
       rubyzip (~> 1.1, < 2.0.0)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
-    rqrcode_png (0.1.5)
-      chunky_png
-      rqrcode
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -619,7 +616,6 @@ DEPENDENCIES
   ransack
   rmagick
   roo
-  rqrcode_png
   rspec-rails (~> 3.5)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
@@ -636,4 +632,4 @@ DEPENDENCIES
   wkhtmltopdf-binary
 
 BUNDLED WITH
-   1.16.0
+   1.16.2
