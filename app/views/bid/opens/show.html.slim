@@ -1,21 +1,21 @@
 - set_meta_tags title: "落札結果"
 - breadcrumb  :bid_opens_show, @open
 
-= search_form_for @search, url: "/bid/opens/#{@open.id}", class: "form-inline" do |s|
+ul.nav.nav-pills
+  li = link_to (params.to_unsafe_h.merge(format: :csv)), class: "btn btn-default btn-square" do
+    span.glyphicon.glyphicon-download-alt
+    span.btn-content CSV出力
+
+= search_form_for @search, url: request.fullpath, method: :get, class: "form-inline" do |s|
   = s.hidden_field :s, value: params.dig(:q, :s)
 
-  ul.nav.nav-pills
-    li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
-      span.glyphicon.glyphicon-download-alt
-      span.btn-content CSV出力
-
-  .row
+  .change-area
     => link_to "すべての商品", "/bid/opens/#{@open.id}", class: "btn btn-info"
-    => link_to "自社が出品した商品のみ", "/bid/opens/#{@open.id}?q[company_id_eq]=#{current_company.id}", class: "btn btn-info"
-    => link_to "自社が落札した商品", "/bid/opens/#{@open.id}?q[success_company_id_eq]=#{current_company.id}", class: "btn btn-info"
+    => link_to "自社が出品した商品", "/bid/opens/#{@open.id}?q[company_id_eq]=#{current_company.id}", class: "btn btn-info"
+    => link_to "自社が入札した商品", "/bid/opens/#{@open.id}?q[bids_company_id_eq]=#{current_company.id}", class: "btn btn-info"
     = link_to "同額札があり落札できなかった商品", "/bid/opens/#{@open.id}?q[success_company_id_not_eq]=#{current_company.id}&q[same_count_gt]=1&q[bids_company_id_eq]=#{current_company.id}", class: "btn btn-info"
 
-  .row
+  .pager-area
     - 1.step @max_list_no, 100 do |no|
       - lt_no = [@max_list_no, no + 99].min
       .list_no-link
@@ -24,7 +24,7 @@
         - else
           = link_to "#{no} 〜 #{lt_no}", "/bid/opens/#{@open.id}?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"
 
-  .row
+  .search-area
     = label_tag :list_no, "キーワード検索 ", class: :h4
     .form-group
       = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
@@ -48,44 +48,53 @@
   - else
       = paginate @pproducts
       .scroll_div
-        table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+        table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-results _fixedhead='rows:1'
           tr
             th.id = s.sort_link :list_no,              "No."
             th = s.sort_link :genre_order_no,          "ジャンル"
             th = s.sort_link :genre_order_no,          "商品名"
             th = s.sort_link :maker,                   "メーカー"
-            th = s.sort_link :model,                   "型式"
-            th 画像
+            / th = s.sort_link :model,                   "型式"
+            th.img_link 画像
             th.sepa = s.sort_link :min_price,          "最低入札金額"
-            th = s.sort_link :bids_count,              "入札数"
+            th.no = s.sort_link :bids_count,           "入札数"
             th = s.sort_link :success_bid_amount,      "落札金額"
             th.sepa = s.sort_link :success_company_no, "落札会社"
             th 自社入札金額
-            th 結果
+            th.no = s.sort_link :same_count,    "同額札"
           - @pproducts.each do |p|
             tr
               td.id = p.list_no
               td = p.genre.name
               td = p.name
               td = p.maker
-              td = p.model
-              td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+              / td = p.model
+              td.img_link = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
-                td.num = p.bids_count
+                td.no = p.bids_count
                 td.num = number_to_currency(p.success_bid.amount)
                 td.sepa = p.success_company.name
 
                 / - if my_amount = p.bids.where(company: current_company).maximum(:amount)
-                - if b = @my_bids.find { |b| b.product_id == p.id }
-                  td.num = number_to_currency(b.amount)
-                  td = p.success_bid.company.id == current_company.id ? "◯" : "☓"
-                - else
-                  td
-                  td
+
+                td.mybids
+                  - if bids = @my_bids.select { |b| b.product_id == p.id }
+                    table.table-mybids
+                      - bids.each do |b|
+                        tr
+                          td.amount
+                            - if p.success_bid.id == b.id
+                              span.ok ◯
+                            - else
+                              span.ng ×
+                            span =< number_to_currency(b.amount)
+                          td.comment = b.comment
+                td.no = p.same_count if p.same_count > 1
+
               - else
                 td
                 td
                 td.sepa
                 td
-                td
+                td.no

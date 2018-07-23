@@ -6,18 +6,18 @@
       span.btn-content CSV出力
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-results _fixedhead='rows:1'
       thead
         tr
           / th
           th.id = sort_link search, :list_no,     "No."
           th = sort_link search, :genre_order_no, "商品名"
           th = sort_link search, :maker,          "メーカー"
-          th = sort_link search, :model,          "型式"
+          / th = sort_link search, :model,          "型式"
           th = sort_link search, :min_price,      "最低入札金額"
           th.sepa = sort_link search, :comment,   "備考欄"
 
-          th = sort_link search, :bids_count,         "入札数"
+          th.no = sort_link search, :bids_count,      "入札数"
           th = sort_link search, :success_company_no, "落札会社"
           th = sort_link search, :success_bid_amount, "落札金額"
 
@@ -33,12 +33,12 @@
           td.id = p.list_no
           td = p.name
           td = p.maker
-          td = p.model
+          / td = p.model
           td.num = number_to_currency(p.min_price)
           td.sepa = p.comment
 
           - if p.success_bid.present?
-            td.num = number_with_delimiter(p.bids_count)
+            td.no = number_with_delimiter(p.bids_count)
             td = p.success_company.name
             td.num = number_to_currency(p.success_bid.amount)
             td.num = number_to_currency(p.deme_h)
@@ -53,7 +53,7 @@
             td.num = number_to_currency(p.shiharai)
 
           - else
-            td
+            td.no
             td
             td
             td
@@ -67,15 +67,13 @@
             td.num = number_to_currency(p.shiharai)
       tfoot
         tr
-          td colspan="13"
+          td.blank colspan="13" rowspan="3"
           th 合計金額
           / td.num  = number_to_currency(products.inject(0){ |sum, p| sum += p.shiharai })
           td.num = number_to_currency(products.sum(&:shiharai))
         tr
-          td colspan="13"
           th 消費税 (#{open_now.tax}%)
           td.num = number_to_currency(open_now.tax_calc(products.sum(&:shiharai)))
         tr
-          td colspan="13"
           th 差引出品支払額
           td.num = number_to_currency(open_now.tax_total(products.sum(&:shiharai)))

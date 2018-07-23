@@ -1,7 +1,7 @@
 - set_meta_tags title: "ウィッシュリスト"
 - breadcrumb  :something, "ウィッシュリスト"
 
-= session[:wishlist] 
+= session[:wishlist]
 
 = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |f|
   / = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
@@ -10,18 +10,18 @@
   /   = " 〜 "
   /   = f.number_field :min_price_lteq, placeholder: "〜以下", class: "form-control"
   / = submit_tag "検索", class: "btn btn-default"
-  
+
   ul.nav.nav-pills
     li = f.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-print
       span.btn-content 入札依頼PDF
-      
+
   = paginate @pproducts
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
       tr
-        / th 
+        / th
         th = sort_link @search, :list_no,   "リストNo."
         th = sort_link @search, :name,      "商品名"
         th = sort_link @search, :maker,     "メーカー"
@@ -37,7 +37,7 @@
           td = p.list_no
           td = link_to p.name, "/detail/#{p.id}"
           td = p.maker
-          td = p.model 
+          td = p.model
           td = p.year
           td.num = p.min_price.to_s(:delimited) + "円"
           td = p.area_name

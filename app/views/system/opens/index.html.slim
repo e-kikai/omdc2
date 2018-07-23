@@ -5,7 +5,7 @@
   = link_to({action: "new"}, class: "btn btn-default btn-square") do
     span.glyphicon.glyphicon-plus
     span.btn-content 新規登録
-    
+
   / = link_to({format: :csv}, class: "btn btn-warning") do
   /   span.glyphicon.glyphicon-save-file
   /   =< "エクスポート"
@@ -14,14 +14,14 @@
   div 入札会がありませんでした
 - else
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-opens _fixedhead='rows:1'
       tr
         th ID
         th 入札会名
         th 出品期間
         th 下見期間
         th 入札期間
-        th 
+        th.button
       - @opens.each do |o|
         tr
           td = o.id
@@ -29,7 +29,7 @@
           td #{o.entry_start_date} 〜 #{o.entry_end_date.strftime('%m/%d')}
           td #{o.preview_start_date} 〜 #{o.preview_end_date.strftime('%m/%d')}
           td #{o.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{o.bid_end_at.strftime('%m/%d %H:%M')}
-          td
+          td.button
             - if o.bid_end_at <= Time.now
               = link_to "落札結果", "/system/opens/#{o.id}"
             - else

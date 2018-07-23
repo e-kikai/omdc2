@@ -72,7 +72,7 @@ $(document).on 'ready, turbolinks:load', ->
       $(this).triggerHandler "focus"
 
 priceUnformat = (str) ->
-  num = new String(str).replace(/[^0-9]/g, "")
+  num = new String(str).replace(/０/g, "0").replace(/１/g, "1").replace(/２/g, "2").replace(/３/g, "3").replace(/４/g, "4").replace(/５/g, "5").replace(/６/g, "6").replace(/７/g, "7").replace(/８/g, "8").replace(/９/g, "9").replace(/[^0-9]/g, "")
   num = "" if num == '0'
   return num
 

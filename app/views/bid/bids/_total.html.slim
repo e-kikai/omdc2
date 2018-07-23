@@ -22,7 +22,7 @@
     tr
       th 差引落札請求額
       td.num = number_to_currency(open_now.tax_total(success_products.sum(&:seikyu)))
-      
+
 .col-md-4.col-sm-12
   table.table.table-condensed.total-table
     caption 出品支払書
@@ -53,17 +53,16 @@
     tr
       th 差引出品支払額
       td.num = number_to_currency open_now.tax_total(products.sum(&:shiharai))
-      
+
   table.table.table-condensed
     tr
       th 差引落札請求額
       td.num = number_to_currency open_now.tax_total(success_products.sum(&:seikyu))
-      
+
     tr
       th 差引出品支払額
       td.num = number_to_currency open_now.tax_total(products.sum(&:shiharai))
-      
+
     tr
       th = products.sum(&:shiharai) > success_products.sum(&:seikyu) ? "出品支払額" : "落札請求額"
       td.num = number_to_currency (open_now.tax_total(products.sum(&:shiharai)) - open_now.tax_total(success_products.sum(&:seikyu))).abs
-    

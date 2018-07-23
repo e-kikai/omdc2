@@ -1,9 +1,9 @@
-- set_meta_tags title: "入札メニュー"    
+- set_meta_tags title: "入札メニュー"
 
 .col-md-5
   div = current_company.name
   = render "/main/openinfo", open: @open_now
-  
+
   hr
   .infos = simple_format Info.comment(:bid)
 
@@ -41,13 +41,13 @@
         li = link_to "/bid/products/", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start? && current_company.entry}" do
           span.glyphicon.glyphicon-list
           span.btn-content 一覧
-          
+
           li = link_to "/bid/products/sim", class: "btn btn-default btn-square btn-twoline", onclick: "window.open('/bid/products/sim', '', 'scrollbars=yes, width=830, height=460'); return false;" do
             span.glyphicon.glyphicon-jpy
             span.btn-content 落札金額<br />シミュレータ
-          
+
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-  
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-pencil: span.menu-title 入札
@@ -59,17 +59,29 @@
         li = link_to "/bid/bids/", class: "btn btn-default btn-square #{:disabled unless @open_now.bid?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 入札履歴
-        
+
   .arrow_area: span.glyphicon.glyphicon-chevron-down
-        
+
   .panel.panel-default
     .panel-heading
       span.glyphicon.glyphicon-flag: span.menu-title 入札終了後
     .panel-body
       ul.nav.nav-pills
+
         li = link_to "/bid/opens/#{@open_now.id}/", class: "btn btn-default btn-square #{:disabled unless @open_now.result_list?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 落札結果一覧
+
+        li = link_to "/bid/opens/#{@open_now.id}/?q[company_id_eq]=#{current_company.id}", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.result_list?}" do
+          span.glyphicon.glyphicon-list
+          span.btn-content 落札結果一覧<br />(自社出品商品)
+
+        li = link_to "/bid/opens/#{@open_now.id}/?q[bids_company_id_eq]=#{current_company.id}", class: "btn btn-default btn-square btn-twoline #{:disabled unless @open_now.result_list?}" do
+          span.glyphicon.glyphicon-list
+          span.btn-content 落札結果一覧<br />(自社入札商品)
+
+        br style="clear:both;"
+
         li = link_to "/bid/bids/rakusatsu_sum", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 落札個別計算表

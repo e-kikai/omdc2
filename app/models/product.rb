@@ -100,7 +100,7 @@ class Product < ApplicationRecord
   end
 
   def self.search_genre(product)
-    products = Product.where.not(genre_id: 390).order(id: :desc)
+    products = Product.unscope(where: [:company_id, :open_id]).where.not(genre_id: 390).order(id: :desc)
 
     name      = product[:name].to_s.normalize_charwidth.strip
     model_reg = product[:model].to_s.normalize_charwidth.strip.gsub(/[^0-9a-zA-Z]+/, "%")
@@ -134,7 +134,7 @@ class Product < ApplicationRecord
       390
     end
   rescue => e
-    "error : #{e.message}"
+    raise "error : #{e.message}"
   end
 
   def set_genre
@@ -269,6 +269,7 @@ class Product < ApplicationRecord
       }
 
       product.set_display(row[10])
+      # product.set_genre
       product.set_genre if product.genre_id == 390
 
       product.valid?

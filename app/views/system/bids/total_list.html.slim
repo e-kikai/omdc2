@@ -6,7 +6,7 @@
     / li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
     /   span.glyphicon.glyphicon-print
     /   span.btn-content PDF
-      
+
     li = button_tag :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
       span.btn-content CSV出力
@@ -16,7 +16,7 @@
 - else
   .scroll_div
     / table.table.table-striped.table-hover _fixedhead="rows:1;cols:2"
-    table.table.table-striped.table-hover _fixedhead='rows:1;cols:2;box-shadow:2px 2px 2px 0 rgba(0,0,0,0.2)'
+    table.table.table-striped.table-hover.table-bordered.table-responsive.table-results _fixedhead='rows:1;cols:2;box-shadow:2px 2px 2px 0 rgba(0,0,0,0.2)'
       tr
         th.id No.
         th.name.sepa 会社名
@@ -39,7 +39,7 @@
         th 結果
         th.num 落札請求額
         th.num 出品支払額
-        
+
       - @companies.each do |c|
         - next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
         tr
@@ -52,7 +52,7 @@
           td.num = number_to_currency(@company_products[c.id][:success_products].sum(&:seikyu))
           td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:success_products].sum(&:seikyu)))
           td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu)))
-          
+
           td.num = number_to_currency(@company_products[c.id][:products].sum(&:success_price))
           td.num = number_to_currency(@company_products[c.id][:products].sum(&:deme_h))
           td.num = number_to_currency(@company_products[c.id][:products].sum(&:success_price) - @company_products[c.id][:products].sum(&:deme_h))
@@ -62,14 +62,14 @@
           td.num = number_to_currency(@company_products[c.id][:products].sum(&:shiharai))
           td.num = number_to_currency(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai)))
           td.num.sepa = number_to_currency(@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)))
-          
+
           - total = (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai)) - @open_now.tax_total(@company_products[c.id][:success_products].sum(&:seikyu))).abs
-          
+
           - if @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu)
             td 支払
             td.num
-            td.num = number_to_currency(total) 
+            td.num = number_to_currency(total)
           - else
             td 請求
-            td.num = number_to_currency(total) 
+            td.num = number_to_currency(total)
             td.num

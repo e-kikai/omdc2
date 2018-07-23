@@ -1,6 +1,6 @@
 .container.list-menu
   .col-md-offset-2.col-md-8
-  
+
 - if bids.blank?
   div 入札がありませんでした
 - else
@@ -10,13 +10,13 @@
       li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
         span.glyphicon.glyphicon-print
         span.btn-content 入札確認PDF
-        
+
       li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
         span.glyphicon.glyphicon-download-alt
         span.btn-content CSV出力
-      
+
     .scroll_div
-      table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
         tr
           th
           th.id = s.sort_link :product_list_no, "No."
@@ -27,26 +27,26 @@
           th = s.sort_link :product_min_price,  "最低入札金額"
           th = s.sort_link :amount,             "入札金額"
           th = s.sort_link :comment,            "備考欄"
-          th 
+          th.button
           th = s.sort_link :created_at,         "入札日時"
-          th
+          th.button
         - bids.each do |b|
           tr
             td = s.check_box :id_in, {multiple: true, include_hidden: false}, b.id
             td.id = b.product.list_no
             td = b.product.name
             td = b.product.maker
-            td = b.product.model 
+            td = b.product.model
             td = b.product.year
             td.num = b.product.min_price.to_s(:delimited) + "円"
             td.num = b.amount.to_s(:delimited) + "円"
             td = b.comment
-            td
+            td.button
               = link_to({ action: :edit, id: b.id }, class: "btn btn-info") do
                 span.glyphicon.glyphicon-pencil
                 span.btn-content 訂正
             td = b.created_at
-            td
+            td.button
               - message = "#{b.product.name}\n\nこの入札を取り消しますか？"
               = link_to({ action: :destroy, id: b.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
                 span.glyphicon.glyphicon-remove

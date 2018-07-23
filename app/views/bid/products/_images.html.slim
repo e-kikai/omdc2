@@ -1,8 +1,8 @@
 coffee:
   Dropzone.autoDiscover = false
-  
+
   $ ->
-    $('.dropzone').dropzone 
+    $('.dropzone').dropzone
       uploadMultiple:  false
       clickable:       true
       addRemoveLinks:  true
@@ -19,31 +19,31 @@ coffee:
         dorpzone = @
         $(dorpzone.element).find(" .dzdata ").each (i, data) ->
           $_data = $(data)
-          
+
           mock = { name: $_data.attr("data-name"), type: 'image/jpeg' };
-          
+
           dorpzone.files.push(mock);
           dorpzone.emit('addedfile', mock);
           # dorpzone.createThumbnailFromUrl(mock, $_data.val());
           dorpzone.emit("thumbnail", mock, $_data.val());
           dorpzone.emit('complete', mock);
           dorpzone.emit('success', mock, { id: $_data.data("id") });
-          
+
       removedfile: (file) ->
         $_this      = $(file.previewTemplate)
         id          = $_this.find('.dz-remove').attr('id')
         product_id  = $_this.closest(".dropzone").data('product-id')
         $_self      = $_this.closest(".dz-preview")
-        
+
         if id
           $.ajax
             type: 'DELETE'
             url: './' + product_id + '/' + id
-            success: (res) -> 
+            success: (res) ->
               $_self.fadeOut()
         else
           $_self.fadeOut()
-          
+
       dictDefaultMessage: '''
         <h2><sapn class="glyphicon glyphicon-picture"></span></h2>
         JPEGファイルをここにドロップするか<br />
@@ -51,8 +51,8 @@ coffee:
       '''
       dictRemoveFile: "削除",
       dictMaxFilesExceeded: "アップロードできる画像ファイルの数は、1商品に5枚までです"
-      
-    
+
+
     # 並び替え
     $('.dropzone').sortable
       items: '> .dz-preview'
@@ -65,7 +65,7 @@ coffee:
           type:     'PATCH'
           dataType: 'text'
           data: $(@).sortable('serialize') + '&authenticity_token=' + $('#authenticity_token').val()
-    
+
 scss:
   td.imgs,
   th.imgs {
@@ -84,26 +84,25 @@ scss:
       span => s.sort_link :list_no, "リストNo.でソート"
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-products _fixedhead='rows:1'
       tr
         th
           .col-md-4 商品情報
           .col-md-8
       - products.each do |p|
         tr
-          td 
+          td
             .col-md-4
               span 商品No. #{p.app_no}
               - if p.list_no.present?
-                span = "(リストNo. #{p.list_no})" 
+                span = "(リストNo. #{p.list_no})"
               span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
               = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
                 span.glyphicon.glyphicon-link
                 span 確認
-            .col-md-8 
+            .col-md-8
               = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
                 - p.product_images.each do |i|
                   = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
                 .fallback
                   = file_field_tag(:image)
-            

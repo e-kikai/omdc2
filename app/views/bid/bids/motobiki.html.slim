@@ -7,13 +7,13 @@
     li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-print
       span.btn-content 引取・元引PDF
-      
+
     li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
       span.glyphicon.glyphicon-download-alt
       span.btn-content CSV出力
-      
+
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-results _fixedhead='rows:1'
       thead
         tr
           / th

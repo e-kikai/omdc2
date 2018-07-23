@@ -118,6 +118,10 @@
         li = link_to "/system/opens/#{@open_now.id}", class: "btn btn-default btn-square #{:disabled unless @open_now.result_list?}" do
           span.glyphicon.glyphicon-list
           span.btn-content 落札結果一覧
+        li = link_to "/system/opens/#{@open_now.id}?recalc=1", class: "btn btn-default btn-square #{:disabled unless @open_now.result_list?}" do
+          span.glyphicon.glyphicon-list
+          span.btn-content 落札結果(再計算)
+
         li = link_to "/system/bids/rakusatsu_sum", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
           span.glyphicon.glyphicon-list-alt
           span.btn-content 落札個別計算表

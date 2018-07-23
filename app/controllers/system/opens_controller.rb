@@ -39,7 +39,7 @@ class System::OpensController < System::ApplicationController
   def show
     redirect_to "/system/opens/", alert: "#{@open.name}はまだ終了していません" if @open.bid_end_at > Time.now
 
-    @open.result_sum unless @open.result
+    @open.result_sum if !@open.result || params[:recalc].present? # 再計算を考慮
 
     @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre, :area).search(params[:q])
     @products  = @search.result.order(:list_no)

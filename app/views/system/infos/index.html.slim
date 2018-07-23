@@ -7,11 +7,10 @@
   div お知らせ情報がありませんでした
 - else
   .col-md-offset-2.col-md-8
-    table.table.table-striped.table-hover.table-condensed
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
       tr
         th タイトル
         th 内容
-        th
       - @infos.each do |i|
         tr
           td = link_to i.title, "/system/infos/#{i.id}/edit"

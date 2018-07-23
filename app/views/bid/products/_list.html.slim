@@ -15,7 +15,7 @@
     div 項目名をクリックすると、ソートすることができます
 
     .scroll_div
-      table.table.table-striped.table-hover.table-condensed _fixedhead='rows:1'
+      table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-products _fixedhead='rows:1'
         tr
           th.id = s.sort_link :app_no,      "申込No."
           th.id = s.sort_link :list_no,     "No."
@@ -24,10 +24,10 @@
           th = s.sort_link :maker,          "メーカー"
           th = s.sort_link :model,          "型式"
           th = s.sort_link :year,           "年式"
-          th = s.sort_link :min_price,      "最低入札金額"
+          th.num = s.sort_link :min_price,  "最低入札金額"
           th = s.sort_link :comment,        "備考欄"
-          th 画像
-          th
+          th.img_link 画像
+          th.button
         - products.each do |p|
           tr
             td.id = p.app_no
@@ -39,8 +39,8 @@
             td = p.year
             td.num = number_to_currency(p.min_price)
             td = p.comment
-            td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
-            td
+            td.img_link = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+            td.button
               - message = "#{p.name}\n\nこの出品商品を削除しますか？"
               = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
                 span.glyphicon.glyphicon-remove

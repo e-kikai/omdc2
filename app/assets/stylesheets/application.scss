@@ -80,11 +80,15 @@ table {
       }
 
       &.no {
-        width: 75px;
+        width: 56px;
+      }
+
+      &.img_link {
+        width: 40px;
       }
 
       &.num {
-        width: 100px;
+        width: 90px;
         min-width: 100px;
       }
 
@@ -96,6 +100,11 @@ table {
       white-space: nowrap;
     }
 
+    td.button {
+      text-align: center;
+      width: 90px;
+    }
+
     td {
       &.id {
         width: 40px;
@@ -104,12 +113,17 @@ table {
 
       &.no {
         text-align: right;
-        width: 75px;
+        width: 56px;
+      }
+
+      &.img_link {
+        text-align: center;
+        width: 40px;
       }
 
       &.num {
         text-align: right;
-        width: 100px;
+        width: 90px;
       }
 
       &.name {
@@ -133,6 +147,12 @@ table {
       td {
         max-width: 120px;
       }
+    }
+  }
+
+  &.table-hover {
+    tr:nth-of-type(n):hover td {
+      background: #FFFFE0;
     }
   }
 
@@ -170,6 +190,101 @@ table {
     }
   }
 
+  &.table-products {
+    th {
+      background: #FF8C00;
+    }
+
+    tr:nth-of-type(odd) td {
+      background: #ffcf7c;
+    }
+  }
+
+  &.table-bids {
+    th {
+      background: #7ae27a;
+    }
+
+    tr:nth-of-type(odd) td {
+      background: #c5ffc5;
+    }
+  }
+
+  &.table-opens {
+    th {
+      background: #FF6347;
+    }
+
+    tr:nth-of-type(odd) td {
+      background: #FFE4E1;
+    }
+  }
+
+  &.table-results {
+    border: 0;
+
+    th {
+      background: #69c3e6;
+    }
+
+    tr:nth-of-type(odd) td {
+      background: #bff7f7;
+    }
+
+    tfoot {
+      tr:nth-of-type(n) td {
+        background: #FFF;
+
+        &.blank {
+          background: inherit;
+          border: 0;
+        }
+      }
+    }
+  }
+
+  tr td.mybids {
+    padding: 0;
+  }
+
+  &.table-mybids {
+    width: 100%;
+
+    tr:nth-of-type(n) td {
+      background: inherit;
+    }
+
+    td.amount {
+      width: 110px;
+      text-align: right;
+      border: 1px solid #DDD;
+      border-width: 0 1px 1px 0;
+      padding: 5px;
+    }
+
+    td.comment {
+      border: 1px solid #DDD;
+      padding: 5px;
+      border-width: 0 0 1px 1px;
+    }
+
+
+    tr:nth-last-of-type(1) {
+      td.amount {
+        border-width: 0 1px 0 0;
+      }
+
+      td.comment {
+        border-width: 0 0 0 1px;
+      }
+    }
+  }
+
+  th a.sort_link {
+    color: #FFF;
+    text-decoration: underline dotted;
+    font-weight: normal;
+  }
 }
 
 input[type=number],
@@ -332,6 +447,15 @@ table.bid-table {
     width: 172px;
   }
 
+}
+
+
+.ok {
+  color: #F00;
+}
+
+.ng {
+  color: #00F;
 }
 
 /// 印刷設定 ///
@@ -568,5 +692,12 @@ table.bid-table {
     .dz-size {
       display: none;
     }
+  }
+
+  ul.nav.nav-pills,
+  .change-area,
+  .pager-area,
+  .search-area {
+    display: none;
   }
 }
