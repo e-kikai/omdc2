@@ -8,7 +8,7 @@
 
   .row
     .col-md-6.col-sm-12
-      table.table.table-condensed.info-table 
+      table.table.table-condensed.info-table
         tr
           th 主催者
           td = @open_now.owner
@@ -32,61 +32,65 @@
     .col-md-6.col-sm-12
       .infos = simple_format(Info.comment(:toppage))
     hr
-  
+
   - if @open_now.display?
-    .col-md-offset-2.col-md-8
-      .row
-        h4
-          = "◆ "
-          = link_to "出品商品リスト(リストNo.順)", "/bid_list"
-      .row
-        = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
-          = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
-          .input-group
-            = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
-            span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-info" do
-                .glyphicon.glyphicon-search
-                span.btn-content 検索
-          
-      .row
-        = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
-          = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
-          .form-group.form-priceinterval
-            = f.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
-            = " 〜 "
+    .row
+      .col-md-offset-2.col-md-6
+        .
+          h4
+            = "◆ "
+            = link_to "出品商品リスト(リストNo.順)", "/bid_list"
+        .
+          = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
+            = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
             .input-group
-              = f.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
+              = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
               span.input-group-btn
                 = button_tag type: :submit, class: "btn btn-info" do
                   .glyphicon.glyphicon-search
                   span.btn-content 検索
-          
-      .row
-        = form_tag "/search", method: :get, class: "form-inline" do
-          = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
-          .input-group
-            = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
-            span.input-group-btn
-              = button_tag type: :submit, class: "btn btn-info" do
-                .glyphicon.glyphicon-search
-                span.btn-content 検索
 
-    .col-md-offset-1.col-md-10
-      h4 ◆ ジャンルからさがす
-      .row
-        - @all_xl_counts.each do |x, v|
-          .col-sm-6.col-md-3
-            .panel.panel-default
-              .list-group style="height:200px;overflow:auto;"
-                  = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
-                    = x[1]
-                    .badge.pull-right = v
-                  - @all_large_counts.each do |l, v2|
-                    - if l[1] == x[0]
-                      = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
-                        = l[2]
-                        .badge.pull-right = v2
+        .
+          = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
+            = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
+            .form-group.form-priceinterval
+              = f.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
+              = " 〜 "
+              .input-group
+                = f.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
+                span.input-group-btn
+                  = button_tag type: :submit, class: "btn btn-info" do
+                    .glyphicon.glyphicon-search
+                    span.btn-content 検索
+
+        .
+          = form_tag "/search", method: :get, class: "form-inline" do
+            = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
+            .input-group
+              = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
+              span.input-group-btn
+                = button_tag type: :submit, class: "btn btn-info" do
+                  .glyphicon.glyphicon-search
+                  span.btn-content 検索
+
+      .col-md-4
+        . = link_to image_tag("auction_02.jpg", style:"width:250px;height:250px;"), "https://www.mnok.net/", target: "_blank"
+
+      .col-md-offset-1.col-md-10
+        h4 ◆ ジャンルからさがす
+        .row
+          - @all_xl_counts.each do |x, v|
+            .col-sm-6.col-md-3
+              .panel.panel-default
+                .list-group style="height:200px;overflow:auto;"
+                    = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
+                      = x[1]
+                      .badge.pull-right = v
+                    - @all_large_counts.each do |l, v2|
+                      - if l[1] == x[0]
+                        = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
+                          = l[2]
+                          .badge.pull-right = v2
   - else
     .row
       .alert.alert-success
