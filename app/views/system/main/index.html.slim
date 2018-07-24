@@ -32,10 +32,12 @@
         span.btn-content ログアウト
 
     hr
-    h4 管理者ログイン用QRコード
-    / .qr = RQRCode::QRCode.new("#{root_url}system/", size: 4, level: :m).as_svg(module_size: 3, color: "000", fill: "FFF").html_safe
-    / .qr = image_tag "#{root_url}qrcode.png?url=#{root_url}system/"
-    .qr = image_tag System.qrcode("#{root_url}system/")
+    / h4 管理者ログイン用QRコード
+    / .qr = image_tag System.qrcode("#{root_url}system/")
+
+    h4 BT用管理者ページ
+    .qr = image_tag System.qrcode("http://omdc2-01-712905525.ap-northeast-1.elb.amazonaws.com/system/bt/")
+
 
   .col-md-7.bid-menu
     .panel.panel-default

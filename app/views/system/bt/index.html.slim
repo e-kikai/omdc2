@@ -1,5 +1,6 @@
 - set_meta_tags title: "BTメニュー"
 
+h3 BT用管理者ページ
 ul.nav
   li = link_to "入庫処理", "/system/bt/new", class: "#{:disabled unless @open_now.entry_start?}"
-  li = link_to "出庫処理", "/system/bt/carryout", class: "#{:disabled unless @open_now.result_sum?}"
+  / li = link_to "出庫処理", "/system/bt/carryout", class: "#{:disabled unless @open_now.result_sum?}"
