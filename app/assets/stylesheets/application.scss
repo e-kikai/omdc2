@@ -713,13 +713,18 @@ body.bt {
     text-align: center;
   }
 
-  #key, #list_no, #area_id {
-    height: 50px;
+  #key, #product_list_no, #product_area_id {
+    height: 26px;
     font-size: 26px;
     line-height: 26px;
     padding: 12px;
     width: 100%;
     margin: 0 auto;
+  }
+
+  #product_list_no {
+    width: 120px;
+    text-align: right;
   }
 
 }
