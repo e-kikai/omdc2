@@ -713,6 +713,10 @@ body.bt {
     text-align: center;
   }
 
+  ul.nav li {
+    font-size: 22px;
+  }
+
   label {
     display: inline-block;
     max-width: 100%;
@@ -725,6 +729,8 @@ body.bt {
   .value {
     font-size: 22px;
     display: inline-block;
+    *display: inline;
+    *zoom: 1;
   }
 
   #key, #product_list_no {
@@ -737,7 +743,7 @@ body.bt {
   }
 
   #product_list_no {
-    width: 120px;
+    width: 130px;
     text-align: right;
   }
 
