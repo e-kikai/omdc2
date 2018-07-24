@@ -31,14 +31,14 @@ javascript:
 
       .form-group
         = f.label :list_no
-        = f.number_field :list_no, class: "form-control", placeholder: "新規(最後尾に追加)"
+        = f.number_field :list_no, class: "", placeholder: "新規(最後尾に追加)"
 
       .form-group
         = f.label :area_id
         - if @product.tento?
           . 店頭出品
         - else
-          = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: "form-control"}
+          = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: ""}
 
       = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
         span.glyphicon ○
