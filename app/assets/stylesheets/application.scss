@@ -38,7 +38,7 @@ header {
 }
 
 /// footer ///
-footer, .footer {
+footer {
   margin-top: 16px;
   text-align: center;
 }
@@ -700,4 +700,24 @@ table.bid-table {
   .search-area {
     display: none;
   }
+}
+
+body.bt {
+  .omdc-logo img {
+    margin-bottom: 32px;
+  }
+
+  .footer {
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  #key {
+    height: 50px;
+    font-size: 26px;
+    line-height: 26px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
 }

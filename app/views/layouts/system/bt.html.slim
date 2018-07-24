@@ -6,13 +6,13 @@ html
     = display_meta_tags site: "機械団地電子入札システム2", reverse: true, separator: "｜", nofollow: true, noindex: true
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => :reload
-    = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
+    / = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
     = csrf_meta_tags
 
     = analytics_init if Rails.env.production?
 
   / body onLoad="FixedMidashi.create();"
-  body
+  body.bt
     div = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/system/bt/", class: "omdc-logo"
     / header.navbar.navbar-default.container-fluid role="navigation"
     /   .navbar-header
