@@ -1,0 +1,23 @@
+- set_meta_tags title: "リストNo登録"
+- breadcrumb  :system_something, "リストNo登録"
+
+coffee:
+  $ ->
+    $(document).on 'click', '.container', ->
+      $('#key').focus()
+
+    # $(window).on 'keydown', ->
+    #   $('#key').focus()
+
+.row
+  = form_tag({action: :new}, method: :get) do
+    .col-md-offset-3.col-md-6
+      .form-group style="margin-bottom:120px;"
+        = label_tag :key, "バーコード"
+        = text_field_tag :key, "", prompt: "バーコード", class: "form-control input-lg"
+        / = text_field_tag :dummy, "", class: "form-control input-lg", style: "display:none;"
+
+      / = button_tag type: :button, onclick: "submit();", class: "btn btn-default btn-square btn-submit center-block" do
+      = button_tag type: :submit, class: "btn btn-default btn-square btn-submit center-block" do
+        span.glyphicon.glyphicon-search
+        span.btn-content バーコード検索

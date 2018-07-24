@@ -1,0 +1,9 @@
+- set_meta_tags title: "管理者メニュー"
+
+ul.nav
+  li = link_to "/system/bt/new", class: "btn btn-default btn-square #{:disabled unless @open_now.entry_start?}" do
+    span.glyphicon.glyphicon-barcode
+    span.btn-content 入庫処理
+  li = link_to "/system/bt/carryout", class: "btn btn-default btn-square #{:disabled unless @open_now.result_sum?}" do
+    span.glyphicon.glyphicon-qrcode
+    span.btn-content 出庫処理
