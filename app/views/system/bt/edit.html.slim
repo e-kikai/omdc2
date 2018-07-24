@@ -12,6 +12,12 @@
 /         = label_tag :key, "バーコード"
 /         = text_field_tag :key, params[:key], prompt: "バーコード", class: "form-control input-lg"
 
+javascript:
+  window.onload = function(){
+    var target = document.getElementById("list_no");
+    target.focus();
+  }
+
 .row
   = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
     .col-md-offset-3.col-md-6
@@ -38,6 +44,6 @@
         span.glyphicon ○
         span.btn-content リストNo登録
 
-      = link_to "/system/list/new", class: "btn btn-default btn-square btn-submit pull-left" do
+      = link_to "/system/bt/new", class: "btn btn-default btn-square btn-submit pull-left" do
         span.glyphicon ←
         span.btn-content 戻る

@@ -709,13 +709,15 @@ body.bt {
 
   .footer {
     margin-top: 16px;
+    width: 100%;
     text-align: center;
   }
 
-  #key {
+  #key, #list_no, #area_id {
     height: 50px;
     font-size: 26px;
     line-height: 26px;
+    padding: 12px;
     width: 100%;
     margin: 0 auto;
   }
