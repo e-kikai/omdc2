@@ -5,6 +5,7 @@ class System::BtController < ApplicationController
   before_action :get_product,   only: [:edit, :update, :carryout_edit, :carryout_update, :carryout_destroy]
   before_action :get_selectors, only: [:new, :edit]
 
+  layout 'system/bt'
 
   def index
 

@@ -1,0 +1,43 @@
+- set_meta_tags title: "リストNo登録"
+- breadcrumb  :system_something, "リストNo登録"
+
+/ coffee:
+/   $ ->
+/     $('#key').focus()
+/
+/ .row
+/   = form_tag({action: :new}, method: :get) do
+/     .col-md-offset-3.col-md-6
+/       .form-group
+/         = label_tag :key, "バーコード"
+/         = text_field_tag :key, params[:key], prompt: "バーコード", class: "form-control input-lg"
+
+.row
+  = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
+    .col-md-offset-3.col-md-6
+      .form-group
+        = label_tag :company_id, "出品会社"
+        . = @product.company.name
+
+      .form-group
+        = label_tag :app_no, "申込No."
+        . = "#{@product.app_no} :#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
+
+      .form-group
+        = f.label :list_no
+        = f.number_field :list_no, class: "form-control", placeholder: "新規(最後尾に追加)"
+
+      .form-group
+        = f.label :area_id
+        - if @product.tento?
+          . 店頭出品
+        - else
+          = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: "form-control"}
+
+      = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
+        span.glyphicon ○
+        span.btn-content リストNo登録
+
+      = link_to "/system/list/new", class: "btn btn-default btn-square btn-submit pull-left" do
+        span.glyphicon ←
+        span.btn-content 戻る
