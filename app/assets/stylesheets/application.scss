@@ -704,7 +704,7 @@ table.bid-table {
 
 body.bt {
   .omdc-logo img {
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 
   .footer {
@@ -713,12 +713,26 @@ body.bt {
     text-align: center;
   }
 
+  label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 22px;
+    width: 120px;
+  }
+
+  .value {
+    font-size: 22px;
+    display: inline-block;
+  }
+
   #key, #product_list_no {
     height: 26px;
     font-size: 26px;
     line-height: 26px;
     padding: 12px;
-    width: 100%;
+    width: 98%;
     margin: 0;
   }
 
@@ -728,9 +742,9 @@ body.bt {
   }
 
   #product_area_id {
-    width: 100%;
+    width: 240px%;
     font-size: 26px;
-    height: 42px;
+    height: 48px;
     margin: 0 auto;
   }
 
