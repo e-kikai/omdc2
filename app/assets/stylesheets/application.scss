@@ -714,7 +714,7 @@ body.bt {
   }
 
   ul.nav li {
-    font-size: 22px;
+    font-size: 26px;
   }
 
   label {
@@ -723,7 +723,7 @@ body.bt {
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 22px;
-    width: 120px;
+    width: 130px;
   }
 
   .value {
@@ -740,6 +740,10 @@ body.bt {
     padding: 12px;
     width: 98%;
     margin: 0;
+  }
+
+  #key {
+    width: 300px;
   }
 
   #product_list_no {
