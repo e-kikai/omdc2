@@ -13,10 +13,10 @@ html
 
   / body onLoad="FixedMidashi.create();"
   body
-    header.navbar.navbar-default.container-fluid role="navigation"
-      .navbar-header
-        / = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo"
-        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/system/bt/", class: "navbar-brand omdc-logo"
+    div = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/system/bt/", class: "omdc-logo"
+    / header.navbar.navbar-default.container-fluid role="navigation"
+    /   .navbar-header
+    /     / = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo"
 
       /   button.navbar-toggle data-toggle="collapse" data-target="#navbar-collapse-1"
       /     span.sr-only Toggle navigation
@@ -55,7 +55,7 @@ html
         h1.hidden-xs.hidden-sm = yield(:page_title)
       = yield
 
-    footer.container-fluid Copyright &copy; #{Time.now.year} OMDC, All Rights reserved.
+    footer.container.footer Copyright &copy; #{Time.now.year} OMDC, All Rights reserved.
 
     / = button_tag "", class: "btn btn-default btn-square", id: "page-top" do
     /   span.glyphicon.glyphicon-arrow-up

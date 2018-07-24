@@ -2,16 +2,20 @@
 - breadcrumb  :system_something, "リストNo登録"
 
 coffee:
-  $ ->
+  # $ ->
     # $(document).on 'click', '.container', ->
     #   $('#key').focus()
 
     # $(window).on 'keydown', ->
     #   $('#key').focus()
 
-    $('#key').focus()
+    # $('#key').focus()
 
 javascript:
+  window.onload = function(){
+    var target = document.getElementById("key");
+    target.focus();
+  }
 
 
 .row
