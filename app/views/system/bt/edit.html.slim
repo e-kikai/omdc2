@@ -14,7 +14,7 @@
 
 javascript:
   window.onload = function(){
-    var target = document.getElementById("product_list_no");
+    var target = document.getElementById("button-submit");
     target.focus();
   }
 
@@ -40,7 +40,7 @@ javascript:
         - else
           = f.select :area_id, @areas_selector, {include_blank: "エリアを選択"}, {class: ""}
 
-      = f.button :submit, class: "btn btn-default btn-square btn-submit center-block" do
+      = f.button :submit, id: "button-submit", class: "btn btn-default btn-square btn-submit center-block" do
         span.glyphicon ○
         span.btn-content リストNo登録
 

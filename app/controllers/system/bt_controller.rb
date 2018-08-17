@@ -53,7 +53,7 @@ class System::BtController < ApplicationController
     lp[:list_no] = @open_now.products.max_list_no + 1 if lp[:list_no].blank? # デフォルト値
 
     if @product.update(lp)
-      redirect_to "/system/bt/new", notice: "#{@product.name}をリストNo. #{@product.list_no}で入庫確認しました"
+      redirect_to "/system/bt/new", notice: "#{@product.name}をNo. #{@product.list_no}で入庫確認"
     else
       render :edit
     end

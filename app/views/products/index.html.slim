@@ -38,14 +38,14 @@
   .scroll_div
     table.table.table-striped.table-hover.table-bordered.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
       tr
-        th.id = s.sort_link :list_no, "No."
-        th = s.sort_link :name,       "商品名"
-        th = s.sort_link :maker,      "メーカー"
-        th = s.sort_link :model,      "型式"
-        th = s.sort_link :year,       "年式"
-        th.num = s.sort_link :min_price,  "最低入札金額"
-        th = s.sort_link :area,       "展示場所"
-        th.img_link = s.sort_link :imgs,       "画像"
+        th.id = s.sort_link :list_no,    "No."
+        th = s.sort_link :name,          "商品名"
+        th = s.sort_link :maker,         "メーカー"
+        th = s.sort_link :model,         "型式"
+        th = s.sort_link :year,          "年式"
+        th.num = s.sort_link :min_price, "最低入札金額"
+        th = s.sort_link :area,          "展示場所"
+        th.img_link = s.sort_link :imgs, "画像"
       - @pproducts.each do |p|
         tr
           td.id = p.list_no

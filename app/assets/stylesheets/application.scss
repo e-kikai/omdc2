@@ -713,8 +713,17 @@ body.bt {
     text-align: center;
   }
 
+  h3 {
+    font-size: 32px;
+  }
+
   ul.nav li {
-    font-size: 26px;
+    font-size: 32px;
+
+    a {
+      padding: 8px 0;
+    }
+
   }
 
   label {
