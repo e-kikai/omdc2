@@ -1,8 +1,7 @@
 - set_meta_tags title: "#{@product.name} 入札詳細"
 - breadcrumb  :system_opens_result_detail, @product
 
-
-.container-fluid.list-menu
+.row
   .col-sm-12.col-md-6
     .panel.panel-default
       .panel-heading 商品詳細
@@ -33,7 +32,7 @@
             th 展示場所
             td
              - if @product.display == "店頭出品"
-              . = @product.company.try(:name) 
+              . = @product.company.try(:name)
               . = @product.company.try(:address)
              - else
                 = @product.area.name
@@ -61,7 +60,7 @@
                 td.num = number_to_currency(b.amount)
                 td.num = b.sameno
                 td = i == 0 ? "◯" : ""
-      
+
     / - if @product.youtube.present?
     /   .youtube-area <iframe width="560" height="315" src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen></iframe>
     / .imgs-area
