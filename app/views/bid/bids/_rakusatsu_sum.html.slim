@@ -56,7 +56,7 @@
             td
       tfoot
         tr
-          td.blank colspan="12" rowspan="3"
+          td.blank colspan="11" rowspan="3"
           th 合計金額
           td.num = number_to_currency(bids.sum{ |b| b.success? ? b.product.seikyu : 0 })
         tr
