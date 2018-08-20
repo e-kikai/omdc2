@@ -1,8 +1,6 @@
 - set_meta_tags title: "ウィッシュリスト"
 - breadcrumb  :something, "ウィッシュリスト"
 
-= session[:wishlist]
-
 = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |f|
   / = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
   / .form-group
