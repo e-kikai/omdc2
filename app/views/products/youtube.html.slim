@@ -1,9 +1,9 @@
-- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} 画像一覧"
+- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} 商品動画"
 
 h3
-  span.glyphicon.glyphicon-picture
-  span.btn-content 画像一覧
-  
+  span.glyphicon.glyphicon-film
+  span.btn-content 商品動画
+
 .row
   .col-lg-offset-1.col-lg-10.col-md-12
     .panel.panel-default
@@ -23,12 +23,10 @@ h3
             td #{number_with_delimiter(@product.min_price)}円
 
   .col-lg-offset-1.col-lg-10.col-md-12
-    / - if @product.youtube.present?
-    /   .youtube-area.embed-responsive.embed-responsive-16by9
-    /     iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
-    .imgs-area
-      - if @product.product_images.size > 0
-        - @product.product_images.each do |i|
-          = image_tag i.image.view.url
-      - else
-        = image_tag "noimg_view.png"
+    - if @product.youtube.present?
+      .youtube-area.embed-responsive.embed-responsive-16by9
+        iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
+    - else
+      .alert.alert-danger
+        span.glyphicon.glyphicon-alert
+        span.btn-content = 商品動画は登録されていません

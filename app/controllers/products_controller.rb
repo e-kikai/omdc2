@@ -79,6 +79,10 @@ class ProductsController < ApplicationController
       @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
   end
 
+  def youtube
+      @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area).find(params[:id])
+  end
+
   # def contact
   # end
   #

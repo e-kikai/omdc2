@@ -87,22 +87,24 @@ scss:
     table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-products _fixedhead='rows:1'
       tr
         th
-          .col-md-4 商品情報
-          .col-md-8
+          .row
+            .col-md-4 商品情報
+            .col-md-8
       - products.each do |p|
         tr
           td
-            .col-md-4
-              span 商品No. #{p.app_no}
-              - if p.list_no.present?
-                span = "(リストNo. #{p.list_no})"
-              span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
-              p = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
-                span.glyphicon.glyphicon-link
-                span.btn-content 確認
-            .col-md-8
-              = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
-                - p.product_images.each do |i|
-                  = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
-                .fallback
-                  = file_field_tag(:image)
+            .row
+              .col-md-4
+                span 商品No. #{p.app_no}
+                - if p.list_no.present?
+                  span = "(リストNo. #{p.list_no})"
+                span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
+                p = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
+                  span.glyphicon.glyphicon-link
+                  span.btn-content 確認
+              .col-md-8
+                = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
+                  - p.product_images.each do |i|
+                    = hidden_field_tag "img[]", i.image.thumb.url, data: { name: i.image.file.filename, id: i.id }, class: :dzdata
+                  .fallback
+                    = file_field_tag(:image)

@@ -62,7 +62,7 @@
                 span.glyphicon.glyphicon-picture
           td.img_link
             - if p.youtube.present?
-              = link_to "/images/#{p.id}/", target: "_blank" do
+              = link_to "/youtube/#{p.id}/", target: "_blank" do
                 span.glyphicon.glyphicon-film
 
   = paginate @pproducts

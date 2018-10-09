@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get  "detail/:id"   => "products#show"
   get  "images/:id"   => "products#images"
+  get  "youtube/:id"  => "products#youtube"
   get  "ml_get_genre" => "products#ml_get_genre"
   get  "bid_list"     => "products#bid_list"
 
