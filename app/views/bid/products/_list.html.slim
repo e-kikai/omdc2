@@ -27,6 +27,7 @@
           th.num = s.sort_link :min_price,  "最低入札金額"
           th = s.sort_link :comment,        "備考欄"
           th.img_link 画像
+          th.img_link 動画
           th.button
         - products.each do |p|
           tr
@@ -39,12 +40,20 @@
             td = p.year
             td.num = number_to_currency(p.min_price)
             td = p.comment
-            td.img_link = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+            td.img_link
+              - if p.product_images.present?
+                = link_to "/images/#{p.id}/", target: "_blank" do
+                  span.glyphicon.glyphicon-picture
+            td.img_link
+              - if p.youtube.present?
+                = link_to "/images/#{p.id}/", target: "_blank" do
+                  span.glyphicon.glyphicon-film
+
             td.button
               - message = "#{p.name}\n\nこの出品商品を削除しますか？"
-              = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
+              = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-xs") do
                 span.glyphicon.glyphicon-remove
-                =< "削除"
+                span.btn-content 削除
         tr
           td colspan="6"
           td 合計金額

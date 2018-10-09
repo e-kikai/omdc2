@@ -26,8 +26,9 @@
         th = s.sort_link :model,      "型式"
         th = s.sort_link :year,       "年式"
         th = s.sort_link :min_price,  "最低入札金額"
-        th = s.sort_link :area,       "展示場所"
-        th = s.sort_link :imgs,       "画像"
+        th = s.sort_link :area_id,    "展示場所"
+        th.img_link 画像
+        th.img_link 動画
       - @pproducts.each do |p|
         tr
           td.id = p.list_no
@@ -35,6 +36,22 @@
           td = p.maker
           td = p.model
           td = p.year
-          td.num = p.min_price.to_s(:delimited) + "円"
+          td.num = number_to_currency(p.min_price)
           td = p.area_name
-          td = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+          td.img_link
+            - if p.product_images.present?
+              = link_to "/images/#{p.id}/", target: "_blank" do
+                span.glyphicon.glyphicon-picture
+          td.img_link
+            - if p.youtube.present?
+              = link_to "/images/#{p.id}/", target: "_blank" do
+                span.glyphicon.glyphicon-film
+
+  .
+    - 1.step @max_list_no, 100 do |no|
+      - lt_no = [@max_list_no, no + 99].min
+      .list_no-link
+        - if params.dig(:q, :list_no_gteq) == no.to_s
+          strong #{no} 〜 #{lt_no}
+        - else
+          = link_to "#{no} 〜 #{lt_no}", "/bid_list?q[list_no_gteq]=#{no}&q[list_no_lteq]=#{lt_no}"

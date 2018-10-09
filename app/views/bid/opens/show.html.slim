@@ -56,6 +56,7 @@ ul.nav.nav-pills
             th = s.sort_link :maker,                   "メーカー"
             / th = s.sort_link :model,                   "型式"
             th.img_link 画像
+            th.img_link 動画
             th.sepa = s.sort_link :min_price,          "最低入札金額"
             th.no = s.sort_link :bids_count,           "入札数"
             th = s.sort_link :success_bid_amount,      "落札金額"
@@ -69,7 +70,14 @@ ul.nav.nav-pills
               td = p.name
               td = p.maker
               / td = p.model
-              td.img_link = link_to "◯", "/images/#{p.id}/", target: "_blank" if p.product_images.present?
+              td.img_link
+                - if p.product_images.present?
+                  = link_to "/images/#{p.id}/", target: "_blank" do
+                    span.glyphicon.glyphicon-picture
+              td.img_link
+                - if p.youtube.present?
+                  = link_to "/images/#{p.id}/", target: "_blank" do
+                    span.glyphicon.glyphicon-film
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
                 td.no = p.bids_count
@@ -98,3 +106,4 @@ ul.nav.nav-pills
                 td.sepa
                 td
                 td.no
+      = paginate @pproducts

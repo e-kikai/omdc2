@@ -97,9 +97,9 @@ scss:
               - if p.list_no.present?
                 span = "(リストNo. #{p.list_no})"
               span = " : #{p.name} #{p.maker} #{p.model} / #{number_to_currency(p.min_price)}"
-              = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
+              p = link_to "/images/#{p.id}", target: "_blank", class: "btn btn-info" do
                 span.glyphicon.glyphicon-link
-                span 確認
+                span.btn-content 確認
             .col-md-8
               = form_tag({ id: p.id, action: :image_upload }, method: :post, id: "form_#{p.id}", data: { product_id: p.id }, class: :dropzone) do |f|
                 - p.product_images.each do |i|

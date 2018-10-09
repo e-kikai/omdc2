@@ -49,6 +49,7 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def rakusatsu_sum
+    @products = @products.order(:list_no)
     @company  = current_company
 
     respond_to do |format|
