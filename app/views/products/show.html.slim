@@ -113,8 +113,8 @@
   .col-sm-12.col-md-6
     - if @product.youtube.present?
       h3
-        span.glyphicon.glyphicon-picture
-        span.btn-content 画像一覧
+        span.glyphicon.glyphicon-film
+        span.btn-content 商品動画
       .youtube-area.embed-responsive.embed-responsive-16by9
         iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
     .show-imgs-area
