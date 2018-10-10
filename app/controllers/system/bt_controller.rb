@@ -19,12 +19,12 @@ class System::BtController < ApplicationController
     if key =~ /^([0-9]+)\-([0-9]+)\-([0-9]+)$/
       product = Product.includes(:company).find_by(open_id: $1, companies: {no: $2}, app_no: $3)
       if product.blank?
-        flash.now[:alert] =  "#{key} 商品情報がありません"
+        flash.now[:alert] = "商品情報なし\n#{key}"
       else
         redirect_to "/system/bt/#{product.id}/edit"
       end
     else
-      flash.now[:alert] = "#{key} バーコードのフォーマットが違います" unless key.blank?
+      flash.now[:alert] = "フォーマットエラー\n#{key}" unless key.blank?
     end
   end
 
@@ -53,7 +53,7 @@ class System::BtController < ApplicationController
     lp[:list_no] = @open_now.products.max_list_no + 1 if lp[:list_no].blank? # デフォルト値
 
     if @product.update(lp)
-      redirect_to "/system/bt/new", notice: "#{@product.name}をNo. #{@product.list_no}で入庫確認"
+      redirect_to "/system/bt/new", notice: "入庫確認 No. #{@product.list_no}\n#{@product.name}"
     else
       render :edit
     end

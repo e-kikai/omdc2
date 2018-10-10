@@ -31,7 +31,9 @@ javascript:
 
       .form-group
         = f.label :list_no
-        = f.number_field :list_no, class: "", placeholder: "新規(最後尾に追加)"
+        / = f.number_field :list_no, class: "", placeholder: "新規(最後尾に追加)"
+        = f.hidden_field
+        = f.list_no || "新規(最後尾に追加)"
 
       .form-group
         = f.label :area_id

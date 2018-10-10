@@ -43,11 +43,11 @@ html
       - if notice.present?
         .alert.alert-success
           span.glyphicon.glyphicon-info-sign
-          span.btn-content simple_format(notice, {}, wrapper_tag: :span)
+          span.btn-content = simple_format(notice, {}, wrapper_tag: :span)
       - if alert.present?
         .alert.alert-danger
           span.glyphicon.glyphicon-alert
-          span.btn-content simple_format(alert, {}, wrapper_tag: :span)
+          span.btn-content = simple_format(alert, {}, wrapper_tag: :span)
 
       - if content_for?(:page_title)
         h1.hidden-xs.hidden-sm = yield(:page_title)
