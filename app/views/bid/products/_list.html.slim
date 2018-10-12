@@ -51,7 +51,7 @@
 
             td.button
               - message = "#{p.name}\n\nこの出品商品を削除しますか？"
-              = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-xs") do
+              = link_to({ action: :destroy, id: p.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-default btn-xs") do
                 span.glyphicon.glyphicon-remove
                 span.btn-content 削除
         tr
