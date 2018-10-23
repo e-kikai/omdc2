@@ -1,5 +1,4 @@
 scss:
-  
   .hikitori-area {
     // border-bottom: 1px dotted #333;
 
@@ -7,22 +6,22 @@ scss:
     width: 100%;
     position: relative;
     paggin: 0;
-    
+
     &:nth-child(odd) {
       margin-bottom: 12mm;
     }
-    
+
     &:nth-child(even) {
       page-break-after:always;
     }
 
-    
+
     .hikitori {
       border: 1px solid #333;
       margin: 2mm 0;
       width: 100%;
       height: 100mm;
-      
+
       .title {
         font-size: 6mm;
         margin: 4mm auto;
@@ -30,88 +29,88 @@ scss:
         border-bottom: 1px solid #333;
         text-align: center;
       }
-      
+
       .open-name {
         text-align: right;
         margin-right: 2mm;
       }
-      
+
       .company {
         font-size: 5mm;
         text-align: left;
         margin-left: 2mm;
       }
-      
+
       .open-author {
         text-align: right;
         margin-right: 2mm;
       }
-      
+
       .comment {
         position: absolute;
         top: 35mm;
         left: 2mm;
       }
-      
+
       .info {
         position: absolute;
         top: 24mm;
         width: 100%;
         text-align: center;
       }
-      
+
       .product-table {
         position: absolute;
         top: 40mm;
         width: 100%;
-        
+
         td {
           font-size: 4mm;
           border: 1px solid #333;
           padding: 0 1mm;
         }
-        
+
         .header td {
           text-align: center;
         }
-        
+
         .body td {
           height: 18mm;
           vertical-align: middle;
         }
-        
+
         .body .no {
           font-size: 7mm;
           text-align: center;
         }
-        
+
         td.no {
           width: 22mm;
           border-left: 0;
         }
-        
+
         td.name {
           width: 50mm;
         }
-        
+
         td.maker {
           width: 50mm;
         }
       }
-      
+
       .date {
         position: absolute;
         top: 64mm;
         left: 2mm;
       }
-      
+
       .current-company {
         position: absolute;
         top: 74mm;
         right: 2mm;
         width: 80mm;
       }
-      
+
       .current-author {
         position: absolute;
         top: 84mm;
@@ -120,7 +119,7 @@ scss:
       }
     }
   }
-  
+
   .even {
     border: 1px dotted #333;
     border-width: 1 0 0 0;
@@ -128,7 +127,7 @@ scss:
     background: yellow;
     position: relative;
   }
-  
+
   hr.page-break {
     border-width: 0;
     clear: both;
@@ -142,7 +141,7 @@ scss:
   - even = true
   - @bids.each do |b|
     - next unless b.success?
-    
+
     .hikitori-area
       .hikitori
         .title 引取・指図書
@@ -163,8 +162,7 @@ scss:
             td.name = b.product.name
             td.maker = b.product.maker
             td = b.product.year
-            
+
         .date 平成　　　年　　　月　　　日
         .current-company 会社名 : #{@company.name}　　(印)
         .current-author  担当者 : 　　　　　　　　(印)
-    
