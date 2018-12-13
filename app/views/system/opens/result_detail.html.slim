@@ -35,7 +35,7 @@
               . = @product.company.try(:name)
               . = @product.company.try(:address)
              - else
-                = @product.area.name
+                = @product.area.try(:name)
           tr
             th 仕様
             td = simple_format(@product.spec)
