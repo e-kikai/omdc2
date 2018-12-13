@@ -10,16 +10,16 @@ class Product < ApplicationRecord
   belongs_to :area
 
   has_many :bids
-  # has_one  :success_bid,     -> { success }, class_name: Bid
-  # has_one :success_bid, class_name: ViewSuccessBid
+  # has_one  :success_bid,     -> { success }, class_name: "Bid"
+  # has_one :success_bid, class_name: "ViewSuccessBid"
   has_one :view_success_bid
-  belongs_to :success_bid, class_name: Bid, foreign_key: :success_bid_id
+  belongs_to :success_bid, class_name: "Bid", foreign_key: :success_bid_id
 
-  # has_one  :bid_sums,        -> { sums }, class_name: Bid
-  has_one  :success_company, through: :success_bid, source: :company, class_name: Company
+  # has_one  :bid_sums,        -> { sums }, class_name: "Bid"
+  has_one  :success_company, through: :success_bid, source: :company, class_name: "Company"
 
   has_many :product_images, -> { order(:order_no, :id) }
-  has_one  :top_image,      -> { order(:order_no, :id) }, class_name: ProductImage
+  has_one  :top_image,      -> { order(:order_no, :id) }, class_name: "ProductImage"
 
   enum display: { "一般出品" => 0, "常設コマ" => 10, "単品預り" => 20, "店頭出品" => 30 }
 

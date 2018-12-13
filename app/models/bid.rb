@@ -10,10 +10,10 @@ class Bid < ApplicationRecord
   has_one    :large_genre, through: :genre
   has_one    :xl_genre,    through: :large_genre
 
-  # has_one    :success_bid, -> { success }, class_name: Bid, through: :product
-  # has_one :success_bid, class_name: ViewSuccessBid, through: :product
-  has_one :success_bid, class_name: Bid, foreign_key: :success_bid_id, through: :product
-  has_one :product_company, through: :product, source: :company, class_name: Company
+  # has_one    :success_bid, -> { success }, class_name: "Bid", through: :product
+  # has_one :success_bid, class_name: "ViewSuccessBid", through: :product
+  has_one :success_bid, class_name: "Bid", foreign_key: :success_bid_id, through: :product
+  has_one :product_company, through: :product, source: :company, class_name: "Company"
 
   validates :amount,      presence: true, numericality: { only_integer: true }
   validate  :validate_amount
