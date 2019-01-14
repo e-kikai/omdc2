@@ -27,7 +27,8 @@ prawn_document do |pdf|
 
     pdf.bounding_box([96.mm, 276.mm], width: 76.mm, height: 120.mm) do
       # pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
-      pdf.text "平成#{Time.now.strftime("%Y").to_i - 1988}年#{Time.now.strftime("%m月%d日")}", size: 12, align: :center
+      # pdf.text "平成#{Time.now.strftime("%Y").to_i - 1988}年#{Time.now.strftime("%m月%d日")}", size: 12, align: :center
+      pdf.text Time.now.strftime("%Y年%m月%d日"), size: 12, align: :center
       pdf.text " ", size: 12
       pdf.text @open_now.owner, size: 14, align: :center
     end
@@ -103,11 +104,13 @@ prawn_document do |pdf|
 
       if products.sum(&:shiharai) >= success_products.sum(&:seikyu)
         pdf.text "お支払い額は上記の通りです。", size: 12
-        pdf.text "平成#{@open_now.payment_date.strftime("%Y").to_i - 1988}年#{@open_now.payment_date.strftime("%m月%d日")}にお支払い致します。", size: 16
+        # pdf.text "平成#{@open_now.payment_date.strftime("%Y").to_i - 1988}年#{@open_now.payment_date.strftime("%m月%d日")}にお支払い致します。", size: 16
+        pdf.text "#{@open_now.payment_date.strftime("%Y年%m月%d日")}にお支払い致します。", size: 16
 
       else
         pdf.text "御請求額は上記の通りです。", size: 12
-        pdf.text "平成#{@open_now.billing_date.strftime("%Y").to_i - 1988}年#{@open_now.billing_date.strftime("%m月%d日")}までにご入金下さい。", size: 16
+        # pdf.text "平成#{@open_now.billing_date.strftime("%Y").to_i - 1988}年#{@open_now.billing_date.strftime("%m月%d日")}までにご入金下さい。", size: 16
+        pdf.text "#{@open_now.billing_date.strftime("%Y年%m月%d日")}までにご入金下さい。", size: 16
         pdf.text ""
         # pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text "商工中金東大阪支店", size: 12
@@ -283,7 +286,8 @@ prawn_document do |pdf|
           pdf.default_leading 8
 
           pdf.text "以上", size: 12, align: :right
-          pdf.text "平成　　年　　月　　日", size: 12, align: :right
+          # pdf.text "平成　　年　　月　　日", size: 12, align: :right
+          pdf.text "　　　　年　　月　　日", size: 12, align: :right
           pdf.text "大阪機械卸業団地協同組合", size: 14, align: :right
           pdf.text "〒578-0965 東大阪市本庄西2-5-10", size: 12, align: :right
           pdf.text "TEL 06-6747-7521　FAX 06-6747-7525", size: 12, align: :right
