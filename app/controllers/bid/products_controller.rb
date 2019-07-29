@@ -44,7 +44,7 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def edit
-    @only_update = true unless @open_now.entry? true
+    @only_update = true unless @open_now.entry?
   end
 
   def update
