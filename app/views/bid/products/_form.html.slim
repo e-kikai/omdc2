@@ -37,15 +37,27 @@ coffee:
       td = f.object.list_no
     tr
       th = f.label :name, class: :required
-      td = f.text_field :name, class: "form-control get_genre", required: "required"
+      td
+        - if @only_update
+          = f.object.name
+        - else
+          = f.text_field :name, class: "form-control get_genre", required: "required"
 
     tr
       th = f.label :maker
-      td = f.text_field :maker, class: "form-control get_genre"
+      td
+        - if @only_update
+          = f.object.maker
+        - else
+          = f.text_field :maker, class: "form-control get_genre"
 
     tr
       th = f.label :model
-      td = f.text_field :model, class: "form-control get_genre"
+      td
+        - if @only_update
+          = f.object.model
+        - else
+          = f.text_field :model, class: "form-control get_genre"
 
     tr
       th = f.label :hitoyama
@@ -55,24 +67,39 @@ coffee:
 
     tr.form-inline
       th = f.label :min_price, class: :required
-      td = (f.text_field :min_price, class: "form-control price", required: "required") + " 円"
+      td
+        - if @only_update
+          = number_to_currency(f.object.min_price)
+        - else
+          = (f.text_field :min_price, class: "form-control price", required: "required") + " 円"
 
     tr
       th = f.label :genre_id, "ジャンル", class: :required
       td
-        = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control", required: "required"
-        / = text_field_tag :genre, "", class: "form-control"
-        = link_to "/bid/products/ml_get_genre.js", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/ml_get_genre.js?' + $('input.get_genre').serialize()));" do
-          span.glyphicon.glyphicon-search
-          span.btn-content ジャンル検索
-        span.genre_loading
+        - if @only_update
+          span #{f.object.xl_genre.name} > #{f.object.large_genre.name} > #{f.object.genre.name}
+        - else
+          = f.select :genre_id, Genre.options, {include_blank: "-- ジャンルを選択 --"}, class: "form-control", required: "required"
+          / = text_field_tag :genre, "", class: "form-control"
+          = link_to "/bid/products/ml_get_genre.js", method: :get, remote: :true, class: "btn btn-success", onclick: "$('span.genre_loading').html('ジャンル検索中');$(this).attr('href', ('/ml_get_genre.js?' + $('input.get_genre').serialize()));" do
+            span.glyphicon.glyphicon-search
+            span.btn-content ジャンル検索
+          span.genre_loading
     tr
       th = f.label :year
-      td = f.text_field :year, class: "form-control"
+      td
+        - if @only_update
+          = f.object.year
+        - else
+          = f.text_field :year, class: "form-control"
 
     tr
       th = f.label :spec
-      td = f.text_area :spec, class: "form-control"
+      td
+        - if @only_update
+          = simple_format(f.object.spec)
+        - else
+          = f.text_area :spec, class: "form-control"
 
     tr
       th = f.label :condition
@@ -86,9 +113,12 @@ coffee:
     tr
       th = f.label :display
       td
-        - Product.displays.each do |k, v|
-          label.radio-inline = f.radio_button(:display, k, inline: true) + k
-        p.help-block お客様には表示されません
+        - if @only_update
+          = f.object.displays
+        - else
+          - Product.displays.each do |k, v|
+            label.radio-inline = f.radio_button(:display, k, inline: true) + k
+          p.help-block お客様には表示されません
 
     tr
       th = f.label :youtube

@@ -1,9 +1,13 @@
 class Bid::ProductsController < Bid::ApplicationController
   before_action :check_open
-  before_action :check_entry,       except: [:index, :images, :image_upload, :images_order, :image_destroy, :sim]
-  before_action :check_entry_start, only: [:index, :images, :image_upload, :images_order, :image_destroy]
+  # before_action :check_entry,       except: [:index, :images, :image_upload, :images_order, :image_destroy, :sim]
+  # before_action :check_entry_start, only:   [:index, :images, :image_upload, :images_order, :image_destroy]
+
+  before_action :check_entry,       only: [:new, :create, :destroy]
+  before_action :check_entry_start, only: [:index, :edit, :update, :images, :image_upload, :images_order, :image_destroy]
+
   before_action :products,          except: [:sim]
-  before_action :get_product,       only: [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
+  before_action :get_product,       only:   [:edit, :update, :destroy, :image_upload, :image_destroy, :images_order]
 
   skip_before_action :check_rule, only: [:sim]
   skip_before_action :authenticate_company!, only: [:sim]
@@ -40,10 +44,12 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def edit
+    @only_update = true unless @open_now.entry? true
   end
 
   def update
-    if @product.update(product_params)
+    res_params = @open_now.entry? ? product_params : only_update_params
+    if @product.update(res_params)
       redirect_to "/bid/products/", notice: "#{@product.name}を変更しました"
     else
       render :edit
@@ -131,6 +137,10 @@ class Bid::ProductsController < Bid::ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+  end
+
+  def only_update_params
+    params.require(:product).permit(:condition, :comment, :youtube, :hitoyama)
   end
 
   def csv_products_params
