@@ -3,7 +3,7 @@ class Bid::ProductsController < Bid::ApplicationController
   # before_action :check_entry,       except: [:index, :images, :image_upload, :images_order, :image_destroy, :sim]
   # before_action :check_entry_start, only:   [:index, :images, :image_upload, :images_order, :image_destroy]
 
-  before_action :check_entry,       only: [:new, :create, :destroy]
+  before_action :check_entry,       only: [:new, :create, :destroy, :csv, :csv_upload, :csv_import]
   before_action :check_entry_start, only: [:index, :edit, :update, :images, :image_upload, :images_order, :image_destroy]
 
   before_action :products,          except: [:sim]
