@@ -851,3 +851,14 @@ body.bt {
     font-size: 26px;
   }
 }
+
+.row.toppage_genres_area {
+  margin-left: -5px;
+  margin-right: -5px;
+
+  .col-sm-6,
+  .col-md-3 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
