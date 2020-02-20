@@ -26,17 +26,17 @@ class ProductsController < ApplicationController
       params[:q]
     end
 
-    queries = params[:q].present? ? params[:q].permit!.to_h || {}
-    if params[:xl_genre_id].present?
-      @xl_genre = XlGenre.find(params[:xl_genre_id])
-      queries[:xl_genre_id_eq] = params[:xl_genre_id]
-    elsif params[:large_genre_id].present?
-      @large_genre = LargeGenre.find(params[:large_genre_id])
-      queries[:large_genre_id_eq] = params[:large_genre_id]
-    elsif params[:genre_id].present?
-      @genre = Genre.find(params[:genre_id])
-      queries[:genre_id_eq] = params[:genre_id]
-    end
+    # queries = params[:q].present? ? params[:q].permit!.to_h || {}
+    # if params[:xl_genre_id].present?
+    #   @xl_genre = XlGenre.find(params[:xl_genre_id])
+    #   queries[:xl_genre_id_eq] = params[:xl_genre_id]
+    # elsif params[:large_genre_id].present?
+    #   @large_genre = LargeGenre.find(params[:large_genre_id])
+    #   queries[:large_genre_id_eq] = params[:large_genre_id]
+    # elsif params[:genre_id].present?
+    #   @genre = Genre.find(params[:genre_id])
+    #   queries[:genre_id_eq] = params[:genre_id]
+    # end
 
     @search = @products.with_keywords(params[:keywords]).search(queries)
 
