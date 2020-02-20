@@ -13,30 +13,30 @@ class ProductsController < ApplicationController
   include Exports
 
   def index
-    # queries = if params[:xl_genre_id].present?
-    #   @xl_genre = XlGenre.find(params[:xl_genre_id])
-    #   {xl_genre_id_eq: params[:xl_genre_id]}.merge(Hash(params[:q]))
-    # elsif params[:large_genre_id].present?
-    #   @large_genre = LargeGenre.find(params[:large_genre_id])
-    #   {large_genre_id_eq: params[:large_genre_id]}.merge(Hash(params[:q]))
-    # elsif params[:genre_id].present?
-    #   @genre = Genre.find(params[:genre_id])
-    #   {genre_id_eq: params[:genre_id]}.merge(Hash(params[:q]))
-    # else
-    #   params[:q]
-    # end
-
-    queries = params[:q].present? ? params[:q].permit!.to_h || {}
-    if params[:xl_genre_id].present?
+    queries = if params[:xl_genre_id].present?
       @xl_genre = XlGenre.find(params[:xl_genre_id])
-      queries.merge!({xl_genre_id_eq: params[:xl_genre_id]})
+      {xl_genre_id_eq: params[:xl_genre_id]}.merge(Hash(params[:q]))
     elsif params[:large_genre_id].present?
       @large_genre = LargeGenre.find(params[:large_genre_id])
-      queries.merge!({large_genre_id_eq: params[:large_genre_id]})
+      {large_genre_id_eq: params[:large_genre_id]}.merge(Hash(params[:q]))
     elsif params[:genre_id].present?
       @genre = Genre.find(params[:genre_id])
-      queries.merge!({genre_id_eq: params[:genre_id]})
+      {genre_id_eq: params[:genre_id]}.merge(Hash(params[:q]))
+    else
+      params[:q]
     end
+
+    # queries = params[:q].present? ? params[:q].permit!.to_h || {}
+    # if params[:xl_genre_id].present?
+    #   @xl_genre = XlGenre.find(params[:xl_genre_id])
+    #   queries.merge!({xl_genre_id_eq: params[:xl_genre_id]})
+    # elsif params[:large_genre_id].present?
+    #   @large_genre = LargeGenre.find(params[:large_genre_id])
+    #   queries.merge!({large_genre_id_eq: params[:large_genre_id]})
+    # elsif params[:genre_id].present?
+    #   @genre = Genre.find(params[:genre_id])
+    #   queries.merge!({genre_id_eq: params[:genre_id]})
+    # end
 
     @search = @products.with_keywords(params[:keywords]).search(queries)
 
