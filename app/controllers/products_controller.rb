@@ -13,6 +13,7 @@ class ProductsController < ApplicationController
   include Exports
 
   def index
+    queries2 = params[:q].present? ? params[:q].permit!.to_h || {}
     queries = if params[:xl_genre_id].present?
       @xl_genre = XlGenre.find(params[:xl_genre_id])
       {xl_genre_id_eq: params[:xl_genre_id]}.merge(Hash(params[:q]))
