@@ -50,7 +50,7 @@ class Bid::BidsController < Bid::ApplicationController
 
   def rakusatsu_sum
     @products = @products.order(:list_no)
-    @bids     = @bids.reorder("products.list_no")
+    @bids     = @bids.order("products.list_no")
     @company  = current_company
 
     respond_to do |format|
@@ -67,7 +67,7 @@ class Bid::BidsController < Bid::ApplicationController
   end
 
   def shuppin_sum
-    @products = @products.order(:list_no)
+    @products = @products.order(:app_no)
     @company  = current_company
 
     respond_to do |format|
