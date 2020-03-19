@@ -10,16 +10,17 @@
       thead
         tr
           / th
-          th.id = sort_link search,   :list_no,            "No."
-          th = sort_link search,      :genre_order_no,     "商品名"
-          th = sort_link search,      :maker,              "メーカー"
+          th.id   = sort_link search, :app_no,             "申込No."
+          th.id   = sort_link search, :list_no,            "No."
+          th      = sort_link search, :genre_order_no,     "商品名"
+          th      = sort_link search, :maker,              "メーカー"
           / th = sort_link search, :model,          "型式"
-          th = sort_link search,      :min_price,          "最低入札金額"
+          th      = sort_link search, :min_price,          "最低入札金額"
           th.sepa = sort_link search, :comment,            "備考欄"
 
-          th.no = sort_link search,   :bids_count,         "入札数"
-          th = sort_link search,      :success_company_no, "落札会社"
-          th = sort_link search,      :success_bid_amount, "落札金額"
+          th.no   = sort_link search, :bids_count,         "入札数"
+          th      = sort_link search, :success_company_no, "落札会社"
+          th      = sort_link search, :success_bid_amount, "落札金額"
 
           th デメ半
           th 出品区分
@@ -30,6 +31,7 @@
       - products.each do |p|
         tr
           / td = s.check_box :id_eq, {}, b.id
+          td.id = p.app_no
           td.id = p.list_no
           td = p.name
           td = p.maker

@@ -14,15 +14,15 @@
       thead
         tr
           th
-          th.id = s.sort_link   :product_list_no,    "No."
-          th = s.sort_link      :genre_order_no,     "商品名"
-          th = s.sort_link      :product_maker,      "メーカー"
-          / th = s.sort_link :product_model,      "型式"
-          th = s.sort_link      :product_min_price,  "最低入札金額"
-          th = s.sort_link      :amount,             "入札金額"
-          th = s.sort_link      :comment,            "備考欄"
-          th.sepa = s.sort_link :created_at,         "入札日時"
-          th = s.sort_link      :success_bid_amount, "落札金額"
+          th.id   = sort_link search :product_list_no,    "No."
+          th      = sort_link search :genre_order_no,     "商品名"
+          th      = sort_link search :product_maker,      "メーカー"
+          / th = sort_link search :product_model,      "型式"
+          th      = sort_link search :product_min_price,  "最低入札金額"
+          th      = sort_link search :amount,             "入札金額"
+          th      = sort_link search :comment,            "備考欄"
+          th.sepa = sort_link search :created_at,         "入札日時"
+          th      = sort_link search :success_bid_amount, "落札金額"
           th.img_link 結果
           th デメ半
           th 落札会社手数料
@@ -34,9 +34,9 @@
           td = b.product.name
           td = b.product.maker
           / td = b.product.model
-          td.num = number_to_currency(b.product.min_price)
-          td.num = number_to_currency(b.amount)
-          td = b.comment
+          td.num  = number_to_currency(b.product.min_price)
+          td.num  = number_to_currency(b.amount)
+          td      = b.comment
           td.sepa = b.created_at
 
           td.num = number_to_currency(b.success_bid.amount)
