@@ -13,8 +13,8 @@ class Bid::OpensController < Bid::ApplicationController
     @open.result_sum unless @open.result
 
     @search    = @open.products.listed.with_keywords(params[:keywords])
-      .includes(:success_bid, :success_company, :company, :genre, :product_images, :bids, :large_genre, :xl_genre, :area).search(params[:q])
-    @products  = @search.result.order(:list_no)
+      .includes(:success_bid, :success_company, :company, :genre, :product_images, :large_genre, :xl_genre, :area).search(params[:q])
+    @products  = @search.result.order(:list_no).distinct
     @pproducts = @products.page(params[:page])
 
     @max_list_no = @open.products.listed.maximum(:list_no)
