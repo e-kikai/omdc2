@@ -69,7 +69,7 @@
             td.num = number_to_currency(p.shiharai)
       tfoot
         tr
-          td.blank colspan="12" rowspan="3"
+          td.blank colspan="13" rowspan="3"
           th 合計金額
           / td.num  = number_to_currency(products.inject(0){ |sum, p| sum += p.shiharai })
           td.num = number_to_currency(products.sum(&:shiharai))
