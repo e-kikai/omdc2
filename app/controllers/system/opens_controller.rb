@@ -41,8 +41,8 @@ class System::OpensController < System::ApplicationController
 
     @open.result_sum if !@open.result || params[:recalc].present? # 再計算を考慮
 
-    @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre, :area).search(params[:q])
-    @products  = @search.result.order(:list_no)
+    @search    = @open.products.listed.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre, :area, :product_images).search(params[:q])
+    @products  = @search.result.order(:list_no).distinct
     @pproducts = @products.page(params[:page])
 
     @max_list_no = @open.products.listed.maximum(:list_no)
