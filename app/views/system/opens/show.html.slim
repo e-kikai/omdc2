@@ -79,4 +79,4 @@
               td
               td
               td.sepa
-            td = p.carryout_at.strftime('%-g/%-m/%-d %H:%M')
+            td = l(p.carryout_at, format: :short)
