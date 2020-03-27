@@ -79,4 +79,4 @@
               td
               td
               td.sepa
-            td = l(p.carryout_at, format: :short)
+            td = p.carryout_at.present? ? l(p.carryout_at, format: :short) : ""
