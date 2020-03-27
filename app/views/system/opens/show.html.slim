@@ -43,7 +43,7 @@
           th = s.sort_link :genre_order_no,     "ジャンル"
           th = s.sort_link :name,               "商品名"
           th = s.sort_link :maker,              "メーカー"
-          / th = s.sort_link :model,              "型式"
+          th = s.sort_link :model,              "型式"
           th.img_link 画像
           th.img_link 動画
           th.num.sepa = s.sort_link :min_price, "最低入札金額"
@@ -58,7 +58,7 @@
             td = p.genre.name
             td = link_to_if p.success_bid.present?, p.name, "/system/opens/#{@open.id}/detail/#{p.id}"
             td = p.maker
-            / td = p.model
+            td = p.model
             td.img_link
               - if p.product_images.present?
                 = link_to "/images/#{p.id}/", target: "_blank" do
