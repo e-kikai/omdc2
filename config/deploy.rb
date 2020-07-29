@@ -38,8 +38,12 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :keep_releases, 5
 
 set :default_env, {
-  rbenv_root: "/usr/local/rbenv",
-  path: "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
+  # rbenv_root: "/usr/local/rbenv",
+  # path: "/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH"
+
+  rbenv_root: "~/.rbenv/",
+  path: "~/.rbenv/shims:~/.rbenv/bin:$PATH"
+
 }
 
 # 共有ディレクトリにSymlinkする対象を追加
