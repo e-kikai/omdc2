@@ -1,5 +1,8 @@
 PDFKit.configure do |config|
-  config.wkhtmltopdf = `which wkhtmltopdf`.to_s.strip
+  # config.wkhtmltopdf = `which wkhtmltopdf`.to_s.strip
+  config.wkhtmltopdf = "/var/www/omdc2/shared/bundle/ruby/2.6.0/gems/wkhtmltopdf-binary-0.12.6.3/bin/wkhtmltopdf"
+
+
   config.default_options = {
     encoding:                "UTF-8",  # エンコーディング
     # page_size:               "A4",     # ページのサイズ
