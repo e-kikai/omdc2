@@ -14,12 +14,11 @@ module Exports
   def export_pdf(filename = nil, path = nil, options = {})
     kit = PDFKit.new(render_to_string(path, layout: false), options)
 
-    # kit.stylesheets << "#{Rails.root}/vendor/assets/stylesheets/bootstrap_for_pdf.min.css"
-    # kit.stylesheets << "#{Rails.root}/app/assets/stylesheets/pdf.css"
+    kit.stylesheets << "#{Rails.root}/vendor/assets/stylesheets/bootstrap_for_pdf.min.css"
+    kit.stylesheets << "#{Rails.root}/app/assets/stylesheets/pdf.css"
 
     send_data kit.to_pdf,
-      # filename:     filename_encode(filename),
-      filename:     "test.pdf",
+      filename:     filename_encode(filename),
       content_type: "application/pdf",
       disposition:  "inline"
   end
