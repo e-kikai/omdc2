@@ -1,28 +1,28 @@
-scss:
-  .bid_amount {
-    width: 120px;
-    text-align: right;
-  }
-.print-pdf
-  h4 入札依頼書
-  - if @products.blank?
-    div 商品がありません
-  - else  
-    . このPDFを印刷、入札期間を記入して、機械団地組合員にFAXしてください
-    .scroll_div
-      table.table.table-striped.table-hover.table-condensed
-        tr
-          th.id No.
-          th 商品名
-          th メーカー
-          th 型式
-          th 最低入札金額
-          th 入札金額
-        - @products.each do |p|
-          tr
-            td.id = p.list_no
-            td = p.name
-            td = p.maker
-            td = p.model 
-            td.num = p.min_price.to_s(:delimited) + "円"
-            td.bid_amount 円
+/ scss:
+/   .bid_amount {
+/     width: 120px;
+/     text-align: right;
+/   }
+/ .print-pdf
+/   h4 入札依頼書
+/   - if @products.blank?
+/     div 商品がありません
+/   - else
+/     . このPDFを印刷、入札期間を記入して、機械団地組合員にFAXしてください
+/     .scroll_div
+/       table.table.table-striped.table-hover.table-condensed
+/         tr
+/           th.id No.
+/           th 商品名
+/           th メーカー
+/           th 型式
+/           th 最低入札金額
+/           th 入札金額
+/         - @products.each do |p|
+/           tr
+/             td.id = p.list_no
+/             td = p.name
+/             td = p.maker
+/             td = p.model
+/             td.num = p.min_price.to_s(:delimited) + "円"
+/             td.bid_amount 円

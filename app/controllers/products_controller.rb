@@ -45,7 +45,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open_now.name}_検索結果.csv" }
+      format.csv { export_csv "#{@open_now.name}_products.csv" }
     end
   end
 
