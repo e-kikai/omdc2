@@ -19,7 +19,7 @@ module Exports
 
     send_data kit.to_pdf,
       # filename:     filename_encode(filename),
-      filename:     filename_encode("test.pdf"),
+      filename:     "test.pdf",
       content_type: "application/pdf",
       disposition:  "inline"
   end
