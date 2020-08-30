@@ -59,7 +59,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@open_now.name}_bid_list.csv", "/products/index.csv.ruby" }
+      format.csv { export_csv "#{@open_now.name}_bid_list.csv" }
     end
   end
 
