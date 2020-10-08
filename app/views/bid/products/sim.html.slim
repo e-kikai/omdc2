@@ -3,7 +3,7 @@ scss:
   header {
     display: none;
   }
-  
+
   .quesction {
       text-decoration: underline;
       color: #47E;
@@ -12,15 +12,15 @@ scss:
       color: #b22;
     }
   }
-  
+
   .popover {
     max-width: none;
   }
-  
+
 javascript:
   $(function () {
     $('[data-toggle="popover"]').popover({html: true});
-  });  
+  });
 h4 落札金額シミュレータ
 
 .row
@@ -37,8 +37,8 @@ h4 落札金額シミュレータ
           td = button_tag type: :submit, data: { "disable-with" => "計算中..." }, class: "btn btn-info center-block" do
             span.glyphicon.glyphicon-jpy
             span.btn-content 計算
-    p 最低出品金額 : #{number_to_currency(@open_now.lower_price)}、 入札単位 : #{number_to_currency(@open_now.rate)}
-  
+    p 最低出品金額 : #{number_to_currency(@open.lower_price)}、 出品単位 : #{number_to_currency(@open.product_rate)}、 入札単位 : #{number_to_currency(@open.rate)}
+
 - if @errors.present?
   .alert.alert-danger
     span.glyphicon.glyphicon-alert
@@ -47,7 +47,7 @@ h4 落札金額シミュレータ
 - elsif @product.present?
   .row
     .arrow_area: span.glyphicon.glyphicon-chevron-down
-    
+
   .col-md-offset-1.col-md-10
     table.table.table-striped.table-hover.table-condensed.table-bordered
       tr
@@ -84,7 +84,7 @@ h4 落札金額シミュレータ
           . = number_to_currency(@product.kumiai_fee)
           .percent #{@product.kumiai_fee_per}%
         td.num.sepa = number_to_currency(@product.bids.first.amount - @product.deme_h - @product.kumiai_fee - @product.hanbai_fee)
-        
+
       tr
         th
           | 出品商品が未落札の場合、元引き手数料
@@ -98,7 +98,7 @@ h4 落札金額シミュレータ
           . = number_to_currency(@product.shuppin_fee)
           .percent #{@product.shuppin_fee_per}%
         td.num #{number_to_currency(@product.shuppin_fee)}
-        
+
 .col-md-offset-1.col-md-10
   = button_tag type: :button, class: "btn btn-danger center-block", onclick: "window.close();return false;" do
     span.glyphicon.glyphicon-remove

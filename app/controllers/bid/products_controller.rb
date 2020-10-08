@@ -112,15 +112,18 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def sim
+    @open = @open_now || Open.next.first || Open.new
+
     if params[:min_price] && params[:amount]
-      @product = @open_now.products.new({min_price: params[:min_price], display: "一般出品"})
+      @product = @open.products.new({min_price: params[:min_price], display: "一般出品"})
       @product.bids.new({amount: params[:amount]})
 
       @errors = []
       @errors << "落札結果が最低入札金額より低く設定されています"     if params[:min_price].to_i > params[:amount].to_i
-      @errors << "最低入札金額が最低出品金額より低く設定されています" if params[:min_price].to_i < @open_now.lower_price
-      @errors << "最低入札金額が入札単位になっていません"             if params[:min_price].to_i % @open_now.rate != 0
-      @errors << "落札結果が入札単位になっていません"                 if params[:amount].to_i % @open_now.rate != 0
+      @errors << "最低入札金額が最低出品金額より低く設定されています" if params[:min_price].to_i < @open.lower_price
+      # @errors << "最低入札金額が入札単位になっていません"             if params[:min_price].to_i % @open.rate != 0
+      @errors << "最低入札金額が出品単位になっていません"             if params[:min_price].to_i % @open.product_rate != 0
+      @errors << "落札結果が入札単位になっていません"                 if params[:amount].to_i % @open.rate != 0
     end
   end
 

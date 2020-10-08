@@ -3,7 +3,7 @@
     ul
       - f.object.errors.full_messages.each do |msg|
         li = msg
-        
+
 table.table.table-hover.table-condensed.form-table
   tr
     th ID
@@ -11,11 +11,11 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :name, class: :required
     td = f.text_field :name, class: "form-control"
-    
+
   tr
     th = f.label :owner, class: :required
     td = f.text_field :owner, class: "form-control"
-    
+
   tr
     th = f.label :place, class: :required
     td = f.text_field :place, class: "form-control"
@@ -75,6 +75,12 @@ table.table.table-hover.table-condensed.form-table
     th = f.label :lower_price, class: :required
     td.form-inline
       = f.number_field :lower_price, class: "form-control"
+      = " 円"
+
+  tr
+    th = f.label :product_rate, class: :required
+    td.form-inline
+      = f.number_field :product_rate, class: "form-control"
       = " 円"
   tr
     th = f.label :rate, class: :required

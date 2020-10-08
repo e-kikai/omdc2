@@ -64,6 +64,6 @@ class System::OpensController < System::ApplicationController
   end
 
   def open_params
-    params.require(:open).permit(:name, :entry_start_date, :entry_end_date, :carry_in_start_date, :carry_in_end_date, :preview_start_date, :preview_end_date, :bid_start_at, :bid_end_at, :user_bid_end_at, :carry_out_start_date, :carry_out_end_date, :billing_date, :payment_date, :lower_price, :rate, :tax)
+    params.require(:open).permit(:name, :entry_start_date, :entry_end_date, :carry_in_start_date, :carry_in_end_date, :preview_start_date, :preview_end_date, :bid_start_at, :bid_end_at, :user_bid_end_at, :carry_out_start_date, :carry_out_end_date, :billing_date, :payment_date, :lower_price, :rate, :tax, :product_rate)
   end
 end

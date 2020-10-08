@@ -22,11 +22,16 @@ class Open < ApplicationRecord
   validates :payment_date,         presence: true
   validates :lower_price,          presence: true, numericality: { only_integer: true }
   validates :rate,                 presence: true, numericality: { only_integer: true }
+  validates :product_rate,         presence: true, numericality: { only_integer: true }
   validates :tax,                  presence: true, numericality: { only_integer: true }
 
   # 現在開催中の入札会を取得
   scope :now, -> {
     where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id)
+  }
+
+  scope :next, -> {
+    where('entry_start_date > ?', Time.now).order(:entry_start_date)
   }
 
   def display?

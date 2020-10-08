@@ -31,6 +31,7 @@ ja:
         billing_date: 請求日
         payment_date: 支払日
         lower_price: 最低入札金額
+        product_rate: 出品金額単位
         rate: 入札金額単位
         tax: 消費税率
         place: "開催場所"

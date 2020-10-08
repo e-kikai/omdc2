@@ -320,7 +320,8 @@ class Product < ApplicationRecord
   private
 
   def check_min_price_to_open
-    errors[:min_price] << ("が#{open.rate.to_s(:delimited)}円単位ではありません")         if min_price.to_i % open.rate > 0
+    # errors[:min_price] << ("が#{open.rate.to_s(:delimited)}円単位ではありません")         if min_price.to_i % open.rate > 0
+    errors[:min_price] << ("が#{open.product_rate.to_s(:delimited)}円単位ではありません") if min_price.to_i % open.product_rate > 0
     errors[:min_price] << ("が#{open.lower_price.to_s(:delimited)}円未満になっています")  if min_price.to_i < open.lower_price
   end
 
