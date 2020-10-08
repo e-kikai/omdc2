@@ -154,7 +154,7 @@ gem 'whenever', require: false
 gem 'dropzonejs-rails'
 
 gem 'pdfkit'
-gem 'wkhtmltopdf-binary'
+# gem 'wkhtmltopdf-binary'
 
 gem 'prawn'
 gem 'prawn-table'
