@@ -112,7 +112,7 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def sim
-    @open = @open_now || Open.next.first || Open.new
+    @open = (@open_now || Open.next.first) || Open.new
 
     if params[:min_price] && params[:amount]
       @product = @open.products.new({min_price: params[:min_price], display: "一般出品"})
