@@ -176,7 +176,7 @@ class System::PlaygroundController < ApplicationController
 
     image = product.product_images.first
 
-    logger.debug bucket.object(vector_key).exists? 
+    logger.debug bucket.object(vector_key).exists?
     if image.blank?  # 画像の有無チェック
       logger.debug "*** E : 商品に画像が登録されていません"
       return false
@@ -340,7 +340,7 @@ class System::PlaygroundController < ApplicationController
     case Rails.env
     when "production"; redirect_to "/"
     when "staging"
-      ActiveRecord::Base.establish_connection(:production)
+      ActiveRecord::Base.establish_connection(:test_01)
       @img_base    = "https://s3-ap-northeast-1.amazonaws.com/omdc2/uploads/product_image/image"
       @link_base   = "https://www.大阪機械団地.jp/"
       @bucket_name = "omdc2"
