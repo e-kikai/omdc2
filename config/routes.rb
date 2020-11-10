@@ -103,6 +103,19 @@ Rails.application.routes.draw do
       end
     end
 
+    unless Rails.env.production?
+      resources :playground, only: [:index] do
+        collection do
+          get 'search_01'
+          get 'vector_maker'
+          get 'vector_maker_solo'
+
+          get "mock_list_01"
+          get "mock_list_02"
+        end
+      end
+    end
+
   end
 
   namespace :bid do

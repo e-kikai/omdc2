@@ -1,0 +1,46 @@
+- set_meta_tags title: "入札依頼一覧"
+- breadcrumb  :bid_something, "入札依頼一覧"
+
+/ ul.nav.nav-pills
+/   li = link_to "/system/companies/new", class: "btn btn-default btn-square" do
+/     span.glyphicon.glyphicon-plus
+/     span.btn-content 新規会社登録
+/   li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
+/     span.glyphicon.glyphicon-download-alt
+/     span.btn-content CSV出力
+
+
+. この一覧は入札依頼履歴です。まだ入札は実行されていません。
+. 実際の入札は「入札」から行ってください。
+.scroll_div
+  table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
+    tr
+      th.id 商品No.
+      th 商品名
+      th 最低入札価格
+      th 出品会社
+      th 依頼金額
+      th 依頼者
+      th 取引
+      th 入札リンク
+
+    - @products.each_with_index do |pr, i|
+      tr
+        td.id #{pr.list_no}
+        td = link_to pr.name, "/detail/#{pr.id}", target: "_blank"
+        td.price #{number_with_delimiter pr.min_price}
+        td #{pr.company.name_remove_kabu}
+        td.price #{number_with_delimiter(pr.min_price + 3000)}
+        td
+          - if i < 6
+            = "川端工業 川端太郎"
+          - elsif i < 13
+            = "加藤機械 加藤次郎"
+          - else
+            = "株式会社大橋 大橋十郎"
+        td = link_to "#", class: "btn btn-info btn-sm" do
+          span.glyphicon.glyphicon-comment
+          span.btn-content チャット
+        td = link_to "#", class: "btn btn-success btn-sm" do
+          span.glyphicon.glyphicon-pencil
+          span.btn-content 入札

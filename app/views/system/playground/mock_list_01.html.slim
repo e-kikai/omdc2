@@ -1,0 +1,51 @@
+- set_meta_tags title: "取引ユーザ一覧"
+- breadcrumb  :bid_something, "取引ユーザ一覧"
+
+/ ul.nav.nav-pills
+/   li = link_to "/system/companies/new", class: "btn btn-default btn-square" do
+/     span.glyphicon.glyphicon-plus
+/     span.btn-content 新規会社登録
+/   li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
+/     span.glyphicon.glyphicon-download-alt
+/     span.btn-content CSV出力
+
+
+
+.scroll_div
+  table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+    tr
+      th 会社名
+      th 氏名
+      th 住所
+      th TEL
+      / th FAX
+      th 登録日時
+      th 取引
+      th 承認
+      th 拒否
+
+
+    - (1..12).each_with_index do |c, i|
+      tr
+        td 株式会社 川端工業
+        td 川端太郎
+        td 大阪府岸和田市岡山町123-4
+        td 098-7654-3210
+        / td 098-7654-3211
+        td 2020/11/10 12:34
+
+        td = link_to "#", class: "btn btn-info btn-sm" do
+          span.glyphicon.glyphicon-comment
+          span.btn-content チャット
+        - if i > 6
+          td = link_to "#", class: "btn btn-success btn-xs" do
+            span.glyphicon.glyphicon-check
+            span.btn-content 認証
+          td = link_to "#", class: "btn btn-danger btn-xs" do
+            span.glyphicon.glyphicon-remove
+            span.btn-content 拒否
+        - else
+          td 承認済み
+          td = link_to "#", class: "btn btn-danger btn-xs" do
+            span.glyphicon.glyphicon-remove
+            span.btn-content 解除

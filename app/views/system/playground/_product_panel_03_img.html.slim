@@ -1,0 +1,34 @@
+.thumbnail.product-pannel_02
+  / = link_to "/products/#{product.id}?r=#{r}", target: "_blank", title: product.name, class: "product_link" do
+  = link_to "#{@link_base}/detail/#{product.id}?r=#{r}", target: "_blank", title: product.name, class: "product_link" do
+    .thumb_img
+      / = image_tag(product.thumb_url, alt: product.name)
+      - if product.product_images.first.present?
+        = image_tag("#{@img_base}/#{product.product_images.first.id}/thumb_#{product.product_images.first.image_identifier}", alt: product.name)
+      - else
+        = image_tag(ProductImage::NOIMAGE_THUMB, alt: product.name)
+
+    / - if product.product_images.present?
+    /   - product.product_images.each_with_index do |img, i|
+    /     .mini_thumb
+    /       = image_tag("#{@img_base}/#{img.id}/thumb_#{img.image_identifier}", alt: "#{product.name}_#{i}")
+    /       = button_tag name: :product_id, value: product.id, class: "btn btn-warning btn-xs btn-sort-img" do
+    /         span.glyphicon.glyphicon-sort
+    /         span.btn-content 似たものサーチ
+    /
+    / - else
+    /   .thumb_img = image_tag(ProductImage::NOIMAGE_THUMB, alt: product.name)
+
+    .name = product.name
+    .price
+      span.max_price_label 最低入札価格
+      span.success_price = number_to_currency(product.min_price)
+
+  - if product.product_images.present?
+    = button_tag name: :product_id, value: product.id, class: "nitamono" do
+      / span.glyphicon.glyphicon-sort
+      / span.btn-content 似たものサーチ
+      span.glyphicon.glyphicon-camera
+
+  - if params[:product_id] && @sorts[product.id].present? && @sorts[product.id] > 0
+    .dist-label = @sorts[product.id]

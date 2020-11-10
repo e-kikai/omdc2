@@ -1,4 +1,6 @@
 class ProductImage < ApplicationRecord
+  NOIMAGE_THUMB = "noimg_thumb.png"
+
   mount_uploader :image, ProductImageUploader
 
   belongs_to :product
