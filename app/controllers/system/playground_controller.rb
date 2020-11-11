@@ -74,7 +74,7 @@ class System::PlaygroundController < ApplicationController
   def vector_maker
     ### データを取得 ###
     @open     = Open.find(@open_id)
-    @product_ids = @open.products.order(id: :desc).pluck(:id)
+    @product_ids = @open.products.order(id: :asc).pluck(:id)
 
     @product_ids.each do |product_id|
       logger.debug "[[ #{product_id} ]]"
@@ -323,7 +323,7 @@ class System::PlaygroundController < ApplicationController
         # (res > 0 || mine == true) ? [pid, res]  : nil
         (res > 0 ) ? [pid, res]  : nil
       end
-    end.compact.sort_by { |v| v[1] }.first(30).to_h
+    end.compact.sort_by { |v| v[1] }.first(50).to_h
 
 
     # ベクトルキャシュ更新
