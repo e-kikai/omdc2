@@ -1,10 +1,13 @@
 .thumbnail.product-pannel_02
   / = link_to "/products/#{product.id}?r=#{r}", target: "_blank", title: product.name, class: "product_link" do
-  = link_to "#{@link_base}/detail/#{product.id}?r=#{r}", target: "_blank", title: product.name, class: "product_link" do
+  = link_to "#{@link_base}images/#{product.id}", target: "_blank", title: product.name, class: "product_link" do
     .thumb_img
       / = image_tag(product.thumb_url, alt: product.name)
       - if product.product_images.first.present?
-        = image_tag("#{@img_base}/#{product.product_images.first.id}/thumb_#{product.product_images.first.image_identifier}", alt: product.name)
+        / = image_tag("#{@img_base}/#{product.product_images.first.id}/thumb_#{product.product_images.first.image_identifier}", alt: product.name)
+
+        = image_tag("#{@img_base}/#{product.product_images.first.id}/thumb_#{product.product_images.first.image_identifier}", srcset: {"#{@img_base}/#{product.product_images.first.id}/view_#{product.product_images.first.image_identifier}" => "2x"}, alt: product.name)
+
       - else
         = image_tag(ProductImage::NOIMAGE_THUMB, alt: product.name)
 
