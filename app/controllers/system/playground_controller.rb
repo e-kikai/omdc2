@@ -18,9 +18,7 @@ class System::PlaygroundController < ApplicationController
   def search_01
     # 初期検索クエリ作成
     @open = Open.find(@open_id)
-    @products = @open.products
-      .includes(:product_images, :genre, :company)
-      .order(id: :desc)
+    @products = @open.products.includes(:product_images, :genre, :company).order(:id)
 
     ### 通常サーチ ###
     ### 検索キーワード ###
@@ -41,6 +39,8 @@ class System::PlaygroundController < ApplicationController
       ### 似たものサーチ ###
       @time = Benchmark.realtime do
         @target = Product.find(params[:product_id])
+
+        @products = @open.products.includes(:product_images, :genre, :company).order(:id) if params[:scope] == "all" # 全体検索
         @sorts = sort_by_vector(@target, @products)
 
         @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
@@ -294,7 +294,7 @@ class System::PlaygroundController < ApplicationController
 
     return Product.none if target_vector.nil?
 
-    sorts = products.pluck(:id).map do |pid|
+    sorts = products.distinct.pluck(:id).map do |pid|
       ### ベクトルの取得 ###
       pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
         vectors[pid]
