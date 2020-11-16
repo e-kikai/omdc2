@@ -1,0 +1,193 @@
+- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model}商品詳細"
+/ - breadcrumb  :detail, @product
+
+css:
+  .thumbnail img {
+    max-height: 136px;
+    max-width: 150px;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+.row
+  .col-sm-12.col-md-6
+    .panel.panel-default
+      .panel-heading 商品詳細
+      .panel-body
+        table.table.table-condensed.table-detail
+          tr
+            th No.
+            td = @product.list_no
+          tr
+            th ジャンル
+            td #{@product.xl_genre.name} > #{@product.large_genre.name} > #{@product.genre.name}
+          tr
+            th 商品名
+            td #{@product.name}
+          tr
+            th メーカー
+            td #{@product.maker}
+          tr
+            th 型式
+            td #{@product.model}
+          tr
+            th 最低入札金額
+            td = number_to_currency(@product.min_price)
+          tr
+            th 年式
+            td = @product.year
+          tr
+            th 展示場所
+            td
+             - if @product.display == "店頭出品"
+              . = @product.company.try(:name)
+              . = @product.company.try(:address)
+             - else
+                = @product.area.name
+          tr
+            th 仕様
+            td = simple_format(@product.spec)
+          tr
+            th 現状
+            td = simple_format(@product.condition)
+    .form-group id="wishlist_#{@product.id}"
+      - if Array(session[:wishlist]).include? @product.id
+        = link_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create", style: "display:none;" do
+          span.glyphicon.glyphicon-bookmark
+          =< "ウィッシュリストに追加"
+        = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete" do
+          span.glyphicon.glyphicon-remove
+          =< "ウィッシュリストから削除"
+      - else
+        = link_to "/wishlist/?id=#{@product.id}", method: :post, remote: true, class: "btn btn-primary btn-lg wishlist-create" do
+          span.glyphicon.glyphicon-bookmark
+          =< "ウィッシュリストに追加"
+        = link_to "/wishlist/#{@product.id}", method: :delete, remote: true, class: "btn btn-danger btn-lg wishlist-delete", style: "display:none;" do
+          span.glyphicon.glyphicon-remove
+          =< "ウィッシュリストから削除"
+      - if company_signed_in?
+        = link_to "/bid/bids/new?list_no=#{@product.list_no}", target: "_blank", class: "btn btn-success btn-lg" do
+          span.glyphicon.glyphicon-pencil
+          span.btn-content 入札ページへリンク
+
+    h4 商品に関する問い合わせについて
+    .contact-info 商品に関する問い合わせは、入札を依頼される商社へお問い合せ下さい
+
+
+    / .form-group
+    /   = button_tag :button, class: "btn btn-warning btn-lg", data: { toggle: :modal, target: "#sampleModal" } do
+    /     span.glyphicon.glyphicon-earphone
+    /     =< "電話で問い合わせ"
+    /   = link_to "/contact/#{@product.id}", class: "btn btn-warning btn-lg" do
+    /     span.glyphicon.glyphicon-envelope
+    /     =< "メールで問い合わせ"
+    /
+    / .modal.fade#sampleModal tabindex="-1"
+    /   .modal-dialog
+    /     .modal-content
+    /       .modal-header
+    /         = button_tag :button, class: :close, data: { dismiss: :modal} do
+    /           span ☓
+    /         h4 電話で問い合わせ
+    /       .modal-body
+    /         iframe src="/contact_tel/#{@product.id}" style="width:100%;height:320px;" frameborder="0"
+
+    .map-area
+      - if @product.display == "店頭出品"
+        - address = "#{@product.company.address}+#{@product.company.name}"
+        iframe id="gmap2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="100%" height="400" src="http://maps.google.co.jp/maps?f=q&q=#{address}&source=s_q&hl=ja&geocode=ie=UTF8&t=m&output=embed"
+        br
+        = link_to "大きな地図で見る",    "https://maps.google.co.jp/maps?f=q&q=#{address}&source=embed&hl=ja&geocode=&ie=UTF8&t=m", style: "color:#0000FF;text-align:left", target: "_blank"
+      - elsif @product.area.try(:image)
+        / = image_tag @product.area.image.view.url, style: "width:100%;"
+        / = image_tag("#{@img_base}/#{@product.area.image.id}/thumb_#{@product.area.image.image_identifier}", srcset: {"#{@img_base}/#{@product.area.image.id}/view_#{@product.area.image.image_identifier}" => "2x"}, alt: @product.name, style: "width:100%;")
+
+
+    / - if @genre_recommend
+    /   h4 この商品と同じジャンルの商品
+    /   .same-area style="overflow-x:scroll;border:1px solid #CCC;"
+    /     .same-body style="white-space:nowrap;"
+    /       - @genre_recommend.each do |p|
+    /         - next if p.id == @product.id
+    /         . style="width:160px;height:200px;display:inline-block;margin-left:8px;"
+    /           .thumbnail style="height:100%;white-space:normal;overflow:hidden;"
+    /
+    /             = link_to "/detail/#{p.id}" do
+    /               - if p.top_image
+    /                 / = image_tag p.top_image.image.thumb.url, style: "width:100%;"
+    /                 = image_tag("#{@img_base}/#{p.top_image.id}/thumb_#{p.top_image.image_identifier}", srcset: {"#{@img_base}/#{p.top_image.id}/view_#{p.top_image.image_identifier}" => "2x"}, alt: p.name, style: "width:100%;")
+    /
+    /               - else
+    /                 = image_tag "noimg_thumb.png", style: "width:100%;"
+    /               .list_no No. #{p.list_no}
+    /               .name #{p.name} #{p.maker} #{p.model}
+    /             .price = number_to_currency(p.min_price)
+
+  .col-sm-12.col-md-6
+    - if @product.youtube.present?
+      h3
+        span.glyphicon.glyphicon-film
+        span.btn-content 商品動画
+      .youtube-area.embed-responsive.embed-responsive-16by9
+        iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
+    .show-imgs-area
+      h3
+        span.glyphicon.glyphicon-picture
+        span.btn-content 画像一覧
+      - if @product.product_images.size > 0
+        - @product.product_images.each do |i|
+          / = image_tag i.image.view.url
+          = image_tag("#{@img_base}/#{i.id}/thumb_#{i.image_identifier}", srcset: {"#{@img_base}/#{i.id}/view_#{i.image_identifier}" => "2x"}, alt: @product.name)
+
+      - else
+        = image_tag "noimg_view.png"
+
+.row
+  .col-sm-12.col-md-12
+
+    - if @nitamono_recommend
+      h4
+        span.glyphicon.glyphicon-camera
+        span.btn-content この商品と似ている商品
+
+      .same-area style="overflow-x:scroll;border:1px solid #CCC;"
+        .same-body style="white-space:nowrap;"
+          - @nitamono_recommend.each do |p|
+            - next if p.id == @product.id
+            . style="width:160px;height:200px;display:inline-block;margin-left:8px;"
+              .thumbnail style="height:100%;white-space:normal;overflow:hidden;"
+
+                = link_to "/system/playground/#{p.id}", target: "_blank" do
+                  - if p.top_image
+                    / = image_tag p.top_image.image.thumb.url, style: "width:100%;"
+                    = image_tag("#{@img_base}/#{p.top_image.id}/thumb_#{p.top_image.image_identifier}", srcset: {"#{@img_base}/#{p.top_image.id}/view_#{p.top_image.image_identifier}" => "2x"}, alt: p.name, style: "width:100%;")
+
+                  - else
+                    = image_tag "noimg_thumb.png", style: "width:100%;"
+                  .list_no No. #{p.list_no}
+                  .name #{p.name} #{p.maker} #{p.model}
+                .price = number_to_currency(p.min_price)
+
+    - if @genre_recommend
+      h4
+        span.glyphicon.glyphicon-thumbs-up
+        span.btn-content この商品と同じジャンルの商品
+
+      .same-area style="overflow-x:scroll;border:1px solid #CCC;"
+        .same-body style="white-space:nowrap;"
+          - @genre_recommend.each do |p|
+            - next if p.id == @product.id
+            . style="width:160px;height:200px;display:inline-block;margin-left:8px;"
+              .thumbnail style="height:100%;white-space:normal;overflow:hidden;"
+
+                = link_to "/system/playground/#{p.id}", target: "_blank" do
+                  - if p.top_image
+                    / = image_tag p.top_image.image.thumb.url, style: "width:100%;"
+                    = image_tag("#{@img_base}/#{p.top_image.id}/thumb_#{p.top_image.image_identifier}", srcset: {"#{@img_base}/#{p.top_image.id}/view_#{p.top_image.image_identifier}" => "2x"}, alt: p.name, style: "width:100%;")
+
+                  - else
+                    = image_tag "noimg_thumb.png", style: "width:100%;"
+                  .list_no No. #{p.list_no}
+                  .name #{p.name} #{p.maker} #{p.model}
+                .price = number_to_currency(p.min_price)

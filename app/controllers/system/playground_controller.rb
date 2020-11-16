@@ -154,6 +154,20 @@ class System::PlaygroundController < ApplicationController
   #   redirect_to "/system/playground/search_01", alert: "ベクトル変換エラー : #{e.message}"
   end
 
+  def show
+    @open = Open.find(@open_id)
+    @products = @open.products.includes(:product_images, :genre, :company).order(:id)
+
+    @product = @products.find(params[:id])
+
+    ### ジャンルレコメンド ###
+    @genre_recommend = @products.includes(:product_images, :genre, :company).where(genre: @product.genre).limit(32)
+
+    ### 似たものレコメンド ###
+    @sorts              = sort_by_vector(@product, @products, 12)
+    @nitamono_recommend = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
+  end
+
   private
 
   ### ベクトル変換処理 ###
@@ -261,7 +275,7 @@ class System::PlaygroundController < ApplicationController
     end
   end
 
-  def sort_by_vector(target, products)
+  def sort_by_vector(target, products, limit=50)
     logger.debug ":::: start ::::::"
 
     return Product.none if target.nil?
@@ -323,7 +337,7 @@ class System::PlaygroundController < ApplicationController
         # (res > 0 || mine == true) ? [pid, res]  : nil
         (res > 0 ) ? [pid, res]  : nil
       end
-    end.compact.sort_by { |v| v[1] }.first(50).to_h
+    end.compact.sort_by { |v| v[1] }.first(limit).to_h
 
 
     # ベクトルキャシュ更新
@@ -335,7 +349,7 @@ class System::PlaygroundController < ApplicationController
 
   ### テスト用DB切替 ###
   def change_db
-    Thread.current[:request] = request
+    # Thread.current[:request] = request
 
     case Rails.env
     when "production"; redirect_to "/"
@@ -349,7 +363,8 @@ class System::PlaygroundController < ApplicationController
     when "development"
       ActiveRecord::Base.establish_connection(:test_01)
       @img_base    = "https://s3-ap-northeast-1.amazonaws.com/omdc2/uploads/product_image/image"
-      @link_base   = "https://www.大阪機械団地.jp/"
+      # @link_base   = "https://www.大阪機械団地.jp/"
+      @link_base   = "http://192.168.33.110:8082/"
       @bucket_name = "omdc2"
 
       @open_id = 59

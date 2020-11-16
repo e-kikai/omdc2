@@ -104,7 +104,7 @@ Rails.application.routes.draw do
     end
 
     unless Rails.env.production?
-      resources :playground, only: [:index] do
+      resources :playground, only: [:show] do
         collection do
           get 'search_01'
           get 'vector_maker'
