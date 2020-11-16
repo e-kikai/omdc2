@@ -356,7 +356,8 @@ class System::PlaygroundController < ApplicationController
     when "staging"
       ActiveRecord::Base.establish_connection(:test_01)
       @img_base    = "https://s3-ap-northeast-1.amazonaws.com/omdc2/uploads/product_image/image"
-      @link_base   = "https://www.大阪機械団地.jp/"
+      # @link_base   = "https://www.大阪機械団地.jp/"
+      @link_base   = "http://192.168.33.110:8082/"
       @bucket_name = "omdc2"
 
       @open_id = 59
