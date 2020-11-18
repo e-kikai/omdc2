@@ -61,6 +61,29 @@ class System::PlaygroundController < ApplicationController
     end
   end
 
+  def search_02
+    # 初期検索クエリ作成
+    @open = Open.find(@open_id)
+
+    ### 画像ファイル検索 ###
+    if params[:image]
+      @time = Benchmark.realtime do
+        @products = @open.products.includes(:product_images, :genre, :company)
+        @sorts = sort_by_vector(params[:image], @products)
+
+        @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
+      end
+    end
+  end
+
+  def image
+    tmp_img_path = "#{VECTORS_PATH}/#{params[:filename]}"
+
+    respond_to do |format|
+      format.jpeg { send_file tmp_img_path, type: 'image/jpeg', disposition: 'inline' }
+    end
+  end
+
   def mock_list_01
   end
 
@@ -291,10 +314,33 @@ class System::PlaygroundController < ApplicationController
 
     bucket = resource.bucket(@bucket_name)
     update_flag = false
-    logger.debug ":::: #{bucket} ::::::"
 
     ### ターゲットベクトル取得 ###
-    target_vector = if vectors[target.id].present? # キャッシュからベクトル取得
+    target_vector =  if target.try(:path)  # 画像ファイルから
+      image_path      = target.path
+      tmp_img_path    = "#{VECTORS_PATH}/#{target.original_filename}"
+
+      vector_path     = "#{VECTORS_PATH}/#{target.original_filename}.npy"
+      tmp_vector_path = "/tmp/#{target.original_filename}.npy"
+
+      logger.debug "*** 3 : #{vector_path}"
+
+      ### 同じファイルがなければ ###
+      unless File.exist? tmp_vector_path
+        FileUtils.mv(image_path, tmp_img_path)
+
+        # プロセス
+        logger.debug "*** process ***"
+
+        cmd = "cd #{UTILS_PATH} && python3 process_images.py --image_files=\"#{tmp_img_path}\";"
+        logger.debug "*** 4 : #{cmd}"
+        o, e, s = Open3.capture3(cmd)
+
+        FileUtils.mv(vector_path, tmp_vector_path)
+      end
+
+      Npy.load_string(File.read(tmp_vector_path))
+    elsif vectors[target.id].present? # キャッシュからベクトル取得
       vectors[target.id]
     elsif bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").exists? # アップロードファイルからベクトル取得
       str = bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").get.body.read
@@ -302,9 +348,6 @@ class System::PlaygroundController < ApplicationController
     else # ない場合
       nil
     end
-
-    logger.debug ":::: #{target.id} ::::::"
-    logger.debug target_vector
 
     return Product.none if target_vector.nil?
 
@@ -332,7 +375,7 @@ class System::PlaygroundController < ApplicationController
         sub = pr_narray - target_vector
         res = (sub * sub).sum
 
-        logger.debug "#{pid} : #{res}"
+        # logger.debug "#{pid} : #{res}"
 
         # (res > 0 || mine == true) ? [pid, res]  : nil
         (res > 0 ) ? [pid, res]  : nil
@@ -383,5 +426,9 @@ class System::PlaygroundController < ApplicationController
     if Rails.env == "staging"
       ActiveRecord::Base.establish_connection(:staging)
     end
+  end
+
+  def search_02_params
+    params.permit(:images)
   end
 end

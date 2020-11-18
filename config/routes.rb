@@ -107,6 +107,10 @@ Rails.application.routes.draw do
       resources :playground, only: [:show] do
         collection do
           get 'search_01'
+          get 'search_02'
+          post 'search_02'
+          get 'image'
+
           get 'vector_maker'
           get 'vector_maker_solo'
 

@@ -1,4 +1,4 @@
-- set_meta_tags title: "画像特徴ベクトル検索・ソート 01"
+- set_meta_tags title: "画像ファイル検索 02"
 / - breadcrumb :system_something, "出品商品履歴"
 
 css:
@@ -173,19 +173,25 @@ css:
     color: #111;
   }
 
+  img.upload_image {
+    max-width: 320px;
+    max-height: 240px;
+  }
 
 .breadcrumb
     li = link_to "画像特徴ベクトル検索・ソート ", "/system/playground/search_01"
     li = link_to "画像ファイル検索", "/system/playground/search_02"
 
-= form_tag("/system/playground/search_01", method: "get", class: "form-inline filtering-form") do
-  = text_field_tag :keywords, @keywords.to_s, class: "form-control", placeholder: "キーワードから探す - 空白区切りでAND検索できます"
-  = select_tag :genre_id, options_for_select(@genre_selector, selected: params[:genre_id]), {include_blank: "-- カテゴリ --", class: "form-control"}
+= form_tag("/system/playground/search_02", enctype: "multipart/form-data", method: "post", class: "form-inline filtering-form") do
+
+  / = text_field_tag :keywords, @keywords.to_s, class: "form-control", placeholder: "キーワードから探す - 空白区切りでAND検索できます"
+  / = select_tag :genre_id, options_for_select(@genre_selector, selected: params[:genre_id]), {include_blank: "-- カテゴリ --", class: "form-control"}
 
   / = select_tag :type, options_for_select({"ノルム(NArray)" => :narray, "ノルム(NArray) + 一括キャッシュ" => :redis, "ノルム(NArray) + 個別キャッシュ" => :solo_cache, "ノルム" => :norm, "角度(コサイン類似度)" => :angle}, selected: params[:type]), {class: "form-control"}
 
-  = select_tag :scope, options_for_select({"類似画像ソート" => :sort, "類似画像検索" => :all}, selected: params[:scope]), {class: "form-control"}
+  / = select_tag :scope, options_for_select({"類似画像ソート" => :sort, "類似画像検索" => :all}, selected: params[:scope]), {class: "form-control"}
 
+  = file_field_tag "image", class: "form-control", accept: 'image/jpg,image/jpeg,image/png'
 
   = hidden_field_tag :type, :redis
 
@@ -193,27 +199,23 @@ css:
     span.glyphicon.glyphicon-search
     span.btn-content 検索
 
-  = link_to "/system/playground/search_01", class: "btn btn-danger pull-right" do
+  = link_to "/system/playground/search_02", class: "btn btn-danger pull-right" do
     span.glyphicon.glyphicon-remove
     span.btn-content リセット
 
   .
-    - if @pproducts.present?
-      . = paginate @pproducts
+    - if params[:image]
+      h4 「#{params[:image].original_filename}」に類似した商品検索 (検索速度 : #{@time} sec)
+      / = render "product_panel_03_img", product: @target, r: :src_pnl
+      = image_tag("/system/playground/image.jpeg?filename=#{params[:image].original_filename}", alt: "", class: "upload_image")
 
-    - if @products.blank?
-      .alert.alert-success
-        span.glyphicon.glyphicon-info-sign
-        span.btn-content フォームから検索してください
-
-    - if @target.present?
-      h4 この商品に類似した商品ソート (検索速度 : #{@time} sec)
-      = render "product_panel_03_img", product: @target, r: :src_pnl
       hr
 
-    .product_area
-      -(@pproducts || @products).each do |pr|
-        = render "product_panel_03_img", product: pr, r: :src_pnl
+      .product_area
+        -(@products).each do |pr|
+          = render "product_panel_03_img", product: pr, r: :src_pnl
 
-  - if @pproducts.present?
-    . = paginate @pproducts
+    - else
+      .alert.alert-success
+        span.glyphicon.glyphicon-info-sign
+        span.btn-content 画像ファイル(JPEG)を選択肢検索をしてください
