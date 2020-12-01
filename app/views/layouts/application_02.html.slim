@@ -1,0 +1,59 @@
+doctype html
+html.layout2
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    = display_meta_tags site: "機械団地電子入札システム2.1", reverse: true, separator: "｜", nofollow: true, noindex: true
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => :reload
+    = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
+    = csrf_meta_tags
+
+    = analytics_init if Rails.env.production?
+
+  body onLoad="FixedMidashi.create();"
+
+    section#headline.login
+      .container
+        ul
+          li = link_to "ユーザ登録", "/users/sign_up"
+          li = link_to "ログイン",   "/users/sign_in"
+          li = link_to "javascript:window.print();" do
+            i.fas.fa-print
+            span.btn-content ページを印刷
+
+
+    header
+      .container
+        h1#logo = link_to "/" do
+          = image_tag("logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会 電子入札システム2.1")
+        ul#navi
+          li = link_to "はじめての方へ", "/help/new"
+          li = link_to "よくある質問",   "/help/faq"
+          li = link_to "お問い合わせ",   "/contacts/new"
+          li = link_to "組合員ページ",   "/bid/",         target: "_blank"
+
+    section.pan
+      .container = breadcrumbs style: :ul, semantic: true
+
+    .container
+      - if notice.present?
+        .alert.alert-success
+          span.glyphicon.glyphicon-info-sign
+          span.btn-content = simple_format(notice, {}, wrapper_tag: :span)
+      - if alert.present?
+        .alert.alert-danger
+          span.glyphicon.glyphicon-alert
+          span.btn-content = simple_format(alert, {}, wrapper_tag: :span)
+    section.rule
+      .container
+        = yield
+
+    footer.container-fluid
+      | Copyright &copy; #{Time.now.year}
+      span.button_content = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank"
+      | , All Rights reserved.
+
+    = button_tag "", class: "btn btn-default btn-square", id: "page-top" do
+      span.glyphicon.glyphicon-arrow-up
+      span.btn-content 一番上に戻る

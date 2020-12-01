@@ -97,3 +97,11 @@ ja:
       display:
         title: タイトル
         display: 表示
+      contact:
+        name: お名前(氏名)
+        company: 会社名
+        mail: メールアドレス
+        tel: 電話番号
+        addr_1: 都道府県
+        content: 内容
+        allow_mail: 事務局からの案内メール

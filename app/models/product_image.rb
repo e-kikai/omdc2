@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: product_images
+#
+#  id         :integer          not null, primary key
+#  image      :text
+#  order_no   :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  product_id :integer          not null
+#
+# Indexes
+#
+#  index_product_images_on_product_id  (product_id)
+#
 class ProductImage < ApplicationRecord
   NOIMAGE_THUMB = "noimg_thumb.png"
 

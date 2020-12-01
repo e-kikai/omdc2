@@ -23,6 +23,9 @@ $icon-font-path: "bootstrap-sass-official/assets/fonts/bootstrap/";
 @import "bootstrap-sass-official/bootstrap";
 @import 'bootstrap-fileinput'; /// header ///
 
+@import 'font-awesome-sprockets';
+@import 'font-awesome';
+
 header {
   .omdc-logo {
     padding: 2px 16px;
@@ -860,5 +863,17 @@ body.bt {
   .col-md-3 {
     padding-left: 5px;
     padding-right: 5px;
+  }
+}
+
+table.table-detail {
+  th {
+    min-width: 120px;
+  }
+}
+
+.imgs-area {
+  img {
+    margin-top: 8px;
   }
 }

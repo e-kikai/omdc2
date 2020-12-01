@@ -188,3 +188,8 @@ gem 'npy'
 # gem 'redis-rails'
 
 gem 'aws-sdk-s3', '~> 1'
+
+### 20201126 ###
+gem 'font-awesome-sass'
+gem "mailchimp-api",   require: "mailchimp"
+gem 'recaptcha',       require: "recaptcha/rails"

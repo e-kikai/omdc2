@@ -46,5 +46,7 @@ module Omdc2
         request_specs: false
       g.fixture_replacement :factory_girl, dir: "spec/factories"
     end
+
+    config.mail_logger = Logger.new("log/mail_#{Rails.env}.log")
   end
 end

@@ -6,6 +6,8 @@ class System::PlaygroundController < ApplicationController
   after_action  :restore_db
   rescue_from   { restore_db }
 
+  layout "application_02"
+
 
   UTILS_PATH   = "/var/www/yoshida/utils"
   VECTORS_PATH = "#{UTILS_PATH}/static/image_vectors"

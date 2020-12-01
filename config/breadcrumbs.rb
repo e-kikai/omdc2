@@ -38,6 +38,15 @@ end
 #   parent :detail, product
 # end
 
+crumb :contact do
+  link   "事務局への問い合わせ"
+  parent :root
+end
+
+crumb :contact_fin do
+  link   "問い合わせ完了"
+  parent :contact
+end
 
 ### 管理者画面 ###
 crumb :system_root do

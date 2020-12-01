@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_083305) do
+ActiveRecord::Schema.define(version: 2020_11_30_142048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,18 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.index ["company_id"], name: "index_bids_on_company_id"
     t.index ["product_id"], name: "index_bids_on_product_id"
     t.index ["soft_destroyed_at"], name: "index_bids_on_soft_destroyed_at"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.text "comment", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["company_id"], name: "index_chats_on_company_id"
+    t.index ["soft_destroyed_at"], name: "index_chats_on_soft_destroyed_at"
+    t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
   create_table "companies", id: :serial, force: :cascade do |t|
@@ -72,6 +84,39 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.index ["soft_destroyed_at"], name: "index_companies_on_soft_destroyed_at"
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name", null: false
+    t.string "company", null: false
+    t.string "mail", null: false
+    t.string "tel"
+    t.string "addr_1"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "soft_destroyed_at"
+    t.boolean "allow_mail", default: true
+    t.string "ip", default: ""
+    t.string "host", default: ""
+    t.string "ua", default: ""
+    t.index ["soft_destroyed_at"], name: "index_contacts_on_soft_destroyed_at"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
+  end
+
+  create_table "detail_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.string "ip", default: ""
+    t.string "host", default: ""
+    t.string "ua", default: ""
+    t.string "referer"
+    t.string "r", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_detail_logs_on_product_id"
+    t.index ["user_id"], name: "index_detail_logs_on_user_id"
+  end
+
   create_table "displays", id: :serial, force: :cascade do |t|
     t.string "label"
     t.string "title"
@@ -81,6 +126,26 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.datetime "soft_destroyed_at"
     t.index ["label"], name: "index_displays_on_label"
     t.index ["soft_destroyed_at"], name: "index_displays_on_soft_destroyed_at"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["product_id"], name: "index_favorites_on_product_id"
+    t.index ["soft_destroyed_at"], name: "index_favorites_on_soft_destroyed_at"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "genre_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "genre_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["genre_id"], name: "index_genre_users_on_genre_id"
+    t.index ["user_id"], name: "index_genre_users_on_user_id"
   end
 
   create_table "genres", id: :serial, force: :cascade do |t|
@@ -95,6 +160,24 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.datetime "soft_destroyed_at"
     t.index ["large_genre_id"], name: "index_genres_on_large_genre_id"
     t.index ["soft_destroyed_at"], name: "index_genres_on_soft_destroyed_at"
+  end
+
+  create_table "industries", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.integer "order_no", default: 9999999, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["soft_destroyed_at"], name: "index_industries_on_soft_destroyed_at"
+  end
+
+  create_table "industry_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "industry_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["industry_id"], name: "index_industry_users_on_industry_id"
+    t.index ["user_id"], name: "index_industry_users_on_user_id"
   end
 
   create_table "infos", id: :serial, force: :cascade do |t|
@@ -192,6 +275,21 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at"
   end
 
+  create_table "requests", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "product_id"
+    t.bigint "company_id"
+    t.integer "amount"
+    t.datetime "bided_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "soft_destroyed_at"
+    t.index ["company_id"], name: "index_requests_on_company_id"
+    t.index ["product_id"], name: "index_requests_on_product_id"
+    t.index ["soft_destroyed_at"], name: "index_requests_on_soft_destroyed_at"
+    t.index ["user_id"], name: "index_requests_on_user_id"
+  end
+
   create_table "sessions", id: :serial, force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
@@ -221,6 +319,38 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.index ["soft_destroyed_at"], name: "index_systems_on_soft_destroyed_at"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", null: false
+    t.string "company", null: false
+    t.boolean "allow_mail", default: true
+    t.string "tel"
+    t.string "fax"
+    t.string "zip"
+    t.string "addr"
+    t.bigint "company_id"
+    t.datetime "soft_destroyed_at"
+    t.index ["company_id"], name: "index_users_on_company_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["soft_destroyed_at"], name: "index_users_on_soft_destroyed_at"
+  end
+
   create_table "xl_genres", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "order_no"
@@ -230,4 +360,8 @@ ActiveRecord::Schema.define(version: 2020_10_08_083305) do
     t.index ["soft_destroyed_at"], name: "index_xl_genres_on_soft_destroyed_at"
   end
 
+  add_foreign_key "genre_users", "genres"
+  add_foreign_key "genre_users", "users"
+  add_foreign_key "industry_users", "industries"
+  add_foreign_key "industry_users", "users"
 end

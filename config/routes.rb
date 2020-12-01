@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   namespace :system do
     get 'displays/index'
   end
@@ -38,6 +39,12 @@ Rails.application.routes.draw do
   # get  "search_by_ml"      => "products#search_by_ml"
 
   resources :wishlist, only: [:index, :create, :destroy]
+
+  resources :contacts, only: [:new, :create] do
+    collection do
+      get :fin
+    end
+  end
 
   namespace :system do
     root to: "main#index"

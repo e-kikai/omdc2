@@ -42,4 +42,8 @@ class ApplicationController < ActionController::Base
       redirect_to "/", notice: "下見期間開始前です (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
     end
   end
+
+  def ip
+    request.env["HTTP_X_FORWARDED_FOR"].split(",").first.strip || request.remote_ip
+  end
 end
