@@ -2,7 +2,7 @@ class Mypage::FavoritesController < Mypage::ApplicationController
   before_action :get_favorites
 
   def index
-    @search    = open_now..products.where(id: @favorites.select(:id))search(params[:q])
+    @search    = open_now..products.where(id: @favorites.select(:id)).search(params[:q])
     @products  = @search.result.includes(:product_images)
 
     @pproducts = @products.page(params[:page])
