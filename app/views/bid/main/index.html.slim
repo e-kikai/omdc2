@@ -9,6 +9,20 @@
     .infos = simple_format Info.comment(:bid)
 
     hr
+    / ul.nav.nav-pills
+    /   li =  link_to "/bid/users", class: "btn btn-default btn-square" do
+    /     i.fas.fa-user-friends
+    /     span.btn-content 取引ユーザ一覧
+    /
+    /   li =  link_to "/bid/users/new", class: "btn btn-default btn-square" do
+    /     i.fas.fa-user-plus
+    /     span.btn-content 取引ユーザ登録
+    /
+    /   li =  link_to "/bid/users/csv", class: "btn btn-default btn-square btn-twoline" do
+    /     i.fas.fa-file-import
+    /     span.btn-content 取引ユーザ<br />CSV一括登録
+    / hr
+
     ul.nav.nav-pills
       li = link_to "/omdc2_manual.pdf", class: "btn btn-default btn-square" do
         span.glyphicon.glyphicon-info-sign
@@ -54,6 +68,10 @@
         span.glyphicon.glyphicon-pencil: span.menu-title 入札
       .panel-body
         ul.nav.nav-pills
+          / li.nav-sepa =  link_to "/bid/requests", class: "btn btn-default btn-square" do
+          /     i.fas.fa-user-tag
+          /     span.btn-content 入札依頼一覧
+
           li = link_to "/bid/bids/new", class: "btn btn-default btn-square #{:disabled unless @open_now.bid?}" do
             span.glyphicon.glyphicon-pencil
             span.btn-content 入札

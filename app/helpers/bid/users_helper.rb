@@ -1,0 +1,2 @@
+module Bid::UsersHelper
+end

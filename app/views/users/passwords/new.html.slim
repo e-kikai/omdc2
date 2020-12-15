@@ -1,0 +1,19 @@
+- set_meta_tags title: "パスワード再設定方法メールの送信"
+- set_meta_tags nofollow: true, noindex: true
+- breadcrumb  :something, "パスワード再設定方法メールの送信"
+
+h2 パスワード再設定方法メールの送信
+.panel
+  .panel-body
+    = form_for resource, as: resource_name, url: password_path(resource_name) do |f|
+
+      .form-group
+        = f.label :email
+        = f.text_field :email, required: "required", autofocus: true, class: "form-control"
+
+
+      = f.button type:"submit", class: 'btn-submit', data: {disable_with: '送信中・・・' } do
+        i.fas.fa-paper-plane
+        span.btn-content 再設定方法メールを送信
+
+    = render 'users/shared/links'

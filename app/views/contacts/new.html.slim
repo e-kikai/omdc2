@@ -55,20 +55,15 @@ h2 事務局への問い合わせ
             = f.label :allow_mail
             span.cck01 必須
           td
-            = f.radio_button :allow_mail, true
-            = label_tag :allow_mail_true, "受け取る", class: "radio-inline"
-
-            = f.radio_button :allow_mail, false
-            = label_tag :allow_mail_false, "受け取らない", class: "radio-inline"
-
+            label = f.radio_button(:allow_mail, true)  + "受け取る"
+            label = f.radio_button(:allow_mail, false) + "受け取らない"
 
       .pp_box
         p.form-text
           | ご記入頂いた情報は、ご質問等に対するご返答及び、<br />
           | 当組合からのお知らせをご案内をさせて頂く以外の目的では使用致しません。
       .pp_box
-        = check_box_tag :agree, 1
-        = label_tag :agree, " 個人情報の取扱について同意します。", class: "checkbox-inline"
+        label = check_box_tag(:agree, 1) + "個人情報の取扱について同意します。"
 
       .pp_box = recaptcha_tags
 

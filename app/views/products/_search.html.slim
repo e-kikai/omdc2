@@ -1,0 +1,50 @@
+section.genre
+  h2 出品商品検索
+
+  .search_block
+    .search_box
+      h3 リストNo.からさがす
+      .search_body
+        = text_field_tag :list_no, "", placeholder: "リストNo.", class: ""
+        = button_tag type: :submit, class: "" do
+          i.fas.fa-search
+
+    .search_box
+      h3 最低入金額でさがす
+      .search_body
+        = form_tag "/products", method: :get, class: "form-inline" do
+          = text_field_tag "q[min_price_gteq]", "", placeholder: "〜以上", class: " price"
+          | 〜
+          = text_field_tag "q[min_price_lteq]", "", placeholder: " 〜以下", class: " price"
+          = button_tag type: :submit, class: "" do
+            i.fas.fa-search
+
+    .search_box
+      h3 キーワードでさがす
+      .search_body
+        = form_tag "/products", method: :get, class: "form-inline" do
+          = text_field_tag :keywords, "", placeholder: "商品名 メーカー 型式等", class: ""
+          = button_tag type: :submit, class: "" do
+            i.fas.fa-search
+
+    .search_box
+      h3 出品商品リスト
+      .search_body = link_to "リストNo.順", "/products?list_no=true"
+
+
+  .container
+    - xls = all_xl_counts.map { |x, v| {x: x, v: v} }
+    h2 ジャンルからさがす
+    - 0.step(xls.count, 4) do |no|
+      .flex_block
+        - xls.slice(no, 4).each do |xl|
+          ul
+            li = link_to "/search?xl_genre=#{xl[:x][0]}" do
+              = xl[:x][1]
+              span = xl[:v]
+
+            - all_large_counts.each do |l, v2|
+              - if l[1] == xl[:x][0]
+                li = link_to "/large_genre/#{l[0]}" do
+                  = l[2]
+                  span = v2

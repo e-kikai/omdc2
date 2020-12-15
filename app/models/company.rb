@@ -48,6 +48,9 @@ class Company < ApplicationRecord
 
   has_many :products
   has_many :bids
+  has_many :users, foreign_key: :window_id
+  has_many :requests
+
 
   validates :name,    presence: true
   validates :no,      presence: true, uniqueness: { scope: [:soft_destroyed_at] }, numericality: { only_integer: true }

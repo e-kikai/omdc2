@@ -1,6 +1,6 @@
 ### ユーザ画面 ###
 crumb :root do
-  link "TOP", "/"
+  link "機械入札工具会", "/"
 end
 
 crumb :something do |title|
@@ -212,4 +212,75 @@ end
 crumb :bid_opens_show do |open|
   link   "#{open.name} 落札結果一覧", "/system/opens/#{open.id}"
   parent :bid_opens
+end
+crumb :bid_users do
+  link   "取引ユーザ一覧", "/bid/users/"
+  parent :bid_root
+end
+
+crumb :bid_users_new do
+  link   "新規登録", "/bid/users/new"
+  parent :bid_users
+end
+
+crumb :bid_users_edit do |users|
+  link   "#{users.company} #{users.name}", "/bid/users/#{users.id}/edit"
+  parent :bid_users
+end
+
+crumb :bid_users_csv do
+  link   "CSV一括登録", "/bid/users/csv"
+  parent :bid_users
+end
+
+crumb :bid_users_csv_upload do
+  link   "登録確認", "/bid/users/csv"
+  parent :bid_users_csv
+end
+
+crumb :bid_requests do
+  link   "入札依頼一覧", "/bid/requests/"
+  parent :bid_root
+end
+
+crumb :bid_requests_user do |user|
+  link   "#{user.company} #{user.name}", "/bid/requests?user_id=#{user.id}"
+  parent :bid_requests
+end
+
+crumb :bid_requests_bid do |request|
+  link   "入札", "/bid/requests/#{request.id}"
+  parent :bid_requests_user, request.user
+end
+
+
+### マイページ ###
+crumb :mypage do
+  link   "マイページ", "/mypage/"
+  parent :root
+end
+
+crumb :mypage_something do |title|
+  link   title
+  parent :mypage_root
+end
+
+crumb :mypage_favolite do
+  link   "お気に入り一覧", "/mypage/favorites"
+  parent :mypage_root
+end
+
+crumb :mypage_contact do
+  link   "事務局への問い合わせ"
+  parent :mypage_root
+end
+
+crumb :mypage_contact_fin do
+  link   "問い合わせ完了"
+  parent :mypage_contact
+end
+
+crumb :mypage_user_edit do
+  link   "ユーザ情報変更", "/mypage/user/edit"
+  parent :mypage_root
 end

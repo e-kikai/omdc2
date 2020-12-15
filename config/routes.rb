@@ -1,25 +1,29 @@
 Rails.application.routes.draw do
-  devise_for :users
-  namespace :system do
-    get 'displays/index'
-  end
-
   devise_for :systems,
-    path:       'system',
-    path_names: {sign_in: 'login', sign_out: 'logout'},
-    only:       [:sessions]
+    path:        'system',
+    path_names:  {sign_in: 'login', sign_out: 'logout'},
+    only:        [:sessions],
+    controllers: { sessions: 'system/sessions' }
 
   devise_for :companies,
-    path:       'bid',
+    path:        'bid',
+    path_names:  {sign_in: 'login', sign_out: 'logout'},
+    only:        [:sessions],
+    controllers: { sessions: 'bid/sessions' }
+
+  devise_for :users,
+    path: :users,
     path_names: {sign_in: 'login', sign_out: 'logout'},
-    only:       [:sessions]
+    controllers: { registrations: 'users/registrations', confirmations: 'users/confirmations', sessions: 'users/sessions' }
+  # if Rails.env.development?
+  #   mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  # end
 
   root to: "main#index"
-
   get "mltest" => "main#get_ml_genre"
   get "qrcode" => "main#qrcode"
 
-  get  "search"                      => "products#index", as: :search
+  # get  "search"                      => "products#index", as: :search
   get  "xl_genre/:xl_genre_id"       => "products#index", as: :xl_genre
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
@@ -46,11 +50,35 @@ Rails.application.routes.draw do
     end
   end
 
+  # resources :helps, only: [:show]
+  get  "heip/:label" => "helps#show"
+
+  get "search" => "main#search"
+
+
+  ### マイページ ###
+  namespace :mypage do
+    root to: "main#index"
+
+    get   'edit_password' => 'main#edit_password'
+    patch 'edit_password' => 'main#update_password'
+
+    resources :products,  only: [:index]
+    resources :favolites, only: [:index, :create, :destroy] do
+      collection do
+        post "toggle"
+      end
+    end
+    resources :contacts,  only: [:new, :create]
+
+    resource  :user,      only: [:edit, :update]
+  end
+
   namespace :system do
     root to: "main#index"
 
-    get    'edit_password' => 'main#edit_password'
-    patch  'edit_password' => 'main#update_password'
+    get   'edit_password' => 'main#edit_password'
+    patch 'edit_password' => 'main#update_password'
 
     resources :opens do
       member do
@@ -165,6 +193,16 @@ Rails.application.routes.draw do
     end
 
     resources :opens, only: [:index, :show]
+
+    # resources :users, only: [:index, :new, :create, :edit, :update, :destroy] do
+    #   collection do
+    #     get   :csv
+    #     post  "csv" => :csv_upload
+    #     patch "csv" => :csv_import
+    #   end
+    # end
+    #
+    # resources :requests, only: [:index, :show, :update]
   end
 
   get '*path' => 'application#routing_error'

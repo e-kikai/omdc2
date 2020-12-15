@@ -1,0 +1,33 @@
+coffee:
+  $ ->
+    $('.js-csv-upload').fileinput
+      showPreview: false
+      maxFileCount: 1
+      browseClass: 'btn btn-info fileinput-browse-button'
+      browseIcon: '<span class="glyphicon glyphicon-folder-open"></span>'
+      browseLabel: ' ファイル選択'
+      removeClass: 'btn btn-warning'
+      removeIcon: '<span class="glyphicon glyphicon-remove"></span>'
+      removeLabel: ' キャンセル'
+      uploadClass: 'btn btn-success fileinput-upload-button'
+      uploadIcon: '<i class="fa fa-upload"></i>'
+      uploadLabel: ' アップロード'
+      allowedFileExtensions: ['csv']
+      msgValidationError: '''
+        <span class="text-danger">
+          <span class="glyphicon glyphicon-alert"></span>アップロードできるファイル形式はCSVです。
+        </span>
+      '''
+
+.col-md-8.col-md-offset-2
+   .form-group
+     = label_tag :csv, "CSVファイル"
+     = file_field_tag :file, class: "js-csv-upload", required: "required"
+     .help-block
+       li 取引ユーザを一括登録を行います。
+       li すでに自分でユーザ登録しているユーザは、パスワードなどは変更されず、<br />取引ユーザ設定のみ行います。
+       li すでに他の組合員と取引設定されている場合は、取引ユーザ設定は行われません。
+
+   = button_tag(data: { "disable-with" => "アップロード中..."}, class: "btn btn-default btn-square btn-submit center-block") do
+     i.fas.fa-file-upload
+     span.btn-content アップロード

@@ -1,0 +1,49 @@
+.col-md-offset-2.col-md-8
+  - if f.object.errors.full_messages.present?
+    .alert.alert-danger
+      ul
+        - f.object.errors.full_messages.each do |msg|
+          li = msg
+
+  table.table.table-hover.table-condensed.form-table
+    tr
+      th ID
+      td = f.object.id || "新規登録"
+
+    tr
+      th = f.label :email, class: :required
+      td = f.text_field :email, class: "form-control", required: "required"
+    tr
+      - if @user.new_record?
+        th = f.label :password, "初期パスワード", class: :required
+        td = f.text_field :password, class: "form-control short", required: "required"
+      - else
+        td colspan="2"  ※ パスワードの変更、再設定はユーザのみが行なえます。
+
+    tr
+      th = f.label :company, class: :required
+      td = f.text_field :company, class: "form-control", required: "required"
+    tr
+      th = f.label :name, class: :required
+      td = f.text_field :name, class: "form-control", required: "required"
+
+    tr
+      th = f.label :tel, class: :required
+      td = f.text_field :tel, class: "form-control", required: "required"
+    tr
+      th = f.label :zip, class: :required
+      td = f.text_field :zip, class: "form-control short", required: "required"
+    tr
+      th = f.label :addr, class: :required
+      td = f.text_field :addr, class: "form-control", required: "required"
+
+    tr
+      th = f.label :allow_mail, class: :required
+      td
+        label.radio-inline = f.radio_button(:allow_mail, true)  + "受け取る"
+        label.radio-inline = f.radio_button(:allow_mail, false) + "受け取らない"
+
+
+  = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
+    i.fas.fa-save
+    span.btn-content 保存

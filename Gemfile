@@ -193,3 +193,5 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'font-awesome-sass'
 gem "mailchimp-api",   require: "mailchimp"
 gem 'recaptcha',       require: "recaptcha/rails"
+
+gem 'html2slim', group: :development

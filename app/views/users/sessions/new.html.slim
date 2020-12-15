@@ -1,0 +1,24 @@
+- set_meta_tags title: "マイページ ログイン"
+- set_meta_tags nofollow: true, noindex: true
+- breadcrumb  :something, "マイページ ログイン"
+
+h2 マイページ ログイン
+.panel
+  .panel-body
+    = form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+
+      .form-group
+        = f.label :email
+        = f.text_field :email, required: "required", autofocus: true, class: "form-control"
+      .form-group
+        = f.label :password
+        = f.password_field :password, required: "required", autocomplete: "off", class: "form-control"
+      .checkbox-inline
+        = f.check_box :remember_me
+        = f.label :remember_me
+
+      = f.button type:"submit", class: 'btn-submit', data: {disable_with: 'ログイン中・・・' } do
+        i.fas.fa-sign-in-alt
+        span.btn-content ログイン
+
+    = render 'users/shared/links'

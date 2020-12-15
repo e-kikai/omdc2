@@ -1,0 +1,71 @@
+- set_meta_tags title: "取引ユーザ一覧"
+- breadcrumb  :bid_something, "取引ユーザ一覧"
+
+= search_form_for @search, url: "" do |s|
+  .
+    / = s.hidden_field :s, value: params.dig(:q, :s)
+    ul.nav.nav-pills
+      li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
+        i.fas.fa-user-plus
+        span.btn-content 新規登録
+      li.nav-sepa = link_to({action: :csv}, {class: "btn btn-default btn-square"}) do
+        i.fas.fa-file-import
+        span.btn-content CSV一括登録
+
+
+      li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+        i.fas.fa-file-csv
+        span.btn-content CSV出力
+
+    / - if @users.blank?
+    - if 1 == 2
+      .alert.alert-danger
+        i.fas.fa-exclamation-triangle
+        span.btn-content = "取引ユーザが登録されていません。「新規ユーザ登録」「CSV一括登録」から登録してください。"
+
+    - else
+      . 項目名をクリックすると、ソートすることができます
+
+      .scroll_div
+        table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-users _fixedhead='rows:1'
+          tr
+            th = s.sort_link :company,    "会社名・氏名"
+            / th = s.sort_link :name,       "氏名"
+            th = s.sort_link :email,      "メールアドレス"
+            th = s.sort_link :tel,        "TEL"
+            th = s.sort_link :zip,        "郵便番号・住所"
+            / th.num = s.sort_link :addr,   "住所"
+            th.button 変更
+            th.button 入札依頼
+            th.button チャット
+            th = s.sort_link :created_at, "登録日時"
+            th.button 解除
+
+          - @users.each do |us|
+            tr
+              td
+                .user_company = us.company
+                .user.name    = us.name
+              / td = us.name
+              td = us.email
+              td = us.tel
+              td
+                .zip = us.zip
+                .addr = us.addr
+              / td = us.addr
+              td.button = link_to "/bid/users/#{us.id}/edit", class: "btn btn-warning btn-sm" do
+                i.fas.fa-edit
+                span.btn-content 変更
+              td.button = link_to "/bid/requests?user_id=#{us.id}", class: "btn btn-success btn-sm" do
+                i.fas.fa-user-tag
+                span.btn-content 一覧
+              td.button = link_to "/bid/requests?user_id=#{us.id}", class: "btn btn-info btn-sm" do
+                i.fas.fa-comments
+                span.btn-content 取引
+
+              td = l(us.created_at, format: :short)
+              td.button
+                - message = "#{us.company} #{us.name}\n\nこのユーザの取引ユーザを解除します。\n\n※ 入札依頼やチャットは非表示なります。\n※ 入札依頼から行われた入札は有効です。"
+                = link_to({ action: :destroy, id: us.id }, method: :delete, data: { confirm: message, "disable-with" => "解除中..."}, class: "btn btn-default btn-xs") do
+                 i.fas.fa-user-times
+                 span.btn-content 解除

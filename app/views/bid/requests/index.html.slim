@@ -1,0 +1,83 @@
+- set_meta_tags title: "入札依頼一覧"
+- if @user.present?
+  - breadcrumb :bid_requests_user, @user
+- else
+  - breadcrumb :bid_requests
+
+- if @user.present?
+  h4 = "#{@user.company} #{@user.name} からの入札依頼"
+
+- if @requests.blank?
+  .alert.alert-danger
+    i.fas.fa-exclamation-triangle
+    span.btn-content = "取引ユーザからの入札依頼はまだありません。"
+
+- else
+  = search_form_for @search, url: "" do |s|
+    / = s.hidden_field :s, value: params.dig(:q, :s)
+    ul.nav.nav-pills
+      li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
+        i.fas.fa-file-pdf
+        span.btn-content 確認PDF
+
+      li.nav-sepa = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
+        i.fas.fa-file-csv
+        span.btn-content CSV出力
+
+      - if @user.present?
+        li = link_to "/bid/chats?user_id=#{@user.id}", class: "btn btn-default btn-square btn-twoline" do
+          i.fas.fa-comments
+          span.btn-content このユーザの<br />チャット
+
+    ul
+      li 項目名をクリックすると、ソートすることができます。
+      - if @user.blank?
+        li 依頼者名をクリックすると、その依頼者の依頼のみ表示できます。
+
+    .scroll_div
+      table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-requests _fixedhead='rows:1'
+        tr
+          th.id = s.sort_link :product_list_no,      "No."
+          th = s.sort_link    :product_name,         "商品名"
+          th = s.sort_link    :product_maker,        "メーカー"
+
+          - if @user.present?
+            th = s.sort_link  :product_model,        "型式"
+            th = s.sort_link  :product_year,         "年式"
+          th = s.sort_link    :product_company_name, "出品会社"
+          th = s.sort_link    :product_min_price,    "最低入札価格"
+          th = s.sort_link    :amount,               "依頼金額"
+          - if @user.blank?
+            th = s.sort_link  :user_company,         "依頼者"
+          th.button 入札実行
+          - if @user.blank?
+            th.button チャット
+          th = s.sort_link :created_at,              "登録日時"
+          th 済
+
+        - @requests.each do |re|
+          tr
+            td.id = re.product.list_no
+            td = link_to re.product.name, "/detail/#{re.product_id}", target: "_blank"
+            td = re.product.maker
+
+            - if @user.present?
+              td = re.product.model
+              td = re.product.year
+            td = re.product_company.name_remove_kabu
+            td.num = number_to_currency(re.product.min_price)
+            td.num = number_to_currency(re.amount)
+            - if @user.blank?
+              td = link_to "#{re.user.company} #{re.user.name}", "/bid/requests?user_id=#{re.user_id}"
+            td.button
+              - message = "No. #{re.product.list_no} : #{re.product.name}\n最低入札価格 : #{number_to_currency(re.product.min_price)}\n\n入札金額 : #{number_to_currency(re.amount)}\n依頼者 : #{re.user.company} #{re.user.name}\n\nこの内容で入札します。よろしいですか。"
+              = link_to("/bid/requests/#{re.id}", method: :patch, data: { confirm: message, "disable-with" => "入札中..."}, class: "btn btn-success btn-sm") do
+                i.fas.fa-pencil-alt
+                span.btn-content 入札
+
+            - if @user.blank?
+              td.button = link_to "/bid/chats?user_id=#{re.user_id}", class: "btn btn-info btn-sm" do
+                i.fas.fa-comments
+                span.btn-content 取引
+            td = l(re.created_at, format: :short)
+            td = re.bided_at.present? ? "済" : ""

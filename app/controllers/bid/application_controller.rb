@@ -1,4 +1,6 @@
 class Bid::ApplicationController < ApplicationController
+  layout 'layouts/application'
+
   before_action :check_rule
   before_action :authenticate_company!
   before_action :check_default_password

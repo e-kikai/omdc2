@@ -8,46 +8,49 @@
     = s.hidden_field :s, value: params.dig(:q, :s)
     ul.nav.nav-pills
       li = s.button :submit, name: :format, value: :pdf, class: "btn btn-default btn-square" do
-        span.glyphicon.glyphicon-print
+        i.fas.fa-file-pdf
         span.btn-content 入札確認PDF
 
       li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
-        span.glyphicon.glyphicon-download-alt
+        i.fas.fa-file-csv
         span.btn-content CSV出力
 
     .scroll_div
       table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
         tr
           th
-          th.id = s.sort_link :product_list_no, "No."
-          th = s.sort_link :genre_order_no,     "商品名"
-          th = s.sort_link :product_maker,      "メーカー"
-          th = s.sort_link :product_model,      "型式"
-          th = s.sort_link :product_year,       "年式"
-          th = s.sort_link :product_min_price,  "最低入札金額"
-          th = s.sort_link :amount,             "入札金額"
-          th = s.sort_link :comment,            "備考欄"
-          th.button
-          th = s.sort_link :created_at,         "入札日時"
-          th.button
+          th.id = s.sort_link :product_list_no,   "No."
+          th = s.sort_link :genre_order_no,       "商品名"
+          th = s.sort_link :product_maker,        "メーカー"
+          th = s.sort_link :product_model,        "型式"
+          / th = s.sort_link :product_year,       "年式"
+          th = s.sort_link :product_company_name, "出品会社"
+          th = s.sort_link :product_min_price,    "最低入札金額"
+          th = s.sort_link :amount,               "入札金額"
+          th = s.sort_link :comment,              "備考欄"
+          th.button 訂正
+          th = s.sort_link :created_at,           "入札日時"
+          th.button 取消
         - bids.each do |b|
           tr
             td = s.check_box :id_in, {multiple: true, include_hidden: false}, b.id
             td.id = b.product.list_no
-            td = b.product.name
+            td = link_to b.product.name, "/detail/#{b.product_id}", target: "_blank"
+
             td = b.product.maker
             td = b.product.model
-            td = b.product.year
-            td.num = b.product.min_price.to_s(:delimited) + "円"
-            td.num = b.amount.to_s(:delimited) + "円"
+            / td = b.product.year
+            td = b.product_company.name_remove_kabu
+            td.num = number_to_currency(b.product.min_price)
+            td.num = number_to_currency(b.amount)
             td = b.comment
             td.button
-              = link_to({ action: :edit, id: b.id }, class: "btn btn-info") do
+              = link_to({ action: :edit, id: b.id }, class: "btn btn-info btn-sm") do
                 span.glyphicon.glyphicon-pencil
                 span.btn-content 訂正
-            td = b.created_at
+            td = l(b.created_at, format: :short)
             td.button
               - message = "#{b.product.name}\n\nこの入札を取り消しますか？"
-              = link_to({ action: :destroy, id: b.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger") do
+              = link_to({ action: :destroy, id: b.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger btn-xs") do
                 span.glyphicon.glyphicon-remove
                 span.btn-content 取消

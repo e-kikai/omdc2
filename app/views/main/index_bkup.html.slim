@@ -1,0 +1,107 @@
+
+- if @open_now.persisted?
+  .row
+    .col-md-6.col-sm-12
+      h4 = @open_now.name
+    .col-md-6.col-sm-12
+      / .pull-right = link_to image_tag("dst_05.jpg"), "https://www.deadstocktool.com/?ref=omdc2", target: "_blank"
+  / . = link_to "test1", "https://www.xn--4bswgw9cs82at4b485i.jp/system/", target: "_blank"
+  / . = link_to "test2", "https://www.大阪機械団地.jp/system/", target: "_blank"
+  .row
+    .col-md-6.col-sm-12
+      table.table.table-condensed.info-table
+        tr
+          th 主催者
+          td = @open_now.owner
+        tr
+          th 開催場所
+          td
+            . = @open_now.place
+            . = @open_now.addr
+        tr
+          th 連絡先
+          td TEL : #{@open_now.tel} FAX : #{@open_now.fax}
+        tr
+          th 下見期間
+          td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.try(:strftime, '%m/%d')}
+        tr
+          th 入札期間
+          td #{@open_now.bid_start_at.try(:strftime, '%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.try(:strftime, '%Y/%m/%d %H:%M')}
+        tr
+          th 搬出期間
+          td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.try(:strftime, '%m/%d')}
+    .col-md-6.col-sm-12
+      .infos = simple_format(Info.comment(:toppage))
+    hr
+
+  - if @open_now.display?
+    .row
+      .col-md-offset-2.col-md-6
+        .
+          h4
+            = "◆ "
+            = link_to "出品商品リスト(リストNo.順)", "/bid_list"
+        .
+          = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
+            = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
+            .input-group
+              = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
+              span.input-group-btn
+                = button_tag type: :submit, class: "btn btn-info" do
+                  .glyphicon.glyphicon-search
+                  span.btn-content 検索
+
+        .
+          = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
+            = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
+            .form-group.form-priceinterval
+              = f.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
+              = " 〜 "
+              .input-group
+                = f.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
+                span.input-group-btn
+                  = button_tag type: :submit, class: "btn btn-info" do
+                    .glyphicon.glyphicon-search
+                    span.btn-content 検索
+
+        .
+          = form_tag "/search", method: :get, class: "form-inline" do
+            = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
+            .input-group
+              = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
+              span.input-group-btn
+                = button_tag type: :submit, class: "btn btn-info" do
+                  .glyphicon.glyphicon-search
+                  span.btn-content 検索
+
+      .col-md-4
+        . = link_to image_tag("auction_02.jpg", style:"width:250px;height:250px;"), "https://www.mnok.net/", target: "_blank"
+
+      .col-md-offset-1.col-md-10
+        h4 ◆ ジャンルからさがす
+        .row.toppage_genres_area
+          - @all_xl_counts.each do |x, v|
+            .col-sm-6.col-md-3
+              .panel.panel-default
+                .list-group style="height:200px;overflow:auto;"
+                    = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
+                      = x[1]
+                      .badge.pull-right = v
+                    - @all_large_counts.each do |l, v2|
+                      - if l[1] == x[0]
+                        = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
+                          = l[2]
+                          .badge.pull-right = v2
+  - else
+    .row
+      .alert.alert-success
+        span.glyphicon.glyphicon-info-sign
+        =< "出品商品の検索は、下見期間までしばらくお待ち下さい (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
+- else
+  .alert.alert-success
+    span.glyphicon.glyphicon-info-sign
+    =< "現在、入札会は開催されていません"
+
+  .row
+    .col-md-4
+      . = link_to image_tag("auction_02.jpg", style:"width:250px;height:250px;"), "https://www.mnok.net/", target: "_blank"

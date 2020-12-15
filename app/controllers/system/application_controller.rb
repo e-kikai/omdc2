@@ -1,7 +1,7 @@
 class System::ApplicationController < ApplicationController
   before_action :authenticate_system!
 
-  # layout 'layouts/application'
+  layout 'layouts/application'
 
   private
 

@@ -77,11 +77,12 @@
     .scroll_div
       table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
         tr
-          th.id = s.sort_link :product_list_no, "リストNo."
+          th.id = s.sort_link :product_list_no, "No."
           th = s.sort_link :genre_order_no,     "商品名"
           th = s.sort_link :product_maker,      "メーカー"
           th = s.sort_link :product_model,      "型式"
           th = s.sort_link :product_year,       "年式"
+          th = s.sort_link :product_company_name, "出品会社"
           th = s.sort_link :product_min_price,  "最低入札金額"
           th = s.sort_link :amount,             "入札金額"
           th = s.sort_link :comment,            "備考欄"
@@ -93,6 +94,7 @@
             td = b.product.maker
             td = b.product.model
             td = b.product.year
+            td = b.product_company.name_remove_kabu
             td.num = number_to_currency(b.product.min_price)
             td.num = number_to_currency(b.amount)
             td = b.comment

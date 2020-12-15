@@ -1,0 +1,19 @@
+- set_meta_tags title: "確認メールの再送信"
+- set_meta_tags nofollow: true, noindex: true
+- breadcrumb  :something, "確認メールの再送信"
+
+h2 確認メールの再送信
+.panel
+  .panel-body
+    = form_for resource, as: resource_name, url: confirmation_path(resource_name) do |f|
+
+      .form-group
+        = f.label :email
+        = f.text_field :email, required: "required", autofocus: true, class: "form-control"
+
+
+      = f.button type:"submit", class: 'btn-submit', data: {disable_with: 'ログイン中・・・' } do
+        i.fas.fa-paper-plane
+        span.btn-content 確認メールを再送信
+
+    = render 'users/shared/links'

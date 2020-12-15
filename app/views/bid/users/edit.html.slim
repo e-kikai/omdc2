@@ -1,0 +1,6 @@
+- set_meta_tags title: "取引ユーザ 変更"
+- breadcrumb  :bid_users_new
+
+= form_for @user, url: "/bid/users/#{@user.id}", method: :patch do |f|
+
+  = render "form", f: f

@@ -18,7 +18,7 @@
 #  fk_rails_...  (genre_id => genres.id)
 #  fk_rails_...  (user_id => users.id)
 #
-class GenreUser < ApplicationRecord
+class LargeGenreUser < ApplicationRecord
   belongs_to :user
-  belongs_to :genre
+  belongs_to :large_genre
 end

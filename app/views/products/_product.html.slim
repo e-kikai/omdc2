@@ -1,0 +1,19 @@
+.items_box
+  = link_to "/products/#{product.id}" do
+    - if product.product_images.size > 0
+      = image_tag product.product_images.first.image.view.url
+    - else
+      = image_tag "noimage.jpg"
+
+    p.number No. #{product.list_no}
+    h3 = product.name
+    / - if product.maker.present?
+    /   p.maker メーカー : #{product.maker}
+    p.maker メーカー : #{product.maker}
+    p.price 最低入札価格 : <br class="forsp" /><span>#{number_with_delimiter(product.min_price)}</span>円
+
+  .watch_area
+    = link_to "/products/?camera=#{product.id}" do
+      i.fas.fa-camera
+    = button_tag class: :star do
+      i.fas.fa-star

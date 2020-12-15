@@ -34,6 +34,9 @@ ja:
       default: ! '%Y/%m/%d'
       long: ! '%Y年%m月%d日(%a)'
       short: ! '%m/%d'
+      with_week: "%Y/%-m/%-d (%a)"
+      short_with_week: "%-m/%-d (%a)"
+
     month_names:
     -
     - 1月
@@ -191,4 +194,7 @@ ja:
       default: ! '%Y/%m/%d %H:%M:%S'
       long: ! '%Y年%m月%d日(%a) %H時%M分%S秒 %z'
       short: ! '%y/%m/%d %H:%M'
+      full_date: ! "%Y/%-m/%-d (%a) %-H:%M"
+      date: "%Y/%-m/%-d (%a)"
+      date_time: ! "%e (%a) %k:%M"
     pm: 午後

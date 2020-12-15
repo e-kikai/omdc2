@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :get_open_now
 
-  layout 'layouts/application'
+  layout "layouts/application_02"
+  # layout 'layouts/application'
 
   class Forbidden < ActionController::ActionControllerError; end
   class IpAddressRejected < ActionController::ActionControllerError; end
@@ -13,17 +14,20 @@ class ApplicationController < ActionController::Base
   # ログイン後のリンク先
   def after_sign_in_path_for(resource)
     case resource
-    when System; "/system/"
-    else         "/bid/"
+    when System;  "/system/"
+    when Company; "/bid/"
+    else          "/mypage/"
     end
   end
 
   # ログアウト後のリンク先
   def after_sign_out_path_for(resource)
-    case resource
-    when System; "/system/login"
-    else         "/bid/login"
-    end
+    # case resource
+    # when System; "/system/login"
+    # else         "/bid/login"
+    # end
+
+    "/"
   end
 
   private
@@ -31,6 +35,9 @@ class ApplicationController < ActionController::Base
   def get_open_now
     @open_now = Open.now.first || Open.new
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
+
+    # とりあえずのダミーデータ
+    @histories = @products.order("random()").limit (5)
   end
 
   def check_open

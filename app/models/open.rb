@@ -40,7 +40,8 @@ class Open < ApplicationRecord
   default_scope { without_soft_destroyed }
 
   has_many :products
-  has_many :bids, through: :products
+  has_many :bids,     through: :products
+  has_many :requests, through: :products
 
   validates :name,                 presence: true
   validates :owner,                presence: true

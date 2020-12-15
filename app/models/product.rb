@@ -48,6 +48,7 @@ class Product < ApplicationRecord
   belongs_to :area
 
   has_many :bids
+  has_many :requests
   # has_one  :success_bid,     -> { success }, class_name: "Bid"
   # has_one :success_bid, class_name: "ViewSuccessBid"
   has_one :view_success_bid

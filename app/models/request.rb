@@ -31,6 +31,7 @@ class Request < ApplicationRecord
   has_one    :genre,       through: :product
   has_one    :large_genre, through: :genre
   has_one    :xl_genre,    through: :large_genre
+  has_one    :product_company, through: :product, source: :company, class_name: "Company"
 
   validates :amount,       presence: true, numericality: { only_integer: true }
   validate  :validate_amount

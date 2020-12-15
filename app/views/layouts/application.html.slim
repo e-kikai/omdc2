@@ -14,7 +14,7 @@ html
   body onLoad="FixedMidashi.create();"
     header.navbar.navbar-default.container-fluid role="navigation"
       .navbar-header
-        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo"
+        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo", target: "_blank"
 
         button.navbar-toggle data-toggle="collapse" data-target="#navbar-collapse-1"
           span.sr-only Toggle navigation
@@ -27,9 +27,9 @@ html
           li = link_to "javascript:window.print();" do
             .glyphicon.glyphicon-print
             span.btn-content ページを印刷
-          li = link_to "/wishlist" do
-            .glyphicon.glyphicon-list
-            span.btn-content ウィッシュリスト
+          / li = link_to "/wishlist" do
+          /   .glyphicon.glyphicon-list
+          /   span.btn-content ウィッシュリスト
           li = link_to "http://www.omdc.or.jp/?page_id=542", target: "_blank" do
             .glyphicon.glyphicon-question-sign
             span.btn-content 入札会FAQ

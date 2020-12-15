@@ -1,107 +1,104 @@
+javascript:
+  var display = function(tab) {
+      if (tab == 0) {
+         close= 1;
+     } else {
+         close = 0;
+      }
+     var pane = document.getElementsByClassName("items_block");
+     pane[tab].setAttribute("style", "display:inline-table");
+    pane[close].setAttribute("style", "display:none");
+       var pane = document.getElementsByClassName("items_block t2");
+     pane[tab].setAttribute("style", "display:inline-table");
+    pane[close].setAttribute("style", "display:none");
+  }
+  </script>
+  <script type="text/javascript">
+  $(function(){
+      $('button.star').on('click', function(event){
+          event.preventDefault();
+          $(this).toggleClass('active');
+          if($(this).hasClass('active')){
+              var text = $(this).data('text-clicked');
+          } else {
+              var text = $(this).data('text-default');
+          }
+          $(this).html(text);
+      });
+  });
 
-- if @open_now.persisted?
-  .row
-    .col-md-6.col-sm-12
-      h4 = @open_now.name
-    .col-md-6.col-sm-12
-      / .pull-right = link_to image_tag("dst_05.jpg"), "https://www.deadstocktool.com/?ref=omdc2", target: "_blank"
-  / . = link_to "test1", "https://www.xn--4bswgw9cs82at4b485i.jp/system/", target: "_blank"
-  / . = link_to "test2", "https://www.大阪機械団地.jp/system/", target: "_blank"
-  .row
-    .col-md-6.col-sm-12
-      table.table.table-condensed.info-table
-        tr
-          th 主催者
-          td = @open_now.owner
-        tr
-          th 開催場所
-          td
-            . = @open_now.place
-            . = @open_now.addr
-        tr
-          th 連絡先
-          td TEL : #{@open_now.tel} FAX : #{@open_now.fax}
-        tr
-          th 下見期間
-          td #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date.try(:strftime, '%m/%d')}
-        tr
-          th 入札期間
-          td #{@open_now.bid_start_at.try(:strftime, '%Y/%m/%d %H:%M')} 〜 #{@open_now.user_bid_end_at.try(:strftime, '%Y/%m/%d %H:%M')}
-        tr
-          th 搬出期間
-          td #{@open_now.carry_out_start_date} 〜 #{@open_now.carry_out_end_date.try(:strftime, '%m/%d')}
-    .col-md-6.col-sm-12
-      .infos = simple_format(Info.comment(:toppage))
-    hr
+  $(function(){
+  	$("ul.pannel li:not("+$("ul.tab li a.selected").attr("href")+")").hide()
+  	$("ul.tab li a").click(function(){
+  		$("ul.tab li a").removeClass("selected")
+  		$(this).addClass("selected")
+  		$("ul.pannel li").hide()
+  		$($(this).attr("href")).show()
+  		return false
+  	})
+  })
 
-  - if @open_now.display?
-    .row
-      .col-md-offset-2.col-md-6
-        .
-          h4
-            = "◆ "
-            = link_to "出品商品リスト(リストNo.順)", "/bid_list"
-        .
-          = form_tag "/search_by_list_no", method: :get, class: "form-inline" do
-            = label_tag :list_no, "◆ リストNo.からさがす", class: "h4 search-label"
-            .input-group
-              = text_field_tag :list_no, params[:list_no], placeholder: "リストNo.", class: "form-control"
-              span.input-group-btn
-                = button_tag type: :submit, class: "btn btn-info" do
-                  .glyphicon.glyphicon-search
-                  span.btn-content 検索
+.mv_block
+  .container
+    h2.mv = image_tag "mvv3.png", alt: "大阪機械卸業団地 機械工具入札会"
 
-        .
-          = search_form_for @search, url: "/search", method: :get, class: "form-inline" do |f|
-            = label_tag :list_no, "◆ 最低入札金額からさがす", class: "h4 search-label"
-            .form-group.form-priceinterval
-              = f.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
-              = " 〜 "
-              .input-group
-                = f.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
-                span.input-group-btn
-                  = button_tag type: :submit, class: "btn btn-info" do
-                    .glyphicon.glyphicon-search
-                    span.btn-content 検索
+    .mv_cont
+      .mv_display
+        = image_tag "main.jpg", alt: ""
 
-        .
-          = form_tag "/search", method: :get, class: "form-inline" do
-            = label_tag :list_no, "◆ キーワードでさがす", class: "h4 search-label"
-            .input-group
-              = text_field_tag :keywords, params[:keywords], placeholder: "商品名 メーカー 型式など", class: "form-control"
-              span.input-group-btn
-                = button_tag type: :submit, class: "btn btn-info" do
-                  .glyphicon.glyphicon-search
-                  span.btn-content 検索
+        h3 機械団地「#{@open_now.name}」
 
-      .col-md-4
-        . = link_to image_tag("auction_02.jpg", style:"width:250px;height:250px;"), "https://www.mnok.net/", target: "_blank"
+        dl
+          dt 主催者
+          dd = @open_now.owner
 
-      .col-md-offset-1.col-md-10
-        h4 ◆ ジャンルからさがす
-        .row.toppage_genres_area
-          - @all_xl_counts.each do |x, v|
-            .col-sm-6.col-md-3
-              .panel.panel-default
-                .list-group style="height:200px;overflow:auto;"
-                    = link_to "/xl_genre/#{x[0]}", class: "list-group-item h4" do
-                      = x[1]
-                      .badge.pull-right = v
-                    - @all_large_counts.each do |l, v2|
-                      - if l[1] == x[0]
-                        = link_to "/large_genre/#{l[0]}", class: "list-group-item" do
-                          = l[2]
-                          .badge.pull-right = v2
-  - else
-    .row
-      .alert.alert-success
-        span.glyphicon.glyphicon-info-sign
-        =< "出品商品の検索は、下見期間までしばらくお待ち下さい (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
-- else
-  .alert.alert-success
-    span.glyphicon.glyphicon-info-sign
-    =< "現在、入札会は開催されていません"
+          / dt 開催場所
+          / dd #{@open_now.place}<br />#{@open_now.addr}
 
-  .row
-    .col-md-4
-      . = link_to image_tag("auction_02.jpg", style:"width:250px;height:250px;"), "https://www.mnok.net/", target: "_blank"
+          dt 下見期間
+          dd #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
+          dt 入札締切
+          dd #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
+          dt 搬出期間
+          dd #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
+          dt 営業時間
+          dd 9:00～17:00 (土・日曜日 / 祝日)
+
+      .mv_bnr = image_tag "sixv2.png", alt: ""
+
+section.news
+  .container
+    h2 お知らせ
+
+    dl.acMenu
+      dt
+      dd = simple_format(Info.comment(:toppage))
+
+
+section.items
+  .container
+
+    h2 注目の出品商品
+
+    ul.tab
+      li = link_to "最低落札価格1万円特集", "#tab1", class: :selected
+      li = link_to "ひとやま特集", "#tab2"
+
+    ul.pannel
+      li#tab1
+        span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで10件表示しています。
+
+        .items_block style="display: inline-table;"
+          - @specials_01.each do |pr|
+            = render "/products/product", product: pr
+
+      li#tab2
+        span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで10件表示しています。
+
+        .items_block style="display: inline-table;"
+          - @specials_02.each do |pr|
+            = render "/products/product", product: pr
+
+= render "/products/search", all_xl_counts: @all_xl_counts, all_large_counts: @all_large_counts
+
+= render "/main/overview"

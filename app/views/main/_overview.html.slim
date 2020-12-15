@@ -1,0 +1,28 @@
+section.overview
+  .container
+    h2 機械工具入札会概要
+    .flex_block
+      .half_block
+        dl
+          dt 主催者
+          dd = @open_now.owner
+
+          dt 連絡先
+          dd TEL : 06-6747-7528<br />FAX : 06-6747-7529
+
+          dt 下見期間
+          dd #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
+          dt 入札締切
+          dd #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
+
+          dt 搬出期間
+          dd #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
+      .half_block
+        dl
+          dt 開催場所
+          dd #{@open_now.place}<br />#{@open_now.addr}
+
+          dt アクセスマップ
+          dd
+            .google_map
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1640.3711959201194!2d135.60181215648436!3d34.68645058043822!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6001200880dc8013%3A0xdc8a3e0d7fd3b2d4!2z5aSn6Ziq5qmf5qKw5Y245qWt5Zuj5Zyw5Y2U5ZCM57WE5ZCIIOWFseWQjOWxleekuuWgtA!5e0!3m2!1sja!2sjp!4v1601363402677!5m2!1sja!2sjp" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>

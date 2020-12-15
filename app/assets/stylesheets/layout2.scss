@@ -1,5 +1,3 @@
-
-
 html.layout2 {
   font-size: 15px;
 
@@ -9,12 +7,51 @@ html.layout2 {
 
   body {
     background: #FFF;
-    line-height: 1.6;
+    // line-height: 1.6;
   }
 
   textarea {
     box-sizing: border-box;
     height: 112px;
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 2px;
+  }
+
+  label {
+    margin-right: 10px;
+    font-weight: normal;
+
+    input[type=checkbox],
+    input[type=radio] {
+      margin-right: 4px;
+    }
+  }
+
+  th label {
+    font-weight: bold;
+  }
+
+  button[disabled] {
+    opacity: 0.65;
+    pointer-events: none;
+    cursor: not-allowed;
+    box-shadow: none
+  }
+
+  .li-content {
+    display: inline-block;
+    margin-left: 4px;
+  }
+
+  section.genre li a span {
+    width: 24px;
+  }
+
+  .search_body button {
+    color: #999;
   }
 
   /// @20201130 Ohashi ///
@@ -46,7 +83,7 @@ html.layout2 {
       display: inline-block;
       width: 100%;
       text-align: right;
-      background-image: image-url("black-thread-light.png");
+      background-image: url(black-thread-light.png);
       background-size: 40px;
   }
   section#headline.login {
@@ -1206,7 +1243,7 @@ html.layout2 {
   .mv_block {
       width: 100%;
       display: inline-block;
-      background-image: image-url("bgi02v4.png");
+      background-image: url(bgi02v4.png);
       background-repeat: no-repeat;
       background-position: top center;
       background-size: 100% 500px;
@@ -1392,6 +1429,44 @@ html.layout2 {
   .flex_style {
       display: flex;
   }
+
+  #fixed_right_banner {
+      position: fixed;
+      right: 0;
+      margin: 50vh auto 0;
+      transform: translateY(-50%);
+      top: 0px;
+  }
+  #fixed_right_banner img {
+      width: 100%;
+      float: left;
+  }
+  #fixed_right_banner img:hover {
+      background-color: unset;
+  }
+  #fixed_right_banner > *
+  {
+      clear: both;
+      float: right;
+      width: 80px;
+      margin-right: -15px;
+      -webkit-transition: margin .2s ease;
+      transition: margin .2s ease;
+  }
+  #fixed_right_banner > * ~ * { margin-top: 20px; }
+  #fixed_right_banner > a
+  {
+      display: block;
+  }
+  #fixed_right_banner > *:hover
+  {
+      margin-right: 0;
+  }
+  @media (max-width: 1156px)
+  {
+      #fixed_right_banner { display: none; }
+  }
+
   }
   @media screen and (max-width:740px){
   img{max-width: 100%;height: auto;width /***/:auto;}
@@ -1456,7 +1531,7 @@ html.layout2 {
   .mv_block {
       width: 100%;
       display: inline-block;
-      background-image: image-url("bgi02v4.png");
+      background-image: url(bgi02v4.png);
       background-repeat: no-repeat;
       background-size: 100%;
       background-color: #f4e700;
@@ -1751,6 +1826,9 @@ html.layout2 {
   .newcomers_block h3 {
       font-size: 1rem;
       letter-spacing: .1em;
+  }
+  #fixed_right_banner {
+      display: none;
   }
   }
 }

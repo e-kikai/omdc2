@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_30_142048) do
+ActiveRecord::Schema.define(version: 2020_12_04_051020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,15 +139,6 @@ ActiveRecord::Schema.define(version: 2020_11_30_142048) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
-  create_table "genre_users", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "genre_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["genre_id"], name: "index_genre_users_on_genre_id"
-    t.index ["user_id"], name: "index_genre_users_on_user_id"
-  end
-
   create_table "genres", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "order_no"
@@ -189,6 +180,15 @@ ActiveRecord::Schema.define(version: 2020_11_30_142048) do
     t.datetime "soft_destroyed_at"
     t.index ["label"], name: "index_infos_on_label"
     t.index ["soft_destroyed_at"], name: "index_infos_on_soft_destroyed_at"
+  end
+
+  create_table "large_genre_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "large_genre_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["large_genre_id"], name: "index_large_genre_users_on_large_genre_id"
+    t.index ["user_id"], name: "index_large_genre_users_on_user_id"
   end
 
   create_table "large_genres", id: :serial, force: :cascade do |t|
@@ -343,12 +343,12 @@ ActiveRecord::Schema.define(version: 2020_11_30_142048) do
     t.string "fax"
     t.string "zip"
     t.string "addr"
-    t.bigint "company_id"
+    t.bigint "window_id"
     t.datetime "soft_destroyed_at"
-    t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["soft_destroyed_at"], name: "index_users_on_soft_destroyed_at"
+    t.index ["window_id"], name: "index_users_on_window_id"
   end
 
   create_table "xl_genres", id: :serial, force: :cascade do |t|
@@ -360,8 +360,8 @@ ActiveRecord::Schema.define(version: 2020_11_30_142048) do
     t.index ["soft_destroyed_at"], name: "index_xl_genres_on_soft_destroyed_at"
   end
 
-  add_foreign_key "genre_users", "genres"
-  add_foreign_key "genre_users", "users"
   add_foreign_key "industry_users", "industries"
   add_foreign_key "industry_users", "users"
+  add_foreign_key "large_genre_users", "genres", column: "large_genre_id"
+  add_foreign_key "large_genre_users", "users"
 end

@@ -13,6 +13,8 @@ ja:
       area: エリア
       info: お知らせ
       display: 表示設定
+      user: ユーザ
+      industry: 業種
     attributes:
       open:
         name:  入札会名
@@ -105,3 +107,15 @@ ja:
         addr_1: 都道府県
         content: 内容
         allow_mail: 事務局からの案内メール
+      user:
+        name: お名前(氏名)
+        company: 会社名
+        email: メールアドレス
+        tel: 電話番号
+        zip: 郵便番号
+        addr: 住所
+        allow_mail: 事務局からの案内メール
+
+        industries: 業種
+        genres: 興味のあるジャンル
+      industry:
