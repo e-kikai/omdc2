@@ -17,8 +17,12 @@ CarrierWave.configure do |config|
       config.fog_directory = 'omdc2'
       config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/omdc2'
     when 'staging'
-      config.fog_directory = 'staging.omdc2'
-      config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/staging.omdc2'
+      # config.fog_directory = 'staging.omdc2'
+      # config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/staging.omdc2'
+
+      config.fog_directory = 'omdc2'
+      config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/omdc2'
+
     when 'development'
       config.fog_directory = 'development.omdc2'
       config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/development.omdc2'
