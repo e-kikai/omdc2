@@ -19,6 +19,8 @@
 # require bootstrap-fileinput
 #= require fixed_midashi
 #= require jquery.ui.touch-punch.min
+#= require modernizr.custom
+#= require jquery.dlmenu
 #= require bootstrap-fileinput
 #= require moment
 #= require moment/locale/ja
@@ -70,6 +72,8 @@ $(document).on 'ready, turbolinks:load', ->
   $("form").submit ->
     $(@).find("input.price").each ->
       $(this).triggerHandler "focus"
+
+  $('#dl-menu').dlmenu()
 
 priceUnformat = (str) ->
   num = new String(str).replace(/０/g, "0").replace(/１/g, "1").replace(/２/g, "2").replace(/３/g, "3").replace(/４/g, "4").replace(/５/g, "5").replace(/６/g, "6").replace(/７/g, "7").replace(/８/g, "8").replace(/９/g, "9").replace(/[^0-9]/g, "")
