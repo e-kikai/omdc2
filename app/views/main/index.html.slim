@@ -69,10 +69,10 @@ javascript:
 section.news
   .container
     h2 お知らせ
-
     dl.acMenu
-      dt
-      dd = simple_format(Info.comment(:toppage))
+      . = simple_format(Info.comment(:toppage))
+      / dt
+      / dd = simple_format(Info.comment(:toppage))
 
 
 section.items
