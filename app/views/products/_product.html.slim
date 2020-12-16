@@ -1,9 +1,10 @@
-.items_box 
+.items_box
   = link_to "/products/#{product.id}" do
-    - if product.product_images.size > 0
-      = image_tag product.product_images.first.image.view.url
-    - else
-      = image_tag "noimage.jpg"
+    .thumb_img
+      - if product.product_images.size > 0
+        = image_tag product.product_images.first.image.view.url
+      - else
+        = image_tag "noimage.jpg"
 
     p.number No. #{product.list_no}
     h3 = product.name
