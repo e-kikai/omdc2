@@ -15,78 +15,80 @@ javascript:
     });
   });
 
-h2 マイページ ユーザ登録
-.newcomers_block
+section.rule
+  .container
+    h2 マイページ ユーザ登録
+    .newcomers_block
 
-  h3 機械工具入札会ユーザー登録
-  .form_block
-    = form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
-      - if f.object.errors.full_messages.present?
-        .alert.alert-danger
-          ul
-            - f.object.errors.full_messages.each do |msg|
-              li = msg
+      h3 機械工具入札会ユーザー登録
+      .form_block
+        = form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+          - if f.object.errors.full_messages.present?
+            .alert.alert-danger
+              ul
+                - f.object.errors.full_messages.each do |msg|
+                  li = msg
 
-      table.formTable
-        tr
-          th
-            = f.label :company
-            span.cck01 必須
-          td = f.text_field :company, class: "form-control", required: "required", placeholder: "例 : 山田株式会社(個人の方は個人と入力)"
-        tr
-          th
-            = f.label :name
-            span.cck01 必須
-          td = f.text_field :name, class: "form-control", required: "required", placeholder: "例 : 山田 太郎"
-        tr
-          th
-            = f.label :email
-            span.cck01 必須
-          td = f.text_field :email, class: "form-control", required: "required", placeholder: "例 : yamada@omdc.or.jp"
-        tr
-          th
-            = f.label :password
-            span.cck01 必須
-          td = f.password_field :password, class: "form-control wide-type-01", required: "required", placeholder: "半角英数字8文字以上"
-        tr
-          th
-            = f.label :password_confirmation
-            span.cck01 必須
-          td = f.password_field :password_confirmation, class: "form-control wide-type-01", required: "required", placeholder: "パスワード確認用"
-        / tr
-        /   th
-        /     = f.label :industries
-        /     span.cck02 任意
-        /   td = f.collection_check_boxes(:industry_ids, Industry.order(:order_no), :id, :name) do |b|
-        /     label.checkbox-inline = b.check_box + b.text
-        / tr
-        /   th
-        /     = f.label :genres
-        /     span.cck02 任意
-        /   td
+          table.formTable
+            tr
+              th
+                = f.label :company
+                span.cck01 必須
+              td = f.text_field :company, class: "form-control", required: "required", placeholder: "例 : 山田株式会社(個人の方は個人と入力)"
+            tr
+              th
+                = f.label :name
+                span.cck01 必須
+              td = f.text_field :name, class: "form-control", required: "required", placeholder: "例 : 山田 太郎"
+            tr
+              th
+                = f.label :email
+                span.cck01 必須
+              td = f.text_field :email, class: "form-control", required: "required", placeholder: "例 : yamada@omdc.or.jp"
+            tr
+              th
+                = f.label :password
+                span.cck01 必須
+              td = f.password_field :password, class: "form-control wide-type-01", required: "required", placeholder: "半角英数字8文字以上"
+            tr
+              th
+                = f.label :password_confirmation
+                span.cck01 必須
+              td = f.password_field :password_confirmation, class: "form-control wide-type-01", required: "required", placeholder: "パスワード確認用"
+            / tr
+            /   th
+            /     = f.label :industries
+            /     span.cck02 任意
+            /   td = f.collection_check_boxes(:industry_ids, Industry.order(:order_no), :id, :name) do |b|
+            /     label.checkbox-inline = b.check_box + b.text
+            / tr
+            /   th
+            /     = f.label :genres
+            /     span.cck02 任意
+            /   td
 
-        tr
-          th
-            = f.label :allow_mail
-            span.cck01 必須
-          td
-            label = f.radio_button(:allow_mail, true)  + "受け取る"
-            label = f.radio_button(:allow_mail, false) + "受け取らない"
+            tr
+              th
+                = f.label :allow_mail
+                span.cck01 必須
+              td
+                label = f.radio_button(:allow_mail, true)  + "受け取る"
+                label = f.radio_button(:allow_mail, false) + "受け取らない"
 
-        tr
-          th
-          td= recaptcha_tags
+            tr
+              th
+              td= recaptcha_tags
 
-      .pp_box
-        p.form-text
-          | ご記入頂いた情報は、ご質問等に対するご返答及び、<br />
-          | 当組合からのお知らせをご案内をさせて頂く以外の目的では使用致しません。
-      .pp_box
-        label = check_box_tag(:agree, 1) + "個人情報の取扱について同意します。"
+          .pp_box
+            p.form-text
+              | ご記入頂いた情報は、ご質問等に対するご返答及び、<br />
+              | 当組合からのお知らせをご案内をさせて頂く以外の目的では使用致しません。
+          .pp_box
+            label = check_box_tag(:agree, 1) + "個人情報の取扱について同意します。"
 
 
-      = f.button type:"submit", id: :submit, class: 'btn-submit', data: {disable_with: '保存中・・・' } do
-        i.fas.fa-user-plus
-        span.btn-content ユーザ登録 (確認メールを送信します)
+          = f.button type:"submit", id: :submit, class: 'btn-submit', data: {disable_with: '保存中・・・' } do
+            i.fas.fa-user-plus
+            span.btn-content ユーザ登録 (確認メールを送信します)
 
-    = render 'users/shared/links'
+        = render 'users/shared/links'

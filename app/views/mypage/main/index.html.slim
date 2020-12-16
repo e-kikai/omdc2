@@ -2,32 +2,34 @@
 - set_meta_tags nofollow: true, noindex: true
 - breadcrumb :mypage
 
-h2 マイページ
+section.rule
+  .container
+    h2 マイページ
 
-.newcomers_block
-  .mypage_block.right
-    ul
-      span 会員メニュー
+    .newcomers_block
+      .mypage_block.right
+        ul
+          span 会員メニュー
 
-      li = link_to "/mypage/favorites" do
-        i.fas.fa-star
-        .li-content お気に入りリスト (入札依頼PDF作成)
+          li = link_to "/mypage/favorites" do
+            i.fas.fa-star
+            .li-content お気に入りリスト (入札依頼PDF作成)
 
-      li = link_to "/mypage/products.csv" do
-        i.fas.fa-file-csv
-        .li-content 全出品商品リストCSVダウンロード
+          li = link_to "/mypage/products.csv" do
+            i.fas.fa-file-csv
+            .li-content 全出品商品リストCSVダウンロード
 
-    ul.harf
-      span 問い合わせ
-      li = link_to "/contacts/new" do
-        i.fas.fa-building
-        .li-content 事務局へのお問い合せ
+        ul.harf
+          span 問い合わせ
+          li = link_to "/contacts/new" do
+            i.fas.fa-building
+            .li-content 事務局へのお問い合せ
 
-    ul.harf
-      span 各種設定
-      li = link_to "/mypage/user/edit" do
-        i.fas.fa-user-edit
-        .li-content ユーザ情報変更
-      li = link_to "/users/edit" do
-        i.fas.fa-key
-        .li-content パスワード変更
+        ul.harf
+          span 各種設定
+          li = link_to "/mypage/user/edit" do
+            i.fas.fa-user-edit
+            .li-content ユーザ情報変更
+          li = link_to "/users/edit" do
+            i.fas.fa-key
+            .li-content パスワード変更

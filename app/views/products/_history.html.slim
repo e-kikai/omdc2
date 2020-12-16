@@ -1,6 +1,6 @@
 section.history
   .container
     h2 閲覧履歴
-    .
-      - histories.each do |product|
-        = render product
+    .items_block
+      - histories.each_with_index do |product, i|
+        = render product, hidexs: (i < 3 ? false : true)

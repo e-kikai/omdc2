@@ -85,6 +85,8 @@ class ProductsController < ApplicationController
   end
 
   def show
+    @samegenres = @products.where(genre: @product.genre).limit(5)
+    @likeimgs   = @products.order("random()").limit(5)
   end
 
   def images

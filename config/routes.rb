@@ -28,7 +28,9 @@ Rails.application.routes.draw do
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
 
-  get  "detail/:id"   => "products#show"
+  # get  "detail/:id"   => "products#show"
+  resources :products, only: [:index, :show]
+
   get  "images/:id"   => "products#images"
   get  "youtube/:id"  => "products#youtube"
   get  "ml_get_genre" => "products#ml_get_genre"

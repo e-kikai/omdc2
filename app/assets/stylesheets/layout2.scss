@@ -68,7 +68,20 @@ html.layout2 {
       img {
       }
     }
-
   }
+
+  .panel-body {
+    padding: 0;
+  }
+
+  .product_map {
+    width: 100%;
+    border: 1px solid #999;
+  }
+
+  #gmap2 {
+    border: 1px solid #999;
+  }
+
 
 }

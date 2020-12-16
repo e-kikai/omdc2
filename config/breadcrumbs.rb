@@ -33,6 +33,11 @@ crumb :detail do |product|
   parent :genre, product.genre
 end
 
+crumb :product_show do |product|
+  link "No.#{product.list_no} #{product.name} 商品詳細", "/products/#{product.id}"
+  parent :genre, product.genre
+end
+
 # crumb :contact do |product|
 #   link "メールで問い合わせ", "/contact/#{product.id}"
 #   parent :detail, product
