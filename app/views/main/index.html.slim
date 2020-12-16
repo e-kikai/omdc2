@@ -89,15 +89,18 @@ section.items
         span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで10件表示しています。
 
         .items_block style="display: inline-table;"
-          - @specials_01.each do |pr|
-            = render "/products/product", product: pr
+          - @specials_01.each do |product|
+            = render product, hidexs: (i < 6 ? false : true)
 
       li#tab2
         span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで10件表示しています。
 
         .items_block style="display: inline-table;"
-          - @specials_02.each_with_index do |pr, i|
-            = render "/products/product", product: pr, hidesm: (i > 3 ? true : false)
+          / - @specials_02.each_with_index do |pr, i|
+          /   = render "/products/product", product: pr, hidesm: (i > 3 ? true : false)
+          - @specials_02.each_with_index do |product, i|
+            = render product, hidexs: (i < 6 ? false : true)
+
 
 = render "/products/search", all_xl_counts: @all_xl_counts, all_large_counts: @all_large_counts
 

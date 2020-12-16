@@ -1,4 +1,7 @@
-.items_box
+- cls = defined?(hidexs) && hidexs ? "hidden-xs" : ""
+
+.items_box class="#{cls}"
+  = try(:hidexs)
   = link_to "/products/#{product.id}" do
     .thumb_img
       - if product.product_images.size > 0

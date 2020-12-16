@@ -1,4 +1,5 @@
 html.layout2 {
+
 a {
 	outline: none;
 	padding: 0px;
@@ -267,8 +268,11 @@ ul.no_tab li a {
 }
 .items_box img {
     width: 100%;
+    max-height: 192px;
+    min-height: 192px;
     float: left;
     margin-bottom: 0.5rem;
+    object-fit: cover;
 }
 .items_box a h3 {
     font-weight: 700;
@@ -1778,6 +1782,10 @@ ul.harf {
 }
 #fixed_right_banner {
     display: none;
+}
+.items_box img {
+    max-height: 100px;
+    min-height: 100px;
 }
 }
 }

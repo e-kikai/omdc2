@@ -2,5 +2,5 @@ section.history
   .container
     h2 閲覧履歴
     .
-      - histories.each do |pr|
-        = render "/products/product", product: pr
+      - histories.each do |product|
+        = render product
