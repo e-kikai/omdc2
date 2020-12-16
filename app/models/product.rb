@@ -193,7 +193,7 @@ class Product < ApplicationRecord
 
   def area_name
     case
-    when tento?;        company.name
+    when tento?;        company.name_remove_kabu
     when area.present?; area.name
     else;               "-"
     end

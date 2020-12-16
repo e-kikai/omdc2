@@ -62,14 +62,6 @@ html.layout2 {
     padding: 15px 20px;
   }
 
-  .items_box {
-    .thumb_img {
-
-      img {
-      }
-    }
-  }
-
   .panel-body {
     padding: 0;
   }
@@ -81,6 +73,50 @@ html.layout2 {
 
   #gmap2 {
     border: 1px solid #999;
+  }
+
+  .items_block table {
+    td {
+      max-width: 160px;
+    }
+
+    td.id {
+      width: 26px;
+      text-align: right;
+    }
+
+    th.id {
+      width: 26px;
+    }
+
+    th.num,
+    td.num {
+      width: 90px;
+    }
+
+    td.num {
+      text-align: right;
+    }
+
+    td.img_link {
+      text-align: center;
+    }
+  }
+
+  #button_area .view_button {
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 2px solid #3b6783;
+    color: #3b6783;
+    outline: none;
+    padding: 6px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-left: 6px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
   }
 
 

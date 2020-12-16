@@ -8,61 +8,92 @@
 - else
   - breadcrumb  :search, params[:q]
 
-  / = link_to "/system/companies.csv", class: "btn btn-warning" do
-  /   span.glyphicon.glyphicon-save-file
-  /   =< "エクスポート"
+javascript:
+  var display = function(tab) {
+      if (tab == 0) {
+        close= 1;
+      } else {
+        close = 0;
+      }
 
-= search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |s|
-  = s.hidden_field :s, value: params.dig(:q, :s)
-  = hidden_field_tag :keywords, params[:keywords]
+      var pane = document.getElementsByClassName("items_block");
+      pane[tab].setAttribute("style", "display:inline-table");
+      pane[close].setAttribute("style", "display:none");
+      var pane = document.getElementsByClassName("items_block t2");
+      pane[tab].setAttribute("style", "display:inline-table");
+      pane[close].setAttribute("style", "display:none");
 
-  / ul.nav.nav-pills
-  /   li = s.button :submit, name: :format, value: :csv, class: "btn btn-default btn-square" do
-  /     span.glyphicon.glyphicon-download-alt
-  /     span.btn-content CSV出力
+      return false;
+  }
 
-  .search-area
-    = label_tag :list_no, "最低入札金額でフィルタ", class: :h4
-    .form-group.form-priceinterval
-      = s.text_field :min_price_gteq, placeholder: "〜以上", class: "form-control price"
-      = " 〜 "
-      .input-group
-        = s.text_field :min_price_lteq, placeholder: "〜以下", class: "form-control price"
-        span.input-group-btn
-          = button_tag type: :submit, class: "btn btn-info" do
-            .glyphicon.glyphicon-search
-            span.btn-content 検索
+section.items
+  .container
+    = search_form_for @search, url: request.path_info, method: :get, class: "form-inline" do |s|
+      = s.hidden_field :s, value: params.dig(:q, :s)
+      = hidden_field_tag :keywords, params[:keywords]
 
-  = paginate @pproducts
+      #button_area
+        = link_to "javascript:display(0);", class: "view_button" do
+          i.fas.fa-th-large
+        = link_to "javascript:display(1);", class: "view_button" do
+          i.fas.fa-list
 
-  .scroll_div
-    table.table.table-striped.table-hover.table-bordered.table-condensed.table-bordered.table-responsive.table-bids _fixedhead='rows:1'
-      tr
-        th.id = s.sort_link :list_no,    "No."
-        th = s.sort_link :name,          "商品名"
-        th = s.sort_link :maker,         "メーカー"
-        th = s.sort_link :model,         "型式"
-        th = s.sort_link :year,          "年式"
-        th.num = s.sort_link :min_price, "最低入札金額"
-        th = s.sort_link :area_id,       "展示場所"
-        th.img_link 画像
-        th.img_link 動画
-      - @pproducts.each do |p|
-        tr
-          td.id = p.list_no
-          td = link_to p.name, "/detail/#{p.id}"
-          td = p.maker
-          td = p.model
-          td = p.year
-          td.num = number_to_currency(p.min_price)
-          td = p.area_name
-          td.img_link
-            - if p.product_images.present?
-              = link_to "/images/#{p.id}/", target: "_blank" do
-                span.glyphicon.glyphicon-picture
-          td.img_link
-            - if p.youtube.present?
-              = link_to "/youtube/#{p.id}/", target: "_blank" do
-                span.glyphicon.glyphicon-film
+      h2 検索結果
 
-  = paginate @pproducts
+      .search_block
+        .search_box
+          h3 最低入金額でフィルタ
+          .search_body
+            = form_tag "/products", method: :get, class: "form-inline" do
+              = text_field_tag "q[min_price_gteq]", "", placeholder: "〜以上", class: " price"
+              | 〜
+              = text_field_tag "q[min_price_lteq]", "", placeholder: " 〜以下", class: " price"
+              = button_tag type: :submit, class: "" do
+                i.fas.fa-search
+
+      = paginate @pproducts
+
+      .items_block style="display: inline-table;"
+        - @pproducts.each do |product, i|
+          = render product, hidexs: false
+
+      .nowrap
+        .items_block style="display: none;"
+          table
+            tr
+              th.id = s.sort_link :list_no,    "No."
+              th = s.sort_link :name,          "商品名"
+              th = s.sort_link :maker,         "メーカー"
+              th = s.sort_link :model,         "型式"
+              th = s.sort_link :year,          "年式"
+              th.num = s.sort_link :min_price, "最低入札金額"
+              th = s.sort_link :area_id,       "展示場所"
+              th.img_link 画像
+              th.img_link 動画
+              th.img_link 画像検索
+              th.img_link
+
+            - @pproducts.each do |pr|
+              tr
+                td.id = pr.list_no
+                td = link_to pr.name, "/products/#{pr.id}"
+                td = pr.maker
+                td = pr.model
+                td = pr.year
+                td.num = number_to_currency(pr.min_price)
+                td = pr.area_name
+                td.img_link
+                  - if pr.product_images.present?
+                    = link_to "/products/#{pr.id}/image", target: "_blank" do
+                      span.glyphicon.glyphicon-picture
+                td.img_link
+                  - if pr.youtube.present?
+                    = link_to "/products/#{pr.id}/youtube", target: "_blank" do
+                      span.glyphicon.glyphicon-film
+                td.img_link
+                  - if pr.product_images.present?
+                    = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
+                      i.fas.fa-camera
+                td.img_link
+                  = link_to "/products/#{pr.id}/favorite", target: "_blank" do
+                    i.fas.fa-star
