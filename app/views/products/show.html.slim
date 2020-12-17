@@ -5,6 +5,10 @@ section.detail
   .container
     h2 = @product.name
 
+    = hidden_field_tag :product_id, @product.id
+    = hidden_field_tag :referer,    request.referer
+    = hidden_field_tag :r,          params[:r]
+
     .detail_box
       .detail_box_left
         - if @product.youtube.present?

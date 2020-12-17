@@ -413,7 +413,7 @@ class System::PlaygroundController < ApplicationController
       @link_base   = "http://192.168.33.110:8082/"
       @bucket_name = "omdc2"
 
-      @open_id = 59
+      @open_id = 60
     else
       @img_base    = "https://s3-ap-northeast-1.amazonaws.com/development.omdc2/uploads/product_image/image"
       @link_base   = "http://192.168.33.110:8082/"

@@ -45,16 +45,18 @@ Rails.application.routes.draw do
   # post "contact/:id"     => "products#contact_do"
   # get  "contact_tel/:id" => "products#contact_tel"
 
-  get  "search_by_list_no" => "products#search_by_list_no"
+  # get  "search_by_list_no" => "products#search_by_list_no"
   # get  "search_by_ml"      => "products#search_by_ml"
 
-  resources :wishlist, only: [:index, :create, :destroy]
+  # resources :wishlist, only: [:index, :create, :destroy]
 
   resources :contacts, only: [:new, :create] do
     collection do
       get :fin
     end
   end
+
+  resources :detail_logs, only: [:create]
 
   # resources :helps, only: [:show]
   get  "heip/:label" => "helps#show"

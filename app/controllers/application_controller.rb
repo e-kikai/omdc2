@@ -37,7 +37,28 @@ class ApplicationController < ActionController::Base
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
 
     # とりあえずのダミーデータ
-    @histories = @products.order("random()").limit (5)
+    # @histories = @products.order("random()").limit (5)
+
+    detail_logs = if user_signed_in?
+      @user = current_user
+
+      # IPからユーザ推測
+      ips =  DetailLog.where(user_id: current_user.id).distinct.pluck(:ip)
+      # ips += SearchLog.where(user_id: current_user.id).distinct.pluck(:ip)
+      # ips += ToppageLog.where(user_id: current_user.id).distinct.pluck(:ip)
+      ips << current_user.last_sign_in_ip.to_s
+      ips << current_user.current_sign_in_ip.to_s
+
+      ips.uniq
+
+      DetailLog.where(user_id: current_user.id).or(DetailLog.where(ip: ips, user_id: nil))
+    else
+      DetailLog.where(ip: ip)
+    end
+
+    detail_logs = detail_logs.where(created_at: (1.year.ago)..(Time.now))
+
+    @histories = @products.joins(:detail_logs).where("detail_logs.id": detail_logs).order("detail_logs.created_at": :desc).uniq
   end
 
   def check_open

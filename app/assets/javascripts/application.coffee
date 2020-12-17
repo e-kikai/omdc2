@@ -34,6 +34,10 @@ $(document).on 'ready, turbolinks:load', ->
   # $('input.allselect').click ->
   #   @.select()
 
+  # tooltip
+  $('.tooltip').remove()
+  $('[data-toggle="tooltip"]').tooltip()
+
   # フォーム共通 : datetimepicker
   $('input.datepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD'})
   $('input.datetimepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD HH:mm:ss'})
@@ -73,7 +77,35 @@ $(document).on 'ready, turbolinks:load', ->
     $(@).find("input.price").each ->
       $(this).triggerHandler "focus"
 
+  # ハンバーガー
   $('#dl-menu').dlmenu()
+
+
+  ### ロギング ###
+  if !$("#nologging").val()
+    ### 詳細ページログ取得 ###
+    if $("body").data("controller") == "products" && $("body").data("action") == "show"
+      $.ajax
+        async:    true
+        url:      "/detail_logs/"
+        type:     'POST',
+        dataType: 'json',
+        data :    { product_id : $('#product_id').val(), r : $('#r').val(), referer : $('#referer').val()  },
+        timeout:  3000,
+        # success:  (data, status, xhr)   -> alert status
+        # error:    (xhr,  status, error) -> alert status
+
+    ### 検索ログ ###
+    # if $("body").data("controller") == "products" && $("body").data("action") == "index"
+    #   $.ajax
+    #     async:    true
+    #     url:      "/search_logs/"
+    #     type:     'POST',
+    #     dataType: 'json',
+    #     data :    { category_id : $('#search_category_id').val(), company_id : $('#search_company_id').val(), keywords : $('#search_keywords').val(), search_id : $('#search_id').val(), nitamono_product_id : $('#nitamono_product_id').val(), path : $('#path').val(), page : $('#page').val(), r : $('#r').val(), referer : $('#referer').val() },
+    #     timeout:  3000,
+    #     # success:  (data, status, xhr)   -> alert status
+    #     # error:    (xhr,  status, error) -> alert status
 
 priceUnformat = (str) ->
   num = new String(str).replace(/０/g, "0").replace(/１/g, "1").replace(/２/g, "2").replace(/３/g, "3").replace(/４/g, "4").replace(/５/g, "5").replace(/６/g, "6").replace(/７/g, "7").replace(/８/g, "8").replace(/９/g, "9").replace(/[^0-9]/g, "")

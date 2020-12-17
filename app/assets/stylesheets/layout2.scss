@@ -126,5 +126,27 @@ html.layout2 {
     }
   }
 
+  .favorite_star {
+    display: block;
+    // width: 36px;
+    // height: 36px;
+    margin: auto;
+    text-align: center;
+
+    i.fas  {
+      // font-size: 28px;
+      // color: #CCC;
+      -webkit-text-stroke: #3b6783 1px;
+      // text-shadow: #FFF 1px 1px 1px;
+    }
+
+    &.active i.fas {
+      -webkit-text-stroke: #3b6783 1px;
+      color: #FF0;
+      text-shadow: #FF0 0px 0px 8px;
+
+    }
+  }
+
 
 }

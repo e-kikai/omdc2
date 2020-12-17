@@ -3,4 +3,4 @@ section.history
     h2 閲覧履歴
     .items_block
       - histories.each_with_index do |product, i|
-        = render product, hidexs: (i < 3 ? false : true)
+        = render "products/product", product: product, hidexs: (i < 3 ? false : true)
