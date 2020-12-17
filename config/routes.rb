@@ -29,7 +29,11 @@ Rails.application.routes.draw do
   get  "genre/:genre_id"             => "products#index", as: :genre
 
   # get  "detail/:id"   => "products#show"
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show] do
+    collection do
+      get :list_no
+    end
+  end
 
   get  "images/:id"   => "products#images"
   get  "youtube/:id"  => "products#youtube"

@@ -5,7 +5,7 @@ class ProductsController < ApplicationController
 
   before_action :check_open,    except: [:images, :ml_get_genre]
   before_action :check_display, except: [:images, :ml_get_genre]
-  before_action :get_product, only: [:show, :contact, :contact_tel, :contact_do]
+  before_action :get_product,   only: [:show, :contact, :contact_tel, :contact_do]
 
   before_action :fluent_before, only: [:show]
   after_action  :fluent_log,    only: [:show]
@@ -47,6 +47,14 @@ class ProductsController < ApplicationController
       format.html
       format.csv { export_csv "#{@open_now.name}_products.csv" }
     end
+  end
+
+  def list_no
+    page       = (params[:page] || 1).to_i
+    where_rage = (page * 100 - 99)..(page * 100)
+    @max = @products.maximum(:list_no)
+
+    @pproducts = @products.where(list_no: where_rage).order(:list_no)
   end
 
   def bid_list

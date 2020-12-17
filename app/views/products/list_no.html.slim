@@ -1,0 +1,81 @@
+- set_meta_tags title: "リストNo.順 出品商品リスト"
+- breadcrumb  :something, "リストNo.順 出品商品リスト"
+
+javascript:
+  var display = function(tab) {
+      if (tab == 0) {
+        close= 1;
+      } else {
+        close = 0;
+      }
+
+      var pane = document.getElementsByClassName("items_block");
+      pane[tab].setAttribute("style", "display:inline-table");
+      pane[close].setAttribute("style", "display:none");
+      var pane = document.getElementsByClassName("items_block t2");
+      pane[tab].setAttribute("style", "display:inline-table");
+      pane[close].setAttribute("style", "display:none");
+
+      return false;
+  }
+
+section.items
+  .container
+    #button_area
+      = link_to "javascript:display(0);", class: "view_button" do
+        i.fas.fa-th-large
+      = link_to "javascript:display(1);", class: "view_button" do
+        i.fas.fa-list
+
+    h2 リストNo.順 出品商品リスト
+
+    / = paginate @pproducts
+    .nowrap
+      ul.no_tab
+        - 1.upto(@max / 100) do |v|
+          li = link_to "#{v * 100 - 99}-#{[v * 100, @max].min}", "/products/list_no?page=#{v}"
+
+    .items_block style="display: inline-table;"
+      - @pproducts.each do |product, i|
+        = render product, hidexs: false
+
+    .nowrap
+      .items_block style="display: none;"
+        table
+          tr
+            th.id = "No."
+            th = "商品名"
+            th = "メーカー"
+            th = "型式"
+            th = "年式"
+            th.num = "最低入札金額"
+            th = "展示場所"
+            th.img_link 画像
+            th.img_link 動画
+            th.img_link 画像検索
+            th.img_link
+
+          - @pproducts.each do |pr|
+            tr
+              td.id = pr.list_no
+              td = link_to pr.name, "/products/#{pr.id}"
+              td = pr.maker
+              td = pr.model
+              td = pr.year
+              td.num = number_to_currency(pr.min_price)
+              td = pr.area_name
+              td.img_link
+                - if pr.product_images.present?
+                  = link_to "/products/#{pr.id}/image", target: "_blank" do
+                    span.glyphicon.glyphicon-picture
+              td.img_link
+                - if pr.youtube.present?
+                  = link_to "/products/#{pr.id}/youtube", target: "_blank" do
+                    span.glyphicon.glyphicon-film
+              td.img_link
+                - if pr.product_images.present?
+                  = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
+                    i.fas.fa-camera
+              td.img_link
+                = link_to "/products/#{pr.id}/favorite", target: "_blank" do
+                  i.fas.fa-star
