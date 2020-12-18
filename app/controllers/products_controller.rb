@@ -140,6 +140,15 @@ class ProductsController < ApplicationController
     end
   end
 
+  def image_vector_search
+    ### 商品が選択されている場合 ###
+    if params[:id].present?
+      get_product
+
+      @products = @products.image_vector_sort(@product.id, Product::VECTORS_LIMIT)
+    end
+  end
+
   private
 
   def get_product

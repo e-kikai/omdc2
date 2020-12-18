@@ -368,6 +368,11 @@ class Product < ApplicationRecord
     res
   end
 
+  ### トップ画像の有無 ###
+  def top_image?
+    product_images.first.present?
+  end
+
 
   ### この商品のベクトルを取得 ###
   def get_vector
@@ -387,74 +392,39 @@ class Product < ApplicationRecord
     end
   end
 
-  ### 商品から画像特徴ベクトル検索 ###
-  def nitamono(limit=Product::VECTORS_LIMIT)
-    Product.status(STATUS[:start]).nitamono_search(self.get_vector, limit)
+  ### 商品から画像特徴ベクトルソート(全件からソートで検索) ###
+  def self.image_vector_sort(product_id, limit=Product::VECTORS_LIMIT, page=1, mine=false)
+    target = Product.find(product_id).get_vector
+
+    self.image_vector_search(target, limit, page, mine)
   end
 
-  ### 画像ファイルから画像特徴ベクトル検索(途中) ###
-  def self.nitamono_by_image(image, limit=Product::VECTORS_LIMIT)
+  ### 画像ファイルから画像特徴ベクトルソート ###
+  def self.image_vector_sort_by_file(image, limit=Product::VECTORS_LIMIT)
 
     ### 画像ファイルからベクトルを取得 ###
-    target = process_vector_by_file()
+    target = process_vector_by_file(image)
 
-    Product.status(STATUS[:start]).nitamono_search(target, limit)
+    self.image_vector_search(target, limit)
   end
 
-  def self.sort_by_vector(target, products, limit=50)
-    logger.debug ":::: start ::::::"
-
+  ### 画像特徴ベクトル検索処理 ###
+  def self.image_vector_search(target, limit=nil, page=1, mine=false)
     return self.none if target.nil?
 
+    ### ベクトル郡取得 ###
     vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
-
-    ### 初期化 ###
-    resource = Aws::S3::Resource.new(
-      access_key_id:     Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key,
-      region:            'ap-northeast-1', # Tokyo
-    )
-
-    bucket = resource.bucket(@bucket_name)
+    bucket = Product.s3_bucket # S3バケット取得
     update_flag = false
 
-    ### ターゲットベクトル取得 ###
-    target_vector =  if target.try(:path)  # 画像ファイルから
-      image_path      = target.path
-      tmp_img_path    = "#{VECTORS_PATH}/#{target.original_filename}"
+    ### 各ベクトル比較 ###
+    pids = self.pluck(:id).uniq # 検索対象(出品中)の商品ID取得
 
-      vector_path     = "#{VECTORS_PATH}/#{target.original_filename}.npy"
-      tmp_vector_path = "/tmp/#{target.original_filename}.npy"
+    logger.debug pids.count
 
-      logger.debug "*** 3 : #{vector_path}"
+    sorts = pids.map do |pid|
+      logger.debug("pid : #{pid}")
 
-      ### 同じファイルがなければ ###
-      unless File.exist? tmp_vector_path
-        FileUtils.mv(image_path, tmp_img_path)
-
-        # プロセス
-        logger.debug "*** process ***"
-
-        cmd = "cd #{UTILS_PATH} && python3 process_images.py --image_files=\"#{tmp_img_path}\";"
-        logger.debug "*** 4 : #{cmd}"
-        o, e, s = Open3.capture3(cmd)
-
-        FileUtils.mv(vector_path, tmp_vector_path)
-      end
-
-      Npy.load_string(File.read(tmp_vector_path))
-    elsif vectors[target.id].present? # キャッシュからベクトル取得
-      vectors[target.id]
-    elsif bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").exists? # アップロードファイルからベクトル取得
-      str = bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").get.body.read
-      Npy.load_string(str)
-    else # ない場合
-      nil
-    end
-
-    return Product.none if target_vector.nil?
-
-    sorts = products.distinct.pluck(:id).map do |pid|
       ### ベクトルの取得 ###
       pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
         vectors[pid]
@@ -475,18 +445,27 @@ class Product < ApplicationRecord
       if pr_narray == ZERO_NARRAY || pr_narray.nil? # ベクトルなし
         nil
       else
-        sub = pr_narray - target_vector
+        sub = pr_narray - target
         res = (sub * sub).sum
-        (res > 0 ) ? [pid, res]  : nil
-      end
-    end.compact.sort_by { |v| v[1] }.first(limit).to_h
 
+        (res > 0 || mine == true) ? [pid, res]  : nil
+      end
+    end.compact.sort_by { |v| v[1] }
+
+    ### 件数フィルタリング ###
+    limit = limit.to_i
+    page = page.to_i
+    page = 1 if page < 1
+
+    sorts = sorts.slice(limit * (page - 1), limit) if limit > 0
+
+    sorts = sorts.to_h
 
     # ベクトルキャシュ更新
     Rails.cache.write(VECTOR_CACHE, vectors) if update_flag == true
 
     # 結果を返す
-    sorts
+    where(id: sorts.keys).sort_by { |pr| sorts[pr.id] }
   end
 
   ### 商品画像から画像特徴ベクトル抽出・バケット保存 ###

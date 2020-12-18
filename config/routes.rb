@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     collection do
       get :list_no
     end
+
+    member do
+      get :image_vector_search
+    end
   end
 
   get  "images/:id"   => "products#images"
