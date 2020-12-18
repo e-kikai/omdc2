@@ -429,6 +429,8 @@ class Product < ApplicationRecord
       pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
         vectors[pid]
       else # 新規(ファイルからベクトル取得して追加)
+        logger.debug("get by file :: pid : #{pid}")
+
         update_flag = true
         vectors[pid] = if bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").exists?
 
