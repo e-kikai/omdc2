@@ -426,7 +426,8 @@ class Product < ApplicationRecord
       logger.debug("pid : #{pid}")
 
       ### ベクトルの取得 ###
-      pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
+      # pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
+      pr_narray = if vectors[pid].present? # 既存
         vectors[pid]
       else # 新規(ファイルからベクトル取得して追加)
         logger.debug("get by file :: pid : #{pid}")
