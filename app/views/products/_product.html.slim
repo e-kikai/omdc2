@@ -19,7 +19,5 @@
   .watch_area
     = link_to "/products/#{product.id}/image_vector_search" do
       i.fas.fa-camera
-    / = button_tag class: :star do
-    /   i.fas.fa-star
 
     = render "products/favorite", product: product

@@ -59,9 +59,8 @@ section.items
                     span.glyphicon.glyphicon-film
               td.img_link
                 - if pr.product_images.present?
-                  = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
+                  = link_to "/products/#{pr.id}/image_vector_search" do
                     i.fas.fa-camera
-              / td.img_link
-              /   = link_to "/products/#{pr.id}/favorite", target: "_blank" do
-              /     i.fas.fa-star
+
+
               td.img_link = render "products/favorite", product: pr
