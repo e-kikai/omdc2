@@ -418,7 +418,7 @@ class Product < ApplicationRecord
     update_flag = false
 
     ### 各ベクトル比較 ###
-    pids = self.pluck(:id).uniq # 検索対象(出品中)の商品ID取得
+    pids = self.reorder(:id).pluck(:id).uniq # 検索対象(出品中)の商品ID取得
 
     logger.debug pids.count
 
