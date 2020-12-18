@@ -260,7 +260,7 @@ end
 
 
 ### マイページ ###
-crumb :mypage do
+crumb :mypage_root do
   link   "マイページ", "/mypage/"
   parent :root
 end
@@ -271,7 +271,7 @@ crumb :mypage_something do |title|
 end
 
 crumb :mypage_favolite do
-  link   "お気に入り一覧", "/mypage/favorites"
+  link   "お気に入りリスト (入札依頼PDF作成)", "/mypage/favorites"
   parent :mypage_root
 end
 

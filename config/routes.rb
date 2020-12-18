@@ -72,7 +72,7 @@ Rails.application.routes.draw do
     patch 'edit_password' => 'main#update_password'
 
     resources :products,  only: [:index]
-    resources :favolites, only: [:index, :create, :destroy] do
+    resources :favorites, only: [:index, :create, :destroy] do
       collection do
         post "toggle"
       end

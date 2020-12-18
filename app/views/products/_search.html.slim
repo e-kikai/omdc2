@@ -39,7 +39,7 @@ section.genre
       .flex_block
         - xls.slice(no, 4).each do |xl|
           ul
-            li = link_to "/search?xl_genre=#{xl[:x][0]}" do
+            li = link_to "/xl_genre/#{xl[:x][0]}" do
               = xl[:x][1]
               span = xl[:v]
 

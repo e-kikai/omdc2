@@ -115,4 +115,15 @@ class User < ApplicationRecord
   #   end
   # end
 
+  ### お気に入りリストIDリスト ###
+  def favorite_ids
+    favorites.pluck(:product_id)
+  end
+
+  def favorite?(product_id)
+    @favorite_ids = favorites.pluck(:product_id) if @favorite_ids.nil?
+
+    @favorite_ids.include?(product_id)
+  end
+
 end

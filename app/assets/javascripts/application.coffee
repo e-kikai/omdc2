@@ -35,8 +35,8 @@ $(document).on 'ready, turbolinks:load', ->
   #   @.select()
 
   # tooltip
-  $('.tooltip').remove()
-  $('[data-toggle="tooltip"]').tooltip()
+  # $('.tooltip').remove()
+  # $('[data-toggle="tooltip"]').tooltip()
 
   # フォーム共通 : datetimepicker
   $('input.datepicker').datetimepicker({locale: 'ja', format: 'YYYY/MM/DD'})
@@ -106,6 +106,7 @@ $(document).on 'ready, turbolinks:load', ->
     #     timeout:  3000,
     #     # success:  (data, status, xhr)   -> alert status
     #     # error:    (xhr,  status, error) -> alert status
+
 
 priceUnformat = (str) ->
   num = new String(str).replace(/０/g, "0").replace(/１/g, "1").replace(/２/g, "2").replace(/３/g, "3").replace(/４/g, "4").replace(/５/g, "5").replace(/６/g, "6").replace(/７/g, "7").replace(/８/g, "8").replace(/９/g, "9").replace(/[^0-9]/g, "")

@@ -1,6 +1,6 @@
-$_favolite = $('.favolite[data-pid=<%= @product_id %>]')
-<% if @favolite.soft_destroyed_at.present? %>
-  $_favolite.removeClass("active").attr("data-original-title", "お気に入りに登録")
+$_favorite = $('.favorite_star[data-pid=<%= @product_id %>]')
+<% if @favorite.soft_destroyed_at.present? %>
+  $_favorite.removeClass("active").attr("data-original-title", "お気に入りに登録")
 <% else %>
-  $_favolite.addClass("active").attr("data-original-title", "お気に入りから削除")
+  $_favorite.addClass("active").attr("data-original-title", "お気に入りから削除")
 <% end %>

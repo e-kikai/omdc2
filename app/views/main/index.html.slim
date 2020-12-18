@@ -1,32 +1,4 @@
 javascript:
-  var display = function(tab) {
-      if (tab == 0) {
-         close= 1;
-     } else {
-         close = 0;
-      }
-     var pane = document.getElementsByClassName("items_block");
-     pane[tab].setAttribute("style", "display:inline-table");
-    pane[close].setAttribute("style", "display:none");
-       var pane = document.getElementsByClassName("items_block t2");
-     pane[tab].setAttribute("style", "display:inline-table");
-    pane[close].setAttribute("style", "display:none");
-  }
-  </script>
-  <script type="text/javascript">
-  $(function(){
-      $('button.star').on('click', function(event){
-          event.preventDefault();
-          $(this).toggleClass('active');
-          if($(this).hasClass('active')){
-              var text = $(this).data('text-clicked');
-          } else {
-              var text = $(this).data('text-default');
-          }
-          $(this).html(text);
-      });
-  });
-
   $(function(){
   	$("ul.pannel li:not("+$("ul.tab li a.selected").attr("href")+")").hide()
   	$("ul.tab li a").click(function(){

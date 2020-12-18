@@ -2,10 +2,10 @@ class Mypage::FavoritesController < Mypage::ApplicationController
   before_action :get_favorites
 
   def index
-    @search    = open_now..products.where(id: @favorites.select(:id)).search(params[:q])
+    @search    = @products.where(id: @favorites.select(:product_id)).search(params[:q])
     @products  = @search.result.includes(:product_images)
 
-    @pproducts = @products.page(params[:page])
+    # @pproducts = @products.page(params[:page])
   end
 
   # def create
@@ -26,14 +26,12 @@ class Mypage::FavoritesController < Mypage::ApplicationController
   ### お気に入り切替 ###
   def toggle
     @product_id = params[:id]
-    @watch      = @favorites.find_by(product_id: @product_id)
+    @favorite   = @favorites.find_by(product_id: @product_id)
 
-    @res = if @watch.blank?
-      @watch = @favorites.create(product_id: @product_id)
-      :on
+    if @favorite.blank?
+      @favorite = @favorites.create(product_id: @product_id)
     else
-      @watch.soft_destroy!
-      :off
+      @favorite.soft_destroy!
     end
   end
 

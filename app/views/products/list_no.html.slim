@@ -1,24 +1,6 @@
 - set_meta_tags title: "リストNo.順 出品商品リスト"
 - breadcrumb  :something, "リストNo.順 出品商品リスト"
 
-javascript:
-  var display = function(tab) {
-      if (tab == 0) {
-        close= 1;
-      } else {
-        close = 0;
-      }
-
-      var pane = document.getElementsByClassName("items_block");
-      pane[tab].setAttribute("style", "display:inline-table");
-      pane[close].setAttribute("style", "display:none");
-      var pane = document.getElementsByClassName("items_block t2");
-      pane[tab].setAttribute("style", "display:inline-table");
-      pane[close].setAttribute("style", "display:none");
-
-      return false;
-  }
-
 section.items
   .container
     #button_area
