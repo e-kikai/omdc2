@@ -1,6 +1,19 @@
 - set_meta_tags title: "事務局への問い合わせ"
 - breadcrumb  :contact
 
+javascript:
+  $(function() {
+    $('#submit').prop('disabled', true);
+
+    $('#agree').on('click', function() {
+      if ( $(this).prop('checked') == false ) {
+        $('#submit').prop('disabled', true);
+      } else {
+        $('#submit').prop('disabled', false);
+      }
+    });
+  });
+
 section.rule
   .container
     h2 事務局への問い合わせ
@@ -60,6 +73,10 @@ section.rule
                 label = f.radio_button(:allow_mail, true)  + "受け取る"
                 label = f.radio_button(:allow_mail, false) + "受け取らない"
 
+            tr
+              th
+              td= recaptcha_tags
+
           .pp_box
             p.form-text
               | ご記入頂いた情報は、ご質問等に対するご返答及び、<br />
@@ -67,9 +84,7 @@ section.rule
           .pp_box
             label = check_box_tag(:agree, 1) + "個人情報の取扱について同意します。"
 
-          .pp_box = recaptcha_tags
 
-
-          = f.button :button, data: { "disable-with" => "送信中..." }, class: "btn-submit" do
+          = f.button type: :submit, id: :submit, data: { "disable-with" => "送信中..." }, class: "btn-submit" do
             i.fas.fa-paper-plane
             span.btn-content 問い合わせを送信する

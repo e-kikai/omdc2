@@ -37,8 +37,19 @@
 #  index_products_on_soft_destroyed_at  (soft_destroyed_at)
 #
 class Product < ApplicationRecord
+  require "open3"
+
   soft_deletable
   default_scope { without_soft_destroyed }
+
+  # 画像特徴ベクトル関連
+  UTILS_PATH   = "/var/www/yoshida/utils"
+  VECTORS_PATH = "#{UTILS_PATH}/static/image_vectors"
+  S3_VECTORS_PATH = "vectors"
+  ZERO_NARRAY  =  Numo::SFloat.zeros(1)
+  VECTOR_CACHE = "vector"
+
+  VECTORS_LIMIT   = 30
 
   belongs_to :open,    required: true
   belongs_to :company, required: true
@@ -357,6 +368,175 @@ class Product < ApplicationRecord
     res
   end
 
+
+  ### この商品のベクトルを取得 ###
+  def get_vector
+    return nil unless top_image? # 画像の有無チェック
+
+    vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+    bucket  = Product.s3_bucket # S3バケット取得
+
+    ### ターゲットベクトル取得 ###
+    if vectors[id].present? # キャッシュからベクトル取得
+      vectors[id]
+    elsif bucket.object("#{S3_VECTORS_PATH}/vector_#{id}.npy").exists? # アップロードファイルからベクトル取得
+      str = bucket.object("#{S3_VECTORS_PATH}/vector_#{id}.npy").get.body.read
+      Npy.load_string(str)
+    else # ない場合
+      nil
+    end
+  end
+
+  ### 商品から画像特徴ベクトル検索 ###
+  def nitamono(limit=Product::VECTORS_LIMIT)
+    Product.status(STATUS[:start]).nitamono_search(self.get_vector, limit)
+  end
+
+  ### 画像ファイルから画像特徴ベクトル検索(途中) ###
+  def self.nitamono_by_image(image, limit=Product::VECTORS_LIMIT)
+
+    ### 画像ファイルからベクトルを取得 ###
+    target = process_vector_by_file()
+
+    Product.status(STATUS[:start]).nitamono_search(target, limit)
+  end
+
+  def self.sort_by_vector(target, products, limit=50)
+    logger.debug ":::: start ::::::"
+
+    return self.none if target.nil?
+
+    vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+
+    ### 初期化 ###
+    resource = Aws::S3::Resource.new(
+      access_key_id:     Rails.application.secrets.aws_access_key_id,
+      secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region:            'ap-northeast-1', # Tokyo
+    )
+
+    bucket = resource.bucket(@bucket_name)
+    update_flag = false
+
+    ### ターゲットベクトル取得 ###
+    target_vector =  if target.try(:path)  # 画像ファイルから
+      image_path      = target.path
+      tmp_img_path    = "#{VECTORS_PATH}/#{target.original_filename}"
+
+      vector_path     = "#{VECTORS_PATH}/#{target.original_filename}.npy"
+      tmp_vector_path = "/tmp/#{target.original_filename}.npy"
+
+      logger.debug "*** 3 : #{vector_path}"
+
+      ### 同じファイルがなければ ###
+      unless File.exist? tmp_vector_path
+        FileUtils.mv(image_path, tmp_img_path)
+
+        # プロセス
+        logger.debug "*** process ***"
+
+        cmd = "cd #{UTILS_PATH} && python3 process_images.py --image_files=\"#{tmp_img_path}\";"
+        logger.debug "*** 4 : #{cmd}"
+        o, e, s = Open3.capture3(cmd)
+
+        FileUtils.mv(vector_path, tmp_vector_path)
+      end
+
+      Npy.load_string(File.read(tmp_vector_path))
+    elsif vectors[target.id].present? # キャッシュからベクトル取得
+      vectors[target.id]
+    elsif bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").exists? # アップロードファイルからベクトル取得
+      str = bucket.object("#{S3_VECTORS_PATH}/vector_#{target.id}.npy").get.body.read
+      Npy.load_string(str)
+    else # ない場合
+      nil
+    end
+
+    return Product.none if target_vector.nil?
+
+    sorts = products.distinct.pluck(:id).map do |pid|
+      ### ベクトルの取得 ###
+      pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
+        vectors[pid]
+      else # 新規(ファイルからベクトル取得して追加)
+        update_flag = true
+        vectors[pid] = if bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").exists?
+
+          str = bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").get.body.read
+          Npy.load_string(str) rescue ZERO_NARRAY
+        else
+          ZERO_NARRAY
+        end
+
+        vectors[pid]
+      end
+
+      # ベクトル比較
+      if pr_narray == ZERO_NARRAY || pr_narray.nil? # ベクトルなし
+        nil
+      else
+        sub = pr_narray - target_vector
+        res = (sub * sub).sum
+        (res > 0 ) ? [pid, res]  : nil
+      end
+    end.compact.sort_by { |v| v[1] }.first(limit).to_h
+
+
+    # ベクトルキャシュ更新
+    Rails.cache.write(VECTOR_CACHE, vectors) if update_flag == true
+
+    # 結果を返す
+    sorts
+  end
+
+  ### 商品画像から画像特徴ベクトル抽出・バケット保存 ###
+  def process_vector
+    logger.debug "*** 1 : #{id}"
+
+    bucket = Product.s3_bucket # S3バケット取得
+    vector_key = "#{S3_VECTORS_PATH}/vector_#{id}.npy" # 保存ベクトルファイル名
+    image = product_images.first
+
+    if image.blank?  # 画像の有無チェック
+      errors.add(:base, '商品に画像が登録されていません') and return false
+    elsif bucket.object(vector_key).exists? # ベクトルファイルの存否を確認
+      errors.add(:base, 'ベクトルファイルがすでに存在します') and return false
+    end
+
+    logger.debug "*** 2 : #{vector_key}"
+
+    filename    = image.image_identifier
+    image_id    = image.id
+    image_key   = "uploads/product_image/image/#{image_id}/#{filename}"
+
+    image_path  = "#{UTILS_PATH}/static/img/#{filename}"
+    vector_path = "#{VECTORS_PATH}/#{filename}.npy"
+
+    logger.debug "*** 3 : get #{image_key}"
+
+    bucket.object(image_key).download_file(image_path) # S3より画像ファイルの取得
+
+    ### プロセス ###
+    Product.process_vector_core(image_path)
+
+    logger.debug "*** 5 : process #{vector_path}"
+
+    ### バケット保存 ###
+    bucket.object(vector_key).upload_file(vector_path) # ベクトルファイルアップロード
+
+    logger.debug "*** 6 : upload"
+
+    ### 不要になった画像ファイル、ベクトルファイルの削除
+    File.delete(vector_path, image_path)
+
+    logger.debug "*** 7 : delete"
+
+    self
+  rescue => e
+    logger.debug "*** X : rescue"
+    logger.debug e
+  end
+
   private
 
   def check_min_price_to_open
@@ -378,4 +558,57 @@ class Product < ApplicationRecord
     else self.youtube
     end
   end
+
+
+
+  ### アップロードされたファイルから画像特徴ベクトルを抽出 ###
+  def self.process_vector_by_file(target)
+    image_path      = target.path
+    tmp_img_path    = "#{VECTORS_PATH}/#{target.original_filename}"
+
+    vector_path     = "#{VECTORS_PATH}/#{target.original_filename}.npy"
+    tmp_vector_path = "/tmp/#{target.original_filename}.npy"
+
+    logger.debug "*** 3 : #{vector_path}"
+
+    FileUtils.mv(image_path, tmp_img_path) # アップロードされたファイルをtmpへ移動
+
+    ### プロセス ###
+    Product.process_vector_core(tmp_img_path)
+
+    FileUtils.mv(vector_path, tmp_vector_path) # 生成されたベクトルファイルをtmpへ移動
+
+    Npy.load_string(File.read(tmp_vector_path)) # 抽出されたベクトルを返す
+  rescue
+    Product::ZERO_NARRAY
+  end
+
+  ### 抽出処理コア ###
+  def self.process_vector_core(image_path)
+    # プロセス
+    logger.debug "*** process ***"
+
+    cmd = "cd #{UTILS_PATH} && python3 process_images.py --image_files=\"#{image_path}\";"
+    logger.debug "*** 4 : #{cmd}"
+    o, e, s = Open3.capture3(cmd)
+  rescue => e
+    logger.debug "*** X : rescue"
+    logger.debug e
+    return
+  end
+
+  ### S3リソース情報 ###
+  def self.s3_resource
+    Aws::S3::Resource.new(
+      access_key_id:     Rails.application.secrets.aws_access_key_id,
+      secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region:            'ap-northeast-1', # Tokyo
+    )
+  end
+
+  ### S3バケット ###
+  def self.s3_bucket
+    s3_resource.bucket(Rails.application.secrets.aws_s3_bucket)
+  end
+
 end
