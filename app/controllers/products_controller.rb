@@ -96,7 +96,7 @@ class ProductsController < ApplicationController
     @samegenres = @products.where(genre: @product.genre).limit(5)
     # @likeimgs   = @products.order("random()").limit(5)
 
-    @likeimgs   = @products.image_vector_sort(@product, 5)
+    @likeimgs   = @products.image_vector_sort(@product.id, 5)
   end
 
   def images
