@@ -151,6 +151,21 @@ class ProductsController < ApplicationController
     end
   end
 
+  def image_vector_search_by_file
+    if params[:image]
+      @products = @products.image_vector_sort_by_file(params[:image], Product::VECTORS_LIMIT)
+    end
+  end
+
+  ### 検索結果用の画像表示用 ###
+  def image
+    tmp_img_path = "/tmp/#{params[:filename]}"
+
+    respond_to do |format|
+      format.jpeg { send_file tmp_img_path, type: 'image/jpeg', disposition: 'inline' }
+    end
+  end
+
   private
 
   def get_product

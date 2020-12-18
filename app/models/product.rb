@@ -541,24 +541,24 @@ class Product < ApplicationRecord
     end
   end
 
-
-
   ### アップロードされたファイルから画像特徴ベクトルを抽出 ###
   def self.process_vector_by_file(target)
-    image_path      = target.path
-    tmp_img_path    = "#{VECTORS_PATH}/#{target.original_filename}"
+    image_path       = target.path
+    process_img_path = "#{VECTORS_PATH}/#{target.original_filename}"
+    vector_path      = "#{VECTORS_PATH}/#{target.original_filename}.npy"
 
-    vector_path     = "#{VECTORS_PATH}/#{target.original_filename}.npy"
-    tmp_vector_path = "/tmp/#{target.original_filename}.npy"
+    tmp_vector_path  = "/tmp/#{target.original_filename}.npy"
+    tmp_img_path     = "/tmp/#{target.original_filename}"
 
-    logger.debug "*** 3 : #{vector_path}"
+    unless File.exist? tmp_vector_path
+      FileUtils.mv(image_path, process_img_path) # アップロードされたファイルをtmpへ移動
 
-    FileUtils.mv(image_path, tmp_img_path) # アップロードされたファイルをtmpへ移動
+      ### プロセス ###
+      Product.process_vector_core(process_img_path)
 
-    ### プロセス ###
-    Product.process_vector_core(tmp_img_path)
-
-    FileUtils.mv(vector_path, tmp_vector_path) # 生成されたベクトルファイルをtmpへ移動
+      FileUtils.mv(vector_path, tmp_vector_path) # 生成されたベクトルファイルをtmpへ移動
+      FileUtils.mv(process_img_path, tmp_img_path)
+    end
 
     Npy.load_string(File.read(tmp_vector_path)) # 抽出されたベクトルを返す
   rescue

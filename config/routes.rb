@@ -31,7 +31,10 @@ Rails.application.routes.draw do
   # get  "detail/:id"   => "products#show"
   resources :products, only: [:index, :show] do
     collection do
-      get :list_no
+      get  :list_no
+      get  :image_vector_search_by_file
+      post :image_vector_search_by_file
+      get  :image
     end
 
     member do

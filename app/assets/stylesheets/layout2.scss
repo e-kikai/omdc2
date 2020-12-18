@@ -161,4 +161,20 @@ html.layout2 {
     border-width: 0;
   }
 
+  hr {
+    border-top: 1px solid #999;
+  }
+
+  h3.image_vector {
+    font-size: 1.3rem;
+    margin: 1rem 0;
+    font-weight: 700;
+    color: #004e98;
+  }
+
+  img.upload_image {
+    max-width: 400px;
+    max-height: 200px;
+  }
+
 }
