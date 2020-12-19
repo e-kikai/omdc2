@@ -9,12 +9,12 @@ p
 p
   = link_to "メールアドレス確認", confirmation_url(@resource, confirmation_token: @token, locale: I18n.locale)
 
-p style="margin-top:32px;" ものづくりオークションを何卒よろしくお願いいたします。
+p style="margin-top:32px;" 大阪機械卸業団地協同組合 機械工具入札会を何卒よろしくお願いいたします。
 
 
 p style="margin-top:32px;"
-  | ※このメールは自動送信です。本メールへの返信によるご質問は承っておりませんので、ご了承ください。
-  | お手数をおかけしますが、以下のURLより、事務局までお問い合わせください。
+  . ※このメールは自動送信です。本メールへの返信によるご質問は承っておりませんので、ご了承ください。
+  . お手数をおかけしますが、以下のURLより、事務局までお問い合わせください。
   . = link_to "事務局への問い合わせ", "#{root_url(only_path: false)}/contacts/new"
 
 div style="margin-top642px;"

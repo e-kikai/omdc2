@@ -12,6 +12,7 @@
         th 氏名
         th メールアドレス
         th 案内
+        th 確認
         th 登録日時
         th 削除
       - @pusers.each do |us|
@@ -21,12 +22,12 @@
             td = us.name
             td = us.email
             td = (us.allow_mail? ? "○" : "×")
+            td = us.confirmed_at? ? "◯" : ""
             td =  l(us.created_at, format: :short)
             td.button
               - message = "#{us.company} #{us.name}\n\nこのユーザを削除します。\nよろしいですか？"
               = link_to({ action: :destroy, id: us.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-default btn-xs") do
                i.fas.fa-user-times
                span.btn-content 削除
-
 
   = paginate @pusers

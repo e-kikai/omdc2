@@ -16,3 +16,5 @@
   = link_to "/users/login", class: "favorite_star",
     data: { pid: product.id, totoggle: :tooltip, container: :html, placement: :left, trigger: :hover, html: :true }, title: "ログインすると<br />お気に入りを利用できます"  do
     i.fas.fa-star
+    - if defined? content
+      span.btn-content = content

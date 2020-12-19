@@ -11,6 +11,7 @@
         th IP/ホスト名
         th ユーザID/会社・ユーザ名
         th.id 商品ID
+        th.id No.
         th 商品名 メーカー 型式
         th 出品会社
         th 最低価格
@@ -26,6 +27,7 @@
               - else
                 | -
             td.id = dl.product_id
+            td.id = dl.product.list_no
             td #{dl.product.name} #{dl.product.maker} #{dl.product.model}
             td = dl.product.company.name_remove_kabu
             td = number_to_currency dl.product.min_price

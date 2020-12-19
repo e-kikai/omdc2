@@ -1,0 +1,46 @@
+- set_meta_tags title: "ユーザ情報変更"
+- breadcrumb  :mypage_something, "ユーザ情報変更"
+
+section.rule
+  .container
+    h2 ユーザ情報変更
+    .newcomers_block
+
+      h3 ユーザ情報変更フォーム
+      .form_block
+        = form_for(@user, method: :patch, url: '/mypage/edit_user') do |f|
+
+          - if f.object.errors.full_messages.present?
+            .alert.alert-danger
+              ul
+                - f.object.errors.full_messages.each do |msg|
+                  li = msg
+
+          table.formTable
+            tr
+              th
+                = f.label :company
+                span.cck01 必須
+              td = f.text_field :company, class: "form-control", required: "required", placeholder: "例 : 山田株式会社(個人の方は個人と入力)"
+            tr
+              th
+                = f.label :name
+                span.cck01 必須
+              td = f.text_field :name, class: "form-control", required: "required", placeholder: "例 : 山田 太郎"
+            tr
+              th
+                = f.label :email
+                span.cck01 必須
+              td = f.text_field :email, class: "form-control", required: "required", placeholder: "例 : yamada@omdc.or.jp"
+
+            tr
+              th
+                = f.label :allow_mail
+                span.cck01 必須
+              td
+                label = f.radio_button(:allow_mail, true)  + "受け取る"
+                label = f.radio_button(:allow_mail, false) + "受け取らない"
+
+          = f.button type: "submit", id: :submit, class: 'btn-submit', data: {disable_with: '変更中・・・' } do
+            i.fas.fa-user-edit
+            span.btn-content ユーザを変更情報

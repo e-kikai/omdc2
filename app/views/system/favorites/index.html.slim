@@ -1,0 +1,36 @@
+- set_meta_tags title: "詳細ログ履歴"
+- breadcrumb  :system_something, "お気に入り履歴"
+
+.container-fluid.list-menu
+  = paginate @pfavorites
+
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+      tr
+        th.id ID
+        th 登録日時
+        th 削除日時
+        th ユーザID/会社・ユーザ名
+        th.id 商品ID
+        th.id No.
+        th 商品名 メーカー 型式
+        th 出品会社
+        th 最低価格
+
+      - @pfavorites.each do |fa|
+          tr
+            td.id = fa.id
+            td = fa.created_at
+            td = fa.soft_destroyed_at
+            td
+              - if fa.user_id.present?
+                | #{fa.user_id} #{fa.user.company}<br />#{fa.user.name}
+              - else
+                | -
+            td.id = fa.product_id
+            td.id = fa.product.list_no
+            td #{fa.product.name} #{fa.product.maker} #{fa.product.model}
+            td = fa.product.company.name_remove_kabu
+            td = number_to_currency fa.product.min_price
+
+  = paginate @pfavorites

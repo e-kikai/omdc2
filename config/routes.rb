@@ -90,6 +90,8 @@ Rails.application.routes.draw do
 
     get   'edit_password' => 'main#edit_password'
     patch 'edit_password' => 'main#update_password'
+    get   'edit_user'     => 'main#edit_user'
+    patch 'edit_user'     => 'main#update_user'
 
     resources :products,  only: [:index]
     resources :favorites, only: [:index, :create, :destroy] do
@@ -98,8 +100,6 @@ Rails.application.routes.draw do
       end
     end
     resources :contacts,  only: [:new, :create]
-
-    resource  :user,      only: [:edit, :update]
   end
 
   namespace :system do
@@ -168,8 +168,8 @@ Rails.application.routes.draw do
 
     resources :users,       only: [:index, :show, :destroy]
     resources :contacts,    only: [:index]
+    resources :favorites,   only: [:index]
     resources :detail_logs, only: [:index]
-
 
     unless Rails.env.production?
       resources :playground, only: [:show] do
