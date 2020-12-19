@@ -102,9 +102,9 @@ class ProductsController < ApplicationController
 
   def search_by_list_no
     if @product = @products.find_by(list_no: params[:list_no])
-      redirect_to "/detail/#{@product.id}"
+      redirect_to "/products/#{@product.id}"
     else
-      redirect_to "/", alert: "リストNo.「#{params[:list_no]}」の商品はありませんでした"
+      redirect_to "/search", alert: "リストNo.「#{params[:list_no]}」の商品はありませんでした"
     end
   end
 

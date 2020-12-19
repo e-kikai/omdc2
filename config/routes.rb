@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   root to: "main#index"
   get "mltest" => "main#get_ml_genre"
   get "qrcode" => "main#qrcode"
+  get "search" => "main#search"
+
 
   # get  "search"                      => "products#index", as: :search
   get  "xl_genre/:xl_genre_id"       => "products#index", as: :xl_genre
@@ -37,6 +39,7 @@ Rails.application.routes.draw do
       get  :image_vector_search_by_file
       post :image_vector_search_by_file
       get  :image
+      get  :search_by_list_no
     end
 
     member do
@@ -49,12 +52,12 @@ Rails.application.routes.draw do
   # get  "images/:id"   => "products#images"
   # get  "youtube/:id"  => "products#youtube"
   # get  "bid_list"     => "products#bid_list"
+  # get  "search_by_list_no" => "products#search_by_list_no"
 
   get "images/:id"  => redirect("/products/%{id}/images")
   get "youtube/:id" => redirect("/products/%{id}/youtube")
   get "bid_list"    => redirect("/products/list_no")
-
-  get  "/moss1/interview/:id" => redirect("/moss2/interview/%{id}")
+  get "search_by_list_no" => "products#search_by_list_no"
 
   get  "ml_get_genre" => "products#ml_get_genre"
 
@@ -63,7 +66,6 @@ Rails.application.routes.draw do
   # post "contact/:id"     => "products#contact_do"
   # get  "contact_tel/:id" => "products#contact_tel"
 
-  # get  "search_by_list_no" => "products#search_by_list_no"
   # get  "search_by_ml"      => "products#search_by_ml"
 
   # resources :wishlist, only: [:index, :create, :destroy]
