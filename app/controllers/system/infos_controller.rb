@@ -1,4 +1,4 @@
-class System::InfosController < ApplicationController
+class System::InfosController < System::ApplicationController
   def index
     @infos = Info.order(:id)
   end

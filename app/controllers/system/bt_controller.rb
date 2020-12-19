@@ -1,4 +1,4 @@
-class System::BtController < ApplicationController
+class System::BtController < System::ApplicationController
   before_action :get_companies_selector, only: [:hangtag, :ef, :carryout_new, :carryout_edit]
   before_action :check_open
   before_action :check_entry_date

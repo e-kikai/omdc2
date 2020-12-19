@@ -6,6 +6,18 @@
     = render "/main/openinfo", open: @open_now
 
     hr
+      ul.nav.nav-pills
+        li = link_to "/system/users", class: "btn btn-default btn-square" do
+          i.fas.fa-users
+          span.btn-content ユーザ管理
+        li = link_to "/system/contacts", class: "btn btn-default btn-square" do
+          i.fas.fa-mail-bulk
+          span.btn-content 問い合わせ管理
+        li = link_to "/system/detail_logs", class: "btn btn-default btn-square" do
+          i.fas.fa-list-alt
+          span.btn-content 詳細ログ
+
+    hr
     ul.nav.nav-pills
       li = link_to "/omdc2_system_manual.pdf", class: "btn btn-default btn-square" do
         span.glyphicon.glyphicon-info-sign

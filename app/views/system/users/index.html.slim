@@ -1,0 +1,32 @@
+- set_meta_tags title: "ユーザ管理"
+- breadcrumb  :system_something, "ユーザ管理"
+
+.container-fluid.list-menu
+  = paginate @pusers
+
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+      tr
+        th.id ID
+        th 会社名
+        th 氏名
+        th メールアドレス
+        th 案内
+        th 登録日時
+        th 削除
+      - @pusers.each do |us|
+          tr
+            td.id = us.id
+            td = us.company
+            td = us.name
+            td = us.email
+            td = (us.allow_mail? ? "○" : "×")
+            td =  l(us.created_at, format: :short)
+            td.button
+              - message = "#{us.company} #{us.name}\n\nこのユーザを削除します。\nよろしいですか？"
+              = link_to({ action: :destroy, id: us.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-default btn-xs") do
+               i.fas.fa-user-times
+               span.btn-content 削除
+
+
+  = paginate @pusers

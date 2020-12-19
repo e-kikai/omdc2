@@ -166,6 +166,11 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :users,       only: [:index, :show, :destroy]
+    resources :contacts,    only: [:index]
+    resources :detail_logs, only: [:index]
+
+
     unless Rails.env.production?
       resources :playground, only: [:show] do
         collection do

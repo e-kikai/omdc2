@@ -1,4 +1,4 @@
-class System::DisplaysController < ApplicationController
+class System::DisplaysController < System::ApplicationController
   def index
     @displays = Display.order(:id)
   end

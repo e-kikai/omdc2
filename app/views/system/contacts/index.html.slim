@@ -1,0 +1,32 @@
+- set_meta_tags title: "問い合わせ管理"
+- breadcrumb  :system_something, "問い合わせ管理"
+
+.container-fluid.list-menu
+  = paginate @pcontacts
+
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+      tr
+        th.id ID
+        th 会社名 / 氏名
+        th メールアドレス
+        th TEL
+        th 都道府県
+        th 案内
+        th ユーザ
+        th 内容
+        th 送信日時
+
+      - @pcontacts.each do |co|
+          tr
+            td.id = co.id
+            td #{co.company}<br />#{co.name}
+            td = co.mail
+            td = co.tel
+            td = co.addr_1
+            td = (co.allow_mail? ? "○" : "×")
+            td = co.user_id || "-"
+            td = simple_format co.content
+            td =  l(co.created_at, format: :short)
+
+  = paginate @pcontacts

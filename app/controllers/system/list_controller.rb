@@ -1,4 +1,4 @@
-class System::ListController < ApplicationController
+class System::ListController < System::ApplicationController
   # before_action :select_company_proudcuts, only: [:hangtag]
   # before_action :select_company_proudcuts_ef, only: [:ef]
   before_action :get_companies_selector, only: [:hangtag, :ef, :carryout_new, :carryout_edit]

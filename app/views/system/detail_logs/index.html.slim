@@ -1,0 +1,36 @@
+- set_meta_tags title: "詳細ログ履歴"
+- breadcrumb  :system_something, "詳細ログ履歴"
+
+.container-fluid.list-menu
+  = paginate @pdetail_logs
+
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+      tr
+        th アクセス日時
+        th IP/ホスト名
+        th ユーザID/会社・ユーザ名
+        th.id 商品ID
+        th 商品名 メーカー 型式
+        th 出品会社
+        th 最低価格
+        th リンク元
+
+      - @pdetail_logs.each do |dl|
+          tr
+            td = dl.created_at
+            td #{dl.ip}<br />#{dl.host}
+            td
+              - if dl.user_id.present?
+                | #{dl.user_id} #{dl.user.company}<br />#{dl.user.name}
+              - else
+                | -
+            td.id = dl.product_id
+            td #{dl.product.name} #{dl.product.maker} #{dl.product.model}
+            td = dl.product.company.name_remove_kabu
+            td = number_to_currency dl.product.min_price
+            / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
+            td.name style="word-break: break-all;" = URI.unescape(dl.referer)
+
+
+  = paginate @pdetail_logs
