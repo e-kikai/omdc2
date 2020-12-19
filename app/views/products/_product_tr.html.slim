@@ -1,0 +1,21 @@
+tr
+  td.id = product.list_no
+  td = link_to product.name, "/products/#{product.id}"
+  td = product.maker
+  td = product.model
+  td = product.year
+  td.num = number_to_currency(product.min_price)
+  td = product.area_name
+  td.img_link
+    - if product.product_images.present?
+      = link_to "/products/#{product.id}/images", target: "_blank" do
+        i.far.fa-images
+  td.img_link
+    - if product.youtube.present?
+      = link_to "/products/#{product.id}/youtube", target: "_blank" do
+        i.far.fa-video
+  td.img_link
+    - if product.product_images.present?
+      = link_to "/products/#{product.id}/image_vector_search" do
+        i.fas.fa-camera
+  td.img_link = render "/products/favorite", product: product

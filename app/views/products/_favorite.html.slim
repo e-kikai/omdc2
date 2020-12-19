@@ -9,6 +9,8 @@
   = link_to "/mypage/favorites/toggle?id=#{product.id}", method: :post, remote: true, class: "favorite_star #{ac}",
     data: { pid: product.id, toggle: :tooltip, container: :html, placement: :left, trigger: :hover }, title: ti  do
     i.fas.fa-star
+    - if defined? content
+      span.btn-content = content
 
 - else
   = link_to "/users/login", class: "favorite_star",

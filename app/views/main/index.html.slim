@@ -58,14 +58,14 @@ section.items
 
     ul.pannel
       li#tab1
-        span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで10件表示しています。
+        span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
 
         .items_block style="display: inline-table;"
           - @specials_01.each_with_index do |product, i|
             = render product, hidexs: (i < 6 ? false : true)
 
       li#tab2
-        span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで10件表示しています。
+        span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
 
         .items_block style="display: inline-table;"
           / - @specials_02.each_with_index do |pr, i|

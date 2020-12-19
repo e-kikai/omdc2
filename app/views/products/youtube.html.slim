@@ -1,32 +1,39 @@
 - set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} 商品動画"
 
-.row
-  .col-lg-offset-1.col-lg-10.col-md-12
-    h3
-      span.glyphicon.glyphicon-film
-      span.btn-content 商品動画
+- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model} 商品動画"
 
-    .panel.panel-default
-      .panel-body
-        table.table.table-condensed.table-detail
-          tr
-            th No.
-            td = @product.list_no
-          tr
-            th ジャンル
-            td #{@product.xl_genre.name} > #{@product.large_genre.name} > #{@product.genre.name}
-          tr
-            th 商品名 メーカー 型式
-            td #{@product.name} #{@product.maker} #{@product.model}
-          tr
-            th 最低入札金額
-            td #{number_with_delimiter(@product.min_price)}円
+section.detail
+  .container
+    h2 = "#{@product.name} 商品動画"
 
-  .col-lg-offset-1.col-lg-10.col-md-12
-    - if @product.youtube.present?
-      .youtube-area.embed-responsive.embed-responsive-16by9
-        iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
-    - else
-      .alert.alert-danger
-        span.glyphicon.glyphicon-alert
-        span.btn-content = 商品動画は登録されていません
+    .row
+      .col-lg-offset-1.col-lg-10.col-md-12
+        .detail_box
+          .panel-body
+            table
+              tbody
+                tr
+                  th No.
+                  td = @product.list_no
+                tr
+                  th ジャンル
+                  td #{@product.xl_genre.name} > #{@product.large_genre.name} > #{@product.genre.name}
+                tr
+                  th 商品名 メーカー 型式
+                  td #{@product.name} #{@product.maker} #{@product.model}
+                tr
+                  th 型式
+                  td = @product.model
+                tr
+                  th 最低入札価格
+                  td = number_to_currency(@product.min_price)
+
+        .detail_box
+          .panel-body
+            - if @product.youtube.present?
+              .youtube-area.embed-responsive.embed-responsive-16by9
+                iframe.embed-responsive-item src="https://www.youtube.com/embed/#{@product.youtube}" frameborder="0" allowfullscreen="1"
+            - else
+              .alert.alert-danger
+                span.glyphicon.glyphicon-alert
+                span.btn-content 商品動画は登録されていません

@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   get  "genre/:genre_id"             => "products#index", as: :genre
 
   # get  "detail/:id"   => "products#show"
+  get "detail/:id" => redirect("/products/%{id}")
+
   resources :products, only: [:index, :show] do
     collection do
       get  :list_no
@@ -39,13 +41,22 @@ Rails.application.routes.draw do
 
     member do
       get :image_vector_search
+      get :images
+      get :youtube
     end
   end
 
-  get  "images/:id"   => "products#images"
-  get  "youtube/:id"  => "products#youtube"
+  # get  "images/:id"   => "products#images"
+  # get  "youtube/:id"  => "products#youtube"
+  # get  "bid_list"     => "products#bid_list"
+
+  get "images/:id"  => redirect("/products/%{id}/images")
+  get "youtube/:id" => redirect("/products/%{id}/youtube")
+  get "bid_list"    => redirect("/products/list_no")
+
+  get  "/moss1/interview/:id" => redirect("/moss2/interview/%{id}")
+
   get  "ml_get_genre" => "products#ml_get_genre"
-  get  "bid_list"     => "products#bid_list"
 
   get  "qr"         => "products#qr"
   # get  "contact/:id"     => "products#contact"

@@ -64,10 +64,7 @@ section.detail
 
         .panel-body
           .nomal_btn
-            = button_tag class: :star do
-              i.fas.fa-star
-              span.button_content お気に入りリストに追加
-
+            = render "/products/favorite", product: @product, content: "お気に入りリストに追加"
 
         h3 商品に関する問い合わせについて
         .panel-body

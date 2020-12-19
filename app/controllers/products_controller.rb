@@ -3,9 +3,10 @@ class ProductsController < ApplicationController
 
   ROBOTS = /(google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/
 
-  before_action :check_open,    except: [:images, :ml_get_genre]
-  before_action :check_display, except: [:images, :ml_get_genre]
-  before_action :get_product,   only: [:show, :contact, :contact_tel, :contact_do]
+  before_action :check_open,      except: [:images, :youtube, :ml_get_genre]
+  before_action :check_display,   except: [:images, :youtube, :ml_get_genre]
+  before_action :get_product,     only: [:show, :contact, :contact_tel, :contact_do]
+  before_action :get_product_all, only: [:images, :youtube,]
 
   before_action :fluent_before, only: [:show]
   after_action  :fluent_log,    only: [:show]
@@ -13,19 +14,6 @@ class ProductsController < ApplicationController
   include Exports
 
   def index
-    # queries = if params[:xl_genre_id].present?
-    #   @xl_genre = XlGenre.find(params[:xl_genre_id])
-    #   {xl_genre_id_eq: params[:xl_genre_id]}.merge(Hash(params[:q]))
-    # elsif params[:large_genre_id].present?
-    #   @large_genre = LargeGenre.find(params[:large_genre_id])
-    #   {large_genre_id_eq: params[:large_genre_id]}.merge(Hash(params[:q]))
-    # elsif params[:genre_id].present?
-    #   @genre = Genre.find(params[:genre_id])
-    #   {genre_id_eq: params[:genre_id]}.merge(Hash(params[:q]))
-    # else
-    #   params[:q]
-    # end
-
     queries = params[:q].present? ? params[:q].permit!.to_h : {}
     if params[:xl_genre_id].present?
       @xl_genre = XlGenre.find(params[:xl_genre_id])
@@ -94,17 +82,13 @@ class ProductsController < ApplicationController
 
   def show
     @samegenres = @products.where(genre: @product.genre).limit(5)
-    # @likeimgs   = @products.order("random()").limit(5)
-
     @likeimgs   = @products.image_vector_sort(@product.id, 5)
   end
 
   def images
-      @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
   end
 
   def youtube
-      @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area).find(params[:id])
   end
 
   # def contact
@@ -170,6 +154,10 @@ class ProductsController < ApplicationController
 
   def get_product
     @product = @products.find(params[:id])
+  end
+
+  def get_product_all
+    @product = Product.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images).find(params[:id])
   end
 
   def fluent_before

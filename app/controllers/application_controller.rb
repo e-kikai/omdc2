@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
 
     # とりあえずのダミーデータ
-    # @histories = @products.order("random()").limit (5)
+    # @histories = @products.order("random()").limit(5)
 
     detail_logs = if user_signed_in?
       @user = current_user
@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
 
     detail_logs = detail_logs.where(created_at: (1.year.ago)..(Time.now))
 
-    @histories = @products.joins(:detail_logs).where("detail_logs.id": detail_logs).order("detail_logs.created_at": :desc).uniq
+    @histories = @products.joins(:detail_logs).where("detail_logs.id": detail_logs).order("detail_logs.created_at": :desc, id: :asc).limit(5)
   end
 
   def check_open

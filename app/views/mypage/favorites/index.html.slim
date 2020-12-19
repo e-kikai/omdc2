@@ -54,20 +54,18 @@ section.items
                 td = pr.area_name
                 td.img_link
                   - if pr.product_images.present?
-                    = link_to "/products/#{pr.id}/image", target: "_blank" do
-                      span.glyphicon.glyphicon-picture
+                    = link_to "/products/#{pr.id}/images", target: "_blank" do
+                      i.far.fa-images
                 td.img_link
                   - if pr.youtube.present?
                     = link_to "/products/#{pr.id}/youtube", target: "_blank" do
-                      span.glyphicon.glyphicon-film
+                      i.far.fa-video
                 td.img_link
                   - if pr.product_images.present?
                     = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
                       i.fas.fa-camera
-                / td.img_link
-                /   = link_to "/products/#{pr.id}/favorite", target: "_blank" do
-                /     i.fas.fa-star
-                td.img_link = render "products/favorite", product: pr
+
+                td.img_link = render "/products/favorite", product: pr
 
                 td = text_field_tag "price[#{pr.id}]", "", placeholder: "金額を入力", class: :price
 

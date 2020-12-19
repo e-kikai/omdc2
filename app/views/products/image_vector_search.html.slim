@@ -40,26 +40,4 @@ section.items
             th.img_link
 
           - @products.each do |pr|
-            tr
-              td.id = pr.list_no
-              td = link_to pr.name, "/products/#{pr.id}"
-              td = pr.maker
-              td = pr.model
-              td = pr.year
-              td.num = number_to_currency(pr.min_price)
-              td = pr.area_name
-              td.img_link
-                - if pr.product_images.present?
-                  = link_to "/products/#{pr.id}/image", target: "_blank" do
-                    span.glyphicon.glyphicon-picture
-              td.img_link
-                - if pr.youtube.present?
-                  = link_to "/products/#{pr.id}/youtube", target: "_blank" do
-                    span.glyphicon.glyphicon-film
-              td.img_link
-                - if pr.product_images.present?
-                  = link_to "/products/#{pr.id}/image_vector_search" do
-                    i.fas.fa-camera
-
-
-              td.img_link = render "products/favorite", product: pr
+            = render "/products/product_tr", product: pr
