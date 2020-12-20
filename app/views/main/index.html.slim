@@ -12,6 +12,10 @@ javascript:
 
 .mv_block
   .container
+    = hidden_field_tag :logging, :toppage
+    = hidden_field_tag :referer, request.referer
+    = hidden_field_tag :r,       params[:r]
+
     h2.mv = image_tag "mvv3.png", alt: "大阪機械卸業団地 機械工具入札会"
 
     .mv_cont

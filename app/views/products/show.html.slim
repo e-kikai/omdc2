@@ -4,7 +4,8 @@
 section.detail
   .container
     h2 = @product.name
-
+    
+    = hidden_field_tag :logging,    :detail
     = hidden_field_tag :product_id, @product.id
     = hidden_field_tag :referer,    request.referer
     = hidden_field_tag :r,          params[:r]

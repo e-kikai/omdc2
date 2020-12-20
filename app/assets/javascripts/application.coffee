@@ -83,8 +83,9 @@ $(document).on 'ready, turbolinks:load', ->
 
   ### ロギング ###
   if !$("#nologging").val()
+
     ### 詳細ページログ取得 ###
-    if $("body").data("controller") == "products" && $("body").data("action") == "show"
+    if $("input#logging").val() == "detail"
       $.ajax
         async:    true
         url:      "/detail_logs/"
@@ -95,17 +96,28 @@ $(document).on 'ready, turbolinks:load', ->
         # success:  (data, status, xhr)   -> alert status
         # error:    (xhr,  status, error) -> alert status
 
-    ### 検索ログ ###
-    # if $("body").data("controller") == "products" && $("body").data("action") == "index"
-    #   $.ajax
-    #     async:    true
-    #     url:      "/search_logs/"
-    #     type:     'POST',
-    #     dataType: 'json',
-    #     data :    { category_id : $('#search_category_id').val(), company_id : $('#search_company_id').val(), keywords : $('#search_keywords').val(), search_id : $('#search_id').val(), nitamono_product_id : $('#nitamono_product_id').val(), path : $('#path').val(), page : $('#page').val(), r : $('#r').val(), referer : $('#referer').val() },
-    #     timeout:  3000,
-    #     # success:  (data, status, xhr)   -> alert status
-    #     # error:    (xhr,  status, error) -> alert status
+    ## 検索ログ ###
+    if $("input#logging").val() == "search"
+      $.ajax
+        async:    true
+        url:      "/search_logs/"
+        type:     'POST',
+        dataType: 'json',
+        data :    { keywords : $('#keywords').val(), path : $('#path').val(), page : $('#page').val(), r : $('#r').val(), referer : $('#referer').val() },
+        timeout:  3000,
+        # success:  (data, status, xhr)   -> alert status
+        # error:    (xhr,  status, error) -> alert status
+
+    ### トップページログ ###
+    if $("input#logging").val() == "toppage"
+      $.ajax
+        async:    true
+        url:      "/toppage_logs/"
+        type:     'POST',
+        dataType: 'json',
+        data :    { r : $('#r').val(), referer : $('#referer').val() },
+        timeout:  3000,
+
 
 
 priceUnformat = (str) ->

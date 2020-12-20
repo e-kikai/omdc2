@@ -76,7 +76,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :detail_logs, only: [:create]
+  resources :detail_logs,  only: [:create]
+  resources :toppage_logs, only: [:create]
+  resources :search_logs,  only: [:create]
 
   # resources :helps, only: [:show]
   get  "heip/:label" => "helps#show"
@@ -96,7 +98,8 @@ Rails.application.routes.draw do
     resources :products,  only: [:index]
     resources :favorites, only: [:index, :create, :destroy] do
       collection do
-        post "toggle"
+        post  "toggle"
+        patch "request_list"
       end
     end
     resources :contacts,  only: [:new, :create]
@@ -166,10 +169,12 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :users,       only: [:index, :show, :destroy]
-    resources :contacts,    only: [:index]
-    resources :favorites,   only: [:index]
-    resources :detail_logs, only: [:index]
+    resources :users,        only: [:index, :show, :destroy]
+    resources :contacts,     only: [:index]
+    resources :favorites,    only: [:index]
+    resources :detail_logs,  only: [:index]
+    resources :toppage_logs, only: [:index]
+    resources :search_logs,  only: [:index]
 
     unless Rails.env.production?
       resources :playground, only: [:show] do

@@ -11,6 +11,14 @@ section.items
 
     h2 リストNo.順 出品商品リスト
 
+    = hidden_field_tag :logging,  :search
+    = hidden_field_tag :keywords, params[:keywords]
+
+    = hidden_field_tag :path,     request.fullpath
+    = hidden_field_tag :page,     params[:page] || 1
+    = hidden_field_tag :referer,  request.referer
+    = hidden_field_tag :r,        params[:r]
+
     / = paginate @pproducts
     .nowrap
       ul.no_tab

@@ -3,6 +3,7 @@
 # Table name: favorites
 #
 #  id                :bigint           not null, primary key
+#  amount            :integer
 #  soft_destroyed_at :datetime
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

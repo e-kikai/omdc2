@@ -8,6 +8,15 @@ class Mypage::FavoritesController < Mypage::ApplicationController
     # @pproducts = @products.page(params[:page])
   end
 
+  def request_list
+
+
+
+    respond_to do |format|
+      format.pdf
+    end
+  end
+
   # def create
   #   @watch = @favorites.new(product_id: params[:id])
   #   if @watch.save

@@ -16,6 +16,14 @@
         li = link_to "/system/favorites", class: "btn btn-default btn-square" do
           i.fas.fa-star
           span.btn-content お気に入り履歴
+      ul.nav.nav-pills
+        li = link_to "/system/toppage_logs", class: "btn btn-default btn-square" do
+          i.fas.fa-home
+          span.btn-content トップログ履歴
+        li = link_to "/system/search_logs", class: "btn btn-default btn-square" do
+          i.fas.fa-search
+          span.btn-content 検索ログ履歴
+
         li = link_to "/system/detail_logs", class: "btn btn-default btn-square" do
           i.fas.fa-list-alt
           span.btn-content 詳細ログ履歴

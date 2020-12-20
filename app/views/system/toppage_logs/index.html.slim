@@ -1,0 +1,27 @@
+- set_meta_tags title: "トップページログ履歴"
+- breadcrumb  :system_something, "トップページログ履歴"
+
+.container-fluid.list-menu
+  = paginate @ptoppage_logs
+
+  .scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+      tr
+        th アクセス日時
+        th IP/ホスト名
+        th ユーザID/会社・ユーザ名
+        th リンク元
+
+      - @ptoppage_logs.each do |tl|
+          tr
+            td = tl.created_at
+            td #{tl.ip}<br />#{tl.host}
+            td
+              - if tl.user_id.present?
+                | #{tl.user_id} #{tl.user.company} #{tl.user.name}
+              - else
+                | -
+            / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
+            td.name style="word-break: break-all;" = URI.unescape(tl.referer)
+
+  = paginate @ptoppage_logs

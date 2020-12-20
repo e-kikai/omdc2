@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_051020) do
+ActiveRecord::Schema.define(version: 2020_12_20_090129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2020_12_04_051020) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "soft_destroyed_at"
+    t.integer "amount"
     t.index ["product_id"], name: "index_favorites_on_product_id"
     t.index ["soft_destroyed_at"], name: "index_favorites_on_soft_destroyed_at"
     t.index ["user_id"], name: "index_favorites_on_user_id"
@@ -201,6 +202,11 @@ ActiveRecord::Schema.define(version: 2020_12_04_051020) do
     t.datetime "soft_destroyed_at"
     t.index ["soft_destroyed_at"], name: "index_large_genres_on_soft_destroyed_at"
     t.index ["xl_genre_id"], name: "index_large_genres_on_xl_genre_id"
+  end
+
+  create_table "name2gnre_id_temp", id: false, force: :cascade do |t|
+    t.text "name"
+    t.integer "genre_id"
   end
 
   create_table "opens", id: :serial, force: :cascade do |t|
@@ -290,6 +296,21 @@ ActiveRecord::Schema.define(version: 2020_12_04_051020) do
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
+  create_table "search_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "ip"
+    t.string "host"
+    t.string "referer"
+    t.string "ua"
+    t.string "r", default: "", null: false
+    t.string "path", default: "", null: false
+    t.string "page", default: "1", null: false
+    t.string "keywords", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_search_logs_on_user_id"
+  end
+
   create_table "sessions", id: :serial, force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
@@ -317,6 +338,18 @@ ActiveRecord::Schema.define(version: 2020_12_04_051020) do
     t.string "email", default: "", null: false
     t.index ["account", "soft_destroyed_at"], name: "index_systems_on_account_and_soft_destroyed_at", unique: true
     t.index ["soft_destroyed_at"], name: "index_systems_on_soft_destroyed_at"
+  end
+
+  create_table "toppage_logs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "ip"
+    t.string "host"
+    t.string "referer"
+    t.string "ua"
+    t.string "r", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_toppage_logs_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
