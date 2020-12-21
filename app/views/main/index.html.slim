@@ -22,23 +22,29 @@ javascript:
       .mv_display
         = image_tag "main.jpg", alt: ""
 
-        h3 機械団地「#{@open_now.name}」
+        - if @open_now.persisted?
+          h3 機械団地「#{@open_now.name}」
 
-        dl
-          dt 主催者
-          dd = @open_now.owner
+          dl
+            dt 主催者
+            dd = @open_now.owner
 
-          / dt 開催場所
-          / dd #{@open_now.place}<br />#{@open_now.addr}
+            / dt 開催場所
+            / dd #{@open_now.place}<br />#{@open_now.addr}
 
-          dt 下見期間
-          dd #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
-          dt 入札締切
-          dd #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
-          dt 搬出期間
-          dd #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
-          dt 営業時間
-          dd 9:00～17:00 (土・日曜日 / 祝日)
+            dt 下見期間
+            dd #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
+            dt 入札締切
+            dd #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
+            dt 搬出期間
+            dd #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
+            dt 営業時間
+            dd 9:00～17:00 (土・日曜日 / 祝日)
+        - else
+          h3 現在、入札会は開催されていません。
+          - if @open_next.persisted?
+            dl
+              dd 次回の入札会は、<br />#{I18n.l(@open_next.preview_start_date, format: :with_week)}から下見期間開始予定です。
 
       .mv_bnr = image_tag "sixv2.png", alt: ""
 
@@ -50,34 +56,40 @@ section.news
       / dt
       / dd = simple_format(Info.comment(:toppage))
 
+- if @open_now.persisted?
+  - if @open_now.display?
+    section.items
+      .container
 
-section.items
-  .container
+        h2 注目の出品商品
 
-    h2 注目の出品商品
+        ul.tab
+          li = link_to "最低落札価格1万円特集", "#tab1", class: :selected
+          li = link_to "ひとやま特集", "#tab2"
 
-    ul.tab
-      li = link_to "最低落札価格1万円特集", "#tab1", class: :selected
-      li = link_to "ひとやま特集", "#tab2"
+        ul.pannel
+          li#tab1
+            span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
 
-    ul.pannel
-      li#tab1
-        span.tab_head_text 最低落札価格1万円の商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
+            .items_block style="display: inline-table;"
+              - @specials_01.each_with_index do |product, i|
+                = render product, hidexs: (i < 6 ? false : true)
 
-        .items_block style="display: inline-table;"
-          - @specials_01.each_with_index do |product, i|
-            = render product, hidexs: (i < 6 ? false : true)
+          li#tab2
+            span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
 
-      li#tab2
-        span.tab_head_text ひとやまの商品を<br class="forsp" />ランダムで <span class="hidden-xs">10</span><span class="hidden-sm hidden-md hidden-lg">6</span> 件表示しています。
+            .items_block style="display: inline-table;"
+              / - @specials_02.each_with_index do |pr, i|
+              /   = render "/products/product", product: pr, hidesm: (i > 3 ? true : false)
+              - @specials_02.each_with_index do |product, i|
+                = render product, hidexs: (i < 6 ? false : true)
 
-        .items_block style="display: inline-table;"
-          / - @specials_02.each_with_index do |pr, i|
-          /   = render "/products/product", product: pr, hidesm: (i > 3 ? true : false)
-          - @specials_02.each_with_index do |product, i|
-            = render product, hidexs: (i < 6 ? false : true)
+    = render "/products/search", all_xl_counts: @all_xl_counts, all_large_counts: @all_large_counts
+  - else
+    section.items
+      .container
+        .alert.alert-success
+          i.fas.fa-info-circle
+          span.btn-content "出品商品の検索は、下見期間までしばらくお待ち下さい。 (下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}"
 
-
-= render "/products/search", all_xl_counts: @all_xl_counts, all_large_counts: @all_large_counts
-
-/ = render "/main/overview"
+  / = render "/main/overview"

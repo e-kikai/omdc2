@@ -96,7 +96,7 @@
     .row
       .alert.alert-success
         span.glyphicon.glyphicon-info-sign
-        =< "出品商品の検索は、下見期間までしばらくお待ち下さい (下見期間 : #{@open_now.preview_start_date} 〜 #{@open_now.preview_end_date})"
+        =< "出品商品の検索は、下見期間までしばらくお待ち下さい (下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)})"
 - else
   .alert.alert-success
     span.glyphicon.glyphicon-info-sign

@@ -33,12 +33,14 @@ class ApplicationController < ActionController::Base
   private
 
   def get_open_now
+    ### 現在の入札会 ###
     @open_now = Open.now.first || Open.new
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
 
-    # とりあえずのダミーデータ
-    # @histories = @products.order("random()").limit(5)
+    ### 次の入札会 ###
+    @open_next = Open.next.first ||  Open.new
 
+    ### 閲覧履歴 ###
     detail_logs = if user_signed_in?
       @user = current_user
 
@@ -62,7 +64,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_open
-    redirect_to "/", notice: "現在、開催されている入札会はありません" unless @open_now
+    redirect_to "/", notice: "現在、開催されている入札会はありません" unless @open_now.persisted?
   end
 
   def check_display

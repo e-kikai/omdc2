@@ -1,6 +1,11 @@
 class MainController < ApplicationController
   # skip_before_action :get_open_now, only: [:qrcode]
+  before_action :check_open,    except: [:index]
+  before_action :check_display, except: [:index]
+
   before_action :get_genres
+
+
 
   def index
     if @open_now

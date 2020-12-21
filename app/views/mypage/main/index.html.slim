@@ -8,16 +8,17 @@ section.rule
 
     .newcomers_block
       .mypage_block.right
-        ul
-          span 会員メニュー
+        - if @open_now.persisted? && @open_now.display?
+          ul
+            span 会員メニュー
 
-          li = link_to "/mypage/favorites" do
-            i.fas.fa-star
-            .li-content お気に入りリスト (入札依頼PDF作成)
+            li = link_to "/mypage/favorites" do
+              i.fas.fa-star
+              .li-content お気に入りリスト (入札依頼PDF作成)
 
-          li = link_to "/mypage/products.csv" do
-            i.fas.fa-file-csv
-            .li-content 全出品商品リストCSVダウンロード
+            li = link_to "/mypage/products.csv" do
+              i.fas.fa-file-csv
+              .li-content 全出品商品リストCSVダウンロード
 
         ul.harf
           span 問い合わせ

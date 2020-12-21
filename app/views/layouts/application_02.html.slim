@@ -54,7 +54,8 @@ html.layout2
         h1#logo = link_to "/" do
           = image_tag("logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会 電子入札システム2.1")
         ul#navi
-          li = link_to "出品商品",           "/search/"
+          - if @open_now.persisted? && @open_now.display?
+            li = link_to "出品商品",           "/search/"
           li = link_to "入札までの流れ",     "/helps/beginner"
           li = link_to "機械工具入札会とは", "/helps/faq"
           li = link_to "お問い合わせ",       "/contacts/new"
@@ -64,7 +65,8 @@ html.layout2
           button.dl-trigger Open Menu
           ul.dl-menu
             li = link_to "HOME",               "/"
-            li = link_to "出品商品",           "/search/"
+            - if @open_now.persisted? && @open_now.display?
+              li = link_to "出品商品",           "/search/"
             li = link_to "入札までの流れ",     "/helps/beginner"
             li = link_to "機械工具入札会とは", "/helps/faq"
             li = link_to "お問い合わせ",       "/contacts/new"
@@ -78,16 +80,17 @@ html.layout2
     .container
       - if notice.present?
         .alert.alert-success
-          span.glyphicon.glyphicon-info-sign
+          i.fas.fa-info-circle
           span.btn-content = simple_format(notice, {}, wrapper_tag: :span)
       - if alert.present?
         .alert.alert-danger
-          span.glyphicon.glyphicon-alert
+          i.fas.fa-exclamation-triangle
           span.btn-content = simple_format(alert, {}, wrapper_tag: :span)
 
     . = yield
 
-    = render "/products/history", histories: @histories
+    - if @open_now.persisted? && @open_now.display?
+      = render "/products/history", histories: @histories
 
     footer.container-fluid
       | Copyright &copy; #{Time.now.year}
@@ -102,5 +105,5 @@ html.layout2
       #fixed_right_banner
         = link_to "/users/sign_up" do
           = image_tag "fixbnr01.png", alt: "ユーザー登録はこちら"
-        = link_to "/heolps/beginner" do
+        = link_to "/helps/beginner" do
           = image_tag "fixbnr02.png", alt: "入札依頼までの流れ"
