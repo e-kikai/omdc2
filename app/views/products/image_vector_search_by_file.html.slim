@@ -13,13 +13,21 @@ section.items
     = hidden_field_tag :referer,  request.referer
     = hidden_field_tag :r,        params[:r]
 
+    .mini_help
+      h3
+        i.fas.fa-question-circle
+        .btn-content 画像特徴検索とは
+      p
+        | お手持ちやカメラで撮影した機械画像の機械や工具の画像ファイル(JPEG形式)を以下のフォームからアップロードしてください。<br />
+        | 出品されている商品の中から、アップロードした画像に見た目が似ている商品をさがして表示します。
+
     = form_tag("/products/image_vector_search_by_file", enctype: "multipart/form-data", method: "post", class: "form-inline filtering-form") do
 
       = file_field_tag "image", class: "", style: "display: inline-block;", accept: 'image/jpg,image/jpeg,image/png'
 
       = button_tag class: "btn btn-info" do
         span.glyphicon.glyphicon-search
-        span.btn-content 検索
+        span.btn-content 画像特徴検索
 
     - if params[:image]
       - if @products

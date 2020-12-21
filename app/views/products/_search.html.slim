@@ -29,8 +29,16 @@ section.genre
             i.fas.fa-search
 
     .search_box
-      h3 出品商品リスト
-      .search_body = link_to "リストNo.順", "/products/list_no"
+      h3 = link_to "/products/list_no" do
+        i.fas.fa-list-ol
+        .btn-content = "No.順 出品商品リスト"
+
+  h2 画像ファイルからさがす
+  .nomal_link
+    = link_to "/products/image_vector_search_by_file" do
+      i.fas.fa-file-image
+      .btn-content = "画像ファイルから画像特徴検索"
+
 
 
   .container

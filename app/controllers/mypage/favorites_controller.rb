@@ -10,7 +10,9 @@ class Mypage::FavoritesController < Mypage::ApplicationController
 
   def request_list
 
-    @table_data = {}
+    @table_data = @favorites.includes(:product).map do |fa|
+      [fa.product.list_no, fa.product.name ,fa.product.maker ,fa.product.min_price, "", ""]
+    end
 
 
 

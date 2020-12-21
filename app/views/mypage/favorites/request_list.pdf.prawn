@@ -21,5 +21,17 @@ prawn_document do |pdf|
 
   pdf.text @open_now.name, size: 14
 
-  pdf.table @favorites, header: true
+  pdf.table(
+    # (["No.", "商品名", "メーカー", "最低入札金額", "入札依頼金額" "備考欄"] +
+    (
+    @favorites.includes(:product).map do |fa|
+      [fa.product.list_no, fa.product.name ,fa.product.maker ,number_to_currency(fa.product.min_price), "", ""]
+    end),
+    header: true
+  ) do |t|
+    t.columns(0).style :align => :right
+    t.columns(3).style :align => :right
+    t.columns(4).style :align => :right
+  end
+
 end

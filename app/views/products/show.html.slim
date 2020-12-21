@@ -4,7 +4,7 @@
 section.detail
   .container
     h2 = @product.name
-    
+
     = hidden_field_tag :logging,    :detail
     = hidden_field_tag :product_id, @product.id
     = hidden_field_tag :referer,    request.referer
@@ -64,20 +64,35 @@ section.detail
                 td = simple_format(@product.condition)
 
         .panel-body
-          .nomal_btn
-            = render "/products/favorite", product: @product, content: "お気に入りリストに追加"
+          .nomal_btn = render "/products/favorite", product: @product, content: "お気に入りリストに追加"
 
-        h3 商品に関する問い合わせについて
-        .panel-body
+          - if user_signed_in?
+            .nomal_link = link_to "/mypage/favorites/" do
+                i.fas.fa-star
+                span.btn-content = "お気にりリストを表示"
+
+        .mini_help
+          h3
+            i.fas.fa-question-circle
+            .btn-content 商品に関する問い合わせについて
+
           p 商品に関する問い合わせは、<br />入札を依頼される組合員商社へお問い合せ下さい。
 
+        - if company_signed_in?
+          .panel-body
+            .nomal_btn = link_to "/bid/bids/new?list_no=#{@product.list_no}", target: "_blank", class: "" do
+              i.fas.fa-pencil-alt
+              span.btn-content = "(組合員ページ) 入札ページへリンク"
 
         .map-area
           - if @product.display == "店頭出品"
-            h3 店頭出品について
-            p
-              | この商品は、機械団地展示場ではなく、<br />
-              | 機械団地内にある出品会社の店舗に商品が展示されています。
+            .mini_help
+              h3
+                i.fas.fa-question-circle
+                .btn-content 店頭出品について
+              p
+                | この商品は、機械団地共同展示場ではなく、<br />
+                | 機械団地内にある出品会社の店舗に商品が展示されています。
 
             - address = "#{@product.company.address}+#{@product.company.name}"
             iframe id="gmap2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="100%" height="400" src="http://maps.google.co.jp/maps?f=q&q=#{address}&source=s_q&hl=ja&geocode=ie=UTF8&t=m&output=embed"
@@ -87,16 +102,18 @@ section.detail
             = image_tag @product.area.image.view.url, style: "width:100%;", class: "product_map"
 
 
-section.items
-  .container
-    h2 この商品と画像が似ている商品
-    .items_block
-      - @likeimgs.each_with_index do |product, i|
-        = render product, hidexs: (i < 3 ? false : true)
+- if @likeimgs.present?
+  section.items
+    .container
+      h2 この商品と画像が似ている商品
+      .items_block
+        - @likeimgs.each_with_index do |product, i|
+          = render product, hidexs: (i < 3 ? false : true)
 
-section.items
-  .container
-    h2 この商品と同じジャンルの商品
-    .items_block
-      - @samegenres.each_with_index do |product, i|
-        = render product, hidexs: (i < 3 ? false : true)
+- if @samegenres.present?
+  section.items
+    .container
+      h2 この商品と同じジャンルの商品
+      .items_block
+        - @samegenres.each_with_index do |product, i|
+          = render product, hidexs: (i < 3 ? false : true)

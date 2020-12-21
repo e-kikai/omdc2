@@ -4,11 +4,20 @@
 section.items
   .container
     h2 お気に入りリスト(入札依頼PDF作成)
+
+    .mini_help
+      h3
+        i.fas.fa-question-circle
+        .btn-content 組合員に入札依頼を行うには
+      p
+        | 各商品の「入札依頼金額」に金額を入力して「入札依頼PDFを作成する」をクリックすると、入札依頼用PDFが作成されます。<br />
+        | 取引されている組合員商社に、このPDFをFAX、メールなどで送付することで、入札依頼を行って下さい。
+
     = form_tag "/mypage/favorites/request_list.pdf", method: :patch do
 
       .rely = button_tag :submit do
         i.fas.fa-file-pdf
-        span.btn-content チェックした商品でPDFを作成する
+        span.btn-content 金額を入力した商品で入札依頼PDFを作成する
 
         / #button_area
         /   = link_to "javascript:display(0);", class: "view_button" do
@@ -32,14 +41,14 @@ section.items
                 th.id = s.sort_link :list_no,    "No."
                 th = s.sort_link :name,          "商品名"
                 th = s.sort_link :maker,         "メーカー"
-                / th = s.sort_link :model,         "型式"
+                th = s.sort_link :model,         "型式"
                 / th = s.sort_link :year,          "年式"
                 th.num = s.sort_link :min_price, "最低入札金額"
                 th = s.sort_link :area_id,       "展示場所"
                 th.img_link 画像
                 th.img_link 動画
                 th.img_link 画像検索
-                th.img_link
+                / th.img_link
                 th = "入札依頼金額"
             tbody
 
@@ -48,7 +57,7 @@ section.items
                   td.id = pr.list_no
                   td = link_to pr.name, "/products/#{pr.id}"
                   td = pr.maker
-                  / td = pr.model
+                  td = pr.model
                   / td = pr.year
                   td.num = number_to_currency(pr.min_price)
                   td = pr.area_name
@@ -65,10 +74,10 @@ section.items
                       = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
                         i.fas.fa-camera
 
-                  td.img_link = render "/products/favorite", product: pr
+                  / td.img_link = render "/products/favorite", product: pr
 
                   td = text_field_tag "price[#{pr.id}]", "", placeholder: "金額を入力", class: :price
 
       .rely = button_tag :submit do
         i.fas.fa-file-pdf
-        span.btn-content チェックした商品でPDFを作成する
+        span.btn-content 金額を入力した商品で入札依頼PDFを作成する

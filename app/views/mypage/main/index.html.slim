@@ -7,7 +7,8 @@ section.rule
     h2 マイページ
 
     .newcomers_block
-      .mypage_block.right
+      / .mypage_block.right
+      .mypage_block.center
         - if @open_now.persisted? && @open_now.display?
           ul
             span 会員メニュー

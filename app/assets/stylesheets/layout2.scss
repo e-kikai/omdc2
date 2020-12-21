@@ -188,4 +188,39 @@ html.layout2 {
     margin: auto;
   }
 
+  .nomal_link {
+    text-align: center;
+    margin: 8px 0 16px 0;
+
+    a {
+      font-size: 16px;
+    }
+  }
+
+  .mini_help {
+    margin: 8px 0 16px 0;
+
+    h3 {
+      color: #004e98;
+      font-size: 17px;
+      margin: 0 0 4px 0;
+      font-weight: 700;
+    }
+  }
+
+  .mypage_block.center {
+    display: block;
+    float: none;
+    margin: auto;
+    width: 60%;
+  }
+
+}
+
+@media screen and (max-width: 740px) {
+  html.layout2 {
+    .mypage_block.center {
+      width: 100%;
+    }
+  }
 }

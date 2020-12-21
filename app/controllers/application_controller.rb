@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_open
-    redirect_to "/", notice: "現在、開催されている入札会はありません" unless @open_now.persisted?
+    redirect_to "/", notice: "現在、入札会は開催されていません。" unless @open_now.persisted?
   end
 
   def check_display
