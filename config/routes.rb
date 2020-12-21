@@ -81,7 +81,12 @@ Rails.application.routes.draw do
   resources :search_logs,  only: [:create]
 
   # resources :helps, only: [:show]
-  get  "heip/:label" => "helps#show"
+  resources :helps, only: [] do
+    collection do
+      get :beginner
+      get :faq
+    end
+  end
 
   get "search" => "main#search"
 

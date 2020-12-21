@@ -10,6 +10,8 @@ class Mypage::FavoritesController < Mypage::ApplicationController
 
   def request_list
 
+    @table_data = {}
+
 
 
     respond_to do |format|
