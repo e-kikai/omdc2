@@ -1,6 +1,7 @@
 class HelpsController < ApplicationController
-  def show
+  def beginner
+  end
 
-    render params[:label]
+  def faq
   end
 end
