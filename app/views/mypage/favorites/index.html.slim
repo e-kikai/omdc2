@@ -76,7 +76,7 @@ section.items
 
                   / td.img_link = render "/products/favorite", product: pr
 
-                  td = text_field_tag "price[#{pr.id}]", "", placeholder: "金額を入力", class: :price
+                  td = text_field_tag "amounts[#{pr.id}]", "", placeholder: "金額を入力", class: :price
 
       .rely = button_tag :submit do
         i.fas.fa-file-pdf

@@ -2,19 +2,25 @@ class Mypage::FavoritesController < Mypage::ApplicationController
   before_action :get_favorites
 
   def index
-    @search    = @products.where(id: @favorites.select(:product_id)).search(params[:q])
-    @products  = @search.result.includes(:product_images)
+    @search   = @products.where(id: @favorites.select(:product_id)).order(:list_no).search(params[:q])
+    @products = @search.result.includes(:product_images)
 
     # @pproducts = @products.page(params[:page])
   end
 
   def request_list
+    @amounts = params[:amounts] || {}
 
-    @table_data = @favorites.includes(:product).map do |fa|
-      [fa.product.list_no, fa.product.name ,fa.product.maker ,fa.product.min_price, "", ""]
+    @search   = @products.where(id: @favorites.select(:product_id)).order(:list_no).search(params[:q])
+    @products = @search.result
+
+    @favorites.each do |fa|
+      amount = @amounts[fa.product_id.to_s].to_i
+      if amount > 0
+        fa[:amount] = amount
+        fa.save
+      end
     end
-
-
 
     respond_to do |format|
       format.pdf
