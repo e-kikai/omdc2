@@ -220,7 +220,7 @@ html.layout2 {
     overflow-x: scroll;
     overflow-y: hidden;
     padding: 12px 7px;
-    border: 3px solid #004e98;
+    border: 2px solid #004e98;
     border-radius: 4px;
 
     .overflow_items {
@@ -239,6 +239,18 @@ html.layout2 {
 
 @media screen and (max-width: 740px) {
   html.layout2 {
+    section#headline {
+      .container {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    h1#logo img {
+      display: block;
+      margin-left: 4px;
+    }
+
     .mypage_block.center {
       width: 100%;
     }
