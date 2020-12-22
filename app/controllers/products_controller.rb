@@ -81,8 +81,11 @@ class ProductsController < ApplicationController
   end
 
   def show
-    @samegenres = @products.where(genre: @product.genre).limit(5)
-    @likeimgs   = @products.image_vector_sort(@product.id, 5)
+    # @samegenres = @products.where(genre: @product.genre).limit(5)
+    # @likeimgs   = @products.image_vector_sort(@product.id, 5)
+
+    @samegenres = @products.where(genre: @product.genre).limit(16)
+    @likeimgs   = @products.image_vector_sort(@product.id, 16)
   end
 
   def images

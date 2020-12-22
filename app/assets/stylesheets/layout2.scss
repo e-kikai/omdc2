@@ -200,7 +200,8 @@ html.layout2 {
   .mini_help {
     margin: 8px 0 16px 0;
 
-    h3 {
+    h3 {.items_box {
+    }
       color: #004e98;
       font-size: 17px;
       margin: 0 0 4px 0;
@@ -215,6 +216,25 @@ html.layout2 {
     width: 60%;
   }
 
+  .overflow_area {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 12px 7px;
+    border: 3px solid #004e98;
+    border-radius: 4px;
+
+    .overflow_items {
+       white-space: nowrap;
+       display: inline-block;
+
+       .items_box {
+         white-space: normal;
+         width: 192px;
+         margin-right: 10px;
+       }
+    }
+  }
+
 }
 
 @media screen and (max-width: 740px) {
@@ -222,5 +242,17 @@ html.layout2 {
     .mypage_block.center {
       width: 100%;
     }
+
+    .overflow_area {
+      margin: 0 -5%;
+
+      .overflow_items {
+         .items_box {
+           width: 108px;
+           margin-right: 7px;
+         }
+      }
+    }
+
   }
 }

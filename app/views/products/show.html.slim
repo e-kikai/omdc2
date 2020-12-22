@@ -106,14 +106,16 @@ section.detail
   section.items
     .container
       h2 この商品と画像が似ている商品
-      .items_block
-        - @likeimgs.each_with_index do |product, i|
-          = render product, hidexs: (i < 3 ? false : true)
+      .overflow_area
+        .overflow_items
+          - @likeimgs.each_with_index do |product, i|
+            = render product
 
 - if @samegenres.present?
   section.items
     .container
       h2 この商品と同じジャンルの商品
-      .items_block
-        - @samegenres.each_with_index do |product, i|
-          = render product, hidexs: (i < 3 ? false : true)
+      .overflow_area
+        .overflow_items
+          - @samegenres.each_with_index do |product, i|
+            = render product
