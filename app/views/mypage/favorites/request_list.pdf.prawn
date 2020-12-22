@@ -4,8 +4,6 @@ prawn_document do |pdf|
   pdf.start_new_page layout: :portrait, margin: [10.mm, 12.mm]
   pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
 
-  pdf.number_pages "<page> / <total>", { at: [0, 0], align: :center }
-
   pdf.default_leading 2
   # pdf.stroke_axis
 
@@ -69,4 +67,6 @@ prawn_document do |pdf|
     end
   end
 
+  # foot
+  pdf.number_pages "<page> / <total>", { at: [0, 0], align: :center }
 end
