@@ -1,13 +1,16 @@
-p = "#{@resource.email} 様"
+p = "#{@resource.company} #{@resource.name} 様"
+
+h3 機械工具入札会 ユーザ登録確認
 
 p
   | 大阪機械卸業団地協同組合 機械工具入札会 マイページ ユーザ登録登録ありがとうございました。
   br
   | 次のリンクをクリックすることで、メールアドレスの確認が完了します。
   br
+  br
   | ↓↓↓↓↓↓↓↓↓↓
 p
-  = link_to "メールアドレス確認", confirmation_url(@resource, confirmation_token: @token, locale: I18n.locale)
+  = link_to "→ メールアドレス確認", confirmation_url(@resource, confirmation_token: @token, locale: I18n.locale)
 
 p style="margin-top:32px;" 大阪機械卸業団地協同組合 機械工具入札会を何卒よろしくお願いいたします。
 
