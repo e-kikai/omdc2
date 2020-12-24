@@ -13,9 +13,9 @@ ActionMailer::Base.smtp_settings = {
 }
 
 case Rails.env
-when "staging"
-  ActionMailer::Base.default_url_options = { host: '52.198.41.71' }
-  ActionMailer::Base.register_interceptor(MailInterceptor) # 自分宛てに転送
+# when "staging"
+#   ActionMailer::Base.default_url_options = { host: '52.198.41.71' }
+#   ActionMailer::Base.register_interceptor(MailInterceptor) # 自分宛てに転送
 when "development"
   ActionMailer::Base.default_url_options = { host: '192.168.33.110', port: 8082 }
   ActionMailer::Base.register_interceptor(MailInterceptor) # 自分宛てに転送
