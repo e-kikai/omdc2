@@ -83,9 +83,9 @@ gem 'slim-rails'
 
 # 認証
 gem 'devise'
-# gem 'devise-bootstrap-views'
+gem 'devise-bootstrap-views'
 gem 'devise-i18n'
-# gem 'devise-i18n-views'
+gem 'devise-i18n-views'
 gem 'devise-encryptable'
 
 # パンくず

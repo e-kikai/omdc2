@@ -4,10 +4,12 @@
 
 section.rule
   .container
+    = bootstrap_devise_error_messages!
+    
     h2 確認メールの再送信
     .panel
       .panel-body
-        = form_for resource, as: resource_name, url: confirmation_path(resource_name) do |f|
+        = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, role: 'form' }) do |f|
 
           .form-group
             = f.label :email

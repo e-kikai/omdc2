@@ -4,11 +4,12 @@
 
 section.rule
   .container
+    = bootstrap_devise_error_messages!
+
     h2 パスワード再設定方法メールの送信
     .panel
       .panel-body
-        = form_for resource, as: resource_name, url: password_path(resource_name) do |f|
-
+        = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, role: "form" }) do |f|
           .form-group
             = f.label :email
             = f.text_field :email, required: "required", autofocus: true, class: "form-control"

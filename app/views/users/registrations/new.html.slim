@@ -17,12 +17,15 @@ javascript:
 
 section.rule
   .container
+    = bootstrap_devise_error_messages!
+
     h2 マイページ ユーザ登録
     .newcomers_block
 
       h3 機械工具入札会ユーザー登録
       .form_block
-        = form_for resource, as: resource_name, url: registration_path(resource_name) do |f|
+        = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { role: 'form' }) do |f|
+
           - if f.object.errors.full_messages.present?
             .alert.alert-danger
               ul
