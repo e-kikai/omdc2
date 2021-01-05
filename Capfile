@@ -29,7 +29,7 @@ require 'capistrano/rails/migrations'
 require 'capistrano3/unicorn'
 
 # require 'capistrano/sitemap_generator'
-# require "whenever/capistrano"
+require "whenever/capistrano"
 # require "capistrano/sidekiq"
 
 require "capistrano/scm/git"
