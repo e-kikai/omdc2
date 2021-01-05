@@ -27,6 +27,11 @@
         li = link_to "/system/detail_logs", class: "btn btn-default btn-square" do
           i.fas.fa-list-alt
           span.btn-content 詳細ログ履歴
+    hr
+      ul.nav.nav-pills
+        li = link_to "/system/scheduling/vectors_process", method: :post, class: "btn btn-default btn-square btn-twoline" do
+          i.fas.fa-magic
+          span.btn-content ベクトル一括<br />変換(手動実行)
 
     hr
     ul.nav.nav-pills

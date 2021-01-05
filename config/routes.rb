@@ -181,6 +181,12 @@ Rails.application.routes.draw do
     resources :toppage_logs, only: [:index]
     resources :search_logs,  only: [:index]
 
+    resources :scheduling, only: [:index] do
+      collection do
+        post 'vectors_process'
+      end
+    end
+
     unless Rails.env.production?
       resources :playground, only: [:show] do
         collection do
@@ -197,7 +203,6 @@ Rails.application.routes.draw do
         end
       end
     end
-
   end
 
   namespace :bid do

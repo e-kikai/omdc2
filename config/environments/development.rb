@@ -25,8 +25,8 @@ Rails.application.configure do
 
     # config.cache_store = :null_store
   end
-  config.cache_store = :file_store , "/tmp/rails-cache/assets/#{Rails.env}/"
-
+  # config.cache_store = :file_store , "/tmp/rails-cache/assets/#{Rails.env}/"
+  config.cache_store = :file_store , Rails.root.join("tmp/cache/rails-cache/#{Rails.env}/")
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

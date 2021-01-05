@@ -378,7 +378,9 @@ class Product < ApplicationRecord
   def get_vector
     return nil unless top_image? # 画像の有無チェック
 
-    vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+    # vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+    vectors = open.vectors_cache
+
     bucket  = Product.s3_bucket # S3バケット取得
 
     ### ターゲットベクトル取得 ###
@@ -413,41 +415,43 @@ class Product < ApplicationRecord
     return self.none if target.nil?
 
     ### ベクトル郡取得 ###
-    vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+    # vectors = Rails.cache.read(VECTOR_CACHE) || {} # キャッシュからベクトル群を取得
+    vectors = self.first.open.vectors_cache
+
+
     bucket = Product.s3_bucket # S3バケット取得
-    update_flag = false
+    # update_flag = false
 
     ### 各ベクトル比較 ###
     pids = self.reorder(:id).pluck(:id).uniq # 検索対象(出品中)の商品ID取得
 
-    logger.debug pids.count
-
     sorts = pids.map do |pid|
-      logger.debug("pid : #{pid}")
-
       ### ベクトルの取得 ###
       # pr_narray = if vectors[pid].present? && vectors[pid] != ZERO_NARRAY # 既存
       pr_narray = if vectors[pid].present? # 既存
         vectors[pid]
-      else # 新規(ファイルからベクトル取得して追加)
-        logger.debug("get by file :: pid : #{pid}")
-
-        update_flag = true
-        vectors[pid] = if bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").exists?
-
-          str = bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").get.body.read
-          Npy.load_string(str) rescue ZERO_NARRAY
-        else
-          ZERO_NARRAY
-        end
-
-        vectors[pid]
+      else
+        # # 新規(ファイルからベクトル取得して追加)
+        # logger.debug("get by file :: pid : #{pid}")
+        #
+        # update_flag = true
+        # vectors[pid] = if bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").exists?
+        #
+        #   str = bucket.object("#{S3_VECTORS_PATH}/vector_#{pid}.npy").get.body.read
+        #   Npy.load_string(str) rescue ZERO_NARRAY
+        # else
+        #   ZERO_NARRAY
+        # end
+        #
+        # vectors[pid]
+        ZERO_NARRAY
       end
 
       # ベクトル比較
       if pr_narray == ZERO_NARRAY || pr_narray.nil? # ベクトルなし
         nil
       else
+        ### ベクトル比較アルゴリズム ###
         sub = pr_narray - target
         res = (sub * sub).sum
 
@@ -465,7 +469,7 @@ class Product < ApplicationRecord
     sorts = sorts.to_h
 
     # ベクトルキャシュ更新
-    Rails.cache.write(VECTOR_CACHE, vectors) if update_flag == true
+    # Rails.cache.write(VECTOR_CACHE, vectors) if update_flag == true
 
     # 結果を返す
     where(id: sorts.keys).sort_by { |pr| sorts[pr.id] }

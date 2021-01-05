@@ -63,6 +63,9 @@ class Open < ApplicationRecord
   validates :product_rate,         presence: true, numericality: { only_integer: true }
   validates :tax,                  presence: true, numericality: { only_integer: true }
 
+  VECTOR_CACHE = "vector"
+
+
   # 現在開催中の入札会を取得
   scope :now, -> {
     where('entry_start_date <= ?', Time.now).where('carry_out_end_date >= ?', Time.now).order(:id)
@@ -126,6 +129,68 @@ class Open < ApplicationRecord
     end
 
     self.update(result: true)
+  end
+
+  # 画像特徴ベクトル一括変換・キャッシュ
+  # @return true
+  def process_and_cache_all
+    bucket  = Product.s3_bucket # S3バケット取得
+
+    ### キャッシュ取得 ###
+    vectors = vectors_cache
+
+    ### ベクトルを検索キャッシュ保存  ###
+    c = 0
+    products.includes(:product_images).each do |pr|
+      image = pr.product_images.first
+
+     if image.blank?
+       # 画像がない場合、パス
+       logger.debug "#{pr.id} :: no image!"
+       next
+     elsif vectors[pr.id].present? && vectors[pr.id] != Product::ZERO_NARRAY
+       # 既にキャッシュされている場合、パス
+       logger.debug "#{pr.id} :: OK exsist"
+       next
+     end
+
+     s3_vector_path = "#{Product::S3_VECTORS_PATH}/vector_#{pr.id}.npy"
+
+      ### ベクトルファイルがない場合、変換 ###
+      unless bucket.object(s3_vector_path).exists?
+        pr.process_vector
+        logger.debug "#{pr.id} :: <<< process >>>"
+      end
+
+      # 変換済みのベクトルファイルをキャッシュへ
+      str = bucket.object(s3_vector_path).get.body.read
+      vectors[pr.id] = Npy.load_string(str) rescue Product::ZERO_NARRAY
+      logger.debug "#{pr.id} :: store"
+
+      ### キャッシュに保存(途中経過) ###
+      c += 1
+      if c % 100 == 0
+        Rails.cache.write(cache_filename, vectors)
+        logger.debug "--- cache save ---"
+      end
+    end
+
+    ### キャッシュに保存 ###
+    Rails.cache.write(cache_filename, vectors)
+    logger.debug "--- cache save ---"
+  end
+
+  # 入札会ごとのキャッシュのファイル名を取得
+  # @return ベクトルキャッシュファイル名
+  def cache_filename
+    "#{VECTOR_CACHE}_open_#{self.id}"
+  end
+
+  # ベクトルキャッシュにアクセス
+  # @return PStore ベクトルキャッシュ
+  def vectors_cache
+    # PStore.new("/tmp/foo/#{cache_filename}")
+    Rails.cache.read(cache_filename) || {}
   end
 
   private
