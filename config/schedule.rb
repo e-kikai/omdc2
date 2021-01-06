@@ -1,16 +1,21 @@
 # 出力先のログファイルの指定
-set :output, 'log/crontab.log'
-# set :output, nil
+# set :output, 'log/crontab.log'
+set :output, nil
 
 # 事故防止の為RAILS_ENVの指定が無い場合にはdevelopmentを使用する
 rails_env = ENV['RAILS_ENV'].to_s.to_sym || :development
-
 set :environment, rails_env
+
+# path = case rails_env
+# when :production; "/var/www/omdc2/"
+# else;             "/var/www/omdc2/current/"
+# end
+# set :path, path
 
 ### wget URL ###
 url = case rails_env
-when :production; "https://www.xn--4bswgw9cs82at4b485i.jp/"
-when :staging;    "http://52.198.41.71/"
+when :production; "https://www.xn--4bswgw9cs82at4b485i.jp"
+when :staging;    "http://52.198.41.71"
 else;             "http://127.0.0.1:8082"
 end
 
