@@ -41,8 +41,11 @@ prawn_document do |pdf|
         #   file: nil # path to write
         # ))
 
+        qr_url = "#{root_url}qr?id=#{p.id}&place=hangtag"
+        # qr_url = "#{root_url}products/#{p.id}?r=qr"
+
         qr_image =
-        RQRCode::QRCode.new("#{root_url}qr?id=#{p.id}&place=hangtag", size: 6, level: :l).as_png(
+        RQRCode::QRCode.new(qr_url, size: 6, level: :l).as_png(
               resize_gte_to: false,
               resize_exactly_to: false,
               fill: 'white',

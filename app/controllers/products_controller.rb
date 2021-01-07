@@ -76,7 +76,8 @@ class ProductsController < ApplicationController
         redirect_to "/system/list/#{product_id}/edit"
       end
     else
-      redirect_to "/detail/#{product_id}/?ref=#{params[:place]}"
+      # redirect_to "/detail/#{product_id}/?ref=#{params[:place]}"
+      redirect_to "/products/#{product_id}/?r=qr_#{params[:place]}"
     end
   end
 
