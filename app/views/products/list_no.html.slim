@@ -22,7 +22,7 @@ section.items
     / = paginate @pproducts
     .nowrap
       ul.no_tab
-        - 1.upto(@max / 100) do |v|
+        - 1.upto(@max.fdiv(100).ceil) do |v|
           li = link_to "#{v * 100 - 99}-#{[v * 100, @max].min}", "/products/list_no?page=#{v}"
 
     .items_block style="display: inline-table;"
