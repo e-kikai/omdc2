@@ -1,0 +1,207 @@
+- set_meta_tags title: "K-meansテスト 01"
+- breadcrumb :system_something, "K-meansテスト"
+
+css:
+  .thumbnail.product-pannel_02 .btn-sort-img {
+    position: absolute;
+    top: 194px;
+    left: 8px;
+  }
+
+  .thumbnail.product-pannel_02 .dist-label {
+    position: absolute;
+    top: 218px;
+    right: 8px;
+  }
+
+  .thumbnail.product-pannel_02 {
+      /*
+      width: 200px;
+      height: 260px;
+      */
+      width: 184px;
+      height: 224px;
+
+      margin: 0;
+      white-space: normal;
+      display: inline-block;
+      vertical-align: top;
+      padding: 0;
+      border-radius: 0;
+      border: 0;
+      position: relative;
+      margin: 0 6px 6px 0;
+      text-align: center;
+
+  }
+
+  .thumbnail.product-pannel_02 a.product_link {
+    padding: 0;
+    border: 1px solid whitesmoke;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .thumbnail.product-pannel_02 a.product_link:hover {
+    background: #fff;
+    border: 1px solid #258a01;
+  }
+
+
+  .thumbnail.product-pannel_02 .thumb_img {
+    width: 100%;
+    background: #EEE;
+    position: relative;
+    height: auto;
+    height: auto;
+  }
+
+  .thumbnail.product-pannel_02 .thumb_img:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+
+  .thumbnail.product-pannel_02 .thumb_img img {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      display: block;
+      margin: auto;
+      position: absolute;
+      min-width: unset !important;
+      max-height: unset !important;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      object-fit: cover;
+  }
+
+  .thumbnail.product-pannel_02 .name {
+      bottom: 4rem;
+      top: unset;
+      width: 90%;
+      margin: 0 5%;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #000;
+      font-weight: 700;
+      line-height: 2rem;
+
+      height: 18px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: absolute;
+  }
+
+  .thumbnail.product-pannel_02 .price, .thumbnail.product-pannel_02 .finish_price {
+    bottom: 2rem;
+    top: unset;
+    text-align: center;
+    width: 90%;
+    margin: 0 5%;
+    color: #333;
+    position: absolute;
+  }
+
+  .thumbnail.product-pannel_02 .price span.max_price_label {
+      font-size: 1rem !important;
+      line-height: 20px;
+      color: #333;
+  }
+
+  .thumbnail.product-pannel_02 .price span.max_price, .thumbnail.product-pannel_02 .success_price {
+    font-size: 1.5rem;
+    line-height: 20px;
+    margin-left: 4px;
+    color: #E50;
+    font-weight: normal;
+  }
+
+  .thumbnail.product-pannel_02 .dist-label {
+    top: 238px;
+  }
+
+  .product_area {
+    margin-left: -6px;
+    margin-right: -6px;
+  }
+
+  .mini_thumb {
+    display: inline-block;
+    margin: 4px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .mini_thumb {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    position: absolute;
+    min-width: unset !important;
+    max-height: unset !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    object-fit: cover;
+  }
+
+  .thumbnail.product-pannel_02 .nitamono {
+    border-radius: 5px;
+    padding: 0;
+    bottom: 110px;
+    position: absolute;
+    right: 12px;
+    background: rgba(255,255,255,0.75);
+
+    display: block;
+    width: 36px;
+    height: 36px;
+    margin: auto;
+    text-align: center;
+
+    border: 0;
+  }
+
+  .nitamono .glyphicon-camera {
+    font-size: 22px;
+    color: #111;
+  }
+
+  img.upload_image {
+    max-width: 320px;
+    max-height: 240px;
+  }
+
+/ = icon("fab", "twitter", class: "twitter-icon")
+/ .breadcrumb
+/     li = link_to "画像特徴ベクトル検索・ソート ", "/system/playground/search_01"
+/     li = link_to "画像ファイル検索", "/system/playground/search_02"
+ul.nav.nav-tabs
+  - @clasters.each do |cl|
+    li  = link_to cl[:id], "#claster_#{cl[:id]}", data: { toggle: "tab" }
+
+.tab-content
+  - @clasters.each do |cl|
+    .tab-pane id="claster_#{cl[:id]}"
+      h4 = "#{cl[:id]} : #{cl[:name]}"
+      .
+        - @results.each do |re|
+          - if re[:claster] == cl[:id]
+            .thumbnail.product-pannel_02
+              .thumb_img
+                = image_tag("#{@img_base}/#{re[:product].product_images.first.id}/thumb_#{re[:product].product_images.first.image_identifier}", srcset: {"#{@img_base}/#{re[:product].product_images.first.id}/view_#{re[:product].product_images.first.image_identifier}" => "2x"}, alt: re[:product].name)
+
+              . = "#{re[:product].id} : #{re[:product].name}"
+
+            / = render "product_panel_03_img", product: re[:product], r: :cls

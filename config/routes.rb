@@ -195,6 +195,9 @@ Rails.application.routes.draw do
           post 'search_02'
           get 'image'
 
+          get 'kmeans_01'
+
+
           get 'vector_maker'
           get 'vector_maker_solo'
 

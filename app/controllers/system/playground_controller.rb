@@ -2,11 +2,12 @@ class System::PlaygroundController < ApplicationController
   require "open3"
   include Exports
 
-  before_action :change_db
-  after_action  :restore_db
+  before_action :change_db, exists: [:kmeans_01]
+  after_action  :restore_db, exists: [:kmeans_01]
   rescue_from   { restore_db }
 
-  layout "application_02"
+  # layout "application_02"
+  layout 'layouts/application'
 
 
   UTILS_PATH   = "/var/www/yoshida/utils"
@@ -63,6 +64,8 @@ class System::PlaygroundController < ApplicationController
     end
   end
 
+  #############
+  ## 画像ファイル検索
   def search_02
     # 初期検索クエリ作成
     @open = Open.find(@open_id)
@@ -76,6 +79,101 @@ class System::PlaygroundController < ApplicationController
         @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
       end
     end
+  end
+
+  ###################
+  ## K-meansによるクラスタリング
+  def kmeans_01
+    ### キャッシュからベクトルを読み込み ###
+    @vectors = @open_now.vectors_cache
+
+    @clasters = Rails.cache.read("#{Open::VECTOR_CACHE}_open_clasters_#{@open_now.id}") || {}
+    @results  = Rails.cache.read("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}") || {}
+
+    if @results.blank? || params[:num]
+
+      num = params[:num].to_i || 1
+
+      ### 既存の中カテゴリから初期クラスタ生成 ###
+      @clasters = LargeGenre.all.map do |la|
+        res = nil
+        la.products.where(open: @open_now).order(:id).pluck(:id).each do |product_id|
+          unless @vectors[product_id] == Product::ZERO_NARRAY || @vectors[product_id].nil? # ベクトルなし
+            logger.debug "claster :: #{la.id} (#{la.name}) >> #{product_id}"
+
+            res = {id: la.id, name: la.name, vector: @vectors[product_id]}
+            break
+          end
+        end
+
+        res
+      end
+
+      @clasters.compact!
+
+      ### 各ベクトルの初期化 ###
+      @products = @open_now.products.includes(:product_images)
+
+      @results = @products.map do |pr|
+        next if @vectors[pr.id] == Product::ZERO_NARRAY || @vectors[pr.id].nil? # ベクトルなし
+
+        {id: pr.id, claster: 1, product: pr, vector: @vectors[pr.id]}
+      end
+      @results.compact!
+
+      ### クラスタ割当 ###
+      num.times do |time|
+        logger.debug "<<<<<<<< #{time} >>>>>>>>>>"
+
+        res = @results.map do |re|
+          ### ベクトル距離比較 ###
+          calcs = @clasters.map do |cl|
+            sub = re[:vector] - cl[:vector]
+            res = (sub * sub).sum
+
+            [cl[:id], res]
+          end
+
+          cluster_id = (calcs.min_by { |ca| ca[1] })[0]
+
+          logger.debug "result #{time} :: #{re[:id]} (#{re[:product].name}) >> #{cluster_id}"
+
+          {id: re[:id], claster: cluster_id, product: re[:product], vector: re[:vector]}
+        end
+
+        @results = res.compact
+
+        ### クラスタ再設定 ###
+        clas = @clasters.map do |cl|
+          claster_sum   = Product::ZERO_NARRAY
+          claster_count = 0
+
+          @results.each do |re|
+            if re[:claster] == cl[:id]
+              claster_sum   += re[:vector]
+              claster_count += 1
+            end
+          end
+
+          if claster_count > 0
+            cl[:vector] = claster_sum / claster_count
+            logger.debug "claster #{time} :: #{cl[:id]} (#{cl[:name]}) >> count : #{claster_count}"
+
+            cl
+          else
+            nil
+          end
+        end
+
+        @clasters = clas.compact
+
+        ### キャッシュに保存 ###
+        Rails.cache.write("#{Open::VECTOR_CACHE}_open_clasters_#{@open_now.id}", @clasters)
+        Rails.cache.write("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}", @results)
+      end
+    end
+
+    # render plain: 'OK', status: 200
   end
 
   def image
