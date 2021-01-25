@@ -167,10 +167,12 @@ class System::PlaygroundController < ApplicationController
 
         @clasters = clas.compact
 
-        ### キャッシュに保存 ###
-        Rails.cache.write("#{Open::VECTOR_CACHE}_open_clasters_#{@open_now.id}", @clasters)
-        Rails.cache.write("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}", @results)
       end
+
+      ### キャッシュに保存 ###
+      Rails.cache.write("#{Open::VECTOR_CACHE}_open_clasters_#{@open_now.id}", @clasters)
+      Rails.cache.write("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}", @results)
+
 
     end
     @products = @open_now.products.includes(:product_images).index_by(&:id)
