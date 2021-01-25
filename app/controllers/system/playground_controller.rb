@@ -112,7 +112,7 @@ class System::PlaygroundController < ApplicationController
       @clasters.compact!
 
       ### 各ベクトルの初期化 ###
-      @products = @open_now.products.includes(:product_images)
+      @products = @open_now.products.includes(:product_images).order(:list_no)
 
       @results = @products.map do |pr|
         next if @vectors[pr.id] == Product::ZERO_NARRAY || @vectors[pr.id].nil? # ベクトルなし
@@ -136,7 +136,7 @@ class System::PlaygroundController < ApplicationController
 
           cluster_id = (calcs.min_by { |ca| ca[1] })[0]
 
-          logger.debug "result #{time} :: #{re[:id]} (#{re[:product].name}) >> #{cluster_id}"
+          logger.debug "result #{time} :: No. #{re[:product].list_no} (#{re[:product].name}) >> #{cluster_id}"
 
           {id: re[:id], claster: cluster_id, product: re[:product], vector: re[:vector]}
         end
