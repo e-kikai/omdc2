@@ -112,12 +112,12 @@ class System::PlaygroundController < ApplicationController
       @clasters.compact!
 
       ### 各ベクトルの初期化 ###
-      @products = @open_now.products.includes(:product_images).order(:list_no)
+      @products = @open_now.products.order(:list_no)
 
       @results = @products.map do |pr|
         next if @vectors[pr.id] == Product::ZERO_NARRAY || @vectors[pr.id].nil? # ベクトルなし
 
-        {id: pr.id, claster: 1, product: pr, vector: @vectors[pr.id]}
+        {id: pr.id, claster: 1, list_no: pr.list_no, name: pr.name, vector: @vectors[pr.id]}
       end
       @results.compact!
 
@@ -136,9 +136,9 @@ class System::PlaygroundController < ApplicationController
 
           cluster_id = (calcs.min_by { |ca| ca[1] })[0]
 
-          logger.debug "result #{time} :: No. #{re[:product].list_no} (#{re[:product].name}) >> #{cluster_id}"
+          logger.debug "result #{time} :: No. #{re[:list_no]} (#{re[:name]}) >> #{cluster_id}"
 
-          {id: re[:id], claster: cluster_id, product: re[:product], vector: re[:vector]}
+          {id: re[:id], claster: cluster_id, list_no: re[:list_no], name: re[:name], vector: re[:vector]}
         end
 
         @results = res.compact
@@ -171,6 +171,8 @@ class System::PlaygroundController < ApplicationController
         Rails.cache.write("#{Open::VECTOR_CACHE}_open_clasters_#{@open_now.id}", @clasters)
         Rails.cache.write("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}", @results)
       end
+
+      @products = @open_now.products.includes(:product_images).index_by(&:id)
     end
 
     # render plain: 'OK', status: 200

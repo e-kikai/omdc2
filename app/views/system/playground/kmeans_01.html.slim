@@ -197,12 +197,12 @@ ul.nav.nav-tabs
       h4 = "#{cl[:id]} : #{cl[:name]}"
       .
         - @results.each do |re|
-          - if re[:claster] == cl[:id]
+          - if re[:claster] == cl[:id] && @products[re[:id]].present?
             .thumbnail.product-pannel_02
               .thumb_img
-                - if re[:product].product_images.present?
-                  = image_tag("#{@img_base}/#{re[:product].product_images.first.id}/thumb_#{re[:product].product_images.first.image_identifier}", srcset: {"#{@img_base}/#{re[:product].product_images.first.id}/view_#{re[:product].product_images.first.image_identifier}" => "2x"}, alt: re[:product].name)
+                - if @products[re[:id]].product_images.present?
+                  = image_tag("#{@img_base}/#{@products[re[:id]].product_images.first.id}/thumb_#{@products[re[:id]].product_images.first.image_identifier}", srcset: {"#{@img_base}/#{@products[re[:id]].product_images.first.id}/view_#{@products[re[:id]].product_images.first.image_identifier}" => "2x"}, alt: @products[re[:id]].name)
 
-              . = "No. #{re[:product].list_no} : #{re[:product].name}"
+              . = "No. #{@products[re[:id]].list_no} : #{@products[re[:id]].name}"
 
-            / = render "product_panel_03_img", product: re[:product], r: :cls
+            / = render "product_panel_03_img", product: @products[re[:id]], r: :cls
