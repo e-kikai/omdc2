@@ -172,8 +172,8 @@ class System::PlaygroundController < ApplicationController
         Rails.cache.write("#{Open::VECTOR_CACHE}_open_claster_results_#{@open_now.id}", @results)
       end
 
-      @products = @open_now.products.includes(:product_images).index_by(&:id)
     end
+    @products = @open_now.products.includes(:product_images).index_by(&:id)
 
     # render plain: 'OK', status: 200
   end

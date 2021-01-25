@@ -200,7 +200,7 @@ ul.nav.nav-tabs
           - if re[:claster] == cl[:id] && @products[re[:id]].present?
             .thumbnail.product-pannel_02
               .thumb_img
-                - if @products[re[:id]].product_images.present?
+                - if @products[re[:id]].product_images.first.present?
                   = image_tag("#{@img_base}/#{@products[re[:id]].product_images.first.id}/thumb_#{@products[re[:id]].product_images.first.image_identifier}", srcset: {"#{@img_base}/#{@products[re[:id]].product_images.first.id}/view_#{@products[re[:id]].product_images.first.image_identifier}" => "2x"}, alt: @products[re[:id]].name)
 
               . = "No. #{@products[re[:id]].list_no} : #{@products[re[:id]].name}"
