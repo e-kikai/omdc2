@@ -97,7 +97,7 @@ class System::PlaygroundController < ApplicationController
       ### 既存の中カテゴリから初期クラスタ生成 ###
       @clasters = LargeGenre.all.map do |la|
         res = nil
-        la.products.where(open: @open_now).order(:id).pluck(:id).each do |product_id|
+        la.products.where(open: @open_now).order(:list_no).pluck(:id).each do |product_id|
           unless @vectors[product_id] == Product::ZERO_NARRAY || @vectors[product_id].nil? # ベクトルなし
             logger.debug "claster :: #{la.id} (#{la.name}) >> #{product_id}"
 
