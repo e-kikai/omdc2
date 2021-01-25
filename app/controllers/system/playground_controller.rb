@@ -2,8 +2,8 @@ class System::PlaygroundController < ApplicationController
   require "open3"
   include Exports
 
-  before_action :change_db, exists: [:kmeans_01]
-  after_action  :restore_db, exists: [:kmeans_01]
+  before_action :change_db, except: [:kmeans_01]
+  after_action  :restore_db, except: [:kmeans_01]
   rescue_from   { restore_db }
 
   # layout "application_02"
@@ -173,7 +173,7 @@ class System::PlaygroundController < ApplicationController
       end
 
     end
-    @products = @open_now.products.index_by(&:id)
+    @products = @open_now.products.includes(:product_images).index_by(&:id)
 
     # render plain: 'OK', status: 200
   end
