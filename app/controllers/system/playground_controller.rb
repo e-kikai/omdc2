@@ -173,7 +173,7 @@ class System::PlaygroundController < ApplicationController
       end
 
     end
-    @products = @open_now.products.includes(:product_images).index_by(&:id)
+    @products = @open_now.products.index_by(&:id)
 
     # render plain: 'OK', status: 200
   end
