@@ -1,6 +1,44 @@
 - set_meta_tags title: "お気に入りリスト (入札依頼PDF作成)"
 - breadcrumb  :mypage_favolite
 
+javascript:
+  $(function() {
+    $('form.pdf_submit').on("submit", function() {
+      var error = "";
+      try {
+        $(".ids").each(function(i, elem) {
+          id        = $(elem).val();
+          min_price = parseInt($("#min_price_"+ id).val());
+          amount    = parseInt($("#amounts_" + id).val());
+          list_no   = $("#list_no_" + id).val();
+
+          if (amount > 0) {
+            console.log(amount);
+            console.log(min_price);
+
+            if (amount < min_price) {
+              error += "No. " + list_no + " : 最低入札価格(" + min_price + "円)以上の金額を入力してください。\n"
+            }
+
+            if (amount % 100 != 0) {
+              error += "No. " + list_no + " : 入札金額は、100円単位で入力してください。\n"
+            }
+          }
+        });
+
+        if (error != "") {
+          alert(error);
+          return false;
+        } else {
+          return true;
+        };
+      } catch (e) {
+          console.log(e);
+          return false;
+      }
+    });
+  });
+
 section.items
   .container
     h2 お気に入りリスト(入札依頼PDF作成)
@@ -13,18 +51,19 @@ section.items
         | 各商品の「入札依頼金額」に金額を入力して「入札依頼PDFを作成する」をクリックすると、入札依頼用PDFが作成されます。<br />
         | 取引されている組合員商社に、このPDFをFAX、メールなどで送付することで、入札依頼を行って下さい。
 
-    = form_tag "/mypage/favorites/request_list.pdf", method: :patch do
+    = form_tag "/mypage/favorites/request_list.pdf", method: :patch, class: :pdf_submit do
 
       .rely = button_tag :submit do
         i.fas.fa-file-pdf
         span.btn-content 金額を入力した商品で入札依頼PDFを作成する
+
+        = hidden_field_tag "q[s]", params.dig(:q, :s)
 
         / #button_area
         /   = link_to "javascript:display(0);", class: "view_button" do
         /     i.fas.fa-th-large
         /   = link_to "javascript:display(1);", class: "view_button" do
         /     i.fas.fa-list
-
 
         / = paginate @pproducts
 
@@ -54,12 +93,18 @@ section.items
 
               - @products.each do |pr|
                 tr
-                  td.id = pr.list_no
+                  td.id
+                    = pr.list_no
+                    input type="hidden" class="ids" value=pr.id
+                    input type="hidden" id="list_no_#{pr.id}" value=pr.list_no
                   td = link_to pr.name, "/products/#{pr.id}"
                   td = pr.maker
                   td = pr.model
                   / td = pr.year
-                  td.num = number_to_currency(pr.min_price)
+                  td.num
+                    = number_to_currency(pr.min_price)
+                    input type="hidden" id="min_price_#{pr.id}" value=pr.min_price
+
                   td = pr.area_name
                   td.img_link
                     - if pr.product_images.present?
@@ -71,7 +116,7 @@ section.items
                         i.far.fa-video
                   td.img_link
                     - if pr.product_images.present?
-                      = link_to "/products/#{pr.id}/likeimage", target: "_blank" do
+                      = link_to "/products/#{pr.id}/image_vector_search", target: "_blank" do
                         i.fas.fa-camera
 
                   / td.img_link = render "/products/favorite", product: pr

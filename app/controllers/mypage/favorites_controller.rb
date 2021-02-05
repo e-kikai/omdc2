@@ -3,7 +3,7 @@ class Mypage::FavoritesController < Mypage::ApplicationController
 
   def index
     @search   = @products.where(id: @favorites.select(:product_id)).order(:list_no).search(params[:q])
-    @products = @search.result.includes(:product_images)
+    @products = @search.result.includes(:product_images).order(list_no: :asc)
 
     # @pproducts = @products.page(params[:page])
   end
@@ -11,8 +11,10 @@ class Mypage::FavoritesController < Mypage::ApplicationController
   def request_list
     @amounts = params[:amounts] || {}
 
+    logger.debug params[:q]
+
     @search   = @products.where(id: @favorites.select(:product_id)).order(:list_no).search(params[:q])
-    @products = @search.result
+    @products = @search.result.order(list_no: :asc)
 
     @favorites.each do |fa|
       amount = @amounts[fa.product_id.to_s].to_i
