@@ -10,8 +10,8 @@ class MainController < ApplicationController
   def index
     if @open_now
       # 特集
-      @specials_01 = @products.where("min_price <= 10000").order("random()").limit(10)
-      @specials_02 = @products.where("name ~ '一山|1山|雑品' OR hitoyama = true").order("random()").limit(10)
+      @specials_01 = @products.special(1).order("random()").limit(100)
+      @specials_02 = @products.special(2).order("random()").limit(100)
     end
   end
 

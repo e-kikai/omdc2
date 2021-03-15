@@ -21,7 +21,7 @@ section.items
 
     h3.image_vector この商品に画像特徴が近い商品
 
-    = render "/products/product", product: @product, hidexs: false
+    = render "/products/product", product: @product, cls: "", r: "img"
 
     hr
 
@@ -29,7 +29,7 @@ section.items
 
     .items_block style="display: inline-table;"
       - @products.each do |product, i|
-        = render product, hidexs: false
+        = render product, cls: ""
 
     .nowrap
       .items_block style="display: none;"

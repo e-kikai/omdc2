@@ -104,6 +104,23 @@ class Product < ApplicationRecord
     joins("LEFT JOIN (#{Bid.sums.to_sql}) bs ON bs.product_id = products.id").select("*, bids_count, bids_max_amount")
   }
 
+  # 特集
+  def self.special_title(key)
+    case key.to_i
+    when 1; "最低落札価格1万円特集"
+    when 2; "ひとやま特集"
+    end
+  end
+
+  scope :special, -> (key) {
+    case key.to_i
+    when 1; where("min_price <= 10000")
+    when 2; where("name ~ '一山|1山|雑品' OR hitoyama = true")
+    end
+  }
+
+
+
   def self.ml_get_genre(product)
     workspaces = "42c03c07608247ef802a8ff6fce5b577"
     services   = "7bde3c5e52ac486e8cd3ea0b8d0f3c4f"

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get  "xl_genre/:xl_genre_id"       => "products#index", as: :xl_genre
   get  "large_genre/:large_genre_id" => "products#index", as: :large_genre
   get  "genre/:genre_id"             => "products#index", as: :genre
+  get  "special/:special_key"        => "products#index", as: :special
 
   # get  "detail/:id"   => "products#show"
   get "detail/:id" => redirect("/products/%{id}")

@@ -22,8 +22,11 @@ class ProductsController < ApplicationController
       @large_genre = LargeGenre.find(params[:large_genre_id])
       queries[:large_genre_id_eq] = params[:large_genre_id]
     elsif params[:genre_id].present?
-      @genre = Genre.find(params[:genre_id])
-      queries[:genre_id_eq] = params[:genre_id]
+      @genre    = Genre.find(params[:genre_id])
+      @products = @products.where(genre_id: params[:genre_id])
+    elsif Product.special_title(params[:special_key]).present?
+      @special_title = Product.special_title(params[:special_key])
+      @products      = @products.special(params[:special_key])
     end
 
     @search = @products.with_keywords(params[:keywords]).search(queries)

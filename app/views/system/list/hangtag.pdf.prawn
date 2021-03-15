@@ -22,7 +22,8 @@ prawn_document do |pdf|
         # pdf.stroke_bounds
 
         pdf.text p.list_no, {size: 54}
-        pdf.text "　", {size: 4, align: :center}
+        # pdf.text "　", {size: 4, align: :center}
+        pdf.text "　", {size: 18, align: :center}
         pdf.text "#{p.name}", {size: 24, align: :center}
 
         pdf.font "vendor/assets/fonts/ipaexm.ttf"
@@ -41,28 +42,32 @@ prawn_document do |pdf|
         #   file: nil # path to write
         # ))
 
-        qr_url = "#{root_url}qr?id=#{p.id}&place=hangtag"
+        # qr_url = "#{root_url}qr?id=#{p.id}&place=hangtag"
         # qr_url = "#{root_url}products/#{p.id}?r=qr"
+        qr_url = "#{root_url}qr?id=#{p.id}&r=qr_hangtag"
 
         qr_image =
-        RQRCode::QRCode.new(qr_url, size: 6, level: :l).as_png(
+        RQRCode::QRCode.new(qr_url, size: 4, level: :l).as_png(
               resize_gte_to: false,
               resize_exactly_to: false,
               fill: 'white',
               color: 'black',
-              size: 50,
+              # size: 50,
+              size: 70,
               border_modules: 0,
-              module_px_size: 1,
+              module_px_size: 2,
               file: nil # path to write
             ).to_s
         pdf.image StringIO.new(qr_image), at: [320, 262]
+        pdf.image "app/assets/images/qr_info.png", at: [154, 248], :scale => 0.2
+
 
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 17, at: [0, 60]}
         pdf.text_box "￥#{number_with_delimiter(p.min_price)}", {size: 27, at: [110, 68]}
         pdf.text_box "落札会社 :", {size: 23, at: [0, 30]}
 
-        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [320, 16]}
+        pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [316, 16]}
       end
     end
 

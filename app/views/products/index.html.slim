@@ -1,14 +1,17 @@
 - if @xl_genre
-  - breadcrumb  :xl_genre, @xl_genre
+  - breadcrumb :xl_genre, @xl_genre
   - title = @xl_genre.name
 - elsif @large_genre
-  - breadcrumb  :large_genre, @large_genre
+  - breadcrumb :large_genre, @large_genre
   - title = @large_genre.name
 - elsif @genre
-  - breadcrumb  :genre, @genre
+  - breadcrumb :genre, @genre
   - title = @genre.name
+- elsif @special_title
+  - breadcrumb :something, @special_title
+  - title = @special_title
 - else
-  - breadcrumb  :search, params[:q]
+  - breadcrumb :search, params[:q]
   - title = ""
 
 - set_meta_tags title: "#{title} 検索結果"
@@ -51,7 +54,7 @@ section.items
 
       .items_block style="display: inline-table;"
         - @pproducts.each do |product, i|
-          = render product, hidexs: false
+          = render product, cls: ""
 
       .nowrap
         .items_block style="display: none;"
