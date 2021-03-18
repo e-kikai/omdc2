@@ -26,7 +26,8 @@
             td = sl.path
             td = sl.page
             / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
-            td.name style="word-break: break-all;" = URI.unescape(sl.referer)
+            td.name title="#{URI.unescape(sl.referer)}" = URI.unescape(sl.link_source)
+
 
 
   = paginate @psearch_logs

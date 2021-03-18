@@ -21,7 +21,7 @@ section.items
 
     h3.image_vector この商品に画像特徴が近い商品
 
-    = render "/products/product", product: @product, cls: "", r: "img"
+    = render "/products/product", product: @product, cls: "", r: "nms_lst_target"
 
     hr
 
@@ -29,7 +29,7 @@ section.items
 
     .items_block style="display: inline-table;"
       - @products.each do |product, i|
-        = render product, cls: ""
+        = render product, cls: "", r: "nms_pnl"
 
     .nowrap
       .items_block style="display: none;"
@@ -48,4 +48,4 @@ section.items
             th.img_link
 
           - @products.each do |pr|
-            = render "/products/product_tr", product: pr
+            = render "/products/product_tr", product: pr, r: "nms_lst"

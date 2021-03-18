@@ -109,7 +109,7 @@ section.detail
       .overflow_area
         .overflow_items
           - @likeimgs.each_with_index do |product, i|
-            = render product
+            = render product, cls: "", r: "dtl_nmr_pnl"
 
 - if @samegenres.present?
   section.items
@@ -118,4 +118,4 @@ section.detail
       .overflow_area
         .overflow_items
           - @samegenres.each_with_index do |product, i|
-            = render product
+            = render product, cls: "", r: "dtl_sge_pnl"

@@ -17,9 +17,11 @@
 #  index_toppage_logs_on_user_id  (user_id)
 #
 class ToppageLog < ApplicationRecord
+  include LinkSource
+
   belongs_to :user, required: false
 
-  before_save :check_robot
+  # before_save :check_robot
 
   # def link_source
   #   DetailLog.link_source(r, referer)
@@ -27,7 +29,7 @@ class ToppageLog < ApplicationRecord
 
   private
 
-  def check_robot
-    host =~ DetailLog::ROBOTS || ip.blank? ? false : true
-  end
+  # def check_robot
+  #   host =~ DetailLog::ROBOTS || ip.blank? ? false : true
+  # end
 end

@@ -3,4 +3,4 @@ section.history
     h2 閲覧履歴
     .items_block
       - histories.each_with_index do |product, i|
-        = render "products/product", product: product, cls: (i < 3 ? "" : "hidden-xs"), r: "history"
+        = render "products/product", product: product, cls: (i < 3 ? "" : "hidden-xs"), r: "hist_pnl"

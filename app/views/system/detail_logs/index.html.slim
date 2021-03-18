@@ -32,7 +32,9 @@
             td = dl.product.company.name_remove_kabu
             td = number_to_currency dl.product.min_price
             / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
-            td.name style="word-break: break-all;" = URI.unescape(dl.referer)
+            / td.name style="word-break: break-all;" = URI.unescape(dl.referer)
+            td.name title="#{URI.unescape(dl.referer)}" = URI.unescape(dl.link_source)
+
 
 
   = paginate @pdetail_logs

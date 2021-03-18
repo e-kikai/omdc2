@@ -22,13 +22,14 @@
         th 下見期間
         th 入札期間
         th.button
+        th colspan="2" Power BI用CSV
       - @opens.each do |o|
         tr
           td = o.id
           td = link_to o.name, "/system/opens/#{o.id}/edit"
-          td #{o.entry_start_date} 〜 #{o.entry_end_date.strftime('%m/%d')}
-          td #{o.preview_start_date} 〜 #{o.preview_end_date.strftime('%m/%d')}
-          td #{o.bid_start_at.strftime('%Y/%m/%d %H:%M')} 〜 #{o.bid_end_at.strftime('%m/%d %H:%M')}
+          td #{o.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{o.entry_end_date.strftime('%-m/%-d')}
+          td #{o.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{o.preview_end_date.strftime('%-m/%-d')}
+          td #{o.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{o.bid_end_at.strftime('%-m/%-d %H:%M')}
           td.button
             - if o.bid_end_at <= Time.now
               = link_to "落札結果", "/system/opens/#{o.id}"
@@ -36,4 +37,14 @@
               - message = "#{o.name}\n\nこの入札会を削除しますか？"
               = link_to "/system/opens/#{o.id}/", method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-danger" do
                 span.glyphicon.glyphicon-remove
-                =< "削除"
+                span.btn-conten 削除
+          td.button
+            - if o.bid_end_at <= Time.now
+              = link_to "/system/opens/#{o.id}/products.csv" do
+                i.fas.fa-file-csv
+                span.btn-content 商品
+          td.button
+            - if o.bid_end_at <= Time.now
+              = link_to "/system/opens/#{o.id}/detail_logs.csv" do
+                i.fas.fa-file-csv
+                span.btn-content 閲覧

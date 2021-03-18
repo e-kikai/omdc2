@@ -4,7 +4,10 @@
 section.rule
   .container
     h2 入札までの流れ
-    h3 = link_to "機械団地入札会 サイトご利用の手引き", asset_path("omdc2_manual.pdf")
+    .nomal_btn
+      h3 = link_to asset_path("omdc2_manual.pdf")
+        i.fas.fa-file-pdf
+        span.btn-content 機械団地入札会 サイトご利用の手引き
 
     .newcomers_block
       <h3>本サイトを利用した入札までの手順</h3>

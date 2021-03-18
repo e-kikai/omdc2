@@ -97,7 +97,7 @@ section.items
                     = pr.list_no
                     input type="hidden" class="ids" value=pr.id
                     input type="hidden" id="list_no_#{pr.id}" value=pr.list_no
-                  td = link_to pr.name, "/products/#{pr.id}"
+                  td = link_to pr.name, "/products/#{pr.id}?r=fav_lst"
                   td = pr.maker
                   td = pr.model
                   / td = pr.year

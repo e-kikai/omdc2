@@ -11,6 +11,7 @@
         th IP/ホスト名
         th ユーザID/会社・ユーザ名
         th リンク元
+        th リファラ
 
       - @ptoppage_logs.each do |tl|
           tr
@@ -22,6 +23,7 @@
               - else
                 | -
             / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
+            td = tl.link_source
             td.name style="word-break: break-all;" = URI.unescape(tl.referer)
 
   = paginate @ptoppage_logs

@@ -47,7 +47,7 @@ section.items
 
         .items_block style="display: inline-table;"
           - @products.each do |product, i|
-            = render product, cls: ""
+            = render product, cls: "", r: "mnf_pnl"
 
         .nowrap
           .items_block style="display: none;"
@@ -66,7 +66,7 @@ section.items
                 th.img_link
 
               - @products.each do |pr|
-                = render "/products/product_tr", product: pr
+                = render "/products/product_tr", product: pr, r: "mnf_lst"
 
       - else
         .alert.alert-success

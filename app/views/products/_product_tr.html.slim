@@ -1,6 +1,8 @@
+- r   = "" unless defined?(r)
+
 tr
   td.id = product.list_no
-  td = link_to product.name, "/products/#{product.id}"
+  td = link_to product.name, "/products/#{product.id}?r=#{r}"
   td = product.maker
   td = product.model
   td = product.year

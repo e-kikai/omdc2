@@ -27,7 +27,7 @@ section.items
 
     .items_block style="display: inline-table;"
       - @pproducts.each do |product, i|
-        = render product, cls: ""
+        = render product, cls: "", r:"lno_pnl"
 
     .nowrap
       .items_block style="display: none;"
@@ -46,4 +46,4 @@ section.items
             th.img_link
 
           - @pproducts.each do |pr|
-            = render "/products/product_tr", product: pr
+            = render "/products/product_tr", product: pr, r:"lno_lst"

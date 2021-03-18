@@ -121,6 +121,11 @@ Rails.application.routes.draw do
       member do
         get "detail/:product_id" => :result_detail
       end
+
+      member do
+        get   :products
+        get   :detail_logs
+      end
     end
     resources :companies, except: [:show, :delete]
     resources :areas,     except: [:show]

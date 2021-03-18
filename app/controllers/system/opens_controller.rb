@@ -1,5 +1,5 @@
 class System::OpensController < System::ApplicationController
-  before_action :get_open, only: [:show, :edit, :update, :destroy, :result_detail]
+  before_action :get_open, only: [:show, :edit, :update, :destroy, :result_detail, :products, :detail_logs]
 
   include Exports
 
@@ -55,6 +55,35 @@ class System::OpensController < System::ApplicationController
 
   def result_detail
     @product = @open.products.includes(:bids, :success_bid).find(params[:product_id])
+  end
+
+  def products
+    @products = @open.products.includes(:success_bid, :success_company, :company, :genre, :large_genre, :xl_genre, :area)
+
+    respond_to do |format|
+      format.csv {
+        send_data render_to_string,
+        content_type: 'text/csv',
+        filename: filename_encode("#{@open.id}_products.csv")
+      }
+    end
+  end
+
+  def detail_logs
+    @detail_logs = DetailLog
+      .where(product_id: @open.products, created_at: @open.preview_start_date.beginning_of_day..@open.bid_end_at.end_of_day).group(:product_id).count
+
+    ### 訪問者数 ###
+    @detail_users = DetailLog.distinct
+      .where(product_id: @open.products, created_at: @open.preview_start_date.beginning_of_day..@open.bid_end_at.end_of_day).group(:product_id).count(:ip)
+
+    respond_to do |format|
+      format.csv {
+        send_data render_to_string,
+        content_type: 'text/csv',
+        filename: filename_encode("#{@open.id}_detail_logs.csv")
+      }
+    end
   end
 
   private

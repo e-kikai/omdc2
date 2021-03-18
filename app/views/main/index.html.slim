@@ -91,9 +91,9 @@ section.news
 
               .items_block style="display: inline-table;"
                 - @specials_01.first(10).each do |product|
-                  = render product, cls: "", r: "sp_01_pc"
+                  = render product, cls: "", r: "top_spc_01_pc"
                 - @specials_01[10..-1].each do |product|
-                  = render product, cls: "hidden", r: "sp_01_pc"
+                  = render product, cls: "hidden", r: "top_spc_01_pc"
 
               .nomal_link
                 h3 = link_to "javascript:show_product('.sp_01_pc', 10);" do
@@ -110,9 +110,9 @@ section.news
 
               .items_block style="display: inline-table;"
                 - @specials_01.first(6).each do |product|
-                  = render product, cls: "", r: "sp_01_mb"
+                  = render product, cls: "", r: "top_spc_01_mb"
                 - @specials_01[6..-1].each do |product|
-                  = render product, cls: "hidden", r: "sp_01_mb"
+                  = render product, cls: "hidden", r: "top_spc_01_mb"
 
               .nomal_link
                 h3 = link_to "javascript:show_product('.sp_01_mb', 6);" do
@@ -130,9 +130,9 @@ section.news
 
               .items_block style="display: inline-table;"
                 - @specials_02.first(10).each do |product|
-                  = render product, cls: "", r: "sp_02_pc"
+                  = render product, cls: "", r: "top_spc_02_pc"
                 - @specials_02[10..-1].each do |product|
-                  = render product, cls: "hidden", r: "sp_02_pc"
+                  = render product, cls: "hidden", r: "top_spc_02_pc"
 
               .nomal_link
                 h3 = link_to "javascript:show_product('.sp_02_pc', 10);" do
@@ -149,9 +149,9 @@ section.news
 
               .items_block style="display: inline-table;"
                 - @specials_02.first(6).each do |product|
-                  = render product, cls: "", r: "sp_02_mb"
+                  = render product, cls: "", r: "top_spc_02_mb"
                 - @specials_02[6..-1].each do |product|
-                  = render product, cls: "hidden", r: "sp_02_mb"
+                  = render product, cls: "hidden", r: "top_spc_02_mb"
 
               .nomal_link
                 h3 = link_to "javascript:show_product('.sp_02_mb', 6);"do

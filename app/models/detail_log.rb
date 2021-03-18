@@ -19,16 +19,18 @@
 #  index_detail_logs_on_user_id     (user_id)
 #
 class DetailLog < ApplicationRecord
+  include LinkSource
+
   belongs_to :user,    required: false
   belongs_to :product, required: true
 
   before_save :check_robot
-  
-  ROBOTS = /(google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/
+
+  # ROBOTS = /(google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/
 
   private
 
-  def check_robot
-    host !~ ROBOTS && ip.present?
-  end
+  # def check_robot
+  #   host !~ ROBOTS && ip.present?
+  # end
 end
