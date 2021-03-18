@@ -1,5 +1,22 @@
-- set_meta_tags title: "#{@product.name} #{@product.maker} #{@product.model}商品詳細"
+- title = "#{@product.name} #{@product.maker} #{@product.model} "
+
+- desc =  "最低入札価格:#{number_to_currency @product.min_price}、"
+- desc += "#{@product.genre&.name} #{@product.spec} #{@product.condition}"
+
+- set_meta_tags title: "#{title} 商品詳細"
 - breadcrumb  :product_show, @product
+
+/ - set_meta_tags keywords: keywords
+- set_meta_tags description: desc
+
+/// Twitterカード ///
+- set_meta_tags twitter: { card: "summary" }
+
+/// OGP ///
+- set_meta_tags og: { type: "article", title: title, description: desc, url: "#{root_url}products/#{@product.id}", site_name: @product.open&.name }
+
+/// canonical ///
+- set_meta_tags canonical: "#{root_url}products/#{@product.id}"
 
 section.detail
   .container

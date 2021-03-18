@@ -3,7 +3,9 @@ html.layout2
   head
     meta charset="utf-8"
     meta name="viewport" content="width=device-width, initial-scale=1"
-    = display_meta_tags site: "機械団地電子入札システム2.1", reverse: true, separator: "｜", nofollow: true, noindex: true
+
+    - site = @open_now&.name || "機械団地電子入札システム2.1"
+    = display_meta_tags site: "機械団地 #{site}", reverse: true, separator: "｜", nofollow: true, noindex: true
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => :reload
     = javascript_include_tag 'application', 'data-turbolinks-track' => :reload

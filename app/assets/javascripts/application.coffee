@@ -118,6 +118,16 @@ $(document).on 'ready, turbolinks:load', ->
         data :    { r : $('#r').val(), referer : $('#referer').val() },
         timeout:  3000,
 
+    ### URL表示からログパラメータを削除 ###
+    # URLSearchParamsオブジェクトを取得
+    url    = new URL(window.location.href)
+    params = url.searchParams
+
+    params.delete('r')
+
+    # アドレスバーのURLからGETパラメータを削除
+    history.replaceState('', '', url.pathname)
+
 
 
 priceUnformat = (str) ->
