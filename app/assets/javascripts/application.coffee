@@ -81,6 +81,27 @@ $(document).on 'ready, turbolinks:load', ->
   $('#dl-menu').dlmenu()
 
 
+  ### URL表示からログパラメータを削除 ###
+  # URLSearchParamsオブジェクトを取得
+  url    = new URL(window.location.href)
+  params = url.searchParams
+
+  # アドレスバーのURLからGET rパラメータを削除
+  params.delete('r')
+  history.replaceState('', '', url.pathname)
+
+  ### リロード、履歴の判別 ###
+  if $('#r').length
+    rval = $('#r').val()
+  else
+    rval = ""
+
+  if window.performance
+    if performance.navigation.type == 1
+      rval += "_reload"
+    else if performance.navigation.type == 2
+      rval += "_back"
+
   ### ロギング ###
   if !$("#nologging").val()
 
@@ -91,7 +112,7 @@ $(document).on 'ready, turbolinks:load', ->
         url:      "/detail_logs/"
         type:     'POST',
         dataType: 'json',
-        data :    { product_id : $('#product_id').val(), r : $('#r').val(), referer : $('#referer').val()  },
+        data :    { product_id : $('#product_id').val(), r : rval, referer : $('#referer').val()  },
         timeout:  3000,
         # success:  (data, status, xhr)   -> alert status
         # error:    (xhr,  status, error) -> alert status
@@ -103,7 +124,7 @@ $(document).on 'ready, turbolinks:load', ->
         url:      "/search_logs/"
         type:     'POST',
         dataType: 'json',
-        data :    { keywords : $('#keywords').val(), path : $('#path').val(), page : $('#page').val(), r : $('#r').val(), referer : $('#referer').val() },
+        data :    { keywords : $('#keywords').val(), path : $('#path').val(), page : $('#page').val(), r : rval, referer : $('#referer').val() },
         timeout:  3000,
         # success:  (data, status, xhr)   -> alert status
         # error:    (xhr,  status, error) -> alert status
@@ -115,7 +136,7 @@ $(document).on 'ready, turbolinks:load', ->
         url:      "/toppage_logs/"
         type:     'POST',
         dataType: 'json',
-        data :    { r : $('#r').val(), referer : $('#referer').val() },
+        data :    { r : rval, referer : $('#referer').val() },
         timeout:  3000,
 
     ### URL表示からログパラメータを削除 ###

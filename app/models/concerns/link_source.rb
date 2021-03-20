@@ -17,6 +17,9 @@ module LinkSource
 
     "pnl" => "パネル表示", "lst" => "リスト表示",
 
+    # リロード
+    "reload" => "リロード", "back" => "履歴",
+
     # 紙媒体
     "flyer" => "チラシ", "poster" => "ポスター", "plist" => "紙リスト",
     "qr" => "下げ札",
@@ -31,7 +34,7 @@ module LinkSource
   ### リンク元の生成 ###
   def link_source
     if r.present?
-      r.split("_").map { |kwd| KWDS[kwd] || kwd }.join(" | ")
+      r.split("_").map { |kwd| KWDS[kwd] || kwd }.reject(&:blank?).join(" | ")
     else
       case referer
 
