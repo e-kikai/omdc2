@@ -82,13 +82,13 @@ $(document).on 'ready, turbolinks:load', ->
 
 
   ### URL表示からログパラメータを削除 ###
-  # URLSearchParamsオブジェクトを取得
-  url    = new URL(window.location.href)
-  params = url.searchParams
+  # # URLSearchParamsオブジェクトを取得
+  # url    = new URL(window.location.href)
+  # params = url.searchParams
 
-  # アドレスバーのURLからGET rパラメータを削除
-  params.delete('r')
-  history.replaceState('', '', url.pathname)
+  # # アドレスバーのURLからGET rパラメータを削除
+  # params.delete('r')
+  # history.replaceState('', '', url.pathname)
 
   ### リロード、履歴の判別 ###
   if $('#r').length
@@ -98,9 +98,9 @@ $(document).on 'ready, turbolinks:load', ->
 
   if window.performance
     if performance.navigation.type == 1
-      rval += "_reload"
+      rval = "reload"
     else if performance.navigation.type == 2
-      rval += "_back"
+      rval = "back"
 
   ### ロギング ###
   if !$("#nologging").val()

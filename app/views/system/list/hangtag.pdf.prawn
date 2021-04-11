@@ -64,7 +64,9 @@ prawn_document do |pdf|
 
         pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
         pdf.text_box "最低入札金額", {size: 17, at: [0, 60]}
-        pdf.text_box "￥#{number_with_delimiter(p.min_price)}", {size: 27, at: [110, 68]}
+        pdf.text_box "￥#{number_with_delimiter(p.min_price)}", {size: 27, at: [110, 67], align: :right, width: 180}
+        pdf.text_box "(税抜)", {size: 17,  at: [310, 60]}
+
         pdf.text_box "落札会社 :", {size: 23, at: [0, 30]}
 
         pdf.text_box "#{p.company.no}-#{p.app_no}", {size: 14, at: [316, 16]}
