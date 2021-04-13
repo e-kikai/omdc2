@@ -72,15 +72,33 @@ scss:
     width: 66%;
   }
 
+  .nomal_btn a {
+    text-align: center;
+    background-color: #004f99;
+    padding: 1rem 2.2rem;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 1rem 0;
+    display: inline-block;
+    min-width: 230px;
+  }
+
 .container-fluid.list-menu
 
 - if products.blank?
   div 出品商品がありませんでした
 - else
+  .nomal_btn
+    h3 = link_to asset_path("image_manual.pdf")
+      i.fas.fa-file-pdf
+      span.btn-content 電子入札システム 画像登録ガイドライン
+
   .sort_area
     = search_form_for search, url: "" do |s|
       = s.hidden_field :s, value: params.dig(:q, :s)
       span => s.sort_link :app_no,  "申込No.でソート"
+      span = " | "
       span => s.sort_link :list_no, "リストNo.でソート"
 
   .scroll_div
