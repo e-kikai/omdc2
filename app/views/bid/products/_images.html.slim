@@ -79,9 +79,10 @@ scss:
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    margin: 1rem 0;
-    display: inline-block;
-    min-width: 230px;
+    display: block;
+    width: 340px;
+    font-size: 14px;
+    margin: 0 0 0 auto;
   }
 
 .container-fluid.list-menu
@@ -90,7 +91,7 @@ scss:
   div 出品商品がありませんでした
 - else
   .nomal_btn
-    h3 = link_to asset_path("image_manual.pdf")
+    = link_to asset_path("image_manual.pdf")
       i.fas.fa-file-pdf
       span.btn-content 電子入札システム 画像登録ガイドライン
 
