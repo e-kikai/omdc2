@@ -112,7 +112,7 @@ section.detail
                 | 機械団地内にある出品会社の店舗に商品が展示されています。
 
             - address = "#{@product.company.address}+#{@product.company.name}"
-            iframe id="gmap2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="100%" height="400" src="http://maps.google.co.jp/maps?f=q&q=#{address}&source=s_q&hl=ja&geocode=ie=UTF8&t=m&output=embed"
+            iframe id="gmap2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" width="100%" height="400" src="https://maps.google.co.jp/maps?f=q&q=#{address}&source=s_q&hl=ja&geocode=ie=UTF8&t=m&output=embed"
             br
             = link_to "大きな地図で見る",    "https://maps.google.co.jp/maps?f=q&q=#{address}&source=embed&hl=ja&geocode=&ie=UTF8&t=m", style: "color:#0000FF;text-align:left", target: "_blank"
           - elsif @product.area.try(:image)
