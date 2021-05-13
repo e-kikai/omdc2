@@ -47,6 +47,6 @@ class System::CompaniesController < System::ApplicationController
   private
 
   def company_params
-    params.require(:company).permit(:name, :no, :charge, :representative, :position, :zip, :address, :tel, :fax, :mail, :memo, :entry, :account, :password)
+    params.require(:company).permit(:name, :no, :charge, :representative, :position, :zip, :address, :tel, :fax, :mail, :memo, :entry, :transfer, :account, :password)
   end
 end
