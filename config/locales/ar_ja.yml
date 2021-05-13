@@ -53,6 +53,7 @@ ja:
         mail: メールアドレス
         memo: 備考
         entry: 出品可否
+        transfer: 支払方法
         account: ログインアカウント
         password: パスワード
         password_confirmation: パスワード確認

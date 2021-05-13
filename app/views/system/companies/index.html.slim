@@ -30,6 +30,7 @@ ul.nav.nav-pills
         th TEL
         th FAX
         th メールアドレス
+        th 振込
         th アカウント
         th 作成日時
       - @companies.each do |c|
@@ -42,6 +43,7 @@ ul.nav.nav-pills
           td = c.tel
           td = c.fax
           td = mail_to c.mail
+          td = c.transfer? ? "◯" : ""
           td = c.account
           td = c.created_at
           / td

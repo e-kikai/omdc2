@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_20_090129) do
+ActiveRecord::Schema.define(version: 2021_05_13_082124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2020_12_20_090129) do
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
     t.string "email", default: "", null: false
+    t.boolean "transfer", default: false
     t.index ["account", "soft_destroyed_at"], name: "index_companies_on_account_and_soft_destroyed_at", unique: true
     t.index ["no", "soft_destroyed_at"], name: "index_companies_on_no_and_soft_destroyed_at", unique: true
     t.index ["soft_destroyed_at"], name: "index_companies_on_soft_destroyed_at"

@@ -20,6 +20,7 @@ res = %w(
   結果
   落札請求額
   出品支払額
+  支払方法
 ).to_csv
 
 @companies.each do |c|
@@ -46,6 +47,7 @@ res = %w(
     (@company_products[c.id][:products].sum(&:shiharai)),
     (@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai))),
     (@open_now.tax_total(@company_products[c.id][:products].sum(&:shiharai))),
+    (c.transfer? ? "振込" : "小切手"),
   ] + (
     @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? ["支払", "", total] : ["請求", total, ""]
   )).to_csv

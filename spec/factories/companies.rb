@@ -26,6 +26,7 @@
 #  sign_in_count          :integer          default(0), not null
 #  soft_destroyed_at      :datetime
 #  tel                    :string
+#  transfer               :boolean          default(FALSE)
 #  zip                    :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

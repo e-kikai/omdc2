@@ -5,7 +5,7 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :name, class: :required
     td = f.text_field :name, class: "form-control",  required: "required"
-    
+
   tr
     th = f.label :no
     td = f.number_field :no, class: "form-control",  required: "required"
@@ -17,7 +17,7 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :representative
     td = f.text_field :representative, class: "form-control"
-    
+
   tr
     th = f.label :position
     td = f.text_field :position, class: "form-control"
@@ -33,7 +33,7 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :tel
     td = f.text_field :tel, class: "form-control"
-    
+
   tr
     th = f.label :fax
     td = f.text_field :fax, class: "form-control"
@@ -41,11 +41,11 @@ table.table.table-hover.table-condensed.form-table
   tr
     th = f.label :mail
     td = f.text_field :mail, class: "form-control"
-    
+
   tr
     th = f.label :memo
     td = f.text_area :memo, class: "form-control"
-    
+
   tr
     th = f.label :entry, class: :required
     td
@@ -55,10 +55,20 @@ table.table.table-hover.table-condensed.form-table
       label.radio-inline
         = f.radio_button :entry, false
         | 不可
+
+  tr
+    th = f.label :transfer, class: :required
+    td
+      label.radio-inline
+        = f.radio_button :transfer, true
+        | 振込
+      label.radio-inline
+        = f.radio_button :transfer, false
+        | 小切手
     tr
       th = f.label :account, class: :required
       td = f.text_field :account, class: "form-control", required: "required"
-      
+
   - if f.object.id.blank?
     tr
       th = f.label :password, class: :required
@@ -74,4 +84,3 @@ table.table.table-hover.table-condensed.form-table
 = f.button :button, data: { confirm: "保存してよろしいでしょうか", "disable-with" => "保存中..."}, class: "btn btn-default btn-square btn-submit center-block" do
   span.glyphicon.glyphicon-save
   span.btn-content 保存
-  
