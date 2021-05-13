@@ -39,6 +39,7 @@
         th 結果
         th.num 落札請求額
         th.num 出品支払額
+        th 支払方法
 
       - @companies.each do |c|
         - next if @company_products[c.id][:products].blank? && @company_products[c.id][:success_products].blank?
@@ -73,3 +74,5 @@
             td 請求
             td.num = number_to_currency(total)
             td.num
+
+          td = c.transfer? ? "振込" : "小切手"
