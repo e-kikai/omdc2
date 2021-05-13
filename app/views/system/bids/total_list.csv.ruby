@@ -50,7 +50,7 @@ res = %w(
   ] + (
     @company_products[c.id][:products].sum(&:shiharai) > @company_products[c.id][:success_products].sum(&:seikyu) ? ["支払", "", total] : ["請求", total, ""]
   ) +
-  [ (c.transfer? ? "振込" : "小切手") ],
+  [ (c.transfer? ? "振込" : "小切手") ]
 ).to_csv
 end
 
