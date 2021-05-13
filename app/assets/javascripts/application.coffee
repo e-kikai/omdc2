@@ -139,15 +139,15 @@ $(document).on 'ready, turbolinks:load', ->
         data :    { r : rval, referer : $('#referer').val() },
         timeout:  3000,
 
-    ### URL表示からログパラメータを削除 ###
-    # URLSearchParamsオブジェクトを取得
-    url    = new URL(window.location.href)
-    params = url.searchParams
+    # ### URL表示からログパラメータを削除 ###
+    # # URLSearchParamsオブジェクトを取得
+    # url    = new URL(window.location.href)
+    # params = url.searchParams
 
-    params.delete('r')
+    # params.delete('r')
 
-    # アドレスバーのURLからGETパラメータを削除
-    history.replaceState('', '', url.pathname)
+    # # アドレスバーのURLからGETパラメータを削除
+    # history.replaceState('', '', url.pathname)
 
 
 
