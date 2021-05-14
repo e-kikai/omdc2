@@ -6,7 +6,7 @@
 @products.sum do |pr|
   [
     pr.id, "#{url_for(only_path: false)}products/#{pr.id}",
-    "#{pr.name.strip} #{pr.maker.strip} #{pr.model.strip} ｜ 機械団地 #{@open_url.title}",
+    "#{pr.name.strip} #{pr.maker.strip} #{pr.model.strip} ｜ 機械団地 #{@open_now.title}",
     pr.list_no, pr.name.strip, pr.maker.strip, pr.model.strip, pr.year.strip, pr.min_price, pr.area_name
   ].to_csv
 end.to_s
