@@ -143,6 +143,15 @@ class System::ListController < System::ApplicationController
     redirect_to "/system/list/carryout/#{@product.id}", notice: "No. #{@product.list_no} : #{@product.name}の出庫をキャンセルしました"
   end
 
+  ### 広告用CSV ###
+  def ads
+    @products = @open_now.products.includes(:company, :area).order(:list_no)
+
+    respond_to do |format|
+      format.csv { export_csv "ad_products_list.csv" }
+    end
+  end
+
   private
 
   def check_open

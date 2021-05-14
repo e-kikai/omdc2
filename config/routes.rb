@@ -168,6 +168,8 @@ Rails.application.routes.draw do
         get    "carryout/:id" => :carryout_edit
         patch  "carryout/:id" => :carryout_update
         delete "carryout/:id" => :carryout_destroy
+
+        get :ads
       end
     end
 
