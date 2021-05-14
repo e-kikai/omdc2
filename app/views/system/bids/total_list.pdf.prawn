@@ -105,7 +105,7 @@ prawn_document do |pdf|
       if products.sum(&:shiharai) >= success_products.sum(&:seikyu)
         pdf.text "お支払い額は上記の通りです。", size: 12
         # pdf.text "平成#{@open_now.payment_date.strftime("%Y").to_i - 1988}年#{@open_now.payment_date.strftime("%m月%d日")}にお支払い致します。", size: 16
-        pdf.text "#{@open_now.payment_date.strftime("%Y年%m月%d日")}に#{c.transfer? ? "振込" : "小切手"}にてお支払い致します。", size: 16
+        pdf.text "#{@open_now.payment_date.strftime("%Y年%m月%d日")}に#{c.transfer? ? "ご指定の口座に振込" : "小切手"}にてお支払い致します。", size: 16
 
       else
         pdf.text "御請求額は上記の通りです。", size: 12
