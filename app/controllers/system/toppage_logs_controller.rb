@@ -7,7 +7,7 @@ class System::ToppageLogsController < System::ApplicationController
   def index
     @toppage_logs  = ToppageLog.all.includes(:user).where(@where).order(id: :desc)
 
-    @ptoppage_logs = @toppage_logs.page(params[:page])
+    @ptoppage_logs = @toppage_logs.page(params[:page]).per(100)
 
     respond_to do |format|
       format.html

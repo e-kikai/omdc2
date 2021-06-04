@@ -7,7 +7,7 @@ class System::FavoritesController < System::ApplicationController
   def index
     @favorites  = Favorite.unscoped.includes(:user,  product: [:company, genre: [large_genre: [:xl_genre]]]).where(@where).order(id: :desc)
 
-    @pfavorites = @favorites.page(params[:page])
+    @pfavorites = @favorites.page(params[:page]).per(100)
 
     respond_to do |format|
       format.html

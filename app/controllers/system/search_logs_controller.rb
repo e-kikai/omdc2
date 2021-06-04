@@ -7,7 +7,7 @@ class System::SearchLogsController < System::ApplicationController
   def index
     @search_logs  = SearchLog.all.includes(:user).where(@where).order(id: :desc)
 
-    @psearch_logs = @search_logs.page(params[:page])
+    @psearch_logs = @search_logs.page(params[:page]).per(100)
     respond_to do |format|
       format.html
       format.csv { export_csv "search_logs.csv" }

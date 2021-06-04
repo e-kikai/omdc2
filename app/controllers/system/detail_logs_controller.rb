@@ -7,7 +7,7 @@ class System::DetailLogsController < System::ApplicationController
   def index
     @detail_logs  = DetailLog.all.includes(:user, product: [:company, genre: [large_genre: [:xl_genre]]]).where(@where).order(id: :desc)
 
-    @pdetail_logs = @detail_logs.page(params[:page])
+    @pdetail_logs = @detail_logs.page(params[:page]).per(100)
 
     respond_to do |format|
       format.html
