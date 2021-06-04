@@ -5,7 +5,7 @@ class System::DetailLogsController < System::ApplicationController
   before_action :date_selector, only: [:index]
 
   def index
-    @detail_logs  = DetailLog.all.includes(:user, :product).where(@where).order(id: :desc)
+    @detail_logs  = DetailLog.all.includes(:user, product: [:company, genre: [large_genre: [:xl_genre]]]).where(@where).order(id: :desc)
 
     @pdetail_logs = @detail_logs.page(params[:page])
 

@@ -5,7 +5,7 @@ class System::FavoritesController < System::ApplicationController
   before_action :date_selector, only: [:index]
 
   def index
-    @favorites  = Favorite.unscoped.includes(:user, :product).where(@where).order(id: :desc)
+    @favorites  = Favorite.unscoped.includes(:user,  product: [:company, genre: [large_genre: [:xl_genre]]]).where(@where).order(id: :desc)
 
     @pfavorites = @favorites.page(params[:page])
 
