@@ -1,6 +1,8 @@
 - set_meta_tags title: "詳細ログ履歴"
 - breadcrumb  :system_something, "詳細ログ履歴"
 
+= render("/system/detail_logs/date_selector_form", path: "/system/detail_logs/", date_start: @date_start, date_end: @date_end)
+
 .container-fluid.list-menu
   = paginate @pdetail_logs
 
