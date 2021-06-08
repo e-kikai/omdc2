@@ -7,7 +7,13 @@ if product.present?
     product.xl_genre.id, product.xl_genre&.name,
     product.large_genre.id, product.large_genre&.name,
     product.genre_id, product.genre&.name,
+    product.area_name,
     product.created_at,
+
+    (product.bids_count if product.success_bid.present?),
+    product.success_bid&.amount,
+    product.success_company&.name_remove_kabu,
+    (product.same_count if product.same_count > 1)
   ]
 else
   %w|
@@ -18,6 +24,9 @@ else
     大ジャンルID 大ジャンル
     中ジャンルID 中ジャンル
     ジャンルID ジャンル名
+    出品エリア
     登録日時
+
+    入札数 落札金額	落札会社	同額札
   |
 end

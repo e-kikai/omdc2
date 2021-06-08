@@ -931,7 +931,14 @@ table.table-detail {
 
 .filtering-form {
   position: relative;
+  margin-bottom: 4px;
+
+  button,
+  .btn.btn-square  {
+    margin: 0 0 0 8px;
+  }
 }
+
 .datepicker,
 .datetimepicker {
   position: relative;

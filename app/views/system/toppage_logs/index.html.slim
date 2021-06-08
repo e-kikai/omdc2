@@ -3,7 +3,7 @@
 
 = render("/system/detail_logs/date_selector_form", path: "/system/toppage_logs/", date_start: @date_start, date_end: @date_end)
 
-.container-fluid.list-menu
+.row.container-fluid.list-menu
   = paginate @ptoppage_logs
 
   .scroll_div

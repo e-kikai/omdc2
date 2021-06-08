@@ -3,7 +3,7 @@
 
 = render("/system/detail_logs/date_selector_form", path: "/system/favorites/", date_start: @date_start, date_end: @date_end)
 
-.container-fluid.list-menu
+.row.container-fluid.list-menu
   = paginate @pfavorites
 
   .scroll_div
@@ -17,7 +17,11 @@
         th.id No.
         th 商品名 メーカー 型式
         th 出品会社
-        th 最低価格
+        th.num 最低価格
+        th.id 札数
+        th.num 落札金額
+        th 落札会社
+        th.id 同額
 
       - @pfavorites.each do |fa|
           tr
@@ -26,13 +30,24 @@
             td = fa.soft_destroyed_at
             td
               - if fa.user_id.present?
-                | #{fa.user_id} #{fa.user.company}<br />#{fa.user.name}
+                | #{fa.user_id} #{fa.user&.company}<br />#{fa.user&.name}
               - else
                 | -
             td.id = fa.product_id
-            td.id = fa.product.list_no
-            td #{fa.product.name} #{fa.product.maker} #{fa.product.model}
-            td = fa.product.company.name_remove_kabu
-            td = number_to_currency fa.product.min_price
+            td.id = fa.product&.list_no
+            td #{fa.product&.name} #{fa.product&.maker} #{fa.product&.model}
+            td = fa.product&.company&.name_remove_kabu
+            td.num = number_to_currency(fa.product.min_price)
+
+            - if fa.product&.success_bid.present?
+              td.id = fa.product&.bids_count
+              td.num = number_to_currency(fa.product&.success_bid&.amount)
+              td = fa.product&.success_company&.name_remove_kabu
+              td.sepa = fa.product&.same_count if fa.product&.same_count > 1
+            - else
+              td.id
+              td.num
+              td
+              td.id.sepa
 
   = paginate @pfavorites
