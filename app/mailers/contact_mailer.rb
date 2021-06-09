@@ -19,7 +19,7 @@ class ContactMailer < ApplicationMailer
     mail(
       to:       @contact.mail,
       # reply_to: "jimukyoku@omdc.or.jp",
-      to:       "nyusatsu@omdc.or.jp",
+      reply_to: "nyusatsu@omdc.or.jp",
       subject:  "機械工具入札会: 問い合わせ送信確認"
     )
   end
