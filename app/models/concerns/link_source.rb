@@ -39,53 +39,109 @@ module LinkSource
 
   ### リンク元の生成 ###
   def link_source
-    if r.present?
-      r.split("_").map { |kwd| KWDS[kwd] || kwd }.reject(&:blank?).join(" | ")
-    else
-      case referer
+    self.class.link_source_base(r, referer)
 
-      # 検索・SNS
-      when /\/www\.google\.(com|co)\//;      "Google"
-      when /\/search\.yahoo\.co\//;          "Yahoo"
-      when /bing\.com\//;                    "bing"
-      when /baidu\.com\//;                   "百度"
+    # if r.present?
+    #   r.split("_").map { |kwd| KWDS[kwd] || kwd }.reject(&:blank?).join(" | ")
+    # else
+    #   case referer
 
-      when /\/t\.co\//;                      "Twitter"
-      when /facebook\.com\//;                "FB"
-      when /youtube\.com\//;                 "YouTube"
-      when /googleads\.g\.doubleclick\.net/; "広告"
-      when /tpc\.googlesyndication\.com/;    "広告"
-      when /\/www\.googleadservices\.com/;   "広告"
-      # e-kikai
-      when /\/www\.zenkiren\.net/;           "マシンライフ"
-      when /\/www\.zenkiren\.org/;           "全機連"
-      when /\/www\.e-kikai\.com/;            "e-kikai"
-      # when /\/www\.xn\-\-4bswgw9cs82at4b485i\.jp\//; "電子入札システム"
-      # when /\/www\.大阪機械団地\.jp\//;              "電子入札システム"
-      when /\/www\.deadstocktool\.com/;      "DST"
-      when /\/www\.mnok\.net/;               "ものオク"
+    #   # 検索・SNS
+    #   when /\/www\.google\.(com|co)\//;      "Google"
+    #   when /\/search\.yahoo\.co\//;          "Yahoo"
+    #   when /bing\.com\//;                    "bing"
+    #   when /baidu\.com\//;                   "百度"
 
-      # 電子入札システム内
-      when /\/www\.(xn\-\-4bswgw9cs82at4b485i|大阪機械団地)\.jp\/?(.*)$/ then
-        case $2
-        when /(r=.*)?$/;               "トップページ"
-        when /^produts(\?)/;           "検索結果"
-        when /^produts\/([0-9]+)/;     "詳細 : #{$1}"
-        when /^xl_genre\/([0-9]+)/;    "大ジャンル : #{$1}"
-        when /^large_genre\/([0-9]+)/; "中ジャンル : #{$1}"
-        when /^genre\/([0-9]+)/;       "ジャンル : #{$1}"
-        when /^special\/([0-9]+)/;     "特集 : #{$1}"
-        when /^products\/[0-9]+\/image_vector_search\/([0-9]+)/; "画像特徴検索 : #{$1}"
-        when /^mypage\/favorites/;     "お気に入り"
-        when /^helps/;                 "ヘルプ"
+    #   when /\/t\.co\//;                      "Twitter"
+    #   when /facebook\.com\//;                "FB"
+    #   when /youtube\.com\//;                 "YouTube"
+    #   when /googleads\.g\.doubleclick\.net/; "広告"
+    #   when /tpc\.googlesyndication\.com/;    "広告"
+    #   when /\/www\.googleadservices\.com/;   "広告"
+    #   # e-kikai
+    #   when /\/www\.zenkiren\.net/;           "マシンライフ"
+    #   when /\/www\.zenkiren\.org/;           "全機連"
+    #   when /\/www\.e-kikai\.com/;            "e-kikai"
+    #   # when /\/www\.xn\-\-4bswgw9cs82at4b485i\.jp\//; "電子入札システム"
+    #   # when /\/www\.大阪機械団地\.jp\//;              "電子入札システム"
+    #   when /\/www\.deadstocktool\.com/;      "DST"
+    #   when /\/www\.mnok\.net/;               "ものオク"
 
-        when /^bids/;   "組合員ページ"
-        when /^system/; "管理者ページ"
-        else; $2
+    #   # 電子入札システム内
+    #   when /\/www\.(xn\-\-4bswgw9cs82at4b485i|大阪機械団地)\.jp\/?(.*)$/ then
+    #     case $2
+    #     when /(r=.*)?$/;               "トップページ"
+    #     when /^produts(\?)/;           "検索結果"
+    #     when /^produts\/([0-9]+)/;     "詳細 : #{$1}"
+    #     when /^xl_genre\/([0-9]+)/;    "大ジャンル : #{$1}"
+    #     when /^large_genre\/([0-9]+)/; "中ジャンル : #{$1}"
+    #     when /^genre\/([0-9]+)/;       "ジャンル : #{$1}"
+    #     when /^special\/([0-9]+)/;     "特集 : #{$1}"
+    #     when /^products\/[0-9]+\/image_vector_search\/([0-9]+)/; "画像特徴検索 : #{$1}"
+    #     when /^mypage\/favorites/;     "お気に入り"
+    #     when /^helps/;                 "ヘルプ"
+
+    #     when /^bids/;   "組合員ページ"
+    #     when /^system/; "管理者ページ"
+    #     else; $2
+    #     end
+
+    #   when /\/\/(.*?)(\/|$)/; $1
+    #   else;                   "(不明)"
+    #   end
+    # end
+  end
+
+  module ClassMethods
+    def link_source_base(r, referer)
+      if r.present?
+        r.split("_").map { |kwd| KWDS[kwd] || kwd }.reject(&:blank?).join(" | ")
+      else
+        case referer
+
+        # 検索・SNS
+        when /\/www\.google\.(com|co)\//;      "Google"
+        when /\/search\.yahoo\.co\//;          "Yahoo"
+        when /bing\.com\//;                    "bing"
+        when /baidu\.com\//;                   "百度"
+
+        when /\/t\.co\//;                      "Twitter"
+        when /facebook\.com\//;                "FB"
+        when /youtube\.com\//;                 "YouTube"
+        when /googleads\.g\.doubleclick\.net/; "広告"
+        when /tpc\.googlesyndication\.com/;    "広告"
+        when /\/www\.googleadservices\.com/;   "広告"
+        # e-kikai
+        when /\/www\.zenkiren\.net/;           "マシンライフ"
+        when /\/www\.zenkiren\.org/;           "全機連"
+        when /\/www\.e-kikai\.com/;            "e-kikai"
+        # when /\/www\.xn\-\-4bswgw9cs82at4b485i\.jp\//; "電子入札システム"
+        # when /\/www\.大阪機械団地\.jp\//;              "電子入札システム"
+        when /\/www\.deadstocktool\.com/;      "DST"
+        when /\/www\.mnok\.net/;               "ものオク"
+
+        # 電子入札システム内
+        when /\/www\.(xn\-\-4bswgw9cs82at4b485i|大阪機械団地)\.jp\/?(.*)$/ then
+          case $2
+          when /(r=.*)?$/;               "トップページ"
+          when /^produts(\?)/;           "検索結果"
+          when /^produts\/([0-9]+)/;     "詳細 : #{$1}"
+          when /^xl_genre\/([0-9]+)/;    "大ジャンル : #{$1}"
+          when /^large_genre\/([0-9]+)/; "中ジャンル : #{$1}"
+          when /^genre\/([0-9]+)/;       "ジャンル : #{$1}"
+          when /^special\/([0-9]+)/;     "特集 : #{$1}"
+          when /^products\/[0-9]+\/image_vector_search\/([0-9]+)/; "画像特徴検索 : #{$1}"
+          when /^mypage\/favorites/;     "お気に入り"
+          when /^helps/;                 "ヘルプ"
+
+          when /^bids/;   "組合員ページ"
+          when /^system/; "管理者ページ"
+          else; $2
+          end
+
+        when /\/\/(.*?)(\/|$)/; $1
+        else;                   "(不明)"
         end
-
-      when /\/\/(.*?)(\/|$)/; $1
-      else;                   "(不明)"
       end
     end
   end
@@ -95,5 +151,4 @@ module LinkSource
   def check_robot
     host !~ ROBOTS && ip.present?
   end
-
 end
