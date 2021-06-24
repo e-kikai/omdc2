@@ -61,7 +61,7 @@ columns = %w|
   success_companies_products.name
   products.same_count
 |
-@detail_logs.in_batches(of: 100) do |los|
+@detail_logs.in_batches(of: 1000) do |los|
   los.pluck(columns).each do |lo|
     ### 整形 ###
     hitoyama_idx = columns.find_index("products.hitoyama")
