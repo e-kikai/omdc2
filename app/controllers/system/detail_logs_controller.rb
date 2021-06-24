@@ -5,7 +5,9 @@ class System::DetailLogsController < System::ApplicationController
   before_action :date_selector, only: [:index]
 
   def index
-    @detail_logs  = DetailLog.all.includes(:user, product: [:company, :area, :success_bid, :success_company, genre: [large_genre: [:xl_genre]]]).where(@where).order(id: :desc)
+    @detail_logs  = DetailLog.all.includes(:user, product: [:company, :area, :success_bid, :success_company, :genre,:large_genre, :xl_genre]).where(@where).order(id: :desc)
+
+    # @detail_logs  = @detail_logs.where(" detail_logs.host !~* 'google' ")
 
     @pdetail_logs = @detail_logs.page(params[:page]).per(100)
 
