@@ -23,26 +23,28 @@ header = %w[
 
 res = header.to_csv
 # @detail_logs.sum do |lo|
-@detail_logs.find_each do |lo|
+@detail_logs.find_each(batch_size: 5000)  do |lo|
 res += [
     lo.id, lo.created_at, lo.ip, lo.host, lo.user_id, lo.user&.company, lo.user&.name,
     URI.unescape(lo.link_source), lo.r, URI.unescape(lo.referer).scrub('♪'),
   # ].concat(render("/system/detail_logs/product", product: lo&.product)).to_csv
-  lo&.product.id, lo&.product.app_no, lo&.product.list_no,
-  lo&.product.name, lo&.product.maker, lo&.product.model, (lo&.product.hitoyama ? "◯" : ""), lo&.product.year, lo&.product.min_price,
-  lo&.product.spec, lo&.product.condition, lo&.product.comment, lo&.product.display,
-  lo&.product.company_id, lo&.product.company&.name,
-  lo&.product.xl_genre.id, lo&.product.xl_genre&.name,
-  lo&.product.large_genre.id, lo&.product.large_genre&.name,
-  lo&.product.genre_id, lo&.product.genre&.name,
-  lo&.product.area_name,
-  lo&.product.created_at,
+    lo&.product.id, lo&.product.app_no, lo&.product.list_no,
+    lo&.product.name, lo&.product.maker, lo&.product.model, (lo&.product.hitoyama ? "◯" : ""), lo&.product.year, lo&.product.min_price,
+    lo&.product.spec, lo&.product.condition, lo&.product.comment, lo&.product.display,
+    lo&.product.company_id, lo&.product.company&.name,
+    lo&.product.xl_genre.id, lo&.product.xl_genre&.name,
+    lo&.product.large_genre.id, lo&.product.large_genre&.name,
+    lo&.product.genre_id, lo&.product.genre&.name,
+    lo&.product.area_name,
+    lo&.product.created_at,
 
-  (lo&.product.bids_count if lo&.product.success_bid.present?),
-  lo&.product.success_bid&.amount,
-  lo&.product.success_company&.name_remove_kabu,
-  (lo&.product.same_count if lo&.product.same_count > 1)
+    (lo&.product.bids_count if lo&.product.success_bid.present?),
+    lo&.product.success_bid&.amount,
+    lo&.product.success_company&.name_remove_kabu,
+    (lo&.product.same_count if lo&.product.same_count > 1)
   ].to_csv
+
+  GC.start
 end
 
 res
