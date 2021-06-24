@@ -5,7 +5,7 @@ module LinkSource
     before_save :check_robot
   end
 
-  ROBOTS = /(google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/i
+  ROBOTS = /(goo|google|yahoo|naver|ahrefs|msnbot|bot|crawl|amazonaws)/i
   KWDS   = {
     "mail" => "メール", "top" => "トップページ", "dtl" => "詳細", "src" => "検索結果", "fav" => "お気に入り",
 
