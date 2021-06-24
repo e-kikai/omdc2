@@ -3,7 +3,7 @@
 # ]
 # .concat(render("/system/detail_logs/product", product: nil)).to_csv +
 
-%w[
+header = %w[
   ID アクセス日時 IP ホスト名 ユーザID 会社名 ユーザ名
   リンク元 r リファラ
 
@@ -18,9 +18,13 @@
   登録日時
 
   入札数 落札金額	落札会社	同額札
-  ].to_csv +
-@detail_logs.sum do |lo|
-  [
+]
+#   ].to_csv +
+
+res = header.to_csv
+# @detail_logs.sum do |lo|
+@detail_logs.find_each do |lo|
+res += [
     lo.id, lo.created_at, lo.ip, lo.host, lo.user_id, lo.user&.company, lo.user&.name,
     URI.unescape(lo.link_source), lo.r, URI.unescape(lo.referer).scrub('♪'),
   # ].concat(render("/system/detail_logs/product", product: lo&.product)).to_csv
@@ -40,3 +44,5 @@
   (lo&.product.same_count if lo&.product.same_count > 1)
   ].to_csv
 end
+
+res
