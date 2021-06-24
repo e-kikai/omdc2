@@ -23,7 +23,7 @@ header = %w[
 
 res = header.to_csv
 # @detail_logs.sum do |lo|
-@detail_logs.find_each(batch_size: 5000)  do |lo|
+@detail_logs.find_each(batch_size: 2C000)  do |lo|
 res += [
     lo.id, lo.created_at, lo.ip, lo.host, lo.user_id, lo.user&.company, lo.user&.name,
     URI.unescape(lo.link_source), lo.r, URI.unescape(lo.referer).scrub('♪'),
