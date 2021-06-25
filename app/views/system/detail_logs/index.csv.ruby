@@ -21,7 +21,7 @@ header = %w[
 ]
 #   ].to_csv +
 
-res = header.to_csv
+# res = header.to_csv
 # @detail_logs.sum do |lo|
 # @detail_logs.find_each(batch_size: 100)  do |lo|
 # res += [
@@ -61,26 +61,54 @@ columns = %w|
   success_companies_products.name
   products.same_count
 |
-@detail_logs.in_batches(of: 1000) do |los|
-  los.pluck(columns).each do |lo|
-    ### 整形 ###
-    hitoyama_idx = columns.find_index("products.hitoyama")
-    name_idx     = columns.find_index("products.name")
-    lo[hitoyama_idx] = case
-    when lo[hitoyama_idx] == true;        "○"
-    when lo[name_idx] =~ /一山|1山|雑品/; "□"
-    else;                                 ""
+
+
+# @detail_logs.in_batches(of: 1000) do |los|
+#   los.pluck(columns).each do |lo|
+#     ### 整形 ###
+#     hitoyama_idx = columns.find_index("products.hitoyama")
+#     name_idx     = columns.find_index("products.name")
+#     lo[hitoyama_idx] = case
+#     when lo[hitoyama_idx] == true;        "○"
+#     when lo[name_idx] =~ /一山|1山|雑品/; "□"
+#     else;                                 ""
+#     end
+
+#     r_idx   = columns.find_index("detail_logs.r")
+#     ref_idx = columns.find_index("detail_logs.referer")
+
+#     ls = DetailLog.link_source_base(lo[r_idx], lo[ref_idx])
+#     lo[columns.find_index("1")]   = URI.unescape(ls).scrub('♪')
+#     lo[ref_idx] = URI.unescape(lo[ref_idx]).scrub('♪')
+
+#     res += lo.to_csv
+#   end
+# end
+
+CSV.generate do |row|
+  row << header
+
+  @detail_logs.in_batches(of: 1000) do |los|
+    los.pluck(columns).each do |lo|
+      ### 整形 ###
+      hitoyama_idx = columns.find_index("products.hitoyama")
+      name_idx     = columns.find_index("products.name")
+      lo[hitoyama_idx] = case
+      when lo[hitoyama_idx] == true;        "○"
+      when lo[name_idx] =~ /一山|1山|雑品/; "□"
+      else;                                 ""
+      end
+
+      r_idx   = columns.find_index("detail_logs.r")
+      ref_idx = columns.find_index("detail_logs.referer")
+
+      ls = DetailLog.link_source_base(lo[r_idx], lo[ref_idx])
+      lo[columns.find_index("1")]   = URI.unescape(ls).scrub('♪')
+      lo[ref_idx] = URI.unescape(lo[ref_idx]).scrub('♪')
+
+      row << lo
     end
-
-    r_idx   = columns.find_index("detail_logs.r")
-    ref_idx = columns.find_index("detail_logs.referer")
-
-    ls = DetailLog.link_source_base(lo[r_idx], lo[ref_idx])
-    lo[columns.find_index("1")]   = URI.unescape(ls).scrub('♪')
-    lo[ref_idx] = URI.unescape(lo[ref_idx]).scrub('♪')
-
-    res += lo.to_csv
   end
 end
 
-res
+# res
