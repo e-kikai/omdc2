@@ -88,7 +88,7 @@ columns = %w|
 CSV.generate do |row|
   row << header
 
-  @detail_logs.in_batches(of: 1000) do |los|
+  @detail_logs.in_batches(of: 2000) do |los|
     los.pluck(columns).each do |lo|
       ### 整形 ###
       hitoyama_idx = columns.find_index("products.hitoyama")
