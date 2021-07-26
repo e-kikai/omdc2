@@ -66,13 +66,18 @@ section.detail
               tr
                 th 年式
                 td = @product.year
+
+              - if company_signed_in?
+                tr
+                  th 出品会社 (組合員にのみ公開)
+                  td = @product.company&.name_remove_kabu
               tr
                 th 展示場所
                 td
                   - if @product.display == "店頭出品"
-                    | 【店頭出品】 #{@product.company.try(:name_remove_kabu)}<br />#{@product.company.try(:address)}
+                    | 【店頭出品】 #{@product.company&.name_remove_kabu}<br />#{@product.company&.address}
                   - else
-                    = @product.area.name
+                    = @product.area&.name
               tr
                 th 仕様
                 td = simple_format(@product.spec)
@@ -125,8 +130,9 @@ section.detail
       h2 この商品と画像が似ている商品
       .overflow_area
         .overflow_items
-          - @likeimgs.each_with_index do |product, i|
-            = render product, cls: "", r: "dtl_nmr_pnl"
+          / - @likeimgs.each_with_index do |product, i|
+          /   = render product, cls: "", r: "dtl_nmr_pnl"
+          = render partial: :product, collection: @likeimgs, as: :product, locals: { r: :dtl_nmr_pnl }
 
 - if @samegenres.present?
   section.items
@@ -134,5 +140,6 @@ section.detail
       h2 この商品と同じジャンルの商品
       .overflow_area
         .overflow_items
-          - @samegenres.each_with_index do |product, i|
-            = render product, cls: "", r: "dtl_sge_pnl"
+          / - @samegenres.each_with_index do |product, i|
+          /   = render product, cls: "", r: "dtl_sge_pnl"
+          = render partial: :product, collection: @samegenres, as: :product, locals: { r: :dtl_sge_pnl }

@@ -60,6 +60,7 @@ section.items
       .items_block style="display: inline-table;"
         - @pproducts.each do |product, i|
           = render product, cls: "", r: "src_#{rm}_pnl"
+        = render partial: :product, collection: @pproducts, as: :product, locals: { r: :lno_pnl }
 
       .nowrap
         .items_block style="display: none;"
@@ -69,13 +70,16 @@ section.items
               th = s.sort_link :name,          "商品名"
               th = s.sort_link :maker,         "メーカー"
               th = s.sort_link :model,         "型式"
-              th = s.sort_link :year,          "年式"
+              / th = s.sort_link :year,          "年式"
               th.num = s.sort_link :min_price, "最低入札金額"
+              - if company_signed_in?
+                th 出品会社<br />(組合員のみ公開)
               th = s.sort_link :area_id,       "展示場所"
               th.img_link 画像
               th.img_link 動画
-              th.img_link 画像検索
+              th.img_link 画像<br/ >検索
               th.img_link
 
-            - @pproducts.each do |pr|
-              = render "/products/product_tr", product: pr, r: "src_#{rm}_lst"
+            / - @pproducts.each do |pr|
+            /   = render "/products/product_tr", product: pr, r: "src_#{rm}_lst"
+            = render partial: "/products/product_tr", collection: @pproducts, as: :product, locals: { r: "src_#{rm}_lst" }

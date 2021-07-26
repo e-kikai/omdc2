@@ -13,7 +13,7 @@ module LinkSource
     "xgn" => "大ジャンル", "lgn" => "中ジャンル", "gnl" => "ジャンル",
 
     "fav" => "お気に入り",
-    "nms" => "画像特徴検索", "nms" => "画像ファイル検索", "nmr" => "似た商品", "sge" => "同ジャンル", "hist" => "閲覧履歴",
+    "nms" => "画像特徴検索", "mnf" => "画像ファイル検索", "nmr" => "似た商品", "sge" => "同ジャンル", "hist" => "閲覧履歴",
 
     "pnl" => "パネル表示", "lst" => "リスト表示",
 
@@ -94,11 +94,16 @@ module LinkSource
         end
       end
     end
+
+    def check_robot(host ,ip)
+      host !~ ROBOTS && ip.present?
+    end
   end
 
   private
 
   def check_robot
-    host !~ ROBOTS && ip.present?
+    # host !~ ROBOTS && ip.present?
+    self.check_robot(host ,ip)
   end
 end

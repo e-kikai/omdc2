@@ -39,13 +39,16 @@ section.items
             th = "商品名"
             th = "メーカー"
             th = "型式"
-            th = "年式"
+            / th = "年式"
             th.num = "最低入札金額"
+            - if company_signed_in?
+              th 出品会社<br />(組合員のみ公開)
             th = "展示場所"
             th.img_link 画像
             th.img_link 動画
             th.img_link 画像検索
             th.img_link
 
-          - @products.each do |pr|
-            = render "/products/product_tr", product: pr, r: "nms_lst"
+          / - @products.each do |pr|
+          /   = render "/products/product_tr", product: pr, r: "nms_lst"
+          = render partial: "/products/product_tr", collection: @products, as: :product, locals: { r: :nms_lst }

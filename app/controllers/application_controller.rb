@@ -33,6 +33,8 @@ class ApplicationController < ActionController::Base
   private
 
   def get_open_now
+    ### ロボットの場合、セッションを開始しない ###
+
     ### 現在の入札会 ###
     @open_now = Open.now.first || Open.new
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
@@ -46,8 +48,6 @@ class ApplicationController < ActionController::Base
 
       # IPからユーザ推測
       ips =  DetailLog.where(user_id: current_user.id).distinct.pluck(:ip)
-      # ips += SearchLog.where(user_id: current_user.id).distinct.pluck(:ip)
-      # ips += ToppageLog.where(user_id: current_user.id).distinct.pluck(:ip)
       ips << current_user.last_sign_in_ip.to_s
       ips << current_user.current_sign_in_ip.to_s
 

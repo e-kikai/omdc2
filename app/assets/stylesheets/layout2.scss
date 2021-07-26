@@ -100,6 +100,7 @@ html.layout2 {
 
     td.img_link {
       text-align: center;
+      padding: 0;
     }
   }
 
@@ -266,5 +267,17 @@ html.layout2 {
       }
     }
 
+  }
+}
+
+html.layout2 .items_block table th {
+  font-size: 0.9rem;
+  padding: 0 3px;
+  line-height: 1.3;
+  height: 39px;
+  text-align: center;
+
+  a.sort_link {
+    font-weight: bold;
   }
 }

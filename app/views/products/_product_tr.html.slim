@@ -5,8 +5,10 @@ tr
   td = link_to product.name, "/products/#{product.id}?r=#{r}"
   td = product.maker
   td = product.model
-  td = product.year
+  / td = product.year
   td.num = number_to_currency(product.min_price)
+  - if company_signed_in?
+    td = product.company&.name_remove_kabu
   td = product.area_name
   td.img_link
     - if product.product_images.present?
