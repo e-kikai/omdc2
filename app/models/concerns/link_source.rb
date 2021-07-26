@@ -95,7 +95,7 @@ module LinkSource
       end
     end
 
-    def check_robot(host ,ip)
+    def check_robot_base(host ,ip)
       host !~ ROBOTS && ip.present?
     end
   end
@@ -103,7 +103,7 @@ module LinkSource
   private
 
   def check_robot
-    # host !~ ROBOTS && ip.present?
-    self.check_robot(host ,ip)
+    host !~ ROBOTS && ip.present?
+    # self.check_robot_base(host ,ip)
   end
 end
