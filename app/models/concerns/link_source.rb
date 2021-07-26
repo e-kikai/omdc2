@@ -103,7 +103,6 @@ module LinkSource
   private
 
   def check_robot
-    host !~ ROBOTS && ip.present?
-    # self.check_robot_base(host ,ip)
+    throw(:abort) unless host !~ ROBOTS && ip.present?
   end
 end
