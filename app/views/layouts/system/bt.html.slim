@@ -13,11 +13,7 @@ html
     = analytics_init if Rails.env.production?
 
     css:
-      * {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-      }
+
       body.bt {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 14px;
@@ -84,7 +80,7 @@ html
       }
 
       body.bt  #key, body.bt  #product_list_no {
-        height: 52px;
+        height: 26px;
         font-size: 26px;
         line-height: 26px;
         padding: 12px;
@@ -93,6 +89,14 @@ html
       }
 
       body.bt #key {
+        width: 300px;
+      }
+
+      body.bt select {
+        height: 58px;
+        font-size: 26px;
+        line-height: 26px;
+        padding: 12px;
         width: 300px;
       }
 
@@ -145,13 +149,14 @@ html
           margin-bottom: 5px;
       }
 
+
       body.bt .pull-left {
         float: left !important;
       }
 
       body.bt .btn.btn-square {
         width: 92px;
-        height: 69px;
+        height: 92px;
         text-align: center;
         padding: 11px 0;
         font-size: 12px;
@@ -160,6 +165,10 @@ html
         display: inline-block;
         margin: 4px 4px 4px 0;
         vertical-align: top;
+      }
+
+      body.bt a.btn.btn-square {
+        height: 46px;
       }
 
       body.bt .btn.btn-submit {
@@ -172,7 +181,7 @@ html
         max-width: 100%;
         margin-bottom: 5px;
         font-weight: bold;
-        font-size: 22px;
+        font-size: 24px;
         width: 130px;
       }
 
@@ -223,7 +232,7 @@ html
       }
 
       body.bt .value {
-        font-size: 22px;
+        font-size: 24px;
         display: inline-block;
         *display: inline;
         *zoom: 1;
