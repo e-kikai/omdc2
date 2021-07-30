@@ -26,7 +26,7 @@
             td = co.addr_1
             td = (co.allow_mail? ? "○" : "×")
             td = co.user_id || "-"
-            td = simple_format co.content
+            td = simple_format h co.content
             td =  l(co.created_at, format: :short)
 
   = paginate @pcontacts
