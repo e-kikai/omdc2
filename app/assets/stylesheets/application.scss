@@ -98,6 +98,16 @@ table {
         width: 150px;
         min-width: 150px;
       }
+
+      &.date {
+        width: 124px;
+      }
+
+      &.mail {
+        width: 210px;
+        max-width: 210px;
+      }
+
       white-space: nowrap;
     }
 
@@ -134,6 +144,15 @@ table {
       &.name {
         width: 150px;
         min-width: 150px;
+      }
+
+      &.date {
+        width: 124px;
+      }
+
+      &.mail {
+        width: 210px;
+        max-width: 210px;
       }
     }
 
