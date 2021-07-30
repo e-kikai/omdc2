@@ -9,11 +9,12 @@
       tr
         th.id ID
         th 会社名 / 氏名
-        th メールアドレス
-        th TEL
+        th メールアドレス / TEL
+        / th メールアドレス
+        / th TEL
         th 都道府県
-        th 案内
-        th ユーザ
+        th.id 案内
+        th.id ユーザ
         th 内容
         th 送信日時
 
@@ -21,12 +22,13 @@
           tr
             td.id = co.id
             td #{co.company}<br />#{co.name}
-            td = co.mail
-            td = co.tel
+            td #{co.mail}<br /><br />#{co.tel}
+            / td = co.mail
+            / td = co.tel
             td = co.addr_1
-            td = (co.allow_mail? ? "○" : "×")
-            td = co.user_id || "-"
-            td = simple_format h co.content
+            td.id = (co.allow_mail? ? "○" : "×")
+            td.id = co.user_id || "-"
+            td = simple_format(h(co.content))
             td =  l(co.created_at, format: :short)
 
   = paginate @pcontacts
