@@ -2,11 +2,33 @@
 - set_meta_tags nofollow: true, noindex: true
 - breadcrumb  :something, "マイページ ログイン"
 
+javascript:
+  $(document).on('ready, turbolinks:load', function() {
+    $('input#user_email').on('change', function() {
+      if ($(this).val() != "" && !$(this).val().match(/@/)) {
+        $(".account_alert").show();
+      } else {
+        $(".account_alert").hide();
+      }
+
+    });
+  });
+
+
 section.rule
   .container
     = bootstrap_devise_error_messages!
 
     h2 マイページ ログイン
+
+    .alert.alert-danger.account_alert style="display:none;"
+      p
+        i.fas.fa-exclamation-circle
+        span.btn-content こちらはユーザ向けのログインページです。
+        = link_to "/bid/rule", target: "_blank" do
+          span.btn-content → 組合員向け(出品・入札)ログインはこちら
+
+
     .panel
       .panel-body
         = form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: 'form' }) do |f|

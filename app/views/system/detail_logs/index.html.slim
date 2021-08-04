@@ -7,11 +7,13 @@
   = paginate @pdetail_logs
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-fluid  _fixedhead='rows:1'
       tr
         th アクセス日時
         th IP/ホスト名
-        th ユーザID/会社・ユーザ名
+        th utag
+        th.id ユーザID
+        th 会社・ユーザ名
         th.id 商品ID
         th.id No.
         th 商品名 メーカー 型式
@@ -23,9 +25,11 @@
           tr
             td = dl.created_at
             td #{dl.ip}<br />#{dl.host}
+            td = dl.utag
+            td.id = dl.user_id
             td
               - if dl.user_id.present?
-                | #{dl.user_id} #{dl.user.company}<br />#{dl.user.name}
+                | #{dl.user.company}<br />#{dl.user.name}
               - else
                 | -
             td.id = dl.product_id
@@ -36,7 +40,5 @@
             / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)
             / td.name style="word-break: break-all;" = URI.unescape(dl.referer)
             td.name title="#{URI.unescape(dl.referer)}" = URI.unescape(dl.link_source)
-
-
 
   = paginate @pdetail_logs

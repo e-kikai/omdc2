@@ -7,11 +7,13 @@
   = paginate @ptoppage_logs
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-fluid  _fixedhead='rows:1'
       tr
         th アクセス日時
         th IP/ホスト名
-        th ユーザID/会社・ユーザ名
+        th utag
+        th.id ユーザID
+        th 会社・ユーザ名
         th リンク元
         th リファラ
 
@@ -19,9 +21,11 @@
           tr
             td = tl.created_at
             td #{tl.ip}<br />#{tl.host}
+            td = tl.utag
+            td.id = tl.user_id
             td
               - if tl.user_id.present?
-                | #{tl.user_id} #{tl.user.company} #{tl.user.name}
+                | #{tl.user.company} #{tl.user.name}
               - else
                 | -
             / td.name title="#{URI.unescape(lo.referer)}" = URI.unescape(lo.link_source)

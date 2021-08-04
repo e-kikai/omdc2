@@ -89,7 +89,10 @@ class ProductsController < ApplicationController
     # @likeimgs   = @products.image_vector_sort(@product.id, 5)
 
     @samegenres = @products.where(genre: @product.genre).limit(16)
-    @likeimgs   = @products.image_vector_sort(@product.id, 16)
+    # @likeimgs   = @products.image_vector_sort(@product.id, 16)
+    @likeimgs = Rails.cache.fetch("likeimgs_#{@product.id}_16", expires_in: 1.day) do
+      @products.image_vector_sort(@product.id, 16)
+    end
   end
 
   def images

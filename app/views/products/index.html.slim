@@ -58,9 +58,9 @@ section.items
       = paginate @pproducts
 
       .items_block style="display: inline-table;"
-        - @pproducts.each do |product, i|
-          = render product, cls: "", r: "src_#{rm}_pnl"
-        = render partial: :product, collection: @pproducts, as: :product, locals: { r: :lno_pnl }
+        / - @pproducts.each do |product, i|
+        /   = render product, cls: "", r: "src_#{rm}_pnl"
+        = render partial: :product, collection: @pproducts, as: :product, locals: { r: "src_#{rm}_pnl" }
 
       .nowrap
         .items_block style="display: none;"

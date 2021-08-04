@@ -10,7 +10,7 @@ css:
 h3 BT用管理者ページ
 ul.nav
   li = link_to "1. 入庫処理", "/system/bt/new", class: "btn btn-default #{:disabled unless @open_now.entry_start?}"
-  / li = link_to "出庫処理", "/system/bt/carryout", class: "#{:disabled unless @open_now.result_sum?}"
+  li = link_to "2. 出庫処理", "/system/bt/carryout", class: "btn btn-default #{:disabled unless @open_now.result_sum?}"
 
-  li style="font-size:30px;color:red;" = "テスト1"
-  li.test = "テスト2"
+  / li style="font-size:30px;color:red;" = "テスト1"
+  / li.test = "テスト2"

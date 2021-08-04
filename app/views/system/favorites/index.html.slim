@@ -7,17 +7,20 @@
   = paginate @pfavorites
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-fluid _fixedhead='rows:1'
       tr
         th.id ID
         th 登録日時
         th 削除日時
-        th ユーザID/会社・ユーザ名
+        th utag
+        th.id ユーザID
+        th 会社・ユーザ名
         th.id 商品ID
         th.id No.
         th 商品名 メーカー 型式
         th 出品会社
         th.num 最低価格
+        th リンク元
         th.id 札数
         th.num 落札金額
         th 落札会社
@@ -28,9 +31,11 @@
             td.id = fa.id
             td = fa.created_at
             td = fa.soft_destroyed_at
+            td = fa.utag
+            td.id = fa.user_id
             td
               - if fa.user_id.present?
-                | #{fa.user_id} #{fa.user&.company}<br />#{fa.user&.name}
+                | #{fa.user&.company}<br />#{fa.user&.name}
               - else
                 | -
             td.id = fa.product_id
@@ -38,12 +43,14 @@
             td #{fa.product&.name} #{fa.product&.maker} #{fa.product&.model}
             td = fa.product&.company&.name_remove_kabu
             td.num = number_to_currency(fa.product.min_price)
+            td.name title="#{URI.unescape(fa.referer.to_s)}" = URI.unescape(fa.link_source.to_s)
 
             - if fa.product&.success_bid.present?
               td.id = fa.product&.bids_count
               td.num = number_to_currency(fa.product&.success_bid&.amount)
               td = fa.product&.success_company&.name_remove_kabu
               td.sepa = fa.product&.same_count if fa.product&.same_count > 1
+
             - else
               td.id
               td.num

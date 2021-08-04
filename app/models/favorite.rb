@@ -4,7 +4,13 @@
 #
 #  id                :bigint           not null, primary key
 #  amount            :integer
+#  host              :string
+#  ip                :string
+#  r                 :string
+#  referer           :string
 #  soft_destroyed_at :datetime
+#  ua                :string
+#  utag              :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  product_id        :bigint
@@ -17,6 +23,8 @@
 #  index_favorites_on_user_id            (user_id)
 #
 class Favorite < ApplicationRecord
+  include LinkSource
+
   soft_deletable
   default_scope { without_soft_destroyed }
 

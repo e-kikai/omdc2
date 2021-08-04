@@ -4,7 +4,7 @@
 # .concat(render("/system/detail_logs/product", product: nil)).to_csv +
 
 header = %w[
-  ID アクセス日時 IP ホスト名 ユーザID 会社名 ユーザ名
+  ID アクセス日時 IP ホスト名 utag ユーザID 会社名 ユーザ名
   リンク元 r リファラ
 
   商品ID 申込No. No.
@@ -46,7 +46,7 @@ header = %w[
 # end
 
 columns = %w|
-  detail_logs.id  detail_logs.created_at detail_logs.ip detail_logs.host detail_logs.user_id
+  detail_logs.id  detail_logs.created_at detail_logs.ip detail_logs.host detail_logs.utag detail_logs.user_id
   users.company users.name 1 detail_logs.r detail_logs.referer
   products.id products.app_no products.list_no products.name products.maker products.model
   products.hitoyama products.year products.min_price products.spec products.condition products.comment products.display

@@ -22,4 +22,5 @@ tr
     - if product.product_images.present?
       = link_to "/products/#{product.id}/image_vector_search" do
         i.fas.fa-camera
-  td.img_link = render "/products/favorite", product: product
+  / td.img_link = render "/products/favorite", product: product
+  td.img_link = favorite(product, r)

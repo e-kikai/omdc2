@@ -50,7 +50,18 @@ class Mypage::FavoritesController < Mypage::ApplicationController
     @favorite   = @favorites.find_by(product_id: @product_id)
 
     if @favorite.blank?
-      @favorite = @favorites.create(product_id: @product_id)
+      # @favorite = @favorites.create(product_id: @product_id)
+      @favorite = @favorites.create(
+        product_id: @product_id,
+
+        r:          params[:r],
+        referer:    request.referer,
+        ip:         ip,
+        host:       (Resolv.getname(ip) rescue ""),
+        ua:         request.user_agent,
+
+        utag:       session[:utag],
+      )
     else
       @favorite.soft_destroy!
     end

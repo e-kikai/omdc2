@@ -7,11 +7,13 @@
   = paginate @psearch_logs
 
   .scroll_div
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive _fixedhead='rows:1'
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-fluid  _fixedhead='rows:1'
       tr
         th アクセス日時
         th IP/ホスト名
-        th ユーザID/会社・ユーザ名
+        th utag
+        th.id ユーザID
+        th 会社・ユーザ名
         th パス
         th ページ
         th リンク元
@@ -20,9 +22,11 @@
           tr
             td = sl.created_at
             td #{sl.ip}<br />#{sl.host}
+            td = sl.utag
+            td.id = sl.user_id
             td
               - if sl.user_id.present?
-                | #{sl.user_id} #{sl.user.company} #{sl.user.name}
+                | #{sl.user.company} #{sl.user.name}
               - else
                 | -
             td = sl.path

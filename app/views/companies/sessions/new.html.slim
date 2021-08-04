@@ -1,8 +1,28 @@
 - set_meta_tags title: "組合員ログイン"
 - set_meta_tags nofollow: true, noindex: true
 
+javascript:
+  $(document).on('ready, turbolinks:load', function() {
+    $('input#company_account').on('change', function() {
+      if ($(this).val() != "" && $(this).val().match(/@/)) {
+        $(".account_alert").show();
+      } else {
+        $(".account_alert").hide();
+      }
+
+    });
+  });
+
 .row
   .col-lg-offset-4.col-lg-4
+
+    .alert.alert-danger.account_alert style="display:none;"
+      p
+        i.fas.fa-exclamation-circle
+        span.btn-content こちらは組合員向けのログインです。
+        = link_to "/users/login", target: "_blank" do
+          span.btn-content → ユーザ向け(マイページ)ログインはこちら
+
     .panel.panel-default
       .panel-heading 組合員ログイン
       .panel-body

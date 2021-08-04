@@ -132,6 +132,7 @@ section.detail
         .overflow_items
           / - @likeimgs.each_with_index do |product, i|
           /   = render product, cls: "", r: "dtl_nmr_pnl"
+          / - logger.debug("＃＃＃＃ キャッシュテスト")
           = render partial: :product, collection: @likeimgs, as: :product, locals: { r: :dtl_nmr_pnl }
 
 - if @samegenres.present?
@@ -142,4 +143,5 @@ section.detail
         .overflow_items
           / - @samegenres.each_with_index do |product, i|
           /   = render product, cls: "", r: "dtl_sge_pnl"
+          / - logger.debug("＃＃＃＃ 同じジャンルの商品")
           = render partial: :product, collection: @samegenres, as: :product, locals: { r: :dtl_sge_pnl }

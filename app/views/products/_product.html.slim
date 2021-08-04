@@ -23,4 +23,5 @@
     = link_to "/products/#{product.id}/image_vector_search" do
       i.fas.fa-camera
 
-    = render "products/favorite", product: product
+    / = render "products/favorite", product: product
+    = favorite(product, r)

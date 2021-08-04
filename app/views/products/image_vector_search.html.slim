@@ -28,8 +28,9 @@ section.items
     / = paginate @pproducts
 
     .items_block style="display: inline-table;"
-      - @products.each do |product, i|
-        = render product, cls: "", r: "nms_pnl"
+      / - @products.each do |product, i|
+      /   = render product, cls: "", r: "nms_pnl"
+      = render partial: :product, collection: @products, as: :product, locals: { r: :nms_pnl }
 
     .nowrap
       .items_block style="display: none;"

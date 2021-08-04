@@ -10,6 +10,8 @@ class DetailLogsController < ApplicationController
       host:       (Resolv.getname(ip) rescue ""),
       referer:    params[:referer],
       ua:         request.user_agent,
+
+      utag:       session[:utag],
     ) ? "success" : "error"
 
     render json: { status: status }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_082124) do
+ActiveRecord::Schema.define(version: 2021_08_03_074458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_082124) do
     t.string "r", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "utag"
     t.index ["product_id"], name: "index_detail_logs_on_product_id"
     t.index ["user_id"], name: "index_detail_logs_on_user_id"
   end
@@ -136,6 +137,12 @@ ActiveRecord::Schema.define(version: 2021_05_13_082124) do
     t.datetime "updated_at", null: false
     t.datetime "soft_destroyed_at"
     t.integer "amount"
+    t.string "r"
+    t.string "referer"
+    t.string "ip"
+    t.string "host"
+    t.string "ua"
+    t.string "utag"
     t.index ["product_id"], name: "index_favorites_on_product_id"
     t.index ["soft_destroyed_at"], name: "index_favorites_on_soft_destroyed_at"
     t.index ["user_id"], name: "index_favorites_on_user_id"
@@ -309,6 +316,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_082124) do
     t.string "keywords", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "utag"
     t.index ["user_id"], name: "index_search_logs_on_user_id"
   end
 
@@ -350,6 +358,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_082124) do
     t.string "r", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "utag"
     t.index ["user_id"], name: "index_toppage_logs_on_user_id"
   end
 
