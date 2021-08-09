@@ -31,6 +31,14 @@
         li = link_to "https://analytics.google.com/analytics/web/#/report-home/a2926798w149738992p154743548", class: "btn btn-default btn-square" do
           i.fas.fa-chart-bar
           span.btn-content Google Analytics
+
+      ul.nav.nav-pills
+        li = link_to "/system/total/goal", class: "btn btn-default btn-square" do
+          i.fas.fa-table
+          span.btn-content 指標目標
+        li = link_to "/system/total/", class: "btn btn-default btn-square" do
+          i.fas.fa-table
+          span.btn-content 各種集計
     hr
       ul.nav.nav-pills
         li = link_to "/system/scheduling/vectors_process", method: :post, class: "btn btn-default btn-square btn-twoline" do

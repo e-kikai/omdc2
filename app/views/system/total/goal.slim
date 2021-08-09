@@ -1,0 +1,51 @@
+- set_meta_tags title: "指標目標"
+- breadcrumb  :system_something, "指標目標"
+
+.row
+  = form_tag("/system/total/goal", method: :get, class: "form-inline filtering-form") do
+    = button_tag :submit, name: :format, value: :csv, data: { "disable-with" => "出力中..." }, class: "btn btn-default btn-square" do
+      i.fas.fa-file-csv
+      span.btn-content CSV出力
+
+  h4 = "指標目標"
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-fluid
+    thead
+      tr
+        - @result.columns.each do |col|
+          - if col =~ /(id|no.)/i
+            - cls = :id
+          th class="#{cls}" = col
+    tbody
+      - @result.rows.each do |row|
+          tr
+            - row.each_with_index do |r, i|
+              /// クラス ///
+              - cls = case
+              - when @result.columns[i] =~ /(id|no.)/i; :id
+              - when r.to_s =~ /^[0-9.]+$/;             :num
+
+              /// 数値 ///
+              - val = case
+              - when r.blank?                         ; ""
+              - when @result.columns[i] =~ /(id|no.)/i; r
+              - when r.is_a?(Numeric);                  number_with_delimiter(r)
+              - else;                                   Charwidth.normalize(r)
+
+              td class="#{cls}" = val
+
+    tfoot
+      / tr
+      /   - @result.columns.each_with_index do |col, i|
+      /     - sum = @result.rows.sum { |r| r[i].to_f }
+
+      /     - cls, v = case
+      /     - when @result.columns[i] =~ /(id|no.)/i; [ :id,          ""]
+      /     - when sum != 0;                          [ :num,         number_with_delimiter(sum.to_i) ]
+      /     - else;                                   [ "text-right", "合計" ]
+
+      /     td class="#{cls}" = v
+
+      tr
+        - @result.columns.each do |col|
+          th = col

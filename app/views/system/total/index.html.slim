@@ -1,0 +1,58 @@
+- set_meta_tags title: "各種集計"
+- breadcrumb  :system_something, "各種集計"
+
+.row
+  = form_tag("/system/total", method: :get, class: "form-inline filtering-form") do
+    = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
+    span = " - "
+    = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
+    = button_tag class: "btn btn-info" do
+      span.glyphicon.glyphicon-search
+      span.btn-content 検索
+
+    = button_tag :submit, name: :format, value: :csv, data: { "disable-with" => "出力中..." }, class: "btn btn-default btn-square" do
+      i.fas.fa-file-csv
+      span.btn-content CSV出力
+
+  h4 = @title
+
+  table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
+    thead
+      tr
+        - @result.columns.each do |col|
+          - if col =~ /(id|no.)/i
+            - cls = :id
+          th class="#{cls}" = col
+    tbody
+      - @result.rows.each do |row|
+          tr
+            - row.each_with_index do |r, i|
+              /// クラス ///
+              - cls = case
+              - when @result.columns[i] =~ /(id|no.)/i; :id
+              - when r.to_s =~ /^[0-9.]+$/;             :num
+
+              /// 数値 ///
+              - val = case
+              - when r.blank?                         ; ""
+              - when @result.columns[i] =~ /(id|no.)/i; r
+              - when r.is_a?(Numeric);                  number_with_delimiter(r)
+              - else;                                   Charwidth.normalize(r)
+
+              td class="#{cls}" = val
+
+    tfoot
+      tr
+        - @result.columns.each_with_index do |col, i|
+          - sum = @result.rows.sum { |r| r[i].to_f }
+
+          - cls, v = case
+          - when @result.columns[i] =~ /(id|no.)/i; [ :id,          ""]
+          - when sum != 0;                          [ :num,         number_with_delimiter(sum.to_i) ]
+          - else;                                   [ "text-right", "合計" ]
+
+          td class="#{cls}" = v
+
+      tr
+        - @result.columns.each do |col|
+          th = col

@@ -979,3 +979,21 @@ img.help_img {
   border: 1px solid #666;
   display: block;
 }
+
+img.tutorial {
+  display: block;
+  width: 800px;
+  margin: 0 auto 8px;
+}
+
+.table-striped > thead tr {
+  background: #eee;
+}
+
+.table-striped > tfoot tr {
+  background: #eee;
+
+  th, td {
+    border-top-width: 2px;
+  }
+}

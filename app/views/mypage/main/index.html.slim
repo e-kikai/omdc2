@@ -7,7 +7,7 @@ section.rule
     h2 マイページ
 
     .newcomers_block
-      / .mypage_block.right
+      = image_tag "help_banner_pdf_01.png", class: :tutorial
       .mypage_block.center
         - if @open_now.persisted? && @open_now.display?
           ul

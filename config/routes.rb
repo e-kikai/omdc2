@@ -195,6 +195,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :total,  only: [:index] do
+      collection do
+        get 'goal'
+      end
+    end
+
     unless Rails.env.production?
       resources :playground, only: [:show] do
         collection do
