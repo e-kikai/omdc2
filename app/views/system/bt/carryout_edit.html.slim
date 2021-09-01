@@ -16,18 +16,22 @@ javascript:
 
       .form-group
         = label_tag :list_no, "リストNo."
-        .value = "#{@product.list_no} :#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
+        .value = "#{@product.list_no}"
+
+      .form-group
+        = label_tag :list_no, "商品名"
+        .value = "#{@product.name} #{@product.maker || '-'} #{@product.model || '-'}"
 
       .form-group
         = label_tag :user_id, "落札会社"
         .value = @product&.success_company&.name
 
-      .form-group
-        = f.label :area_id
-        - if @product.tento?
-          .value 店頭出品
-        - else
-          .value = @product.area_name
+      / .form-group
+      /   = f.label :area_id
+      /   - if @product.tento?
+      /     .value 店頭出品
+      /   - else
+      /     .value = @product.area_name
 
       .form-group
         = label_tag :carryout_at, "出庫状況"

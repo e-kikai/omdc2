@@ -64,7 +64,7 @@ class System::BtController < System::ApplicationController
     # 入力キー変換
     key = params[:key].to_s.normalize_charwidth.gsub(/[―ー−‐]/, '-').strip
 
-    if key =~ /id\=\/([0-9]+)/
+    if key =~ /id\=([0-9]+)/
       product = Product.includes(:company).find_by(id: $1)
 
       if product.blank?
