@@ -61,27 +61,24 @@ class System::BtController < System::ApplicationController
 
   ### 出庫処理 ###
   def carryout_new
-    if params[:company_id].present?
-      relation   = @open_now.products.listed.includes(:success_bid).references(:bids).order(:list_no)
+    # 入力キー変換
+    key = params[:key].to_s.normalize_charwidth.gsub(/[―ー−‐]/, '-').strip
 
-      @products_selector = relation.where(success_bid_id: Bid.where(company_id: params[:company_id]))
-        .pluck("'(引取) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+    if key =~ /qr\/([0-9]+)/
+      product = Product.includes(:company).find_by(id: $1)
 
-      @products_selector += relation.where(company_id: params[:company_id], display: "一般出品", success_bid_id: nil)
-        .pluck("'(元引) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+      if product.blank?
+        flash.now[:alert] = "商品情報なし\n#{key}"
+      else
+        redirect_to "/system/bt/carryout/#{product.id}/"
+      end
+    else
+      flash.now[:alert] = "フォーマットエラー\n#{key}" unless key.blank?
     end
   end
 
   def carryout_edit
-    @company_id = @product.success_bid_id.present? ? @product.success_bid.company_id : @product.company_id
-
-    relation   = @open_now.products.listed.includes(:success_bid).references(:bids).order(:list_no)
-
-    @products_selector = relation.where(success_bid_id: Bid.where(company_id: @company_id))
-      .pluck("'(引取) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
-
-    @products_selector += relation.where(company_id: @company_id, display: "一般出品", success_bid_id: nil)
-      .pluck("'(元引) ' || list_no || ' : ' || products.name || ' ' || coalesce(maker, '-') || ' ' || coalesce(model, '-')", :id)
+    @products = @open_now.products.includes(:company).where(company_id: @product.company_id).order(:app_no)
   end
 
   def carryout_update

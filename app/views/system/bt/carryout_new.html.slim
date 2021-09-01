@@ -1,0 +1,23 @@
+- set_meta_tags title: "出庫処理"
+- breadcrumb  :system_something, "出庫処理"
+
+javascript:
+  window.onload = function(){
+    var target = document.getElementById("key");
+    target.focus();
+  }
+
+.row
+  = form_tag({action: :carryout_new}, method: :get) do
+    .col-md-offset-3.col-md-6
+      .form-group style="margin-bottom:120px;"
+        = label_tag :key, "QRコード"
+        = text_field_tag :key, "", prompt: "QRコード", class: ""
+
+      = button_tag type: :submit, class: "btn btn-default btn-square btn-submit center-block" do
+        span.glyphicon ○
+        span.btn-content QRコード検索
+
+      = link_to "/system/bt/", class: "btn btn-default btn-square btn-submit pull-left" do
+        span.glyphicon ←
+        span.btn-content 戻る
