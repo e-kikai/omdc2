@@ -12,6 +12,8 @@ class Bid::BidsController < Bid::ApplicationController
 
   include Exports
 
+  protect_from_forgery
+
   def index
     respond_to do |format|
       format.html
