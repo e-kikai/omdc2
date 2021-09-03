@@ -83,12 +83,12 @@ class System::BtController < System::ApplicationController
 
   def carryout_update
     @product.update(carryout_at: Time.now)
-    redirect_to "/system/bt/carryout/#{@product.id}", notice: "No. #{@product.list_no} : #{@product.name}の出庫確認しました"
+    redirect_to "/system/bt/carryout", notice: "No. #{@product.list_no} : #{@product.name}の出庫確認しました"
   end
 
   def carryout_destroy
     @product.update(carryout_at: nil)
-    redirect_to "/system/bt/carryout/#{@product.id}", notice: "No. #{@product.list_no} : #{@product.name}の出庫をキャンセルしました"
+    redirect_to "/system/bt/carryout", notice: "No. #{@product.list_no} : #{@product.name}の出庫をキャンセルしました"
   end
 
   private

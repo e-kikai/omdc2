@@ -8,7 +8,7 @@ javascript:
   }
 
 .row
-  = form_for @product, url: {action: :update, id: @product.id}, html: {method: :patch} do |f|
+  = form_for @product, url: {action: :carryout_update, id: @product.id}, html: {method: :patch} do |f|
     .col-md-offset-3.col-md-6
       .form-group
         = label_tag :company_id, "出品会社"
@@ -44,6 +44,6 @@ javascript:
         span.glyphicon ○
         span.btn-content 出庫処理
 
-      = link_to "/system/bt/new", class: "btn btn-default btn-square btn-submit pull-left" do
+      = link_to "/system/bt/carryout", class: "btn btn-default btn-square btn-submit pull-left" do
         span.glyphicon ←
         span.btn-content 戻る
