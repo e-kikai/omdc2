@@ -7,7 +7,7 @@
   success_bid_id
   genre large_genre_id large_genre
   xl_genre_id xl_genre
-  company area areagroup
+  company area areagroup, image_thumb
 |.to_csv +
 @products.sum do |p|
   areagroup = case p.area&.name
@@ -27,6 +27,6 @@
     p.success_bid_id,
     p.genre&.name, p.genre&.large_genre_id, p.genre&.large_genre&.name,
     p.genre&.large_genre&.xl_genre_id, p.genre&.large_genre&.xl_genre&.name,
-    p.company&.name, p.area&.name, areagroup
+    p.company&.name, p.area&.name, areagroup, p&.product_images&.first&.image&.thumb&.url
   ].to_csv
 end.to_s
