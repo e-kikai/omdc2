@@ -29,6 +29,6 @@
     p.genre&.name, p.genre&.large_genre_id, p.genre&.large_genre&.name,
     p.genre&.large_genre&.xl_genre_id, p.genre&.large_genre&.xl_genre&.name,
     p.company&.name, p.area&.name, areagroup,
-    product&.top_image&.image&.thumb&.url, product&.top_image&.image&.view&.url
+    p&.top_image&.image&.thumb&.url, p&.top_image&.image&.view&.url
   ].to_csv
 end.to_s
