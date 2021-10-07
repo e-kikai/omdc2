@@ -9,6 +9,8 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
     = csrf_meta_tags
 
+    meta name="theme-color" content="#F4F6EB"
+
     = analytics_init if Rails.env.production?
 
   body onLoad="FixedMidashi.create();"

@@ -48,5 +48,7 @@ module Omdc2
     end
 
     config.mail_logger = Logger.new("log/mail_#{Rails.env}.log")
+
+    config.image_upload_logger = Logger.new("log/image_upload.log")
   end
 end

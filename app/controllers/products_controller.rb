@@ -85,6 +85,8 @@ class ProductsController < ApplicationController
   end
 
   def show
+    Rails.application.config.image_upload_logger.error("#{@product.id} : #{@product.company.name} :: ロギングテスト") # エラー補足
+
     # @samegenres = @products.where(genre: @product.genre).limit(5)
     # @likeimgs   = @products.image_vector_sort(@product.id, 5)
 

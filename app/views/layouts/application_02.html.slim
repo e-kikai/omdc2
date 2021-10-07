@@ -11,6 +11,8 @@ html.layout2
     = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
     = csrf_meta_tags
 
+    meta name="theme-color" content="#{user_signed_in? ? '#eb5504' : '#004e98'}"
+
     = analytics_init if Rails.env.production?
 
   body onLoad="FixedMidashi.create();" data-controller="#{controller.controller_path}" data-action="#{controller.action_name}" id="#{controller.controller_path.gsub("/", "-")}-#{controller.action_name}"
