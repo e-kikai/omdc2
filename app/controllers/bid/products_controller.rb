@@ -93,7 +93,9 @@ class Bid::ProductsController < Bid::ApplicationController
       end
       render status: 200, json: product_image
     rescue ActiveRecord::RecordInvalid
-      Rails.application.config.image_upload_logger.error("#{@product.id} : #{@product.company.name} :: #{product_image.errors.full_messages.to_s}") # エラー補足
+      # エラーロギング
+      mes = "#{@product.id} (#{@product.name}) -> #{@product.company.name} : #{params[:image].to_s} :: #{product_image.errors.full_messages.to_s}"
+      Rails.application.config.image_upload_logger.error(mes)
 
       render status: 500, json: product_image.errors.full_messages.to_s
     end

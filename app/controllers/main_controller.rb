@@ -12,8 +12,7 @@ class MainController < ApplicationController
       @specials_02 = @products.special(2).order("random()").limit(100)
     end
 
-    Rails.application.config.image_upload_logger.error("トップページ : ロギングテスト") # エラー補足
-
+    # Rails.application.config.image_upload_logger.error("トップページ : ロギングテスト") # エラー補足
   end
 
   def search
