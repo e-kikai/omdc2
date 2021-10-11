@@ -300,11 +300,7 @@ class System::PlaygroundController < ApplicationController
     products = target.open.products.listed
 
     sorts = sort_by_vector(target, products, 100)
-    res = sorts.keys
-
-    # res = @products.where(id: sorts.keys).sort_by { |pr| sorts[pr.id] }.map { |pr| pr.id }
-
-    logger.debug sorts
+    res   = sorts.keys
 
     respond_to do |format|
       format.json { render plain: res.to_json }
