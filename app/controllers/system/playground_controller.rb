@@ -496,7 +496,7 @@ class System::PlaygroundController < ApplicationController
         # (res > 0 || mine == true) ? [pid, res]  : nil
         (res > 0 ) ? [pid, res]  : nil
       end
-    end.compact.sort_by { |v| v[1] }.first(limit).to_h
+    end.compact.sort_by { |v| v[1] }.first(limit.to_i).to_h
 
 
     # ベクトルキャシュ更新
