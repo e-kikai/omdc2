@@ -299,7 +299,7 @@ class System::PlaygroundController < ApplicationController
     target   = Product.find(params[:id])
     products = target.open.products.listed
 
-    sorts = sort_by_vector(target, products, 100)
+    sorts = sort_by_vector(target, products, (params[:num] || 100))
     res   = sorts.keys
 
     respond_to do |format|
