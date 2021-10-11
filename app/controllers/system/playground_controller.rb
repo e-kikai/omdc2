@@ -297,7 +297,7 @@ class System::PlaygroundController < ApplicationController
 
   def vector_search_json
     target   = Product.find(params[:id])
-    products = pr.open.products.listed
+    products = target.open.products.listed
 
     res = sort_by_vector(target, products, 100).keys
 
