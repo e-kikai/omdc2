@@ -217,6 +217,8 @@ Rails.application.routes.draw do
 
           get "mock_list_01"
           get "mock_list_02"
+
+          get 'vector_search_json'
         end
       end
     end

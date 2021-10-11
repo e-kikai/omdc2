@@ -295,6 +295,17 @@ class System::PlaygroundController < ApplicationController
     @nitamono_recommend = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
   end
 
+  def vector_search_json
+    pr       = Product.find(params[:id])
+    products = pr.open.products.listed
+
+    res = products.image_vector_sort(pr.id, params[:num]).pluck(:id)
+
+    respond_to do |format|
+      format.json { render plain: res.to_json }
+    end
+  end
+
   private
 
   ### ベクトル変換処理 ###
