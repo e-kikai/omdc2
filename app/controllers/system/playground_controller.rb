@@ -296,15 +296,14 @@ class System::PlaygroundController < ApplicationController
   end
 
   def vector_search_json
-    pr       = Product.find(params[:id])
+    target   = Product.find(params[:id])
     products = pr.open.products.listed
 
+    res = sort_by_vector(target, products, 100).keys
 
-    result = products.image_vector_sort(pr.id, params[:num])
-    res = result.pluck(:id)
+    # res = @products.where(id: sorts.keys).sort_by { |pr| sorts[pr.id] }.map { |pr| pr.id }
 
-    logger.debug products.count
-
+    logger.debug res
 
     respond_to do |format|
       format.json { render plain: res.to_json }
