@@ -303,7 +303,7 @@ class System::PlaygroundController < ApplicationController
     result = products.image_vector_sort(pr.id, params[:num])
     res = result.pluck(:id)
 
-    logger.debug result
+    logger.debug products.count
 
 
     respond_to do |format|
