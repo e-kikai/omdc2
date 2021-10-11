@@ -301,6 +301,8 @@ class System::PlaygroundController < ApplicationController
 
     res = products.image_vector_sort(pr.id, params[:num]).pluck(:id)
 
+    logger.debug res
+
     respond_to do |format|
       format.json { render plain: res.to_json }
     end
