@@ -299,9 +299,12 @@ class System::PlaygroundController < ApplicationController
     pr       = Product.find(params[:id])
     products = pr.open.products.listed
 
-    res = products.image_vector_sort(pr.id, params[:num]).pluck(:id)
 
-    logger.debug res
+    result = products.image_vector_sort(pr.id, params[:num])
+    res = result.pluck(:id)
+
+    logger.debug result
+
 
     respond_to do |format|
       format.json { render plain: res.to_json }
