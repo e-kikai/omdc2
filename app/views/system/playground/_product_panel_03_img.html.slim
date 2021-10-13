@@ -37,3 +37,9 @@
 
   - if params[:product_id] && @sorts[product.id].present? && @sorts[product.id] > 0
     .dist-label = @sorts[product.id]
+
+  - if params[:product_id]
+    - if r ~ /sev/ && @sorts[product.id].present? && @sorts[product.id] > 0
+      .dist-label = @sorts[product.id]
+    - elsif r ~ /sef/
+      .dist-label = @features_pairs_01.find { |pa| pa[0] == product.id })&.at(1)

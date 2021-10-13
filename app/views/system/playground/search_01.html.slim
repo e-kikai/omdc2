@@ -215,12 +215,12 @@ css:
       .col-md-6
         h5 画像特徴ベクトル(現状)
         .products_area
-          = render partial: "product_panel_03_img", collection: @vector_products_01, as: "product", locals: { r: :src_pnl }
+          = render partial: "product_panel_03_img", collection: @vector_products_01, as: "product", locals: { r: :src_pnl_sev }
 
       .col-md-6
         h5 局所特徴
         .products_area
-          = render partial: "product_panel_03_img", collection: @features_products_01, as: "product", locals: { r: :src_pnl }
+          = render partial: "product_panel_03_img", collection: @features_products_01, as: "product", locals: { r: :src_pnl_sef }
     - else
       .product_area
         -(@pproducts || @products).each do |pr|
