@@ -43,7 +43,10 @@ class System::PlaygroundController < ApplicationController
       @time = Benchmark.realtime do
         @target = Product.find(params[:product_id])
 
-        @products = @open.products.listed.includes(:product_images, :genre, :company).order(:id) if params[:scope] == "all" # 全体検索
+        unless params[:scope] == "sort"
+          @products = @open.products.listed.includes(:product_images, :genre, :company).order(:id)
+        end
+
         @sorts = sort_by_vector(@target, @products)
 
         # @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
@@ -54,7 +57,7 @@ class System::PlaygroundController < ApplicationController
 
       ### 局所特徴 ###
       @features_pairs_01    = @products.feature_search_pairs("f00", @target.id)
-      @features_products_01 = @products.search_by_pairs(@features_pairs_01, 16)
+      @features_products_01 = @products.search_by_pairs(@features_pairs_01, 50)
 
       logger.debug @features_products_01
     else

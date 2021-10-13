@@ -184,7 +184,7 @@ css:
 
   / = select_tag :type, options_for_select({"ノルム(NArray)" => :narray, "ノルム(NArray) + 一括キャッシュ" => :redis, "ノルム(NArray) + 個別キャッシュ" => :solo_cache, "ノルム" => :norm, "角度(コサイン類似度)" => :angle}, selected: params[:type]), {class: "form-control"}
 
-  = select_tag :scope, options_for_select({"類似画像ソート" => :sort, "類似画像検索" => :all}, selected: params[:scope]), {class: "form-control"}
+  = select_tag :scope, options_for_select({"類似画像検索" => :all, "類似画像ソート" => :sort}, selected: params[:scope]), {class: "form-control"}
 
 
   = hidden_field_tag :type, :redis
@@ -212,15 +212,16 @@ css:
         = render "product_panel_03_img", product: @target, r: :src_pnl
         hr
 
-      .col-md-6
-        h5 画像特徴ベクトル(現状)
-        .products_area
-          = render partial: "product_panel_03_img", collection: @vector_products_01, as: "product", locals: { r: :src_pnl_sev }
+      div style="margin: 0 calc(50% - 50vw);width: 100vw;"
+        .col-md-6
+          h5 画像特徴ベクトル(現状)
+          .products_area
+            = render partial: "product_panel_03_img", collection: @vector_products_01, as: "product", locals: { r: :src_pnl_sev }
 
-      .col-md-6
-        h5 局所特徴
-        .products_area
-          = render partial: "product_panel_03_img", collection: @features_products_01, as: "product", locals: { r: :src_pnl_sef }
+        .col-md-6
+          h5 局所特徴
+          .products_area
+            = render partial: "product_panel_03_img", collection: @features_products_01, as: "product", locals: { r: :src_pnl_sef }
     - else
       .product_area
         -(@pproducts || @products).each do |pr|
