@@ -50,6 +50,12 @@ class System::PlaygroundController < ApplicationController
 
         # @products = sort_by_vector(@target, @products)
       end
+
+      ### 局所特徴 ###
+      @features_pairs_01   = @products.feature_search_pairs("f00", @target.id)
+      @features_product_01 = @products.search_by_pairs(@features_pairs_01, 16)
+
+      logger.debug @features_product_01
     else
       ### ページャ ###
       @pproducts = @products.page(params[:page])
