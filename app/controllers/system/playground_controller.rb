@@ -46,16 +46,17 @@ class System::PlaygroundController < ApplicationController
         @products = @open.products.includes(:product_images, :genre, :company).order(:id) if params[:scope] == "all" # 全体検索
         @sorts = sort_by_vector(@target, @products)
 
-        @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
+        # @products = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
+        @vector_products_01 = @products.where(id: @sorts.keys).sort_by { |pr| @sorts[pr.id] }
 
         # @products = sort_by_vector(@target, @products)
       end
 
       ### 局所特徴 ###
-      @features_pairs_01   = @products.feature_search_pairs("f00", @target.id)
-      @features_product_01 = @products.search_by_pairs(@features_pairs_01, 16)
+      @features_pairs_01    = @products.feature_search_pairs("f00", @target.id)
+      @features_products_01 = @products.search_by_pairs(@features_pairs_01, 16)
 
-      logger.debug @features_product_01
+      logger.debug @features_products_01
     else
       ### ページャ ###
       @pproducts = @products.page(params[:page])

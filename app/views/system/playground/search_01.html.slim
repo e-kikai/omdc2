@@ -207,13 +207,24 @@ css:
         span.btn-content フォームから検索してください
 
     - if @target.present?
-      h4 この商品に類似した商品ソート (検索速度 : #{@time} sec)
-      = render "product_panel_03_img", product: @target, r: :src_pnl
-      hr
+      .col-md-12
+        h4 この商品に類似した商品ソート (検索速度 : #{@time} sec)
+        = render "product_panel_03_img", product: @target, r: :src_pnl
+        hr
 
-    .product_area
-      -(@pproducts || @products).each do |pr|
-        = render "product_panel_03_img", product: pr, r: :src_pnl
+      .col-md-6
+        h5 画像特徴ベクトル(現状)
+        .products_area
+          = render partial: "product_panel_03_img", collection: @vector_products_01, as: "product", locals: { r: :src_pnl }
+
+      .col-md-6
+        h5 局所特徴
+        .products_area
+          = render partial: "product_panel_03_img", collection: @features_products_01, as: "product", locals: { r: :src_pnl }
+    - else
+      .product_area
+        -(@pproducts || @products).each do |pr|
+          = render "product_panel_03_img", product: pr, r: :src_pnl
 
   - if @pproducts.present?
     . = paginate @pproducts
