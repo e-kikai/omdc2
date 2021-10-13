@@ -37,8 +37,8 @@
       / span.btn-content 似たものサーチ
       span.glyphicon.glyphicon-camera
 
-  - if params[:product_id] && @sorts[product.id].present? && @sorts[product.id] > 0
-    .dist-label = @sorts[product.id]
+  / - if params[:product_id] && @sorts[product.id].present? && @sorts[product.id] > 0
+  /   .dist-label = @sorts[product.id]
 
   - if params[:product_id]
     - if r =~ /sev/ && @sorts[product.id].present? && @sorts[product.id] > 0
