@@ -192,6 +192,7 @@ Rails.application.routes.draw do
     resources :scheduling, only: [:index] do
       collection do
         post 'vectors_process'
+        get 'recommend_products_mail'
       end
     end
 

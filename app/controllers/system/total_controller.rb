@@ -35,15 +35,16 @@ class System::TotalController < System::ApplicationController
     SELECT
     o.id AS ID,
     o.name AS "入札会名",
-    tp.c_id AS "出品数",
     tp.s_min_price AS "出品最低入札価格(円)",
-    tb.c_id AS "入札数",
-    tp.c_success_bid_id AS "落札数",
-    ROUND(tp.c_success_bid_id * 100.0 / tp.c_id, 2) AS "落札割合(%)",
+    tp.c_id AS "出品数",
     tb.s_amount AS "落札金額(円)",
-    tdl.c_id AS "詳細閲覧",
+    tp.c_success_bid_id AS "落札数",
+    tb.c_id AS "入札数",
+    ROUND(tp.c_success_bid_id * 100.0 / tp.c_id, 2) AS "落札割合(%)",
     tp.c_hitoyama AS "一山出品数",
     ROUND(tp.c_hitoyama * 100.0 / tp.c_id, 2) AS "一山出品割合(%)",
+    count(DISTINCT tdl.c_id) AS "uid数",
+    tdl.c_id AS "詳細閲覧",
     tdl.c_hitoyama AS "一山閲覧",
     ROUND(tdl.c_hitoyama * 100.0 / tdl.c_id, 2) AS "一山閲覧割合(%)"
   FROM
