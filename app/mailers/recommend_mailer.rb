@@ -1,11 +1,12 @@
 class RecommendMailer < ApplicationMailer
   ### ユーザへ送信確認 ###
-  def products(mail, open, genre, products)
+  def products(mail, open, genre, products, rtag)
     # @mail     = mail
     @mail     = mail
     @open     = open
     @genre    = genre
     @products = products
+    @rtag     = rtag
 
     mail(
       to:       @mail,

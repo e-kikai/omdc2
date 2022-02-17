@@ -6,18 +6,20 @@ html
 
   body style='font-size:15px;line-height: 1.428571429;display:block;width:640px; padding:16px;margin: 0 auto;font-family:"Helvetica", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif;box-sizing:content-box;background:#efefef;'
 
+    = image_tag("#{root_url(only_path: false)}system/scheduling/tracking?r=#{@rtag}",:size => "1x1", :alt => "logo")
+
     p この案内メールは、<br />機械団地入札会にメールアドレス登録していただいた方にお送りしております。
 
-    - @temp_array.each do |us|
-      hr
-      .
-        span = " #{us[:user].id} #{us[:user].name} < #{us[:user].email} >"
-        span = " :: #{us[:genre].id} #{us[:genre].name} > "
-        span = us[:products].count
+    / - @temp_array.each do |us|
+    /   hr
+    /   .
+    /     span = " #{us[:user].id} #{us[:user].name} < #{us[:user].email} >"
+    /     span = " :: #{us[:genre].id} #{us[:genre].name} > "
+    /     span = us[:products].count
 
 
-    / = link_to image_tag("#{root_url(only_path: false)}#{asset_path("mail_logo.png")}", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=mail_maitest", target: "_blank"
-    = link_to image_tag("http://www.zenkiren.net/imgs/mail_logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=mail_maitest", target: "_blank"
+    / = link_to image_tag("#{root_url(only_path: false)}#{asset_path("mail_logo.png")}", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=#{@rtag}", target: "_blank"
+    = link_to image_tag("http://www.zenkiren.net/imgs/mail_logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=#{@rtag}", target: "_blank"
 
     p style=""
       span style='font-size:19px;color:darkred;' #{@open.name}
@@ -30,14 +32,14 @@ html
 
       - @products.each do |pr|
         .item-box style="width:193px;display:inline-block;background:#FFF;margin:0 1.2rem 1.5rem 0;box-shadow:5px 5px #d3d3d3;"
-          = link_to "#{root_url(only_path: false)}products/#{pr.id}?r=mail_maitest", style: "text-decoration:none;outline:none;", target: "_blank" do
+          = link_to "#{root_url(only_path: false)}products/#{pr.id}?r=#{@rtag}", style: "text-decoration:none;outline:none;", target: "_blank" do
             . = image_tag pr.product_images.first.image.view.url, style: "width:100%;max-height:192px;min-height:192px;margin-bottom:0.5rem;object-fit:cover;"
             . style="background:#3b6783d6;width:5em;color:#FFF;line-height:1.5rem;text-align:center;" = "No. #{pr.list_no}"
             . style="padding:0 10px;text-align:center;color:#222;font-weight:700;font-size:0.9rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" = pr.name
             . style="padding:0 10px;text-align:center;color:#222;font-size:x-small;" = "メーカー : #{pr.maker}"
             . style="padding:0 10px;text-align:center;color:#222;font-size:x-small;margin-bottom:0.8rem;" 最低入札価格 : <span style="color:#eb5505;font-size:1.1rem;font-weight:700;">#{number_with_delimiter(pr.min_price)}</span>円
 
-    . = link_to "→ #{@genre.name}の出品商品をもっと見る", "#{root_url(only_path: false)}genre/#{@genre.id}?r=mail_maitest", style: "width:95%;font-size:19px;background:#2baadf;padding:8px 16px;margin:16px auto 32px;display:block;text-align:center;text-decoration:none;border-radius:3px;color:#FFF;font-weight:bold;", target: "_blank"
+    . = link_to "→ #{@genre.name}の出品商品をもっと見る", "#{root_url(only_path: false)}genre/#{@genre.id}?r=#{@rtag}", style: "width:95%;font-size:19px;background:#2baadf;padding:8px 16px;margin:16px auto 32px;display:block;text-align:center;text-decoration:none;border-radius:3px;color:#FFF;font-weight:bold;", target: "_blank"
 
 
     . style="width:95%;margin:16px auto;background:#FFF;border:1px dotted #55F;padding:16px;font-size:17px;"
@@ -53,7 +55,7 @@ html
 
     p ご参加お待ちしております。
 
-    . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false)}?r=mail_maitest", style: "width:75%;font-size:19px;background:#2baadf;padding:8px 16px;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:3px;color:#FFF;font-weight:bold;", target: "_blank"
+    . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false)}?r=#{@rtag}", style: "width:75%;font-size:19px;background:#2baadf;padding:8px 16px;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:3px;color:#FFF;font-weight:bold;", target: "_blank"
 
     p style=""
       | ※	この案内メールは、大阪機械卸業団地協同組合より自動的に送信されています。

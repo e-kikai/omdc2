@@ -1,4 +1,6 @@
 class System::SchedulingController < ApplicationController
+  require 'resolv'
+
   protect_from_forgery only: [:index]
 
   def index
@@ -13,39 +15,57 @@ class System::SchedulingController < ApplicationController
 
   def recommend_products_mail
     @open     = @open_now
-    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id)
+    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id).where(id: 2)
 
     @temp_array = []
     @users.each do |us|
-      tmp = DetailLog.joins(:product).where(user_id: us.id).group("products.genre_id").order("count(*) DESC").limit(1).select("products.genre_id")
+      tmp = DetailLog.joins(:product).where(user_id: us.id).group("products.genre_id").order("c" => :desc).limit(1).select("products.genre_id, count(*) as c").first.genre_id
 
       @genre    = Genre.find_by(id: tmp)
       @products = @open_now.products
         .includes(:product_images)
-        .where(genre_id: tmp, product_images: ProductImage.select(:product_id))
-        .order(:list_no).limit(9)
+        .where(genre_id: tmp, id: ProductImage.select(:product_id))
+        .order(:list_no)
+        .limit(9)
+      @rtag     = "mail_maitest_m-1_u-#{us.id}"
 
       next unless @products.count > 0
 
-      @temp_array << {
-        user:     us,
-        genre:    @genre,
-        products: @products
-      }
+      # @temp_array << {
+      #   user:     us,
+      #   genre:    @genre,
+      #   products: @products
+      # }
 
+      RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
 
-    # RecommendMailer.products(us.email, @open_now, @genre, @products).deliver
-  end
+      sleep 3
+    end
 
     # mail      = "bata44883@gmail.com"
-    # @genre    = Genre.find(236)
-    # @products = @open.products.includes(:product_images)
-    #   .where(genre_id: 236, product_images: ProductImage.all).order(:list_no).limit(9)
-
-    # @users = User.where(user_id: DetaiilLog.where(product_id: @open.products))
-
     # RecommendMailer.products(mail, @open_now, @genre, @products).deliver
 
-    render "recommend_mailer/products", layout: false
+    # render "recommend_mailer/products", layout: false
+    render plain: 'OK', status: 200
+  end
+
+  def tracking
+    status = SearchLog.create(
+      keywords:    "",
+      user_id:     user_signed_in? ? current_user.id : nil,
+
+      path:        "MAI_test_mail",
+      page:        1,
+
+      host:       (Resolv.getname(ip) rescue ""),
+      ip:          ip,
+      r:           params[:r],
+      referer:     "",
+      ua:          request.user_agent,
+
+      utag:       session[:utag],
+    )
+
+    send_file Rails.root.join('app', 'assets', 'images', "1x1.png"), :type => 'image/gif', :disposition => 'inline'
   end
 end
