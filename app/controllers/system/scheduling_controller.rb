@@ -24,7 +24,7 @@ class System::SchedulingController < ApplicationController
       @genre    = Genre.find_by(id: tmp)
       @products = @open_now.products
         .includes(:product_images)
-        .where(genre_id: tmp, id: ProductImage.select(:product_id))
+        .where(genre_id: tmp)
         .order(:list_no)
         .limit(9)
       @rtag     = "mail_maitest_m-1_u-#{us.id}"
@@ -38,7 +38,6 @@ class System::SchedulingController < ApplicationController
       # }
 
       RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
-
       sleep 3
     end
 
@@ -66,6 +65,7 @@ class System::SchedulingController < ApplicationController
       utag:       session[:utag],
     )
 
-    send_file Rails.root.join('app', 'assets', 'images', "1x1.png"), :type => 'image/gif', :disposition => 'inline'
+    # send_file Rails.root.join('app', 'assets', 'images', "1x1.png"), :type => 'image/gif', :disposition => 'inline'
+    send_file Rails.root.join('app', 'assets', 'images', "mail_logo.png"), :type => 'image/gif', :disposition => 'inline'
   end
 end
