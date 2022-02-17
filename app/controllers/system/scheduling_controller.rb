@@ -37,15 +37,15 @@ class System::SchedulingController < ApplicationController
       #   products: @products
       # }
 
-      # RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
-      # sleep 3
+      RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
+      sleep 3
     end
 
     # mail      = "bata44883@gmail.com"
     # RecommendMailer.products(mail, @open_now, @genre, @products).deliver
 
-    render "recommend_mailer/products", layout: false
-    # render plain: 'OK', status: 200
+    # render "recommend_mailer/products", layout: false
+    render plain: 'OK', status: 200
   end
 
   def tracking
