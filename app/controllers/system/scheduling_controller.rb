@@ -15,14 +15,14 @@ class System::SchedulingController < ApplicationController
 
   def recommend_products_mail
     @open     = @open_now
-    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id).where(id: 2)
+    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id).where(id: [1,2])
 
     @temp_array = []
     @users.each do |us|
       tmp = DetailLog.joins(:product).where(user_id: us.id).group("products.genre_id").order("c" => :desc).limit(1).select("products.genre_id, count(*) as c").first.genre_id
 
       @genre    = Genre.find_by(id: tmp)
-      @products = @open_now.products
+      @products = @open_now.products.listed
         .includes(:product_images)
         .where(genre_id: tmp)
         .order(:list_no)
