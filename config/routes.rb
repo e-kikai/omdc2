@@ -193,7 +193,7 @@ Rails.application.routes.draw do
       collection do
         post 'vectors_process'
         get  'recommend_products_mail'
-        get  'tracking'
+        get  'tracking/:r' => :tracking
       end
     end
 
