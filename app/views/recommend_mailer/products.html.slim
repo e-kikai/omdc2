@@ -8,14 +8,6 @@ html
     . style='font-size:15px;line-height: 1.428571429;display:block;width:640px; padding:16px;margin: 0 auto;font-family:"Helvetica", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif;box-sizing:content-box;background:#efefef;'
       p この案内メールは、<br />機械団地入札会にメールアドレス登録していただいた方にお送りしております。
 
-      / - @temp_array.each do |us|
-      /   hr
-      /   .
-      /     span = " #{us[:user].id} #{us[:user].name} < #{us[:user].email} >"
-      /     span = " :: #{us[:genre].id} #{us[:genre].name} > "
-      /     span = us[:products].count
-
-
       / = link_to image_tag("#{root_url(only_path: false)}#{asset_path("mail_logo.png")}", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=#{@rtag}", target: "_blank"
       = link_to "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", target: "_blank" do
           / = image_tag("https://www.zenkiren.net/imgs/mail_logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;")

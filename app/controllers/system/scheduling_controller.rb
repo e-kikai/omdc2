@@ -15,7 +15,7 @@ class System::SchedulingController < ApplicationController
 
   def recommend_products_mail
     @open     = @open_now
-    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id).where(id: [1,2])
+    @users    = User.where(id: DetailLog.all.select(:user_id)).order(:id)
 
     @temp_array = []
     @users.each do |us|
@@ -38,7 +38,7 @@ class System::SchedulingController < ApplicationController
       # }
 
       RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
-      sleep 3
+      sleep 1
     end
 
     # mail      = "bata44883@gmail.com"
