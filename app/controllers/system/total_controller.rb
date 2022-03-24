@@ -43,6 +43,7 @@ class System::TotalController < System::ApplicationController
     ROUND(tp.c_success_bid_id * 100.0 / tp.c_id, 2) AS "落札割合(%)",
     tp.c_hitoyama AS "一山出品数",
     ROUND(tp.c_hitoyama * 100.0 / tp.c_id, 2) AS "一山出品割合(%)",
+    tdl.c_utag AS "utag数",
     tdl.c_id AS "詳細閲覧",
     tdl.c_hitoyama AS "一山閲覧",
     ROUND(tdl.c_hitoyama * 100.0 / tdl.c_id, 2) AS "一山閲覧割合(%)"
@@ -82,6 +83,7 @@ class System::TotalController < System::ApplicationController
       SELECT
         p3.open_id,
         count(dl.id) AS c_id,
+        count(DISTINCT dl.utag) as c_tag,
         count(CASE WHEN p3.hitoyama = 'true' OR p3.name ~ '(一山|1山|雑品)'  AND dl.id IS NOT NULL THEN 1 END) AS c_hitoyama
       FROM
         detail_logs dl
