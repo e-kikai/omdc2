@@ -83,7 +83,7 @@ class System::TotalController < System::ApplicationController
       SELECT
         p3.open_id,
         count(dl.id) AS c_id,
-        count(DISTINCT dl.utag) as c_tag,
+        count(DISTINCT dl.utag) as c_utag,
         count(CASE WHEN p3.hitoyama = 'true' OR p3.name ~ '(一山|1山|雑品)'  AND dl.id IS NOT NULL THEN 1 END) AS c_hitoyama
       FROM
         detail_logs dl
