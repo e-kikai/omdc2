@@ -10,7 +10,7 @@ class System::TotalController < System::ApplicationController
       "価格帯/落札結果金額"         => :price_amount,
     }
 
-    @open_id = params[:open_id] || @open_now&.id || (@open_next ? (@open_next&.id - 1) : @open_selector.first[1])
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
     @total   = params[:total] || @total_selector.first[1]
     @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
