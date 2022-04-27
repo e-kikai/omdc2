@@ -39,7 +39,7 @@
           td      = b.comment
           td.sepa = b.created_at
 
-          td.num = number_to_currency(b.success_bid.amount)
+          td.num = number_to_currency(b&.success_bid&.amount)
 
           - if b.success?
             td.img_link ◯

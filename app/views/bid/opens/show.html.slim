@@ -47,7 +47,7 @@ ul.nav.nav-pills
     div 該当の出品商品はありませんでした
   - else
       = paginate @pproducts
-      .scroll_div
+      .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
         table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive.table-results _fixedhead='rows:1'
           tr
             th.id = s.sort_link :list_no,              "No."
@@ -58,11 +58,12 @@ ul.nav.nav-pills
             th.img_link 画像
             th.img_link 動画
             th.sepa = s.sort_link :min_price,          "最低入札金額"
-            th.no = s.sort_link :bids_count,           "入札数"
+            th.id = s.sort_link :bids_count,           "入札"
             th = s.sort_link :success_bid_amount,      "落札金額"
             th.sepa = s.sort_link :success_company_no, "落札会社"
             th 自社入札金額
-            th.no = s.sort_link :same_count,    "同額札"
+            th.id = s.sort_link :same_count,           "同札"
+            th 自社出品備考欄
           - @pproducts.each do |p|
             tr
               td.id = p.list_no
@@ -80,7 +81,7 @@ ul.nav.nav-pills
                     span.glyphicon.glyphicon-film
               td.num.sepa = number_to_currency(p.min_price)
               - if p.success_bid.present?
-                td.no = p.bids_count
+                td.id = p.bids_count
                 td.num = number_to_currency(p.success_bid.amount)
                 td.sepa = p.success_company.name
 
@@ -98,12 +99,21 @@ ul.nav.nav-pills
                               span.ng ×
                             span =< number_to_currency(b.amount)
                           td.comment = b.comment
-                td.no = p.same_count if p.same_count > 1
-
+                td.id = p.same_count if p.same_count > 1
+                td
+                  - if current_company.id == p.company_id
+                    span.ok ◯
+                    = p.comment
               - else
                 td
                 td
                 td.sepa
                 td
-                td.no
+                td.id
+                td
+                  - if current_company.id == p.company_id
+                    span.ok ◯
+                    = p.comment
+
+
       = paginate @pproducts

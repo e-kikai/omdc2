@@ -2,7 +2,7 @@
   h4 入札確認
   - if @bids.blank?
     div 入札がありませんでした
-  - else  
+  - else
     .scroll_div
       table.table.table-striped.table-hover.table-condensed
         tr
@@ -15,10 +15,10 @@
           th 結果
         - @bids.each do |b|
           tr
-            td.id = b.product.list_no
-            td = b.product.name
-            td = b.product.maker
-            td = b.product.model 
-            td.num = b.product.min_price.to_s(:delimited) + "円"
-            td.num = b.amount.to_s(:delimited) + "円"
+            td.id = b&.product&.list_no
+            td = b&.product&.name
+            td = b&.product&.maker
+            td = b&.product&.model
+            td.num = b&.product&.min_price&.to_s(:delimited) + "円"
+            td.num = b&.amount&.to_s(:delimited) + "円"
             td = b.success? ? "◯" : "×"

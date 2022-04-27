@@ -77,6 +77,8 @@ label.required:after {
 table {
   & {
     th {
+      font-size: 12px;
+
       &.id {
         width: 40px;
       }
@@ -86,7 +88,7 @@ table {
       }
 
       &.img_link {
-        width: 40px;
+        width: 35px;
       }
 
       &.num {
@@ -133,7 +135,7 @@ table {
 
       &.img_link {
         text-align: center;
-        width: 40px;
+        width: 35px;
       }
 
       &.num {

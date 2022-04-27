@@ -18,7 +18,7 @@
           th      = sort_link search, :min_price,          "最低入札金額"
           th.sepa = sort_link search, :comment,            "備考欄"
 
-          th.no   = sort_link search, :bids_count,         "入札数"
+          th.id   = sort_link search, :bids_count,         "入札"
           th      = sort_link search, :success_company_no, "落札会社"
           th      = sort_link search, :success_bid_amount, "落札金額"
 
@@ -40,11 +40,11 @@
           td.sepa = p.comment
 
           - if p.success_bid.present?
-            td.no = number_with_delimiter(p.bids_count)
+            td.id = number_with_delimiter(p.bids_count)
             td = p.success_company.name
             td.num = number_to_currency(p.success_bid.amount)
             td.num = number_to_currency(p.deme_h)
-            td = p.display
+            td = p.display.slice(0, 2)
             td
             td.num
               = number_to_currency(p.kumiai_fee)
@@ -55,11 +55,11 @@
             td.num = number_to_currency(p.shiharai)
 
           - else
-            td.no
+            td.id
             td
             td
             td
-            td = p.display
+            td = p.display.slice(0, 2)
             td.num
               - if p.shuppin_fee > 0
                 . = number_to_currency(p.shuppin_fee)

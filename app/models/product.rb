@@ -558,8 +558,8 @@ class Product < ApplicationRecord
 
   def reform_youtube
     self.youtube = case self.youtube
-    when /watch\?v\=([a-zA-Z0-9\-+]+)/;  $1
-    when /youtu\.be\/([a-zA-Z0-9\-+]+)/; $1
+    when /watch\?v\=([a-zA-Z0-9\_\-+]+)/;  $1
+    when /youtu\.be\/([a-zA-Z0-9\_\-+]+)/; $1
     else self.youtube
     end
   end
