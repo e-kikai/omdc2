@@ -1,0 +1,19 @@
+- set_meta_tags title: "Mailchimp用 本文生成"
+- breadcrumb  :system_something, "Mailchimp用 本文生成"
+
+.row style="margin-bottom:16px;"
+  = form_tag("/system/mailchimp_html", method: :get, class: "form-inline filtering-form") do
+    = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
+    span = " / "
+    = select_tag :category, options_for_select(@category_selector, @category), class: "form-control"
+    span = " / トラッキングタグ : "
+    = text_field_tag :rtag, params[:rtag], class: "form-control", placeholder: @rtag
+    = button_tag class: "btn btn-info" do
+      i.fa-solid.fa-code
+      span.btn-content 生成
+
+  .col-lg-7
+    = render(partial: "body")
+
+  .col-lg-5
+    textarea style="width:100%;height:1000px;" = render(partial: "body")

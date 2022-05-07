@@ -123,8 +123,9 @@ end
 source 'https://rails-assets.org' do
   # gem 'rails-assets-jquery'
   gem 'rails-assets-jquery-ujs'
-  # gem 'rails-assets-bootstrap'
-  gem 'rails-assets-bootstrap-sass-official'
+  gem 'rails-assets-bootstrap', '~> 3.4.1'
+  # gem 'rails-assets-bootstrap-sass-official'
+
   # gem 'rails-assets-fontawesome'
   # gem 'rails-assets-jquery.lazyload'
   gem 'rails-assets-bootstrap-fileinput'
@@ -132,6 +133,9 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap3-datetimepicker'
   gem 'rails-assets-moment'
 end
+
+gem 'bootstrap-sass', '~> 3.4.1'
+gem 'sassc-rails', '>= 2.1.0'
 
 gem 'meta-tags'
 

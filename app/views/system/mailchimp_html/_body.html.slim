@@ -1,0 +1,67 @@
+.mailchimp-body style="width:660px;margin: auto;background:#efefef;"
+  . style="font-size:15px;line-height: 1.428571429;display:block;width:610px;margin: 0 auto;font-family:'Yu Gothic Medium', '游ゴシック Medium', YuGothic, '游ゴシック体', 'ヒラギノ角ゴ Pro W3', 'メイリオ', sans-serif;box-sizing:content-box;"
+    / p この案内メールは、<br />機械団地入札会にメールアドレス登録していただいた方にお送りしております。
+
+    / = link_to image_tag("#{root_url(only_path: false)}#{asset_path("mail_logo.png")}", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=#{@rtag}", target: "_blank"
+    = link_to "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", target: "_blank" do
+        / = image_tag("https://www.zenkiren.net/imgs/mail_logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;")
+        = image_tag("https://mcusercontent.com/64c744bd0ade288be955860a6/images/d67ea352-9986-ba40-7a09-97ef37a73e39.png", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;")
+
+    p style=""
+      a href="https://www.大阪機械団地.jp/" style='font-size:19px;color:darkred;text-decoration:underline;'大阪機械卸業団地協同組合 #{@open.name}
+      span 、ただいま開催中です。
+      br
+      - if @category == :all
+        span そこで、入札会に出品されている商品をご紹介いたします。
+      - else
+        span そこで、出品商品の中からあなたへのおすすめ商品をご案内いたします。
+
+    . style="width:623px;margin:16px 0 16px -13px;"
+      - if @category == :all
+        . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 13px;" ◆ 入札会出品商品
+      - else
+        . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 13px;" ◆ #{@category_selector.key(@category)}のおすすめ商品
+
+      - @products.each_with_index do |pr, i|
+        .item-box style="width:193px;display:inline-block;background:#FFF;margin:0 0 13px 13px;box-shadow:5px 5px #d3d3d3;"
+          = link_to "#{root_url(only_path: false, protocol: 'https')}products/#{pr.id}?r=#{@rtag}-no#{i + 1}", style: "text-decoration:none;outline:none;", target: "_blank" do
+            - if pr.product_images.size > 0
+              . = image_tag pr.product_images.first.image.view.url, style: "width:100%;max-height:192px;min-height:192px;margin-bottom:1px;object-fit:cover;"
+
+            . style="background:#3b6783d6;width:5em;color:#FFF;height:20px;line-height:20px;font-size:12px;margin-bottom:4px;text-align:center;" = "No. #{pr.list_no}"
+            . style="padding:0 10px;text-align:center;color:#222;font-weight:700;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;" = pr.name
+            . style="padding:0 10px;text-align:center;color:#222;font-size:x-small;" = "メーカー : #{pr.maker}"
+            . style="padding:0 10px;text-align:center;color:#222;font-size:x-small;margin-bottom:0.8rem;" 最低入札価格 : <span style="color:#eb5505;font-size:13px;font-weight:700;">#{number_with_delimiter(pr.min_price)}</span>円
+
+    / . = link_to "→ #{@genre.name}の出品商品をもっと見る", "#{root_url(only_path: false, protocol: 'https')}genre/#{@genre.id}?r=#{@rtag}", style: "width:95%;font-size:19px;background:#2baadf;padding:8px 16px;margin:16px auto 32px;display:block;text-align:center;text-decoration:none;border-radius:3px;color:#FFF;font-weight:bold;", target: "_blank"
+
+
+    . style="width:100%;margin:16px auto;background:#FFF;border:1px dotted #004E98;padding:16px;font-size:17px;box-sizing:border-box;"
+
+      . style="font-size:19px;color:darkred;" #{@open.name} 開催日程
+      . 下見期間 :  #{I18n.l(@open.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open.preview_end_date, format: :short_with_week)}
+      . 入札締切 : #{I18n.l(@open.user_bid_end_at, format: :full_date)} 締切
+      . 搬出期間 : #{I18n.l(@open.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open.carry_out_end_date, format: :short_with_week)}
+
+      . style="margin-top:16px;" 主催者 : 大阪機械卸業団地協同組合
+      . 開催場所 : 大阪機械卸業団地協同組合 共同展示場 東大阪市本庄中2-2-38
+      . 営業時間 : 9:00～17:00 (土・日曜日 / 祝日)
+      . 連絡先 : TEL 06-6747-7528   FAX 06-6747-7529
+
+    . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+
+    . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 機械団地 機械工具入札会とは
+    p style="font-size:15px;"
+      | 大阪機械卸業団地協同組合(通称：機械団地)が主催する中古機械・工具の入札会で、<br />
+      | 年4回開催しています。
+      | <br /><br />
+      | 共同展示場及び組合員店舗に出品されている商品に最低価格以上で入札し、<br />
+      | 最高価格だったお客様が落札する方式です。
+      | <br /><br />
+      | 毎回、多くの商品が出品され、全国各地よりご来場いただき、<br />
+      | 多数落札していただいています。
+      | <hr />
+      | 機械・工具類をはじめ、お値打ち商品が目白押しです。<br />
+      | 皆様のご来場をお待ちしております。
+
+      . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"

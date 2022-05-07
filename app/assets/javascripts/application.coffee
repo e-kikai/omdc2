@@ -14,7 +14,8 @@
 #= require jquery_ujs
 #= require jquery-ui/widgets/sortable
 #= require turbolinks
-#= require bootstrap
+# require bootstrap
+#= require bootstrap-sprockets
 # require jquery_nested_form
 # require bootstrap-fileinput
 #= require fixed_midashi

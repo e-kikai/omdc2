@@ -224,6 +224,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :mailchimp_html, only: [:index]
   end
 
   namespace :bid do

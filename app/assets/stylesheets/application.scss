@@ -19,12 +19,14 @@
  *= require_tree .
  *= require_self
  */
-$icon-font-path: "bootstrap-sass-official/assets/fonts/bootstrap/";
-@import "bootstrap-sass-official/bootstrap-sprockets";
-@import "bootstrap-sass-official/bootstrap";
-@import 'bootstrap-fileinput'; /// header ///
+// $icon-font-path: "bootstrap-sass-official/assets/fonts/bootstrap/";
+// @import "bootstrap-sass-official/bootstrap-sprockets";
+// @import "bootstrap-sass-official/bootstrap";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+//@import 'bootstrap-fileinput'; /// header ///
 
-@import 'font-awesome-sprockets';
+// @import 'font-awesome-sprockets';
 @import 'font-awesome';
 
 header {
@@ -943,7 +945,7 @@ table.table-detail {
 }
 
 .btn-square {
-  .fa, .fas, .far, .fal, .fad, .fab {
+  .fa, .fas, .far, .fal, .fad, .fab, .fa-solid, .fa-brands {
     display: block;
     font-size: 28px;
     vertical-align: middle;

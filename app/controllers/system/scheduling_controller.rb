@@ -37,8 +37,7 @@ class System::SchedulingController < ApplicationController
       #   products: @products
       # }
 
-      RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
-      sleep 1
+      # RecommendMailer.products(us.email, @open_now, @genre, @products, @rtag).deliver
     end
 
     # mail      = "bata44883@gmail.com"
