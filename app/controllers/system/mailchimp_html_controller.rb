@@ -9,10 +9,10 @@ class System::MailchimpHtmlController < System::ApplicationController
       '工具'      => :tool
     }
 
-    @open_id = params[:open_id].to_i || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
     @open = Open.find @open_id
 
-    @category = @category_selector.values.include?(params[:category].to_sym) ? params[:category].to_sym : :all
+    @category = @category_selector.values.include?(params[:category]&.to_sym) ? params[:category]&.to_sym : :all
 
     xl_where = case @category
       when :nc;     1
