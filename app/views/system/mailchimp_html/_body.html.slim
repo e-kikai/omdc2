@@ -65,3 +65,21 @@
       | 皆様のご来場をお待ちしております。
 
       . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+
+    hr
+
+    ul style="font-size:13px;margin-top:32px;"
+      li 配信先のメールアドレスを変更したい場合は、<a href="*|UPDATE_PROFILE|*">こちらから</a>。
+      li メール配信を停止したい場合は、<a href="*|UNSUB|*">こちらから</a>。
+
+    p style="font-size:13px;margin:16px 0;"
+      | 大阪機械卸業団地協同組合<br />
+      | 組合事務局 〒578-0965 東大阪市本庄西2-5-10 TEL : 06-6747-7521(代) FAX.06-6747-7525<br />
+      | 共同展示場 〒578-0957 東大阪市本庄中2-2-38 TEL : 06-6747-7528
+
+    hr
+
+    footer style="text-align:center;margin:16px 0;"
+      | Copyright &copy; #{Time.now.year}
+      = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank"
+      | , All Rights reserved.
