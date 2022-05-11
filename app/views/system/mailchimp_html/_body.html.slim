@@ -5,12 +5,14 @@
     - if @site == :mnok
       p style="font-size:14px;margin-bottom:8px;"
         | このメールは、ものづくりオークション委員会が、<br />
-        | <a href="https://www.omdc.or.jp">大阪機械卸業団地協同組合</a>からの情報提供を受け、<br />
-        | <a href="https://www.mnok.net/?r=mailchimp">ものづくりオークション</a>登録ユーザの皆様にお送りしております。
+        | <a href="https://www.omdc.or.jp" target="_blank">大阪機械卸業団地協同組合</a>からの情報提供を受け、<br />
+        | <a href="https://www.mnok.net/?r=mailchimp" target="_blank">ものづくりオークション</a>登録ユーザの皆様に
+        | お送りしております。
     - elsif @site == :machinelife
-        | このメールは、<a href="http://www.zenkiren.org/">全日本機械業連合会</a>が、<br />
-        | <a href="https://www.omdc.or.jp">大阪機械卸業団地協同組合</a>からの情報提供を受け、<br />
-        | <a href="https://www.zenkiren.net/">マシンライフ</a>お問い合わせユーザの皆様にお送りしております。
+        | このメールは、<a href="http://www.zenkiren.org/" target="_blank">全日本機械業連合会</a>が、<br />
+        | <a href="https://www.omdc.or.jp" target="_blank">大阪機械卸業団地協同組合</a>からの情報提供を受け、<br />
+        | <a href="https://www.zenkiren.net/" target="_blank">マシンライフ</a>お問い合わせユーザの皆様に
+        | お送りしております。
 
     / = link_to image_tag("#{root_url(only_path: false)}#{asset_path("mail_logo.png")}", alt: "大阪機械卸業団地協同組合 機械工具入札会", style: "display: block;width: 100%;margin:16px 0;"), "#{root_url(only_path: false)}?r=#{@rtag}", target: "_blank"
     = link_to "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", target: "_blank" do
