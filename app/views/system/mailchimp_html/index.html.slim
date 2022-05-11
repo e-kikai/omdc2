@@ -6,6 +6,8 @@
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
     span = " / "
     = select_tag :category, options_for_select(@category_selector, @category), class: "form-control"
+    span = " / "
+    = select_tag :site, options_for_select(@site_selector, @site), class: "form-control"
     span = " / トラッキングタグ : "
     = text_field_tag :rtag, params[:rtag], class: "form-control", placeholder: @rtag
     = button_tag class: "btn btn-info" do

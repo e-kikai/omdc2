@@ -8,11 +8,18 @@ class System::MailchimpHtmlController < System::ApplicationController
       '鍛圧/鈑金' => :press,
       '工具'      => :tool
     }
+    @site_selector = {
+      '電子入札'     => :omdc,
+      'マシンライフ' => :machinelife,
+      'ものオク'     => :mnok
+    }
+
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
     @open = Open.find @open_id
 
     @category = @category_selector.values.include?(params[:category]&.to_sym) ? params[:category]&.to_sym : :all
+    @site     = @site_selector.values.include?(params[:site]&.to_sym) ? params[:site]&.to_sym : :omdc
 
     xl_where = case @category
       when :nc;     1
@@ -28,7 +35,8 @@ class System::MailchimpHtmlController < System::ApplicationController
     @products = if @category == :all
       (1..9).map { |gid| @products.where( large_genres: {xl_genre_id: gid}).first }.compact
     else
-      @products.limit(9)
+      ids = @products.pluck(:id).sample(9) # ランダム取得
+      @products.where(id: ids)
     end
 
     @rtag = params[:rtag].presence || "mail_maitest_o-#{@open_id}-#{@category}"
