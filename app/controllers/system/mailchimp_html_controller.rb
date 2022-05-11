@@ -9,9 +9,9 @@ class System::MailchimpHtmlController < System::ApplicationController
       '工具'      => :tool
     }
     @site_selector = {
-      '電子入札'     => :omdc,
-      'マシンライフ' => :machinelife,
-      'ものオク'     => :mnok
+      '機械団地入札会'         => :omdc,
+      'マシンライフ'           => :machinelife,
+      'ものづくりオークション' => :mnok
     }
 
 
