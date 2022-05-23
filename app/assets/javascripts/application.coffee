@@ -17,7 +17,7 @@
 # require bootstrap
 #= require bootstrap-sprockets
 # require jquery_nested_form
-# require bootstrap-fileinput
+#= require bootstrap-fileinput
 #= require fixed_midashi
 #= require jquery.ui.touch-punch.min
 #= require modernizr.custom
