@@ -24,19 +24,20 @@ class System::MailchimpHtmlController < System::ApplicationController
     xl_where = case @category
       when :nc;     1
       when :normal; 2
-      when :press;  3..5
+      when :press;  3..4
       when :tool;   7
       else;         1..100
     end
 
     @products = @open.products.listed.includes(:product_images).joins(:large_genre)
-      .where( large_genres: {xl_genre_id: xl_where}).where.not(product_images: { id: nil }).order(:list_no)
+      .where( large_genres: {xl_genre_id: xl_where})
+      .where.not(product_images: { id: nil }, large_genres: {name: "その他%"})
 
     @products = if @category == :all
       (1..9).map { |gid| @products.where( large_genres: {xl_genre_id: gid}).first }.compact
     else
-      ids = @products.pluck(:id).sample(9) # ランダム取得
-      @products.where(id: ids)
+      ids = @products.distinct.pluck(:id).sample(9) # ランダム取得
+      @open.products.listed.includes(:product_images).where(id: ids).order(:list_no)
     end
 
     @rtag = params[:rtag].presence || "mail_maitest_o-#{@open_id}-#{@category}"
