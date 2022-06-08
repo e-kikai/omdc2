@@ -351,11 +351,11 @@ ORDER BY
 SELECT
   o.id,
   o.name as "入札会名",
-  tb6.user_c AS "累計ユーザ",
+  tb6.user_c AS "ユーザ(累計)",
   COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
   ORDER BY
     o.id
-  ), tb6.user_c) AS "新規ユーザ",
+  ), tb6.user_c) AS "ユーザ(新規)",
   tb8.pc AS "出品数",
   tb7.detail_c AS "詳細(件)",
   tb7.detail_utag AS "詳細(utag)",
@@ -371,8 +371,8 @@ SELECT
   tb2.pdf_p AS "PDF生成(商品)",
   tb4.pdf_delete_c AS "PDF&削除(件)",
   tb4.pdf_delete_u AS "PDF&削除(人)",
-  tb5.pdf_miss_c AS "短時間で削除(件)",
-  tb5.pdf_miss_u AS "短時間で削除(人)"
+  -- tb5.pdf_miss_c AS "短時間で削除(件)",
+  -- tb5.pdf_miss_u AS "短時間で削除(人)"
 FROM
   opens o
 LEFT JOIN (
