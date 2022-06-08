@@ -23,8 +23,9 @@
           - if col =~ /(id|no.)/i
             - cls = :id
           - elsif col =~ /(date)/i
-            - cls = :id
-          th class="#{cls}" = col
+            - cls = :date
+            - col = "日付"
+          th class="#{cls}" = col.gsub("(", "<br />(")
     tbody
       - @result.rows.each do |row|
           tr
