@@ -4,11 +4,12 @@ class System::TotalController < System::ApplicationController
   def index
     @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
     @total_selector = {
-      "検索方法/詳細アクセス、一山" => :search_hitoyama_by_period,
-      "リンク元/詳細アクセス、一山" => :links_hitoyama_by_period,
-      "出品会社/デメ半手数料"       => :company_deme,
-      "価格帯/落札結果金額"         => :price_amount,
-      "日別 アクセス/お気に入り"    => :date_favorite,
+      "検索方法/詳細アクセス、一山"    => :search_hitoyama_by_period,
+      "リンク元/詳細アクセス、一山"    => :links_hitoyama_by_period,
+      "出品会社/デメ半手数料"          => :company_deme,
+      "価格帯/落札結果金額"            => :price_amount,
+      "日別/アクセス,お気に入り利用"   => :date_favorite,
+      "入札会/アクセス,お気に入り利用" => :opens_favorite,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
@@ -345,6 +346,167 @@ LEFT JOIN
 ORDER BY
   d.date;
 }
+    when :opens_favorite
+    %q{
+SELECT
+  o.id,
+  o.name,
+  tb6.user_c AS "累計ユーザ",
+  COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
+  ORDER BY
+    o.id
+  ), tb6.user_c) AS "新規ユーザ",
+  tb8.pc AS "出品数",
+  tb7.detail_c AS "詳細アクセス(件)",
+  tb7.detail_utag AS "詳細アクセス(utag)",
+  tb7.detail_u AS "詳細アクセス(ログイン人)",
+  tb7.detail_p AS "詳細アクセス(商品数)",
+  tb1.fa_c AS "お気に入り(件)",
+  tb1.fa_u AS "お気に入り(人)",
+  tb1.fa_p AS "お気に入り(商品)",
+  tb3.delete_c AS "削除(件)",
+  tb3.delete_u AS "削除(人)",
+  tb2.pdf_c AS "PDF生成(件)",
+  tb2.pdf_u AS "PDF生成\n(人)",
+  tb2.pdf_p AS "PDF生成(商品)",
+  tb4.pdf_delete_c AS "PDFかつ削除(件)",
+  tb4.pdf_delete_u AS "PDFかつ削除(人)",
+  tb5.pdf_miss_c AS "短時間で削除(件)",
+  tb5.pdf_miss_u AS "短時間で削除(人)"
+FROM
+  opens o
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(f2.id) AS fa_c,
+      count(DISTINCT f2.user_id) AS fa_u,
+      count(DISTINCT f2.product_id) AS fa_p
+    FROM
+      favorites f2
+    LEFT JOIN products p2 ON
+      p2.id = f2.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+    GROUP BY
+      p2.open_id
+  ) tb1 ON
+  tb1.open_id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(f2.id) AS pdf_c,
+      count(DISTINCT f2.user_id) AS pdf_u,
+      count(DISTINCT f2.product_id) AS pdf_p
+    FROM
+      favorites f2
+    LEFT JOIN products p2 ON
+      p2.id = f2.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+      AND f2.amount IS NOT NULL
+    GROUP BY
+      p2.open_id
+  ) tb2 ON
+  tb2.open_id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(f2.id) AS delete_c,
+      count(DISTINCT f2.user_id) AS delete_u
+    FROM
+      favorites f2
+    LEFT JOIN products p2 ON
+      p2.id = f2.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+      AND f2.soft_destroyed_at IS NOT NULL
+    GROUP BY
+      p2.open_id
+  ) tb3 ON
+  tb3.open_id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(f2.id) AS pdf_delete_c,
+      count(DISTINCT f2.user_id) AS pdf_delete_u
+    FROM
+      favorites f2
+    LEFT JOIN products p2 ON
+      p2.id = f2.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+      AND f2.amount IS NOT NULL
+      AND f2.soft_destroyed_at IS NOT NULL
+    GROUP BY
+      p2.open_id
+  ) tb4 ON
+  tb4.open_id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(f2.id) AS pdf_miss_c,
+      count(DISTINCT f2.user_id) AS pdf_miss_u
+    FROM
+      favorites f2
+    LEFT JOIN products p2 ON
+      p2.id = f2.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+      AND f2.soft_destroyed_at IS NOT NULL
+      AND f2.soft_destroyed_at < f2.created_at + INTERVAL '1hour'
+    GROUP BY
+      p2.open_id
+  ) tb5 ON
+  tb5.open_id = o.id
+LEFT JOIN (
+    SELECT
+      o2.id,
+      count(u.id) AS user_c
+    FROM
+      opens o2
+    LEFT JOIN users u ON
+      u.created_at < o2.bid_end_at
+    WHERE
+      u.confirmed_at IS NOT NULL
+    GROUP BY
+      o2.id
+  )
+  tb6 ON
+  tb6.id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(dl.id) AS detail_c,
+      count(DISTINCT dl.utag) AS detail_utag,
+      count(DISTINCT dl.user_id) AS detail_u,
+      count(DISTINCT dl.product_id) AS detail_p
+    FROM
+      detail_logs dl
+    LEFT JOIN products p2 ON
+      p2.id = dl.product_id
+    WHERE
+      p2.soft_destroyed_at IS NULL
+    GROUP BY
+      p2.open_id
+  ) tb7 ON
+  tb7.open_id = o.id
+LEFT JOIN (
+    SELECT
+      p2.open_id,
+      count(p2.id) AS pc
+    FROM
+      products p2
+    WHERE
+      p2.soft_destroyed_at IS NULL
+    GROUP BY
+      p2.open_id
+  ) tb8 ON
+  tb8.open_id = o.id
+WHERE
+  o.id > 61
+ORDER BY
+  o.id
+    }
     end
   end
 end

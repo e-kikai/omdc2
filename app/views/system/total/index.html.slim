@@ -22,6 +22,8 @@
         - @result.columns.each do |col|
           - if col =~ /(id|no.)/i
             - cls = :id
+          - elsif col =~ /(date)/i
+            - cls = :id
           th class="#{cls}" = col
     tbody
       - @result.rows.each do |row|
@@ -30,12 +32,14 @@
               /// クラス ///
               - cls = case
               - when @result.columns[i] =~ /(id|no.)/i; :id
+              - when @result.columns[i] =~ /(date)/i;   :date
               - when r.to_s =~ /^[0-9.]+$/;             :num
 
               /// 数値 ///
               - val = case
               - when r.blank?                         ; ""
               - when @result.columns[i] =~ /(id|no.)/i; r
+              - when @result.columns[i] =~ /(date)/i;   I18n.l(DateTime.parse(r), format: :date)
               - when r.is_a?(Numeric);                  number_with_delimiter(r)
               - else;                                   Charwidth.normalize(r)
 

@@ -1,5 +1,6 @@
 # config valid only for current version of Capistrano
-lock '3.8.1'
+# lock '3.8.1'
+lock '3.17.0'
 
 set :application, 'omdc2'
 set :repo_url, 'git@github.com:e-kikai/omdc2.git'
