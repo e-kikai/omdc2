@@ -25,16 +25,19 @@
           - elsif col =~ /(date)/i
             - cls = :date
             - col = "日付"
-          th class="#{cls}" = nl2br(col.gsub("(", "\n("))
+          - elsif col =~ /(order_no)/i
+            - next
+          th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
     tbody
       - @result.rows.each do |row|
           tr
             - row.each_with_index do |r, i|
               /// クラス ///
               - cls = case
-              - when @result.columns[i] =~ /(id|no.)/i; :id
-              - when @result.columns[i] =~ /(date)/i;   :date
-              - when r.to_s =~ /^[0-9.]+$/;             :num
+              - when @result.columns[i] =~ /(id|no.)/i;   :id
+              - when @result.columns[i] =~ /(date)/i;     :date
+              - when @result.columns[i] =~ /(order_no)/i; next
+              - when r.to_s =~ /^[0-9.]+$/;               :num
 
               /// 数値 ///
               - val = case
@@ -52,10 +55,11 @@
           - sum = @result.rows.sum { |r| r[i].to_f }
 
           - cls, v = case
-          - when @result.columns[i] =~ /(id|no.)/i; [ :id,          ""]
-          - when @result.columns[i] =~ /(date)/i;   [ "text-right", "合計"]
-          - when sum != 0;                          [ :num,         number_with_delimiter(sum.to_i) ]
-          - else;                                   [ "text-right", "合計" ]
+          - when @result.columns[i] =~ /(id|no.)/i;   [ :id,          ""]
+          - when @result.columns[i] =~ /(date)/i;     [ "text-right", "合計"]
+          - when @result.columns[i] =~ /(order_no)/i; next
+          - when sum != 0;                            [ :num,         number_with_delimiter(sum.to_i) ]
+          - else;                                     [ "text-right", "合計" ]
 
           td class="#{cls}" = v
 
@@ -66,4 +70,6 @@
           - elsif col =~ /(date)/i
             - cls = :date
             - col = "日付"
-          th class="#{cls}" = nl2br(col.gsub("(", "\n("))
+          - elsif col =~ /(order_no)/i
+            - next
+          th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))

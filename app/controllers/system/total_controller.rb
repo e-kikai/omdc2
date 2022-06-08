@@ -350,7 +350,7 @@ ORDER BY
     %q{
 SELECT
   o.id,
-  o.name as "入札会名",
+  regexp_replace(o.name, '第([0-9]+)回(.*)', '第\1回') as "入札会",
   tb6.user_c AS "ユーザ(累計)",
   COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
   ORDER BY
