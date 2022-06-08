@@ -15,61 +15,61 @@
       span.btn-content CSV出力
 
   h4 = @title
+  .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
+      thead
+        tr
+          - @result.columns.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
+      tbody
+        - @result.rows.each do |row|
+            tr
+              - row.each_with_index do |r, i|
+                /// クラス ///
+                - cls = case
+                - when @result.columns[i] =~ /(id|no.)/i;   :id
+                - when @result.columns[i] =~ /(date)/i;     :date
+                - when @result.columns[i] =~ /(order_no)/i; next
+                - when r.to_s =~ /^[0-9.]+$/;               :num
 
-  table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
-    thead
-      tr
-        - @result.columns.each do |col|
-          - if col =~ /(id|no.)/i
-            - cls = :id
-          - elsif col =~ /(date)/i
-            - cls = :date
-            - col = "日付"
-          - elsif col =~ /(order_no)/i
-            - next
-          th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
-    tbody
-      - @result.rows.each do |row|
-          tr
-            - row.each_with_index do |r, i|
-              /// クラス ///
-              - cls = case
-              - when @result.columns[i] =~ /(id|no.)/i;   :id
-              - when @result.columns[i] =~ /(date)/i;     :date
-              - when @result.columns[i] =~ /(order_no)/i; next
-              - when r.to_s =~ /^[0-9.]+$/;               :num
+                /// 数値 ///
+                - val = case
+                - when r.blank?                         ; ""
+                - when @result.columns[i] =~ /(id|no.)/i; r
+                - when @result.columns[i] =~ /(date)/i;   I18n.l(DateTime.parse(r), format: :date)
+                - when r.is_a?(Numeric);                  number_with_delimiter(r)
+                - else;                                   Charwidth.normalize(r)
 
-              /// 数値 ///
-              - val = case
-              - when r.blank?                         ; ""
-              - when @result.columns[i] =~ /(id|no.)/i; r
-              - when @result.columns[i] =~ /(date)/i;   I18n.l(DateTime.parse(r), format: :date)
-              - when r.is_a?(Numeric);                  number_with_delimiter(r)
-              - else;                                   Charwidth.normalize(r)
+                td class="#{cls}" = val
 
-              td class="#{cls}" = val
+      tfoot
+        tr
+          - @result.columns.each_with_index do |col, i|
+            - sum = @result.rows.sum { |r| r[i].to_f }
 
-    tfoot
-      tr
-        - @result.columns.each_with_index do |col, i|
-          - sum = @result.rows.sum { |r| r[i].to_f }
+            - cls, v = case
+            - when @result.columns[i] =~ /(id|no.)/i;   [ :id,          ""]
+            - when @result.columns[i] =~ /(date)/i;     [ "text-right", "合計"]
+            - when @result.columns[i] =~ /(order_no)/i; next
+            - when sum != 0;                            [ :num,         number_with_delimiter(sum.to_i) ]
+            - else;                                     [ "text-right", "合計" ]
 
-          - cls, v = case
-          - when @result.columns[i] =~ /(id|no.)/i;   [ :id,          ""]
-          - when @result.columns[i] =~ /(date)/i;     [ "text-right", "合計"]
-          - when @result.columns[i] =~ /(order_no)/i; next
-          - when sum != 0;                            [ :num,         number_with_delimiter(sum.to_i) ]
-          - else;                                     [ "text-right", "合計" ]
+            td class="#{cls}" = v
 
-          td class="#{cls}" = v
-
-      tr
-        - @result.columns.each do |col|
-          - if col =~ /(id|no.)/i
-            - cls = :id
-          - elsif col =~ /(date)/i
-            - cls = :date
-            - col = "日付"
-          - elsif col =~ /(order_no)/i
-            - next
-          th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
+        tr
+          - @result.columns.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
