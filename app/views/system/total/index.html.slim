@@ -1,6 +1,12 @@
 - set_meta_tags title: "各種集計"
 - breadcrumb  :system_something, "各種集計"
 
+css:
+  .num {
+     width: 80px;
+  }
+
+
 .row
   = form_tag("/system/total", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
@@ -16,7 +22,7 @@
 
   h4 = @title
   .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive style="width:auto;margin:auto;min-width:800px;"
       thead
         tr
           - @result.columns.each do |col|
