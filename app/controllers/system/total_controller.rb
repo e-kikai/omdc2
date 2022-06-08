@@ -370,7 +370,7 @@ SELECT
   tb2.pdf_u AS "PDF生成(人)",
   tb2.pdf_p AS "PDF生成(商品)",
   tb4.pdf_delete_c AS "PDF&削除(件)",
-  tb4.pdf_delete_u AS "PDF&削除(人)",
+  tb4.pdf_delete_u AS "PDF&削除(人)"
   -- tb5.pdf_miss_c AS "短時間で削除(件)",
   -- tb5.pdf_miss_u AS "短時間で削除(人)"
 FROM
