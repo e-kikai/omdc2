@@ -8,6 +8,7 @@ class System::TotalController < System::ApplicationController
       "リンク元/詳細アクセス、一山" => :links_hitoyama_by_period,
       "出品会社/デメ半手数料"       => :company_deme,
       "価格帯/落札結果金額"         => :price_amount,
+      "日別 アクセス/お気に入り"    => :date_favorite,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
@@ -243,6 +244,107 @@ GROUP BY
 ORDER BY
   order_no
     }
+    when :date_favorite
+      %q{
+SELECT
+  d.date,
+  COALESCE(tb1.cnt, 0) AS "ユーザ登録",
+  COALESCE(tb3.cnt, 0) AS "詳細アクセス(件)",
+  COALESCE(tb3.utag_cnt, 0) AS "詳細アクセス(utag)",
+  COALESCE(tb3.usr, 0) AS "詳細アクセス(ログイン人)",
+  COALESCE(tb3.p_cnt, 0) AS "詳細アクセス(商品)",
+  COALESCE(tb2.cnt, 0) AS "お気に入り(件)",
+  COALESCE(tb2.usr, 0) AS "お気に入り(人)",
+  COALESCE(tb2.p_cnt, 0) AS "お気に入り(商品)",
+  COALESCE(tb4.cnt, 0) AS "PDF(件)",
+  COALESCE(tb4.usr, 0) AS "PDF(人)",
+  COALESCE(tb4.p_cnt, 0) AS "PDF(商品)",
+  COALESCE(tb5.cnt, 0) AS "削除(件)",
+  COALESCE(tb5.usr, 0) AS "削除(人)"
+FROM
+  (
+    SELECT
+      date(
+        generate_series(o.carry_in_end_date::date, o.bid_end_at, '1 day')
+      ) AS date
+    FROM
+      opens o
+    WHERE
+      o.id = ?
+  ) d
+LEFT JOIN
+  (
+    SELECT
+      date(u.created_at) AS date,
+      count(*) AS cnt
+    FROM
+      users u
+    WHERE
+      u.confirmed_at IS NOT NULL
+    GROUP BY
+      date
+  ) tb1 ON
+  tb1.date = d.date
+LEFT JOIN
+  (
+    SELECT
+      date(f.created_at) AS date,
+      count(*) AS cnt,
+      count(DISTINCT f.user_id) AS usr,
+      count(DISTINCT f.product_id) AS p_cnt
+    FROM
+      favorites f
+    GROUP BY
+      date
+  ) tb2 ON
+  tb2.date = d.date
+LEFT JOIN
+  (
+    SELECT
+      date(dl.created_at) AS date,
+      count(*) AS cnt,
+      count(DISTINCT dl.utag) AS utag_cnt,
+      count(DISTINCT dl.user_id) AS usr,
+      count(DISTINCT dl.product_id) AS p_cnt
+    FROM
+      detail_logs dl
+    GROUP BY
+      date
+  ) tb3 ON
+  tb3.date = d.date
+LEFT JOIN
+  (
+    SELECT
+      date(f.created_at) AS date,
+      count(*) AS cnt,
+      count(DISTINCT f.user_id) AS usr,
+      count(DISTINCT f.product_id) AS p_cnt
+    FROM
+      favorites f
+    WHERE
+      f.amount IS NOT NULL
+    GROUP BY
+      date
+  ) tb4 ON
+  tb4.date = d.date
+LEFT JOIN
+  (
+    SELECT
+      date(f.created_at) AS date,
+      count(*) AS cnt,
+      count(DISTINCT f.user_id) AS usr,
+      count(f.amount) AS amount_cnt
+    FROM
+      favorites f
+    WHERE
+      f.soft_destroyed_at IS NOT NULL
+    GROUP BY
+      date
+  ) tb5 ON
+  tb5.date = d.date
+ORDER BY
+  d.date;
+}
     end
   end
 end
