@@ -350,7 +350,7 @@ ORDER BY
     %q{
 SELECT
   o.id,
-  o.name,
+  o.name as "入札会名",
   tb6.user_c AS "累計ユーザ",
   COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
   ORDER BY
