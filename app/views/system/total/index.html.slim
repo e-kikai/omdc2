@@ -25,7 +25,7 @@
           - elsif col =~ /(date)/i
             - cls = :date
             - col = "日付"
-          th class="#{cls}" = h(col).gsub("(", "<br />(")
+          th class="#{cls}" = h(col).gsub("(", "<br />(").html_safe
     tbody
       - @result.rows.each do |row|
           tr
@@ -66,4 +66,4 @@
           - elsif col =~ /(date)/i
             - cls = :date
             - col = "日付"
-          th class="#{cls}" = h(col).gsub("(", "<br />(")
+          th class="#{cls}" = h(col).gsub("(", "<br />(").html_safe
