@@ -7,7 +7,7 @@
   success_bid_id
   genre large_genre_id large_genre
   xl_genre_id xl_genre
-  company area areagroup,
+  company area areagroup
   image_thumb, top_image
 |.to_csv +
 @products.sum do |p|

@@ -1,13 +1,6 @@
 - set_meta_tags title: "各種集計"
 - breadcrumb  :system_something, "各種集計"
 
-css:
-  table th.num
-  table td.num {
-     width: 80px;
-  }
-
-
 .row
   = form_tag("/system/total", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
