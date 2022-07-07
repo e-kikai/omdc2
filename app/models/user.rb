@@ -80,6 +80,8 @@ class User < ApplicationRecord
   validates_format_of :email, with: Devise.email_regexp, if: :email_changed?
   validates_uniqueness_of :email, scope: :soft_destroyed_at, if: :email_changed?
 
+  after_create :mailmagazine_create
+  after_update :mailmagazine_update
 
   ### 一括登録 ###
   # def self.import_conf(file)
@@ -126,4 +128,26 @@ class User < ApplicationRecord
     @favorite_ids.include?(product_id)
   end
 
+  def mailmagazine_create
+    if self.allow_mail
+      mm = MailMagazine.new
+      mm.add_member(self, email)
+    end
+  # rescue => e
+  end
+
+  def mailmagazine_update
+    logger.debug "########## changed allow mail #{email}"
+
+    if saved_change_to_allow_mail?
+      mm = MailMagazine.new
+
+      if self.allow_mail
+        mm.add_member(self, email)
+      else
+        mm.remove_member(email) if mm.member?(email)
+      end
+    end
+  # rescue => e
+  end
 end
