@@ -63,7 +63,7 @@
     - if @info == :products
       p
         .
-          | *|IF:XL_ID == ""|*
+          | *|IF:XL_ID = ""|*
           . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 出品商品の紹介
           br
           - @prs_all.each_with_index do |pr, i|
@@ -75,7 +75,7 @@
 
         - @xl_genres.each do |xl|
           .
-            | *|ELSEIF:XL_ID == #{xl.id}|*
+            | *|ELSEIF:XL_ID = #{xl.id}|*
             . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 出品 #{xl.name.gsub(/一般|その他/, '')}の紹介
             br
             - @prs[xl.id].each_with_index do |pr, i|

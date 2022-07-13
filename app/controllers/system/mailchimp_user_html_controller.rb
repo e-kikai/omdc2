@@ -21,7 +21,7 @@ class System::MailchimpUserHtmlController < System::ApplicationController
     @open    = Open.find @open_id
 
     # 配信対象ユーザ
-    @site    = @site_selector.values.include?(params[:site]&.to_sym) ? params[:site]&.to_sym : :@site_selector.first
+    @site    = @site_selector.values.include?(params[:site]&.to_sym) ? params[:site]&.to_sym : @site_selector.first
 
     # 配信内容
     @info    = @info_selector.values.include?(params[:info]&.to_sym) ? params[:info]&.to_sym :  @info_selector.first
