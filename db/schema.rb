@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_074458) do
+ActiveRecord::Schema.define(version: 2022_07_14_042700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -284,6 +284,7 @@ ActiveRecord::Schema.define(version: 2021_08_03_074458) do
     t.integer "bids_count", default: 0
     t.integer "same_count", default: 0
     t.integer "success_bid_id"
+    t.boolean "featured", default: false, null: false
     t.index ["company_id"], name: "index_products_on_company_id"
     t.index ["open_id"], name: "index_products_on_open_id"
     t.index ["soft_destroyed_at"], name: "index_products_on_soft_destroyed_at"

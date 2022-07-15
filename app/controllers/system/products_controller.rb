@@ -14,7 +14,7 @@ class System::ProductsController < System::ApplicationController
         if params[:output] == "import"
           export_csv "#{@company.no}_update_products.csv", "/system/products/import.csv"
         elsif params[:output] == "import_all"
-          @search   = @open_now.products.search(params[:q])
+          @search   = @open_now.products.ransack(params[:q])
           @products = @search.result.order(:list_no)
           export_csv "all_products.csv", "/system/products/import.csv"
         else
@@ -136,7 +136,7 @@ class System::ProductsController < System::ApplicationController
 
   def products
     if @company.present?
-      @search   = @open_now.products.where(company: @company).search(params[:q])
+      @search   = @open_now.products.where(company: @company).ransack(params[:q])
       @products = @search.result.order(app_no: :desc)
     else
       session[:system_company_id] = nil
@@ -157,7 +157,7 @@ class System::ProductsController < System::ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :app_no, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+    params.require(:product).permit(:name, :app_no, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama, :featured)
   end
 
   def csv_products_params

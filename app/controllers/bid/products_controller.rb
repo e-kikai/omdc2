@@ -143,7 +143,7 @@ class Bid::ProductsController < Bid::ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama)
+    params.require(:product).permit(:name, :list_no, :maker, :model, :year, :spec, :condition, :comment, :min_price, :genre_id, :youtube, :display, :hitoyama, :featured)
   end
 
   def only_update_params

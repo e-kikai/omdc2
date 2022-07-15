@@ -62,7 +62,7 @@ coffee:
     tr
       th = f.label :hitoyama
       td.form-group
-        = f.check_box :hitoyama, {}, true, false
+        = f.check_box :hitoyama, as: :boolean
         .help-block 一山や複数まとめて出品される場合はチェックしてください
 
     tr.form-inline
@@ -127,6 +127,15 @@ coffee:
         = button_tag type: :button, id: "check-youtube", class: "btn btn-primary" do
             span.glyphicon.glyphicon-film
             span.btn-content Youtube確認
+
+    tr
+      th = f.label :featured do
+        i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 1px black;"
+        span.btn-content 第200回記念<br />目玉商品
+      td.form-group
+        = f.check_box :featured, as: :boolean
+        .help-block
+          | チェックを入れると「第200回記念 目玉商品」に表示されるようになります。
 
   = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
     span.glyphicon.glyphicon-save

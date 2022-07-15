@@ -8,8 +8,9 @@ class MainController < ApplicationController
   def index
     if @open_now
       # 特集
-      @specials_01 = @products.special(1).order("random()").limit(100)
-      @specials_02 = @products.special(2).order("random()").limit(100)
+      # @specials_01 = @products.special(1).order("random()").limit(100)
+      # @specials_02 = @products.special(2).order("random()").limit(100)
+      @specials_03 = @products.special(3).order("random()").limit(100)
     end
 
     # Rails.application.config.image_upload_logger.error("トップページ : ロギングテスト") # エラー補足

@@ -10,6 +10,7 @@
 #  comment           :text
 #  condition         :text
 #  display           :integer          default("一般出品"), not null
+#  featured          :boolean          default(FALSE), not null
 #  hitoyama          :boolean          default(FALSE)
 #  list_no           :integer
 #  maker             :string

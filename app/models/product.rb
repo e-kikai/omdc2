@@ -10,6 +10,7 @@
 #  comment           :text
 #  condition         :text
 #  display           :integer          default("一般出品"), not null
+#  featured          :boolean          default(FALSE), not null
 #  hitoyama          :boolean          default(FALSE)
 #  list_no           :integer
 #  maker             :string
@@ -111,6 +112,7 @@ class Product < ApplicationRecord
     case key.to_i
     when 1; "最低落札価格1万円特集"
     when 2; "ひとやま特集"
+    when 3; "第200回記念 目玉商品"
     end
   end
 
@@ -118,6 +120,7 @@ class Product < ApplicationRecord
     case key.to_i
     when 1; where("min_price <= 10000")
     when 2; where("name ~ '一山|1山|雑品' OR hitoyama = true")
+    when 3; where(featured: true)
     end
   }
 
