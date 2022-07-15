@@ -1,6 +1,14 @@
 - set_meta_tags title: "ユーザ管理"
 - breadcrumb  :system_something, "ユーザ管理"
 
+ul.nav.nav-pills
+  / li = link_to({action: :new}, {class: "btn btn-default btn-square"}) do
+  /   span.glyphicon.glyphicon-plus
+  /   span.btn-content 新規登録
+  li = link_to("/system/users.csv", class: "btn btn-default btn-square") do
+    i.fa-solid.fa-file-csv
+    span.btn-content CSV出力
+
 .row.container-fluid.list-menu
   = paginate @pusers
 
@@ -11,8 +19,8 @@
         th 会社名
         th 氏名
         th メールアドレス
-        th 案内
-        th 確認
+        th.img_link 案内
+        th.img_link 確認
         th 登録日時
         th 削除
       - @pusers.each do |us|
@@ -21,13 +29,13 @@
             td = us.company
             td = us.name
             td = us.email
-            td = (us.allow_mail? ? "○" : "×")
-            td = us.confirmed_at? ? "◯" : ""
+            td.img_link = (us.allow_mail? ? "◯" : "×")
+            td.img_link = us.confirmed_at? ? "◯" : ""
             td =  l(us.created_at, format: :short)
             td.button
               - message = "#{us.company} #{us.name}\n\nこのユーザを削除します。\nよろしいですか？"
               = link_to({ action: :destroy, id: us.id }, method: :delete, data: { confirm: message, "disable-with" => "削除中..."}, class: "btn btn-default btn-xs") do
-               i.fas.fa-user-times
-               span.btn-content 削除
+                i.fas.fa-user-times
+                span.btn-content 削除
 
   = paginate @pusers
