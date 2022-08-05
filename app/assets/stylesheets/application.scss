@@ -990,6 +990,11 @@ img.help_img {
   display: block;
 }
 
+img.help_img.lite {
+  max-width: 70%;
+}
+
+
 img.tutorial {
   display: block;
   width: 800px;

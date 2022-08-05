@@ -1,5 +1,5 @@
 header = %w[
-  ID 会社名 氏名 メールアドレス 大ジャンルID
+  ID company name mail xl_genre_id
 ]
 
 columns = %w|
