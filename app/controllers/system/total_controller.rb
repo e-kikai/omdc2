@@ -550,7 +550,7 @@ SELECT
   sum(p2.min_price) AS "最低入札価格総額",
   sum(bc.c) AS "入札数",
   count(DISTINCT p2.success_bid_id) AS "落札数",
-  ROUND(count(DISTINCT p2.success_bid_id) * 100.0 / count(DISTINCT p2.id) ,2) AS "落札数/出品数(%)",
+  ROUND(count(DISTINCT p2.success_bid_id) * 100.0 / count(DISTINCT p2.id) ,2) AS "落札率(%)",
   sum(b.amount) AS "落札金額"
 FROM
   products p2
