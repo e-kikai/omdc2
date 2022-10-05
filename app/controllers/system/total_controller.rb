@@ -508,7 +508,6 @@ WHERE
 ORDER BY
   o.id
     }
-    end
   when :feature_products
     %q{
       SELECT
@@ -538,5 +537,6 @@ ORDER BY
     ORDER BY
       p.list_no ;
     }
+    end
   end
 end
