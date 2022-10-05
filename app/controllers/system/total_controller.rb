@@ -509,7 +509,7 @@ WHERE
 ORDER BY
   o.id
     }
-  when :area_amount
+  when :feature_products
     %q{
       SELECT
       p.list_no AS  "No.",
@@ -539,7 +539,7 @@ ORDER BY
     ORDER BY
       p.list_no ;
     }
-    when :feature_products
+    when :area_amount
     %q{
 SELECT
   CASE
