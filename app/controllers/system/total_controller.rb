@@ -564,7 +564,7 @@ WHERE
   AND p2.soft_destroyed_at IS NULL
   AND b.soft_destroyed_at IS NULL
   AND b2.soft_destroyed_at IS NULL
-  AND p2.open_id = 67
+  AND p2.open_id = ?
 GROUP BY
   p2.area_id,
   a.name,
