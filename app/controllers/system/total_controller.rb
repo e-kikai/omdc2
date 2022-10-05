@@ -548,22 +548,31 @@ SELECT
   END AS "エリア",
   count(DISTINCT p2.id) AS "出品数",
   sum(p2.min_price) AS "最低入札価格総額",
-  count(DISTINCT b2.id) AS "入札数",
+  sum(bc.c) AS "入札数",
   count(DISTINCT p2.success_bid_id) AS "落札数",
   sum(b.amount) AS "落札金額"
 FROM
   products p2
 LEFT JOIN bids b ON
   b.id = p2.success_bid_id
-LEFT JOIN bids b2 ON
-  b2.product_id = p2.id
+LEFT JOIN (
+    SELECT
+      b2.product_id,
+      count(b2.id) AS c
+    FROM
+      bids b2
+    WHERE
+      b2.soft_destroyed_at IS NULL
+    GROUP BY
+      b2.product_id
+  ) bc ON
+  bc.product_id = p2.id
 LEFT JOIN areas a ON
   a.id = p2.area_id
 WHERE
   a.soft_destroyed_at IS NULL
   AND p2.soft_destroyed_at IS NULL
   AND b.soft_destroyed_at IS NULL
-  AND b2.soft_destroyed_at IS NULL
   AND p2.open_id = ?
 GROUP BY
   p2.area_id,
