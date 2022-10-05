@@ -10,6 +10,7 @@ class System::TotalController < System::ApplicationController
       "価格帯/落札結果金額"            => :price_amount,
       "日別/アクセス,お気に入り利用"   => :date_favorite,
       "入札会/アクセス,お気に入り利用" => :opens_favorite,
+      "エリア/出品・落札結果金額"      => :area_amount,
       "目玉商品/結果一覧"              => :feature_products,
     }
 
@@ -508,13 +509,14 @@ WHERE
 ORDER BY
   o.id
     }
-  when :feature_products
+  when :area_amount
     %q{
       SELECT
       p.list_no AS  "No.",
       p.name AS "商品名",
       p.maker AS "メーカー",
       p.model AS "型式",
+      p.year AS "年式",
       c."name" AS "出品会社",
       a."name" AS "エリア",
       p.min_price AS "最低金額",
@@ -536,6 +538,39 @@ ORDER BY
       AND p.featured = TRUE
     ORDER BY
       p.list_no ;
+    }
+    when :feature_products
+    %q{
+SELECT
+  CASE
+    WHEN p2.area_id IS NULL THEN '店頭出品'
+    ELSE a.name
+  END AS "エリア",
+  count(DISTINCT p2.id) AS "出品数",
+  sum(p2.min_price) AS "最低入札価格総額",
+  count(DISTINCT b2.id) AS "入札数",
+  count(DISTINCT p2.success_bid_id) AS "落札数",
+  sum(b.amount) AS "落札金額"
+FROM
+  products p2
+LEFT JOIN bids b ON
+  b.id = p2.success_bid_id
+LEFT JOIN bids b2 ON
+  b2.product_id = p2.id
+LEFT JOIN areas a ON
+  a.id = p2.area_id
+WHERE
+  a.soft_destroyed_at IS NULL
+  AND p2.soft_destroyed_at IS NULL
+  AND b.soft_destroyed_at IS NULL
+  AND b2.soft_destroyed_at IS NULL
+  AND p2.open_id = 67
+GROUP BY
+  p2.area_id,
+  a.name,
+  a.order_no
+ORDER BY
+  a.order_no;
     }
     end
   end
