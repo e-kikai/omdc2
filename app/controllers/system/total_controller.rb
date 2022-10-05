@@ -10,6 +10,7 @@ class System::TotalController < System::ApplicationController
       "価格帯/落札結果金額"            => :price_amount,
       "日別/アクセス,お気に入り利用"   => :date_favorite,
       "入札会/アクセス,お気に入り利用" => :opens_favorite,
+      "目玉商品/結果一覧"              => :feature_products,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
@@ -508,5 +509,34 @@ ORDER BY
   o.id
     }
     end
+  when :feature_products
+    %q{
+      SELECT
+      p.list_no AS  "No.",
+      p.name AS "商品名",
+      p.maker AS "メーカー",
+      p.model AS "型式",
+      c."name" AS "出品会社",
+      a."name" AS "エリア",
+      p.min_price AS "最低金額",
+      p.bids_count AS "入札数",
+      p.same_count AS "同額札",
+      b.amount AS "落札金額",
+      c2."name" AS "落札会社"
+    FROM
+      products p
+    LEFT JOIN companies c ON
+      c.id = p.company_id
+    LEFT JOIN areas a ON
+      a.id = p.area_id
+    LEFT JOIN bids b ON
+      b.id = p.success_bid_id LEFT JOIN companies c2 ON c2.id = b.company_id
+    WHERE
+      open_id = ?
+      AND p.soft_destroyed_at IS NULL
+      AND p.featured = TRUE
+    ORDER BY
+      p.list_no ;
+    }
   end
 end
