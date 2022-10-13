@@ -542,7 +542,7 @@ LEFT JOIN (
     detail_logs dl
   GROUP BY
     dl.product_id
-) dlt ON dlt.product_id = b.product_id
+) dlt ON dlt.product_id = p.id
 LEFT JOIN (
   SELECT
     f.product_id,
@@ -552,7 +552,7 @@ LEFT JOIN (
     WHERE soft_destroyed_at IS NULL
   GROUP BY
     f.product_id
-) ft ON ft.product_id = b.product_id
+) ft ON ft.product_id = p.id
 WHERE
   open_id = ?
   AND p.soft_destroyed_at IS NULL
