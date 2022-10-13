@@ -2,17 +2,17 @@
 - breadcrumb  :system_something, "各種集計"
 
 css:
-  .num {
+  table td.num {
     text-align: right;
     width: 50px;
   }
 
-  .price {
+  table td.price {
     text-align: right;
     width: 90px;
   }
 
-  .name {
+  table td.name {
     max-width: 300px;
   }
 
@@ -65,7 +65,7 @@ css:
                 - when r.is_a?(Numeric);                  number_with_delimiter(r)
                 - else;                                   Charwidth.normalize(r)
 
-                td class="#{cls}" = val
+                td class="#{cls} #{@result.columns[i]}" = val
 
       tfoot
         tr
