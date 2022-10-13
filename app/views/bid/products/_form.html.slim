@@ -131,11 +131,15 @@ coffee:
     tr
       th = f.label :featured do
         i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 1px black;"
-        span.btn-content 第200回記念<br />目玉商品
+        span.btn-content 目玉商品
       td.form-group
-        = f.check_box :featured, as: :boolean
-        .help-block
-          | チェックするとトップページ「第200回記念 目玉商品」に表示されます。
+        - if !@product.featured? && @product.featured_count >= Product::FEATURED_LIMIT
+          .help-block
+            | 目玉商品を設定できる件数は、#{Product::FEATURED_LIMIT}件までです。
+        - else
+          = f.check_box :featured, as: :boolean
+          .help-block
+            | チェックするとトップページ「目玉商品」に表示されます。(#{Product::FEATURED_LIMIT}件まで)
 
   = f.button :button, data: { "disable-with" => "保存中..." }, class: "btn btn-default btn-square btn-submit center-block" do
     span.glyphicon.glyphicon-save

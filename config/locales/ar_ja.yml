@@ -80,6 +80,7 @@ ja:
         youtube: Youtube
         hitoyama: 一山
         area_id: 出品エリア
+        featured: 目玉商品
       product_image:
         image: 画像ファイル
         order_no: 並び順

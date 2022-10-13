@@ -46,13 +46,15 @@ class Product < ApplicationRecord
   default_scope { without_soft_destroyed }
 
   # 画像特徴ベクトル関連
-  UTILS_PATH   = "/var/www/yoshida/utils"
-  VECTORS_PATH = "#{UTILS_PATH}/static/image_vectors"
+  UTILS_PATH      = "/var/www/yoshida/utils"
+  VECTORS_PATH    = "#{UTILS_PATH}/static/image_vectors"
   S3_VECTORS_PATH = "vectors"
-  ZERO_NARRAY  =  Numo::SFloat.zeros(1)
-  VECTOR_CACHE = "vector"
+  ZERO_NARRAY     =  Numo::SFloat.zeros(1)
+  VECTOR_CACHE    = "vector"
 
   VECTORS_LIMIT   = 30
+
+  FEATURED_LIMIT  = 10
 
   belongs_to :open,    required: true
   belongs_to :company, required: true
@@ -82,6 +84,9 @@ class Product < ApplicationRecord
   validates :min_price, numericality: { only_integer: true }
 
   validate  :check_min_price_to_open
+  validate :check_featured_limit
+
+
 
   before_create :set_app_no
   before_save   :reform_youtube
@@ -123,8 +128,6 @@ class Product < ApplicationRecord
     when 3; where(featured: true)
     end
   }
-
-
 
   def self.ml_get_genre(product)
     workspaces = "42c03c07608247ef802a8ff6fce5b577"
@@ -545,12 +548,30 @@ class Product < ApplicationRecord
     logger.debug e
   end
 
+  ### 目玉商品の数を取得 ###
+  def featured_count
+    Product.where(open_id: open_id, company_id: company_id, featured: true).count
+  end
+
+  ### 目玉商品の数チェック ###
+  def featured_limit?
+    featured_count > FEATURED_LIMIT
+  end
+
   private
 
+  ###  最低入札価格バリデーション ###
   def check_min_price_to_open
     # errors[:min_price] << ("が#{open.rate.to_s(:delimited)}円単位ではありません")         if min_price.to_i % open.rate > 0
     errors[:min_price] << ("が#{open.product_rate.to_s(:delimited)}円単位ではありません") if min_price.to_i % open.product_rate > 0
     errors[:min_price] << ("が#{open.lower_price.to_s(:delimited)}円未満になっています")  if min_price.to_i < open.lower_price
+  end
+
+  ###  目玉商品数バリデーション ###
+  def check_featured_limit
+    if featured? && featured_count > FEATURED_LIMIT
+      errors.add(:featured, "を設定できる件数は、#{FEATURED_LIMIT}件までです。(#{featured_count})件")
+    end
   end
 
   def set_app_no

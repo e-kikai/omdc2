@@ -1,6 +1,21 @@
 - set_meta_tags title: "各種集計"
 - breadcrumb  :system_something, "各種集計"
 
+css:
+  .num {
+    text-align: right;
+    width: 50px;
+  }
+
+  .price {
+    text-align: right;
+    width: 90px;
+  }
+
+  .name {
+    max-width: 300px;
+  }
+
 .row
   = form_tag("/system/total", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
@@ -34,10 +49,13 @@
               - row.each_with_index do |r, i|
                 /// クラス ///
                 - cls = case
-                - when @result.columns[i] =~ /(id|no.)/i;   :id
-                - when @result.columns[i] =~ /(date)/i;     :date
-                - when @result.columns[i] =~ /(order_no)/i; next
-                - when r.to_s =~ /^[0-9.]+$/;               :num
+                - when @result.columns[i] =~ /(id|no.)/i;     :id
+                - when @result.columns[i] =~ /(date)/i;       :date
+                - when @result.columns[i] =~ /(name)/i;       :name
+                - when @result.columns[i] =~ /(order_no)/i;   next
+                - when @result.columns[i] =~ /(price|deme)/i; :price
+                - when @result.columns[i] =~ /(year)/i;       ""
+                - when r.to_s =~ /^[0-9.]+$/;                 :num
 
                 /// 数値 ///
                 - val = case
