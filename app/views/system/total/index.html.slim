@@ -4,7 +4,7 @@
 css:
   table td.num {
     text-align: right;
-    width: 50px;
+    width: 60px;
   }
 
   table td.price {
@@ -51,10 +51,10 @@ css:
                 - cls = case
                 - when @result.columns[i] =~ /(id|no.)/i;     :id
                 - when @result.columns[i] =~ /(date)/i;       :date
-                - when @result.columns[i] =~ /(name)/i;       :name
                 - when @result.columns[i] =~ /(order_no)/i;   next
-                - when @result.columns[i] =~ /(price|deme)/i; :price
-                - when @result.columns[i] =~ /(year)/i;       ""
+                - when @result.columns[i] =~ /(商品名)/i;       :name
+                - when @result.columns[i] =~ /(価格|金額|デメ半)/i; :price
+                - when @result.columns[i] =~ /(年式)/i;       ""
                 - when r.to_s =~ /^[0-9.]+$/;                 :num
 
                 /// 数値 ///
