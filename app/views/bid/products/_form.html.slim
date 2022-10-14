@@ -130,7 +130,7 @@ coffee:
 
     tr
       th = f.label :featured do
-        i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 1px black;"
+        i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 3px black;"
         span.btn-content 目玉商品
       td.form-group
         - if !@product.featured? && @product.featured_count >= Product::FEATURED_LIMIT

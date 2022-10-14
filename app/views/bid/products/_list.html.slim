@@ -51,7 +51,7 @@
                   span.glyphicon.glyphicon-film
             td.img_link
               - if p.featured?
-                i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 1px black;"
+                i.fa-solid.fa-award style="color:#ffd700;text-shadow:0 0 3px black;"
             td.button
               - if request.path =~ /system/ || @open_now.entry?
                 - message = "#{p.name}\n\nこの出品商品を削除しますか？"
