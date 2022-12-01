@@ -88,7 +88,7 @@ class System::BidsController < System::ApplicationController
   end
 
   def total_list
-    all_products = @open_now.products.includes(:success_bid, :success_company, :company)
+    all_products = @open_now.products.listed.includes(:success_bid, :success_company, :company)
     all_bids     = @open_now.bids.includes(:product, :success_bid, :product_company, :company)
     @companies = Company.order(:no)
 
