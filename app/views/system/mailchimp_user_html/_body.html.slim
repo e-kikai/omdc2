@@ -67,10 +67,10 @@
           . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 出品商品の紹介
           br
           - @prs_all.each_with_index do |pr, i|
-            .item-box style="width:132px;height:132px;display:block;float:left;background:#FFF;margin:0;"
+            .item-box style="width:203px;height:203px;display:block;float:left;background:#FFF;margin:0;"
               = link_to "#{root_url(only_path: false, protocol: 'https')}products/#{pr.id}?r=#{@rtag}-no#{i + 1}", style: "text-decoration:none;outline:none;", target: "_blank" do
                 - if pr.top_image?
-                  . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:132px;min-height:132px;margin:0;object-fit:cover;"
+                  . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:203px;min-height:203px;margin:0;object-fit:cover;"
           br style="clear:both;"
 
         - @xl_genres.each do |xl|
@@ -79,10 +79,10 @@
             . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 出品 #{xl.name.gsub(/一般|その他/, '')}の紹介
             br
             - @prs[xl.id].each_with_index do |pr, i|
-              .item-box style="width:132px;height:132px;display:block;float:left;background:#FFF;margin:0;"
+              .item-box style="width:203px;height:203px;display:block;float:left;background:#FFF;margin:0;"
                 = link_to "#{root_url(only_path: false, protocol: 'https')}products/#{pr.id}?r=#{@rtag}-no#{i + 1}", style: "text-decoration:none;outline:none;", target: "_blank" do
                   - if pr.top_image?
-                    . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:132px;min-height:132px;margin:0;object-fit:cover;"
+                    . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:203px;min-height:203px;margin:0;object-fit:cover;"
             br style="clear:both;"
 
         .
@@ -90,10 +90,10 @@
           . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 出品商品の紹介
           br
           - @prs_all.each_with_index do |pr, i|
-            .item-box style="width:132px;height:132px;display:block;float:left;background:#FFF;margin:0;"
+            .item-box style="width:203px;height:203px;display:block;float:left;background:#FFF;margin:0;"
               = link_to "#{root_url(only_path: false, protocol: 'https')}products/#{pr.id}?r=#{@rtag}-no#{i + 1}", style: "text-decoration:none;outline:none;", target: "_blank" do
                 - if pr.top_image?
-                  . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:132px;min-height:132px;margin:0;object-fit:cover;"
+                  . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:203px;min-height:203px;margin:0;object-fit:cover;"
           br style="clear:both;"
 
         | *|END:IF|*
