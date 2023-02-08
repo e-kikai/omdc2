@@ -45,7 +45,9 @@ class System::MailchimpUserHtmlController < System::ApplicationController
       # all
       @prs_all = (1..9).map { |gid| @products.where( large_genres: {xl_genre_id: gid}).first }.compact
     else
-      ids = @products.distinct.pluck(:id).sample(3) # ランダム取得
+      # その他の表示(ヘッダに3つだけ表示)
+      ids = @open.products.listed.includes(:product_images).joins(:large_genre)
+        .where.not(product_images: { id: nil }, large_genres: {name: "その他%"}).distinct.pluck(:id).sample(3)  # ランダム取得
       @prs_all = @products.where(id: ids).order(:list_no)
     end
 
