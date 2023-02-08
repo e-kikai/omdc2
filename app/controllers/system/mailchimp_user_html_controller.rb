@@ -44,7 +44,9 @@ class System::MailchimpUserHtmlController < System::ApplicationController
 
       # all
       @prs_all = (1..9).map { |gid| @products.where( large_genres: {xl_genre_id: gid}).first }.compact
-
+    else
+      ids = @products.distinct.pluck(:id).sample(3) # ランダム取得
+      @prs_all = @products.where(id: ids).order(:list_no)
     end
 
     @rtag = params[:rtag].presence || "mail_maitest_o-#{@open_id}-#{@category}"

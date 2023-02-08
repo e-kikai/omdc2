@@ -98,7 +98,16 @@
 
         | *|END:IF|*
 
-        . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+        . = link_to "#{@open.name} → 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+    - else
+      p
+        .
+          - @prs_all.each_with_index do |pr, i|
+            .item-box style="width:203px;height:203px;display:block;float:left;background:#FFF;margin:0;"
+              = link_to "#{root_url(only_path: false, protocol: 'https')}products/#{pr.id}?r=#{@rtag}-no#{i + 1}", style: "text-decoration:none;outline:none;", target: "_blank" do
+                - if pr.top_image?
+                  . = image_tag pr.top_image.image.view.url, style: "width:100%;max-height:203px;min-height:203px;margin:0;object-fit:cover;"
+          br style="clear:both;"
 
     / p style=""
     /   a href="https://www.大阪機械団地.jp/" style='font-size:19px;color:darkred;text-decoration:underline;'大阪機械卸業団地協同組合 #{@open.name}
@@ -141,7 +150,7 @@
       . 営業時間 : 9:00～17:00 (土・日曜日 / 祝日)
       . 連絡先 : TEL 06-6747-7528   FAX 06-6747-7529
 
-    . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+    . = link_to "#{@open.name} → 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
 
     . style="font-size:19px;background:yellow;padding:8px 16px;margin:0 0 8px 0;" ◆ 機械団地 機械工具入札会とは
     p style="font-size:15px;"
