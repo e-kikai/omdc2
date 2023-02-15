@@ -9,7 +9,7 @@
     span = " / "
     = select_tag :site, options_for_select(@site_selector, @site), class: "form-control"
     span = " / "
-    = text_field_tag :company_nos, params[:company_nos], class: "form-control", placeholder: "組合員No.(スペース区切り)"
+    = text_field_tag :company_nos, (params[:company_nos] || "121 117 85 78 23"), class: "form-control", placeholder: "組合員No.(スペース区切り)"
 
     span = " / トラッキングタグ : "
     = text_field_tag :rtag, params[:rtag], class: "form-control", placeholder: @rtag
