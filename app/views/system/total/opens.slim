@@ -57,8 +57,8 @@ css:
       tbody
         - @opens.each do |open|
             tr
-              td.id open.id
-              td open.name
+              td.id = open.id
+              td = open.name
 
               - @results.each do |col, vals|
                 val = vals[open.id]
@@ -85,7 +85,7 @@ css:
 
       tfoot
         tr
-          th.id @opens.length
+          th.id = @opens.length
           th 合計
           - @results.each do |col, vals|
             - sum   = @vals.sum { |r| r[i].to_f }

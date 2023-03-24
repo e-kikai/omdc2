@@ -122,21 +122,31 @@ class System::TotalController < System::ApplicationController
     @total = params[:total] || @total_selector.first[1]
     @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
 
-    @results = case @total
-    when :features
-      featured = Product.where(featured: true).group(:open_id)
+    @results = {
+      "出品数"       => featured.count,
+      "最低金額"     => featured.sum(:min_price),
+      "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+      "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
+      "入札数"       => featured.sum(:bids_count),
+      "落札数"       => featured.count(:success_bid),
+      "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
+    }
 
-      {
-        "出品数"       => featured.count,
-        "最低金額"     => featured.sum(:min_price),
-        "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
-        "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
-        "入札数"       => featured.sum(:bids_count),
-        "落札数"       => featured.count(:success_bid),
-        "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
-      }
-    else
-      {
+    @results = case @total
+    # when :title
+    #   featured = Product.where(featured: true).group(:open_id)
+
+    #   {
+    #     "出品数"       => featured.count,
+    #     "最低金額"     => featured.sum(:min_price),
+    #     "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+    #     "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
+    #     "入札数"       => featured.sum(:bids_count),
+    #     "落札数"       => featured.count(:success_bid),
+    #     "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
+    #   }
+    # else
+    #   {
 
 
         # regexp_replace(o.name, '第([0-9]+)回(.*)', '第\1回') as "入札会",
@@ -181,8 +191,8 @@ class System::TotalController < System::ApplicationController
         # "落札数"       => Product.group(:open_id).count(:bids_count),
         # "落札金額"     => Product.joins(:success_bid).group(:open_id).sum("success_bid.amount"),
 
-      }
-    end
+    #   }
+    # end
 
     respond_to do |format|
       format.html
