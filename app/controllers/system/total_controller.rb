@@ -147,9 +147,9 @@ class System::TotalController < System::ApplicationController
     else
       products  = Product.group(:open_id)
       details   = products.joins(:detail_logs)
-      favorites = products.left_joins(:favorites)
-      deletes   = favorites.merge(Favorite.unscope(where: :soft_destroyed_at)).where("favorites.soft_destroyed_at IS NOT NULL")
-      pdfs      = favorites.merge(Favorite.unscope(where: :soft_destroyed_at)).where("favorites.amount IS NOT NULL")
+      favorites = products.joins(:favorites)
+      deletes   = favorites.merge(Favorite.unscope).where("favorites.soft_destroyed_at IS NOT NULL")
+      pdfs      = favorites.merge(Favorite.unscope).where("favorites.amount IS NOT NULL")
 
       @sql = favorites.to_sql
 
