@@ -32,8 +32,7 @@
         - @opens.each do |open|
             tr
               td.id = open[0]
-              / td = open[1].gsub(/(.*)第([0-9]+)回(.*)/) { "第#{$2}回" }
-              td = open[1]
+              td = open[1].gsub(/(.*)第([0-9]+)回(.*)/) { "第#{$2}回" }
 
               - @results.each do |col, vals|
                 - val = vals[open[0]]
