@@ -130,7 +130,7 @@ class System::TotalController < System::ApplicationController
       "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
       "入札数"       => featured.sum(:bids_count),
       "落札数"       => featured.count(:success_bid_id),
-      # "落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
+      "落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
     }
 
     # @results = case @total

@@ -1,32 +1,6 @@
 - set_meta_tags title: "各種集計(入札会ごと)"
 - breadcrumb  :system_something, "各種集計(入札会ごと)"
 
-css:
-  .total_area {
-    margin: 0 calc(50% - 49vw);
-    width: 98vw;
-  }
-
-  .total_area table {
-    width:auto;
-    margin:auto;
-    min-width:800px;
-  }
-
-  .total_area table td.num {
-    text-align: right;
-    width: 60px;
-  }
-
-  .total_area table td.price {
-    text-align: right;
-    width: 90px;
-  }
-
-  .total_area table.table-striped>tbody>tr td.name {
-    max-width: 500px;
-  }
-
 .row
   = form_tag("/system/total/opens", method: :get, class: "form-inline filtering-form") do
     = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
@@ -57,11 +31,11 @@ css:
       tbody
         - @opens.each do |open|
             tr
-              td.id = open.id
-              td = open.name
+              td.id = open[0]
+              td = open[1]
 
               - @results.each do |col, vals|
-                val = vals[open.id]
+                val = vals[open[0]]
 
                 // クラス //
                 - cls = case

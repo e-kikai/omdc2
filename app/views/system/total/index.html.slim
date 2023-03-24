@@ -30,8 +30,8 @@ css:
       span.btn-content CSV出力
 
   h4 = @title
-  .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive style="width:auto;margin:auto;min-width:800px;"
+  .total_area.scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
       thead
         tr
           - @result.columns.each do |col|

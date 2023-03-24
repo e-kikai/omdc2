@@ -1026,3 +1026,28 @@ img.tutorial {
     border-top-width: 2px;
   }
 }
+
+.total_area {
+  margin: 0 calc(50% - 49vw);
+  width: 98vw;
+}
+
+.total_area table {
+  width:auto;
+  margin:auto;
+  min-width:800px;
+}
+
+.total_area table td.num {
+  text-align: right;
+  width: 60px;
+}
+
+.total_area table td.price {
+  text-align: right;
+  width: 90px;
+}
+
+.total_area table.table-striped>tbody>tr td.name {
+  max-width: 500px;
+}
