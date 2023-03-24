@@ -152,8 +152,8 @@ class System::TotalController < System::ApplicationController
       pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
       {
-        "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').count("users.id")
-        "ユーザ(新規)" => opens_base.joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at').count("users.id")
+        "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').count("users.id"),
+        "ユーザ(新規)" => opens_base.joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at').count("users.id"),
 
         "出品数"            => products.count,
         "詳細(件)"          => details.count("detail_logs.id"),
