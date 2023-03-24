@@ -1,18 +1,29 @@
-- set_meta_tags title: "各種集計(入札会)"
-- breadcrumb  :system_something, "各種集計(入札会)"
+- set_meta_tags title: "各種集計(入札会ごと)"
+- breadcrumb  :system_something, "各種集計(入札会ごと)"
 
 css:
-  table td.num {
+  .total_area {
+    margin: 0 calc(50% - 49vw);
+    width: 98vw;
+  }
+
+  .total_area table {
+    width:auto;
+    margin:auto;
+    min-width:800px;
+  }
+
+  .total_area table td.num {
     text-align: right;
     width: 60px;
   }
 
-  table td.price {
+  .total_area table td.price {
     text-align: right;
     width: 90px;
   }
 
-  table.table-striped>tbody>tr td.name {
+  .total_area table.table-striped>tbody>tr td.name {
     max-width: 500px;
   }
 
@@ -28,8 +39,8 @@ css:
       span.btn-content CSV出力
 
   h4 = @title
-  .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
-    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive style="width:auto;margin:auto;min-width:800px;"
+  .total_area.scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
       thead
         tr
           th.id ID
@@ -92,7 +103,7 @@ css:
 
         tr
           th.id ID
-          th = 入札会
+          th 入札会
           - @results.keys.each do |col|
             - if col =~ /(id|no.)/i
               - cls = :id

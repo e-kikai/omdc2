@@ -39,6 +39,9 @@
         li = link_to "/system/total/", class: "btn btn-default btn-square" do
           i.fas.fa-table
           span.btn-content 各種集計
+        li = link_to "/system/total/opens", class: "btn btn-default btn-square" do
+          i.fas.fa-table
+          span.btn-content 各種集計<br />(入札会ごと)
     hr
       ul.nav.nav-pills
         li = link_to "/system/scheduling/vectors_process", method: :post, class: "btn btn-default btn-square btn-twoline" do
