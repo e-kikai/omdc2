@@ -125,7 +125,7 @@ class System::TotalController < System::ApplicationController
     end
 
     # 入札会一覧
-    opens_base = Open.where("id >= ?", start_open_id)
+    opens_base = Open.where("opens.id >= ?", start_open_id)
     @opens = opens_base.order(bid_end_at: :asc).pluck(:id, :name)
 
     @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
