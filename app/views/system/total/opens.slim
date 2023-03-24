@@ -58,25 +58,25 @@
                 td class="#{cls} #{col}" = v
 
       tfoot
-        tr
-          th.id = @opens.length
-          th 合計
-          - @results.each do |col, vals|
-            - if @vals != nil
-              - sum   = @vals.sum { |r| r.to_f }
-              - count = @vals.length
-            - else
-              - sum, count = 0, 0
+        / tr
+        /   th.id = @opens.length
+        /   th 合計
+        /   - @results.each do |col, vals|
+        /     - if @vals != nil
+        /       - sum   = @vals.sum { |r| r.to_f }
+        /       - count = @vals.length
+        /     - else
+        /       - sum, count = 0, 0
 
-            - cls, v = case
-            - when col =~ /(id|no.)/i;      [ :id,          number_with_delimiter(count.to_i) ]
-            - when col =~ /(date)/i;        [ "text-right", "合計"]
-            - when col =~ /(order_no)/i;    next
-            - when col =~ /(商品名|年式)/i; ["", ""]
-            - when sum != 0;                [ :num,         number_with_delimiter(sum.to_i) ]
-            - else;                         [ "text-right", "合計" ]
+        /     - cls, v = case
+        /     - when col =~ /(id|no.)/i;      [ :id,          number_with_delimiter(count.to_i) ]
+        /     - when col =~ /(date)/i;        [ "text-right", "合計"]
+        /     - when col =~ /(order_no)/i;    next
+        /     - when col =~ /(商品名|年式)/i; ["", ""]
+        /     - when sum != 0;                [ :num,         number_with_delimiter(sum.to_i) ]
+        /     - else;                         [ "text-right", "合計" ]
 
-            td class="#{cls}" = v
+        /     td class="#{cls}" = v
 
         tr
           th.id ID
