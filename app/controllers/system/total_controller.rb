@@ -113,7 +113,7 @@ class System::TotalController < System::ApplicationController
   end
 
   def opens
-    @opens = Open.order(bid_end_at: :desc).where("id > 61").pluck(:name, :id)
+    @opens = Open.order(bid_end_at: :desc).where("id > 61").pluck(:id, :name)
     @total_selector = {
       "アクセス,お気に入り" => :favorites,
       "目玉商品"            => :features,
