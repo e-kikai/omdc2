@@ -35,7 +35,7 @@
               td = open[1]
 
               - @results.each do |col, vals|
-                val = vals[open[0]]
+                - val = vals[open[0]]
 
                 // クラス //
                 - cls = case
@@ -48,14 +48,14 @@
                 - when val =~ /^[0-9.]+$/;           :num
 
                 // 数値 //
-                - val = case
+                - v = case
                 - when val.blank? ;        ""
                 - when col =~ /(id|no.)/i; r
                 - when col=~ /(date)/i;    I18n.l(DateTime.parse(val), format: :date)
                 - when val.is_a?(Numeric); number_with_delimiter(val)
                 - else;                    Charwidth.normalize(val)
 
-                td class="#{cls} #{col}" = val
+                td class="#{cls} #{col}" = v
 
       tfoot
         tr
