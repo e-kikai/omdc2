@@ -132,7 +132,7 @@ class System::TotalController < System::ApplicationController
       "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
     }
 
-    @results = case @total
+    # @results = case @total
     # when :title
     #   featured = Product.where(featured: true).group(:open_id)
 
