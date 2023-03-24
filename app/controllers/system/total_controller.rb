@@ -113,13 +113,19 @@ class System::TotalController < System::ApplicationController
   end
 
   def opens
-    @opens = Open.order(bid_end_at: :desc).where("id > 61").pluck(:id, :name)
     @total_selector = {
       "アクセス,お気に入り" => :favorites,
       "目玉商品"            => :features,
     }
-
     @total = params[:total] || @total_selector.first[1]
+
+    start_open_id = case @total
+    when :features; 67
+    else;           62
+
+    # 入札会一覧
+    @opens = Open.order(bid_end_at: :asc).where("id > ?", start_open_id).pluck(:id, :name)
+
     @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
 
     featured = Product.where(featured: true).group(:open_id)
