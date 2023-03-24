@@ -152,8 +152,12 @@ class System::TotalController < System::ApplicationController
       pdfs      = products.joins("INNER JOIN favorites ON favorites.product_id = products.id").where("favorites.amount IS NOT NULL")
 
       {
-        "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').group(:id).count("users.id"),
-        "ユーザ(新規)" => opens_base.joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at').group(:id).count("users.id"),
+        "ユーザ(累計)" => opens_base
+          .joins('LEFT JOIN users ON users.created_at < opens.bid_end_at')
+          .where('users.confirmed_at IS NOT NULL').group(:id).count("users.id"),
+        "ユーザ(新規)" => opens_base
+          .joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at')
+          .where('users.confirmed_at IS NOT NULL').group(:id).count("users.id"),
 
         "出品数"            => products.count,
         "詳細(件)"          => details.count("detail_logs.id"),
