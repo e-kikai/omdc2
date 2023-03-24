@@ -76,6 +76,7 @@ class Product < ApplicationRecord
   has_many :product_images, -> { order(:order_no, :id) }
   has_one  :top_image,      -> { order(:order_no, :id) }, class_name: "ProductImage"
   has_many :detail_logs
+  has_many :favorites
 
   enum display: { "一般出品" => 0, "常設コマ" => 10, "単品預り" => 20, "店頭出品" => 30 }
 
