@@ -32,7 +32,7 @@
         - @opens.each do |open|
             tr
               td.id = open[0]
-              td = open[1]
+              td = open[1].gsub(/(.*)第([0-9]+)回(.*)/) { "第{$2}回" }
 
               - @results.each do |col, vals|
                 - val = vals[open[0]]
@@ -45,13 +45,13 @@
                 - when col =~ /(商品名)/i;           :name
                 - when col =~ /(価格|金額|デメ半)/i; :price
                 - when col =~ /(年式)/i;             ""
-                - when val =~ /^[0-9.]+$/;           :num
+                - when val.is_a?(Numeric);           :num
 
                 // 数値 //
                 - v = case
                 - when val.blank? ;        ""
                 - when col =~ /(id|no.)/i; r
-                - when col=~ /(date)/i;    I18n.l(DateTime.parse(val), format: :date)
+                - when col =~ /(date)/i;   I18n.l(DateTime.parse(val), format: :date)
                 - when val.is_a?(Numeric); number_with_delimiter(val)
                 - else;                    Charwidth.normalize(val)
 
