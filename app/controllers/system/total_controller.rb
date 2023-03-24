@@ -131,7 +131,7 @@ class System::TotalController < System::ApplicationController
     @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
 
     @results = case @total
-    when :title
+    when :features
       featured = Product.where(featured: true).group(:open_id)
 
       {
