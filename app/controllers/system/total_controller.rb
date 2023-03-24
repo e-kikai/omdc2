@@ -151,7 +151,7 @@ class System::TotalController < System::ApplicationController
       deletes   = favorites.merge(Favorite.unscope(where: :soft_destroyed_at)).where("favorites.soft_destroyed_at IS NOT NULL")
       pdfs      = favorites.merge(Favorite.unscope(where: :soft_destroyed_at)).where("favorites.amount IS NOT NULL")
 
-      @sql = deletes.to_sql
+      @sql = details.to_sql
 
       {
         "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').count("users.id"),
