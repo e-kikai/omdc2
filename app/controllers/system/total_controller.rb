@@ -122,6 +122,7 @@ class System::TotalController < System::ApplicationController
     start_open_id = case @total
     when :features; 67
     else;           62
+    end
 
     # 入札会一覧
     @opens = Open.order(bid_end_at: :asc).where("id > ?", start_open_id).pluck(:id, :name)

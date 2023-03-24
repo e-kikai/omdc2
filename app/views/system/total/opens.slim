@@ -63,12 +63,11 @@
           th.id = @opens.length
           th 合計
           - @results.each do |col, vals|
-            / - if @vals != nil
-            /   - sum   = @vals.sum { |r| r.to_f }
-            /   - count = @vals.length
-            / - else
-            / - sum, count = 0, 0
-            - sum, count = 1, 2
+            - if @vals != nil
+              - sum   = @vals.sum { |r| r.to_f }
+              - count = @vals.length
+            - else
+              - sum, count = 0, 0
 
             - cls, v = case
             - when col =~ /(id|no.)/i;      [ :id,          number_with_delimiter(count.to_i) ]
