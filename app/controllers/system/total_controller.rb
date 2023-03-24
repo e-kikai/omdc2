@@ -122,6 +122,7 @@ class System::TotalController < System::ApplicationController
     @total = params[:total] || @total_selector.first[1]
     @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
 
+    featured = Product.where(featured: true).group(:open_id)
     @results = {
       "出品数"       => featured.count,
       "最低金額"     => featured.sum(:min_price),
