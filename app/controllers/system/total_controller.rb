@@ -149,9 +149,9 @@ class System::TotalController < System::ApplicationController
       details   = products.joins(:detail_logs)
       favorites = products.joins(:favorites)
       deletes   = products.joins("INNER JOIN favorites ON favorites.product_id = products.id").where("favorites.soft_destroyed_at IS NOT NULL")
-      pdfs      = products.joins("INNER JOIN favorites ON favorites.product_id = products.id").where("favorites.amount IS NOT NULL")
+      pdfs      = favorites.joins(Favorite.unscope(:all)).where("favorites.amount IS NOT NULL")
 
-      @sql = favorites.to_sql
+      @sql = pdfs.to_sql
 
       {
         "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').count("users.id"),
