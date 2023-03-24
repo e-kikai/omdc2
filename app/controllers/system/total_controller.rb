@@ -148,8 +148,8 @@ class System::TotalController < System::ApplicationController
       products  = Product.group(:open_id)
       details   = products.joins(:detail_logs)
       favorites = products.joins(:favorites)
-      deletes   = favorites.unscope("favorites.soft_destroyed_at" => :soft_destroyed_at).where("favorites.soft_destroyed_at IS NOT NULL")
-      pdfs      = favorites.unscope("favorites.soft_destroyed_at" => :soft_destroyed_at).where("favorites.amount IS NOT NULL")
+      deletes   = favorites.unscope(where: "favorites.soft_destroyed_at").where("favorites.soft_destroyed_at IS NOT NULL")
+      pdfs      = favorites.unscope(where: "favorites.soft_destroyed_at").where("favorites.amount IS NOT NULL")
 
       {
         "ユーザ(累計)" => opens_base.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').count("users.id"),
