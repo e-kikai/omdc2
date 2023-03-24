@@ -129,7 +129,7 @@ class System::TotalController < System::ApplicationController
       "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
       "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
       "入札数"       => featured.sum(:bids_count),
-      "落札数"       => featured.count(:success_bid),
+      "落札数"       => featured.count(:success_bid_id),
       "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
     }
 
