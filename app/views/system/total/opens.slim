@@ -1,0 +1,104 @@
+- set_meta_tags title: "各種集計(入札会)"
+- breadcrumb  :system_something, "各種集計(入札会)"
+
+css:
+  table td.num {
+    text-align: right;
+    width: 60px;
+  }
+
+  table td.price {
+    text-align: right;
+    width: 90px;
+  }
+
+  table.table-striped>tbody>tr td.name {
+    max-width: 500px;
+  }
+
+.row
+  = form_tag("/system/total/opens", method: :get, class: "form-inline filtering-form") do
+    = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
+    = button_tag class: "btn btn-info" do
+      span.glyphicon.glyphicon-search
+      span.btn-content 検索
+
+    = button_tag :submit, name: :format, value: :csv, data: { "disable-with" => "出力中..." }, class: "btn btn-default btn-square" do
+      i.fas.fa-file-csv
+      span.btn-content CSV出力
+
+  h4 = @title
+  .scroll_div style="margin: 0 calc(50% - 49vw);width: 98vw;"
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive style="width:auto;margin:auto;min-width:800px;"
+      thead
+        tr
+          th.id ID
+          th 入札会
+          - @results.keys.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
+      tbody
+        - @opens.each do |open|
+            tr
+              td.id open.id
+              td open.name
+
+              - @results.each do |col, vals|
+                val = vals[open.id]
+
+                // クラス //
+                - cls = case
+                - when col =~ /(id|no.)/i;           :id
+                - when col =~ /(date)/i;             :date
+                - when col=~ /(order_no)/i;          next
+                - when col =~ /(商品名)/i;           :name
+                - when col =~ /(価格|金額|デメ半)/i; :price
+                - when col =~ /(年式)/i;             ""
+                - when val =~ /^[0-9.]+$/;           :num
+
+                // 数値 //
+                - val = case
+                - when val.blank? ;        ""
+                - when col =~ /(id|no.)/i; r
+                - when col=~ /(date)/i;    I18n.l(DateTime.parse(val), format: :date)
+                - when val.is_a?(Numeric); number_with_delimiter(val)
+                - else;                    Charwidth.normalize(val)
+
+                td class="#{cls} #{col}" = val
+
+      tfoot
+        tr
+          th.id @opens.length
+          th 合計
+          - @results.each do |col, vals|
+            - sum   = @vals.sum { |r| r[i].to_f }
+            - count = @vals.length
+
+            - cls, v = case
+            - when col =~ /(id|no.)/i;      [ :id,          number_with_delimiter(count.to_i) ]
+            - when col =~ /(date)/i;        [ "text-right", "合計"]
+            - when col =~ /(order_no)/i;    next
+            - when col =~ /(商品名|年式)/i; ["", ""]
+            - when sum != 0;                [ :num,         number_with_delimiter(sum.to_i) ]
+            - else;                         [ "text-right", "合計" ]
+
+            td class="#{cls}" = v
+
+        tr
+          th.id ID
+          th = 入札会
+          - @results.keys.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))

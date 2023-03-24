@@ -112,6 +112,84 @@ class System::TotalController < System::ApplicationController
     end
   end
 
+  def opens
+    @opens = Open.order(bid_end_at: :desc).where("id > 61").pluck(:name, :id)
+    @total_selector = {
+      "アクセス,お気に入り" => :favorites,
+      "目玉商品"            => :features,
+    }
+
+    @total = params[:total] || @total_selector.first[1]
+    @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
+
+    @results = case @total
+    when :features
+      featured = Product.where(featured: true).group(:open_id)
+
+      {
+        "出品数"       => featured.count,
+        "最低金額"     => featured.sum(:min_price),
+        "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+        "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
+        "入札数"       => featured.sum(:bids_count),
+        "落札数"       => featured.count(:success_bid),
+        "落札金額"     => featured.joins(:success_bid).sum("success_bid.amount"),
+      }
+    else
+      {
+
+
+        # regexp_replace(o.name, '第([0-9]+)回(.*)', '第\1回') as "入札会",
+        # tb6.user_c AS "ユーザ(累計)",
+        # COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
+        # ORDER BY
+        #   o.id
+        # ), tb6.user_c) AS "ユーザ(新規)",
+        # tb8.pc AS "出品数",
+        # tb7.detail_c AS "詳細(件)",
+        # tb7.detail_utag AS "詳細(utag)",
+        # tb7.detail_u AS "詳細(ログイン人)",
+        # tb7.detail_p AS "詳細(商品数)",
+        # tb1.fa_c AS "お気に入り(件)",
+        # tb1.fa_u AS "お気に入り(人)",
+        # tb1.fa_p AS "お気に入り(商品)",
+        # tb3.delete_c AS "削除(件)",
+        # tb3.delete_u AS "削除(人)",
+        # tb2.pdf_c AS "PDF生成(件)",
+        # tb2.pdf_u AS "PDF生成(人)",
+        # tb2.pdf_p AS "PDF生成(商品)"
+
+
+        # count(f2.id) AS fa_c,
+        # count(DISTINCT f2.user_id) AS fa_u,
+        # count(DISTINCT f2.product_id) AS fa_p
+
+
+        # "ユーザ(累計)" => Open.joins('LEFT JOIN users ON users.created_at < opens.bid_end_at').where("opens.id > 61").count("users.id")
+        # "ユーザ(新規)" => Open.joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at').where("opens.id > 61").count("users.id")
+
+
+        # "出品数"       => Product.group(:open_id).count,
+
+        # users
+
+
+        # "最低金額"     => Product..group(:open_id).sum(:min_price),
+        # "詳細アクセス" => DetailLog.joins(:products).group("products.open_id").count,
+        # "お気に入り"   => Favorite.joins(:products).group("products.open_id").count,
+        # "入札数"       => Product.group(:open_id).sum(:bids_count),
+        # "落札数"       => Product.group(:open_id).count(:bids_count),
+        # "落札金額"     => Product.joins(:success_bid).group(:open_id).sum("success_bid.amount"),
+
+      }
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@total}_#{@open_id}.csv" }
+    end
+  end
+
   private
 
   def make_sql(total)

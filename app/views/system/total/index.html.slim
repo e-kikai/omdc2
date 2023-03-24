@@ -47,17 +47,17 @@ css:
         - @result.rows.each do |row|
             tr
               - row.each_with_index do |r, i|
-                /// クラス ///
+                // クラス //
                 - cls = case
-                - when @result.columns[i] =~ /(id|no.)/i;     :id
-                - when @result.columns[i] =~ /(date)/i;       :date
-                - when @result.columns[i] =~ /(order_no)/i;   next
-                - when @result.columns[i] =~ /(商品名)/i;       :name
+                - when @result.columns[i] =~ /(id|no.)/i;           :id
+                - when @result.columns[i] =~ /(date)/i;             :date
+                - when @result.columns[i] =~ /(order_no)/i;         next
+                - when @result.columns[i] =~ /(商品名)/i;           :name
                 - when @result.columns[i] =~ /(価格|金額|デメ半)/i; :price
-                - when @result.columns[i] =~ /(年式)/i;       ""
-                - when r.to_s =~ /^[0-9.]+$/;                 :num
+                - when @result.columns[i] =~ /(年式)/i;             ""
+                - when r.to_s =~ /^[0-9.]+$/;                       :num
 
-                /// 数値 ///
+                // 数値 //
                 - val = case
                 - when r.blank?                         ; ""
                 - when @result.columns[i] =~ /(id|no.)/i; r
@@ -70,14 +70,16 @@ css:
       tfoot
         tr
           - @result.columns.each_with_index do |col, i|
-            - sum = @result.rows.sum { |r| r[i].to_f }
+            - sum   = @result.rows.sum { |r| r[i].to_f }
+            - count = @result.rows.length
 
             - cls, v = case
-            - when @result.columns[i] =~ /(id|no.)/i;   [ :id,          ""]
-            - when @result.columns[i] =~ /(date)/i;     [ "text-right", "合計"]
-            - when @result.columns[i] =~ /(order_no)/i; next
-            - when sum != 0;                            [ :num,         number_with_delimiter(sum.to_i) ]
-            - else;                                     [ "text-right", "合計" ]
+            - when @result.columns[i] =~ /(id|no.)/i;      [ :id,          number_with_delimiter(count.to_i) ]
+            - when @result.columns[i] =~ /(date)/i;        [ "text-right", "合計"]
+            - when @result.columns[i] =~ /(order_no)/i;    next
+            - when @result.columns[i] =~ /(商品名|年式)/i; ["", ""]
+            - when sum != 0;                               [ :num,         number_with_delimiter(sum.to_i) ]
+            - else;                                        [ "text-right", "合計" ]
 
             td class="#{cls}" = v
 

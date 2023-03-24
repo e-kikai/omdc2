@@ -98,7 +98,7 @@
 
         | *|END:IF|*
 
-        . = link_to "#{@open.name} → 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+        . = link_to "→ #{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
     - else
       p style="margin: 0;"
         - @prs_all.each_with_index do |pr, i|
@@ -196,10 +196,10 @@
         | <a href="https://www.xn--4bswgw9cs82at4b485i.jp/helps/beginner">機械団地 入札までの流れ</a> をご覧ください。
 
       p
-        | 機械・工具類をはじめ、お値打ち商品が目白押しです。<br />
+        | 機械・工具類をはじめ、お値打ち商品が目白押しです。<br /><br />
         | 皆様のご来場をお待ちしております。
 
-      . = link_to "#{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
+      . = link_to "→ #{@open.name} 出品商品リストはこちら", "#{root_url(only_path: false, protocol: 'https')}?r=#{@rtag}", style: "width:80%;font-size:19px;background:#0089c2;margin:32px auto;display:block;text-align:center;text-decoration:none;border-radius:25px;height:50px;line-height:50px;color:#FFF;", target: "_blank"
 
     hr style="border-color:#CCC;"
 
