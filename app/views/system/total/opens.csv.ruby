@@ -1,5 +1,4 @@
 CSV.generate do |row|
-  row << 'aaa'
   head = %w|ID 入札会名|
   @results.keys.each { |key| head << key }
 
