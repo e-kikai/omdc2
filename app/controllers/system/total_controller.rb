@@ -147,9 +147,9 @@ class System::TotalController < System::ApplicationController
     else
       products  = Product.group(:open_id)
       details   = products.joins(:detail_logs)
-      favorites = products.joins(:favorites)
-      deletes   = products.joins("INNER JOIN favorites ON favorites.product_id = products.id").where("favorites.soft_destroyed_at IS NOT NULL")
-      pdfs      = products.joins("INNER JOIN favorites ON favorites.product_id = products.id").where("favorites.amount IS NOT NULL")
+      favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+      deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+      pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
       {
         "ユーザ(累計)" => opens_base
@@ -159,25 +159,25 @@ class System::TotalController < System::ApplicationController
           .joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at')
           .where('users.confirmed_at IS NOT NULL').group(:id).count("users.id"),
 
-        "出品数"            => products.count,
-        "詳細(件)"          => details.count("detail_logs.id"),
-        "詳細(utag)"        => details.distinct.count("detail_logs.utag"),
-        "詳細(ログイン人)"  => details.distinct.count("detail_logs.user_id"),
-        "詳細(商品数)"      => details.distinct.count("detail_logs.product_id"),
-        "お気に入り(件)"    => favorites.count("favorites.id"),
-        "お気に入り(人)"    => favorites.distinct.count("favorites.user_id"),
-        "お気に入り(商品)"  => favorites.distinct.count("favorites.product_id"),
-        "削除(件)"          => deletes.count("favorites.id"),
-        "削除(人)"          => deletes.distinct.count("favorites.user_id"),
-        "PDF生成(件)"       => pdfs.count("favorites.id"),
-        "PDF生成(人)"       => pdfs.distinct.count("favorites.user_id"),
-        "PDF生成(商品)"     => pdfs.distinct.count("favorites.product_id"),
+        "出品数"              => products.count,
+        "詳細(件)"            => details.count("detail_logs.id"),
+        "詳細(utag)"          => details.distinct.count("detail_logs.utag"),
+        "詳細(ログイン人)"    => details.distinct.count("detail_logs.user_id"),
+        "詳細(商品数)"        => details.distinct.count("detail_logs.product_id"),
+        "お気に入り(件)"      => favorites.count("favorites.id"),
+        "お気に入り(人)"      => favorites.distinct.count("favorites.user_id"),
+        "お気に入り(商品)"    => favorites.distinct.count("favorites.product_id"),
+        "うち、削除(件)"      => deletes.count("favorites.id"),
+        "うち、削除(人)"      => deletes.distinct.count("favorites.user_id"),
+        "うち、PDF生成(件)"   => pdfs.count("favorites.id"),
+        "うち、PDF生成(人)"   => pdfs.distinct.count("favorites.user_id"),
+        "うち、PDF生成(商品)" => pdfs.distinct.count("favorites.product_id"),
       }
     end
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@total}_#{@open_id}.csv" }
+      format.csv { export_csv "#{@total}_#{Time.now.strftime('%Y%m%d') }.csv" }
     end
   end
 
