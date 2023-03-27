@@ -117,7 +117,7 @@ class System::TotalController < System::ApplicationController
       "アクセス,お気に入り" => :favorites,
       "目玉商品"            => :features,
     }
-    @total = params[:total].to_sym || @total_selector.first[1]
+    @total = (params[:total] || @total_selector.first[1]).to_sym
 
     start_open_id = case @total
     when :features; 67
@@ -128,7 +128,7 @@ class System::TotalController < System::ApplicationController
     opens_base = Open.where("opens.id >= ?", start_open_id)
     @opens = opens_base.order(bid_end_at: :asc).pluck(:id, :name)
 
-    @title = "入札会別 - #{@total_selector.key(@total.to_sym)}"
+    @title = "入札会別 - #{@total_selector.key(@total)}"
 
     @results = case @total
     when :features
