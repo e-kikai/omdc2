@@ -17,16 +17,19 @@
     . 入札締切 : #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
     . 搬出期間 : #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
 
+    hr
 
     / . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
     / . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
     / . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
 
     - @results.each do |key, val|
-      . = "#{key} : "
-      - if key =~ /金額/
-        | "#{number_with_delimiter(val)} 円"
-      - elsif key =~ /件/
-        | "#{number_with_delimiter(val)} 件"
-      - else
-        | "#{val}"
+      .
+        | "#{key} : "
+
+        - if key =~ /金額/
+          | "#{number_with_delimiter(val)}円"
+        - elsif key =~ /件/
+          | "#{number_with_delimiter(val)}件"
+        - else
+          | "#{val}"
