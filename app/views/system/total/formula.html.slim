@@ -2,11 +2,11 @@
 - breadcrumb  :system_something, "結果概要"
 
 .row
-  / = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
-  /   = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
-  /   = button_tag class: "btn btn-info" do
-  /     span.glyphicon.glyphicon-search
-  /     span.btn-content 検索
+  = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
+    = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
+    = button_tag class: "btn btn-info" do
+      span.glyphicon.glyphicon-search
+      span.btn-content 検索
 
   h4 結果概要
 
