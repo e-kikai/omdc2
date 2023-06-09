@@ -188,7 +188,7 @@ class System::TotalController < System::ApplicationController
 
     @open = Open.find(@open_id)
 
-    # @products = @open.products.includes(:company, :area)
+    @products = @open.products.includes(:company, :area)
 
     # @results = {
     #   "出品件数"       => @products.count,

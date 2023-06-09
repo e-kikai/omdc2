@@ -12,9 +12,9 @@
 
   .formula_area
     . 入札会名 : #{@open.name}
-    / . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
-    / . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
-    / . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
+    . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
+    . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
+    . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
 
     / - @results.each do |key, val|
     /   .
