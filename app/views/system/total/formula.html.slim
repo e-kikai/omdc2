@@ -1,0 +1,27 @@
+- set_meta_tags title: "結果概要"
+- breadcrumb  :system_something, "結果概要"
+
+.row
+  = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
+    = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
+    = button_tag class: "btn btn-info" do
+      span.glyphicon.glyphicon-search
+      span.btn-content 検索
+
+  h4 結果概要
+
+  .formula_area
+    . 入札会名 : #{@open.name}
+    . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
+    . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
+    . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
+
+    - @results.each do |key, val|
+      .
+        span.label = "#{key} : "
+        - if key =~ /金額/
+          span.value = "#{number_with_delimiter(val)} 円"
+        - elsif key =~ /件/
+          span.value = "#{number_with_delimiter(val)} 件"
+        - else
+          span.value = "#{val}"

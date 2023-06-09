@@ -4,11 +4,11 @@ class System::TotalController < System::ApplicationController
   def index
     @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
     @total_selector = {
-      "検索方法/詳細アクセス、一山"    => :search_hitoyama_by_period,
-      "リンク元/詳細アクセス、一山"    => :links_hitoyama_by_period,
-      "出品会社/デメ半手数料"          => :company_deme,
-      "価格帯/落札結果金額"            => :price_amount,
-      "日別/アクセス,お気に入り利用"   => :date_favorite,
+      "検索方法/詳細アクセス、一山"  => :search_hitoyama_by_period,
+      "リンク元/詳細アクセス、一山"  => :links_hitoyama_by_period,
+      "出品会社/デメ半手数料"       => :company_deme,
+      "価格帯/落札結果金額"         => :price_amount,
+      "日別/アクセス,お気に入り利用" => :date_favorite,
       # "入札会/アクセス,お気に入り利用" => :opens_favorite,
       "エリア/出品・落札結果金額"      => :area_amount,
       "目玉商品/結果一覧"              => :feature_products,
@@ -115,7 +115,7 @@ class System::TotalController < System::ApplicationController
   def opens
     @total_selector = {
       "アクセス,お気に入り" => :favorites,
-      "目玉商品"            => :features,
+      "目玉商品"          => :features,
     }
     @total = (params[:total] || @total_selector.first[1]).to_sym
 
@@ -179,6 +179,26 @@ class System::TotalController < System::ApplicationController
       format.html
       format.csv { export_csv "#{@total}_#{Time.now.strftime('%Y%m%d') }.csv" }
     end
+  end
+
+  def formula
+    @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
+
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
+
+    @open = Open.find(@open_id)
+
+    @products = @open.products.includes(:company, :area)
+
+    @results = {
+      "出品件数"       => @products.count,
+      "最低金額"     => @products.sum(:min_price),
+      "詳細アクセス件数" => @products.joins(:detail_logs).count("detail_logs.id"),
+      "お気に入り件数"   => @products.joins(:favorites).count("favorites.id"),
+      "入札件数"       => @products.sum(:bids_count),
+      "落札件数"       => @products.count(:success_bid_id),
+      "落札金額"     => @products.joins(:success_bid).sum("bids.amount"),
+    }
   end
 
   private
