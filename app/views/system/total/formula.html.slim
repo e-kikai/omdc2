@@ -16,12 +16,12 @@
     . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
     . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
 
-    / - @results.each do |key, val|
-    /   .
-    /     span.label = "#{key} : "
-    /     - if key =~ /金額/
-    /       span.value = "#{number_with_delimiter(val)} 円"
-    /     - elsif key =~ /件/
-    /       span.value = "#{number_with_delimiter(val)} 件"
-    /     - else
-    /       span.value = "#{val}"
+    - @results.each do |key, val|
+      .
+        span.label = "#{key} : "
+        - if key =~ /金額/
+          span.value = "#{number_with_delimiter(val)} 円"
+        - elsif key =~ /件/
+          span.value = "#{number_with_delimiter(val)} 件"
+        - else
+          span.value = "#{val}"
