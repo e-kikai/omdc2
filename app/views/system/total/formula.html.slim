@@ -1,11 +1,6 @@
 - set_meta_tags title: "結果概要"
 - breadcrumb  :system_something, "結果概要"
 
-css:
-  .formula_area dt:after{
-    content:" : ";
-  }
-
 .row
   = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
@@ -16,19 +11,11 @@ css:
   h4 結果概要
 
   .formula_area
-    dl
-      dt 入札会名
-      dd #{@open.name}
-
-      dt 出品期間
-      dd #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
-
-      dt 下見期間
-      dd #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
-      dt 入札締切
-      dd #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
-      dt 搬出期間
-      dd #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
+    . 入札会名 : #{@open.name}
+    . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
+    . 下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
+    . 入札締切 : #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
+    . 搬出期間 : #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
 
 
     / . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
@@ -36,10 +23,10 @@ css:
     / . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
 
     - @results.each do |key, val|
-      dt key
+      . = "#{key} : "
       - if key =~ /金額/
-        dd = "#{number_with_delimiter(val)} 円"
+        | "#{number_with_delimiter(val)} 円"
       - elsif key =~ /件/
-        dd = "#{number_with_delimiter(val)} 件"
+        | "#{number_with_delimiter(val)} 件"
       - else
-        dd= "#{val}"
+        | "#{val}"

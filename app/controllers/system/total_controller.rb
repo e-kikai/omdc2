@@ -185,7 +185,6 @@ class System::TotalController < System::ApplicationController
     @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
-
     @open = Open.find(@open_id)
 
     @products = @open.products.includes(:company, :area)
