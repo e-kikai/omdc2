@@ -188,17 +188,17 @@ class System::TotalController < System::ApplicationController
 
     @open = Open.find(@open_id)
 
-    @products = @open.products.includes(:company, :area)
+    # @products = @open.products.includes(:company, :area)
 
-    @results = {
-      # "出品件数"       => @products.count,
-      # "最低金額"     => @products.sum(:min_price),
-      # "詳細アクセス件数" => @products.joins(:detail_logs).count("detail_logs.id"),
-      # "お気に入り件数"   => @products.joins(:favorites).count("favorites.id"),
-      # "入札件数"       => @products.sum(:bids_count),
-      # "落札件数"       => @products.count(:success_bid_id),
-      # "落札金額"     => @products.joins(:success_bid).sum("bids.amount"),
-    }
+    # @results = {
+    #   "出品件数"       => @products.count,
+    #   "最低金額"     => @products.sum(:min_price),
+    #   "詳細アクセス件数" => @products.joins(:detail_logs).count("detail_logs.id"),
+    #   "お気に入り件数"   => @products.joins(:favorites).count("favorites.id"),
+    #   "入札件数"       => @products.sum(:bids_count),
+    #   "落札件数"       => @products.count(:success_bid_id),
+    #   "落札金額"     => @products.joins(:success_bid).sum("bids.amount"),
+    # }
   end
 
   private
