@@ -31,9 +31,11 @@
           | #{number_with_delimiter(val)}円
         - elsif key =~ /人|ユーザ/
           | #{number_with_delimiter(val)}人
+        - elsif key =~ /札数/
+          | #{number_with_delimiter(val)}件
 
         - elsif key =~ /品数/
-          | #{number_with_delimiter(val)}商品
+          | #{number_with_delimiter(val)}件
 
         - elsif key =~ /件/
           | #{number_with_delimiter(val)}件
