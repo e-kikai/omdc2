@@ -11,7 +11,7 @@
   h4 結果概要
 
   .formula_area
-    . 入札会名 : #{@open.name}
+    . #{@open.name} 結果概要
     . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
     . 下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
     . 入札締切 : #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
@@ -25,11 +25,17 @@
 
     - @results.each do |key, val|
       .
-        | "#{key} : "
+        = "#{key} : "
 
-        - if key =~ /金額/
-          | "#{number_with_delimiter(val)}円"
+        - if key =~ /金額|価格/
+          | #{number_with_delimiter(val)}円
+        - elsif key =~ /人|ユーザ/
+          | #{number_with_delimiter(val)}人
+
+        - elsif key =~ /品数/
+          | #{number_with_delimiter(val)}商品
+
         - elsif key =~ /件/
-          | "#{number_with_delimiter(val)}件"
+          | #{number_with_delimiter(val)}件
         - else
-          | "#{val}"
+          | #{val}

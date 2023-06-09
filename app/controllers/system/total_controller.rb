@@ -187,17 +187,39 @@ class System::TotalController < System::ApplicationController
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
     @open = Open.find(@open_id)
 
-    @products = @open.products.includes(:company, :area)
+    products  = @open.products.includes(:company, :area)
+    details   = products.joins(:detail_logs)
+    favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+    deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+    pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
     @results = {
-      "出品件数"       => @products.count,
-      "最低金額"     => @products.sum(:min_price),
-      "詳細アクセス件数" => @products.joins(:detail_logs).count("detail_logs.id"),
-      "お気に入り件数"   => @products.joins(:favorites).count("favorites.id"),
-      "入札件数"       => @products.sum(:bids_count),
-      "落札件数"       => @products.count(:success_bid_id),
+      "出品数"           => products.count,
+      "出品最低入札価格合計" => products.sum(:min_price),
+
+      "入札数"       => @products.sum(:bids_count),
+      "落札数"       => @products.count(:success_bid_id),
       "落札金額"     => @products.joins(:success_bid).sum("bids.amount"),
+
+      "詳細アクセス件数"              => details.count("detail_logs.id"),
+      "詳細アクセスしたutag人数"       => details.distinct.count("detail_logs.utag"),
+      "詳細アクセスしたログインユーザ数" => details.distinct.count("detail_logs.user_id"),
+      "詳細アクセスされた商品数"        => details.distinct.count("detail_logs.product_id"),
+
+      "お気に入り件数"       => @products.joins(:favorites).count("favorites.id"),
+
+      "お気に入り件数"         => favorites.count("favorites.id"),
+      "お気に入り利用ユーザ人数" => favorites.distinct.count("favorites.user_id"),
+      "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
+
+      "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
+      "お気に入りのうち、削除したユーザ数"    => deletes.distinct.count("favorites.user_id"),
+      "お気に入りのうち、PDF生成された件数"   => pdfs.count("favorites.id"),
+      "お気に入りのうち、PDF生成したユーザ数" => pdfs.distinct.count("favorites.user_id"),
+      "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
     }
+
+
   end
 
   private
