@@ -204,7 +204,7 @@ class System::TotalController < System::ApplicationController
       "落札したユーザ数" => bids.distinct.count("bids.user_id"),
       "落札数"         => products.count(:success_bid_id),
       "落札金額"       => success_bids.sum("bids.amount"),
-      "落札したユーザ数" => success_bids.distinct.count("bids.user_id"),
+      "落札した会社数"      => success_bids.distinct.count("bids.company_id"),
       "落札された出品会社数" => products.where.not(:success_bid_id, nil).distinct.count(:company_id),
 
       "詳細アクセス件数"              => details.count("detail_logs.id"),
