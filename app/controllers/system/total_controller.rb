@@ -197,9 +197,9 @@ class System::TotalController < System::ApplicationController
       "出品数"           => products.count,
       "出品最低入札価格合計" => products.sum(:min_price),
 
-      "入札数"       => @products.sum(:bids_count),
-      "落札数"       => @products.count(:success_bid_id),
-      "落札金額"     => @products.joins(:success_bid).sum("bids.amount"),
+      "入札数"       => products.sum(:bids_count),
+      "落札数"       => products.count(:success_bid_id),
+      "落札金額"     => products.joins(:success_bid).sum("bids.amount"),
 
       "詳細アクセス件数"              => details.count("detail_logs.id"),
       "詳細アクセスしたutag人数"       => details.distinct.count("detail_logs.utag"),
