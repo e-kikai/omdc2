@@ -8,10 +8,9 @@
       span.glyphicon.glyphicon-search
       span.btn-content 検索
 
-  h4 結果概要
+  h4 #{@open.name} 結果概要
 
   .formula_area
-    . #{@open.name} 結果概要
     . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
     . 下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
     . 入札締切 : #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
