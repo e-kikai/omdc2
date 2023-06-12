@@ -230,8 +230,8 @@ class System::TotalController < System::ApplicationController
       "目玉商品の出品最低入札価格合計" => featured.sum(:min_price),
       "目玉商品の出品会社数"         => featured.distinct.count(:company_id),
 
-      "目玉商品の詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
-      "目玉商品のお気に入り"   => featured.joins(:favorites).count("favorites.id"),
+      "目玉商品の商品詳細閲覧件数" => featured.joins(:detail_logs).count("detail_logs.id"),
+      "目玉商品のお気に入り件数"   => featured.joins(:favorites).count("favorites.id"),
       "目玉商品の入札数"       => featured.sum(:bids_count),
       "目玉商品の落札数"       => featured.count(:success_bid_id),
       "目玉商品の落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
