@@ -197,32 +197,44 @@ class System::TotalController < System::ApplicationController
     deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
     pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
+    featured = Product.where(featured: true).group(:open_id)
+
     @results = {
       "出品数"             => products.count,
       "出品最低入札価格合計" => products.sum(:min_price),
       "出品会社数"          => products.distinct.count(:company_id),
 
       "入札数"         => products.sum(:bids_count),
-      "入札した会社数" => bids.distinct.count("bids.company_id"),
+      "入札した会社数"   => bids.distinct.count("bids.company_id"),
       "落札数"         => products.count(:success_bid_id),
       "落札金額"       => success_bids.sum("bids.amount"),
       "落札した会社数"      => success_bids.distinct.count("bids.company_id"),
       "落札された出品会社数" => products.where.not(success_bid_id: nil).distinct.count(:company_id),
 
-      "詳細アクセス件数"              => details.count("detail_logs.id"),
-      "詳細アクセスしたユニークユーザ"       => details.distinct.count("detail_logs.utag"),
-      "詳細アクセスしたログインユーザ" => details.distinct.count("detail_logs.user_id"),
-      "詳細アクセスされた商品数"        => details.distinct.count("detail_logs.product_id"),
+      "商品詳細閲覧件数"             => details.count("detail_logs.id"),
+      "商品詳細閲覧したユニークユーザ" => details.distinct.count("detail_logs.utag"),
+      "商品詳細閲覧したログインユーザ" => details.distinct.count("detail_logs.user_id"),
+      "商品詳細閲覧された商品数"      => details.distinct.count("detail_logs.product_id"),
 
-      "お気に入り件数"         => favorites.count("favorites.id"),
-      "お気に入り利用ユーザ" => favorites.distinct.count("favorites.user_id"),
+      "お気に入り件数"        => favorites.count("favorites.id"),
+      "お気に入り利用ユーザ"   => favorites.distinct.count("favorites.user_id"),
       "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
 
       "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
-      "お気に入りのうち、削除したユーザ"    => deletes.distinct.count("favorites.user_id"),
+      "お気に入りのうち、削除したユーザ"      => deletes.distinct.count("favorites.user_id"),
       "お気に入りのうち、PDF生成件数"        => pdfs.count("favorites.id"),
-      "お気に入りのうち、PDF生成したユーザ" => pdfs.distinct.count("favorites.user_id"),
+      "お気に入りのうち、PDF生成したユーザ"   => pdfs.distinct.count("favorites.user_id"),
       "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
+
+      "目玉商品の出品数"             => featured.count,
+      "目玉商品の出品最低入札価格合計" => featured.sum(:min_price),
+      "目玉商品の出品会社数"         => featured.distinct.count(:company_id),
+
+      "目玉商品の詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+      "目玉商品のお気に入り"   => featured.joins(:favorites).count("favorites.id"),
+      "目玉商品の入札数"       => featured.sum(:bids_count),
+      "目玉商品の落札数"       => featured.count(:success_bid_id),
+      "目玉商品の落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
     }
 
 
