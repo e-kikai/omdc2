@@ -197,7 +197,7 @@ class System::TotalController < System::ApplicationController
     deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
     pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
-    featured = Product.where(featured: true).group(:open_id)
+    featured = products.where(featured: true)
 
     @results = {
       "出品数"             => products.count,
