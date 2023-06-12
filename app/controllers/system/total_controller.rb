@@ -137,6 +137,8 @@ class System::TotalController < System::ApplicationController
       {
         "出品数"       => featured.count,
         "最低金額"     => featured.sum(:min_price),
+        "出品会社数"    => featured.distinct.count(:company_id),
+
         "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
         "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
         "入札数"       => featured.sum(:bids_count),
@@ -208,18 +210,18 @@ class System::TotalController < System::ApplicationController
       "落札された出品会社数" => products.where.not(success_bid_id: nil).distinct.count(:company_id),
 
       "詳細アクセス件数"              => details.count("detail_logs.id"),
-      "詳細アクセスしたutag人数"       => details.distinct.count("detail_logs.utag"),
-      "詳細アクセスしたログインユーザ数" => details.distinct.count("detail_logs.user_id"),
+      "詳細アクセスしたユニークユーザ"       => details.distinct.count("detail_logs.utag"),
+      "詳細アクセスしたログインユーザ" => details.distinct.count("detail_logs.user_id"),
       "詳細アクセスされた商品数"        => details.distinct.count("detail_logs.product_id"),
 
       "お気に入り件数"         => favorites.count("favorites.id"),
-      "お気に入り利用ユーザ人数" => favorites.distinct.count("favorites.user_id"),
+      "お気に入り利用ユーザ" => favorites.distinct.count("favorites.user_id"),
       "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
 
       "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
-      "お気に入りのうち、削除したユーザ数"    => deletes.distinct.count("favorites.user_id"),
-      "お気に入りのうち、PDF生成された件数"   => pdfs.count("favorites.id"),
-      "お気に入りのうち、PDF生成したユーザ数" => pdfs.distinct.count("favorites.user_id"),
+      "お気に入りのうち、削除したユーザ"    => deletes.distinct.count("favorites.user_id"),
+      "お気に入りのうち、PDF生成件数"        => pdfs.count("favorites.id"),
+      "お気に入りのうち、PDF生成したユーザ" => pdfs.distinct.count("favorites.user_id"),
       "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
     }
 
