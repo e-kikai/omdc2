@@ -188,7 +188,7 @@ class System::TotalController < System::ApplicationController
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
     @open    = Open.find(@open_id)
 
-    @company_selector = Company.order(:no).pluck("no || ' : ' || name", :id)
+    @company_selector = ["入札会全体", nil] + Company.order(:no).pluck("no || ' : ' || name", :id)
     @company_id = params[:company_id]
 
     @company = Company.find(@company_id) if @company_id
