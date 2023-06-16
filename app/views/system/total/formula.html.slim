@@ -4,7 +4,7 @@
 .row
   = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
-    = select_tag :open_id, options_for_select(@company_selector, @company_id), { prompt: '全体', 'include_blank': true }, { class: "form-control"}
+    = select_tag :open_id, options_for_select(@company_selector, @company_id), { prompt: '全体', include_blank: true }, class: "form-control"
 
     = button_tag class: "btn btn-info" do
       span.glyphicon.glyphicon-search
