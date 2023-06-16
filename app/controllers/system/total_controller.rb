@@ -184,10 +184,15 @@ class System::TotalController < System::ApplicationController
   end
 
   def formula
-    @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
-
+    @open_selector = Open.order(bid_end_at: :desc).pluck(:name, :id)
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
-    @open = Open.find(@open_id)
+    @open    = Open.find(@open_id)
+
+    @company_selector = Company.order(:no).pluck("no || ' : ' || name", :id)
+    @company_id = params[:company_id]
+
+    @company = Company.find(@company_id) if @company_id
+    products = @open.products.includes(:company, :area)
 
     products     = @open.products.includes(:company, :area)
     details      = products.joins(:detail_logs)
@@ -200,44 +205,41 @@ class System::TotalController < System::ApplicationController
     featured = products.where(featured: true)
 
     @results = {
-      "出品数"             => products.count,
-      "出品最低入札価格合計" => products.sum(:min_price),
-      "出品会社数"          => products.distinct.count(:company_id),
+        "出品数"             => products.count,
+        "出品最低入札価格合計" => products.sum(:min_price),
+        "出品会社数"          => products.distinct.count(:company_id),
 
-      "入札数"         => products.sum(:bids_count),
-      "入札した会社数"   => bids.distinct.count("bids.company_id"),
-      "落札数"         => products.count(:success_bid_id),
-      "落札金額"       => success_bids.sum("bids.amount"),
-      "落札した会社数"      => success_bids.distinct.count("bids.company_id"),
-      "落札された出品会社数" => products.where.not(success_bid_id: nil).distinct.count(:company_id),
+        "入札数"         => products.sum(:bids_count),
+        "入札した会社数"   => bids.distinct.count("bids.company_id"),
+        "落札数"         => products.count(:success_bid_id),
+        "落札金額"       => success_bids.sum("bids.amount"),
+        "落札した会社数"      => success_bids.distinct.count("bids.company_id"),
+        "落札された出品会社数" => products.where.not(success_bid_id: nil).distinct.count(:company_id),
 
-      "商品詳細閲覧件数"             => details.count("detail_logs.id"),
-      "商品詳細閲覧したユニークユーザ" => details.distinct.count("detail_logs.utag"),
-      "商品詳細閲覧したログインユーザ" => details.distinct.count("detail_logs.user_id"),
-      "商品詳細閲覧された商品数"      => details.distinct.count("detail_logs.product_id"),
+        "商品詳細閲覧件数"             => details.count("detail_logs.id"),
+        "商品詳細閲覧したユニークユーザ" => details.distinct.count("detail_logs.utag"),
+        "商品詳細閲覧したログインユーザ" => details.distinct.count("detail_logs.user_id"),
+        "商品詳細閲覧された商品数"      => details.distinct.count("detail_logs.product_id"),
 
-      "お気に入り件数"        => favorites.count("favorites.id"),
-      "お気に入り利用ユーザ"   => favorites.distinct.count("favorites.user_id"),
-      "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
+        "お気に入り件数"        => favorites.count("favorites.id"),
+        "お気に入り利用ユーザ"   => favorites.distinct.count("favorites.user_id"),
+        "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
 
-      "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
-      "お気に入りのうち、削除したユーザ"      => deletes.distinct.count("favorites.user_id"),
-      "お気に入りのうち、PDF生成件数"        => pdfs.count("favorites.id"),
-      "お気に入りのうち、PDF生成したユーザ"   => pdfs.distinct.count("favorites.user_id"),
-      "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
+        "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
+        "お気に入りのうち、削除したユーザ"      => deletes.distinct.count("favorites.user_id"),
+        "お気に入りのうち、PDF生成件数"        => pdfs.count("favorites.id"),
+        "お気に入りのうち、PDF生成したユーザ"   => pdfs.distinct.count("favorites.user_id"),
+        "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
 
-      "目玉商品の出品数"             => featured.count,
-      "目玉商品の出品最低入札価格合計" => featured.sum(:min_price),
-      "目玉商品の出品会社数"         => featured.distinct.count(:company_id),
-
-      "目玉商品の商品詳細閲覧件数" => featured.joins(:detail_logs).count("detail_logs.id"),
-      "目玉商品のお気に入り件数"   => featured.joins(:favorites).count("favorites.id"),
-      "目玉商品の入札数"       => featured.sum(:bids_count),
-      "目玉商品の落札数"       => featured.count(:success_bid_id),
-      "目玉商品の落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
+        "目玉商品の出品数"             => featured.count,
+        "目玉商品の出品最低入札価格合計" => featured.sum(:min_price),
+        "目玉商品の出品会社数"         => featured.distinct.count(:company_id),
+        "目玉商品の商品詳細閲覧件数" => featured.joins(:detail_logs).count("detail_logs.id"),
+        "目玉商品のお気に入り件数"   => featured.joins(:favorites).count("favorites.id"),
+        "目玉商品の入札数"       => featured.sum(:bids_count),
+        "目玉商品の落札数"       => featured.count(:success_bid_id),
+        "目玉商品の落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
     }
-
-
   end
 
   private
