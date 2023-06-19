@@ -219,7 +219,7 @@ class System::TotalController < System::ApplicationController
 
         "入札された件数" => company_products.sum(:bids_count),
         "入札された会社数" => company_bids.distinct.count("bids.company_id"),
-        "落札された数" => products.count(:success_bid_id),
+        "落札された件数" => company_products.count(:success_bid_id),
         "落札された金額" => company_success_bids.sum("bids.amount"),
 
         "商品詳細閲覧件数" => company_details.count("detail_logs.id"),
@@ -239,7 +239,6 @@ class System::TotalController < System::ApplicationController
 
         "目玉商品の出品数" => company_featured.count,
         "目玉商品の出品最低入札価格合計" => company_featured.sum(:min_price),
-        "目玉商品の出品会社数" => company_featured.distinct.count(:company_id),
         "目玉商品の商品詳細閲覧件数" => company_featured.joins(:detail_logs).count("detail_logs.id"),
         "目玉商品のお気に入り件数" => company_featured.joins(:favorites).count("favorites.id"),
         "目玉商品の入札数" => company_featured.sum(:bids_count),
@@ -248,7 +247,7 @@ class System::TotalController < System::ApplicationController
 
         # 入札側
         "入札した件数" => company_buys.sum(:bids_count),
-        "落札した数" => company_success_buys,
+        "落札した件数" => company_success_buys.count,
         "落札した金額" => company_success_buys.sum("bids.amount"),
       }
     else # 全体
