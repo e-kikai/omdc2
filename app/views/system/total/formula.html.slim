@@ -13,10 +13,6 @@
 
   h4 #{@open.name} 結果概要
 
-  -if @company
-    . 会社No. : #{@company.no}
-    . 会社名 : #{@company.name}
-
   .formula_area
     . 出品期間 : #{I18n.l(@open.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open.entry_end_date, format: :short_with_week)}
     . 下見期間 : #{I18n.l(@open.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open.preview_end_date, format: :short_with_week)}
@@ -25,9 +21,10 @@
 
     hr
 
-    / . 出品期間 : #{@open.entry_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.entry_end_date.strftime('%-m/%-d %H:%M')}
-    / . 下見期間 : #{@open.preview_start_date.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.preview_end_date.strftime('%-m/%-d %H:%M')}
-    / . 入札期間 : #{@open.bid_start_at.strftime('%Y/%-m/%-d %H:%M')} 〜 #{@open.bid_end_at.strftime('%-m/%-d %H:%M')}
+    -if @company
+      . 会社No. : #{@company.no}
+      . 会社名 : #{@company.name}
+      hr
 
     - @results.each do |key, val|
       .
