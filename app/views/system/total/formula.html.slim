@@ -14,8 +14,8 @@
   h4 #{@open.name} 結果概要
 
   -if @company
-    ・ 会社No. : #{@company.no}
-    ・ 会社名 : #{@company.name}
+    . 会社No. : #{@company.no}
+    . 会社名 : #{@company.name}
 
   .formula_area
     . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
