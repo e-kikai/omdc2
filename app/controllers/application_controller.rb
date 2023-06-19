@@ -15,9 +15,9 @@ class ApplicationController < ActionController::Base
   # ログイン後のリンク先
   def after_sign_in_path_for(resource)
     case resource
-    when System;  "/system/"
+    when System; "/system/"
     when Company; "/bid/"
-    else          "/mypage/"
+    else "/mypage/"
     end
   end
 
@@ -41,23 +41,23 @@ class ApplicationController < ActionController::Base
     @products = @open_now.products.listed.includes(:company, :genre, :large_genre, :xl_genre, :area, :product_images) if @open_now
 
     ### 次の入札会 ###
-    @open_next = Open.next.first ||  Open.new
+    @open_next = Open.next.first || Open.new
 
     ### 閲覧履歴 ###
     detail_logs = if user_signed_in?
-      @user = current_user
+        @user = current_user
 
-      # IPからユーザ推測
-      ips =  DetailLog.where(user_id: current_user.id).distinct.pluck(:ip)
-      ips << current_user.last_sign_in_ip.to_s
-      ips << current_user.current_sign_in_ip.to_s
+        # IPからユーザ推測
+        ips = DetailLog.where(user_id: current_user.id).distinct.pluck(:ip)
+        ips << current_user.last_sign_in_ip.to_s
+        ips << current_user.current_sign_in_ip.to_s
 
-      ips.uniq
+        ips.uniq
 
-      DetailLog.where(user_id: current_user.id).or(DetailLog.where(ip: ips, user_id: nil))
-    else
-      DetailLog.where(ip: ip)
-    end
+        DetailLog.where(user_id: current_user.id).or(DetailLog.where(ip: ips, user_id: nil))
+      else
+        DetailLog.where(ip: ip)
+      end
 
     detail_logs = detail_logs.where(created_at: (1.year.ago)..(Time.now))
 

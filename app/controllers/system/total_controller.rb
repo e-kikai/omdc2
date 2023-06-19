@@ -2,31 +2,31 @@ class System::TotalController < System::ApplicationController
   include Exports
 
   def index
-    @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
+    @open_selector = Open.order(bid_end_at: :desc).pluck(:name, :id)
     @total_selector = {
-      "検索方法/詳細アクセス、一山"  => :search_hitoyama_by_period,
-      "リンク元/詳細アクセス、一山"  => :links_hitoyama_by_period,
-      "出品会社/デメ半手数料"       => :company_deme,
-      "価格帯/落札結果金額"         => :price_amount,
+      "検索方法/詳細アクセス、一山" => :search_hitoyama_by_period,
+      "リンク元/詳細アクセス、一山" => :links_hitoyama_by_period,
+      "出品会社/デメ半手数料" => :company_deme,
+      "価格帯/落札結果金額" => :price_amount,
       "日別/アクセス,お気に入り利用" => :date_favorite,
       # "入札会/アクセス,お気に入り利用" => :opens_favorite,
-      "エリア/出品・落札結果金額"      => :area_amount,
-      "目玉商品/結果一覧"              => :feature_products,
+      "エリア/出品・落札結果金額" => :area_amount,
+      "目玉商品/結果一覧" => :feature_products,
     }
 
-    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
-    @total   = params[:total] || @total_selector.first[1]
-    @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
+    @total = params[:total] || @total_selector.first[1]
+    @title = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
     target = if @total =~ /by_period/
-      open = Open.find(@open_id)
-      [make_sql(@total), open.bid_start_at.beginning_of_day, open.bid_end_at.end_of_day]
-    else
-      [make_sql(@total), @open_id]
-    end
+        open = Open.find(@open_id)
+        [make_sql(@total), open.bid_start_at.beginning_of_day, open.bid_end_at.end_of_day]
+      else
+        [make_sql(@total), @open_id]
+      end
 
     sanitize_sql = ActiveRecord::Base.send(:sanitize_sql_array, target)
-    @result      = ActiveRecord::Base.connection.select_all(sanitize_sql)
+    @result = ActiveRecord::Base.connection.select_all(sanitize_sql)
 
     respond_to do |format|
       format.html
@@ -115,14 +115,13 @@ class System::TotalController < System::ApplicationController
   def opens
     @total_selector = {
       "アクセス,お気に入り" => :favorites,
-      "目玉商品"          => :features,
+      "目玉商品" => :features,
     }
     @total = (params[:total] || @total_selector.first[1]).to_sym
 
     start_open_id = case @total
-    when :features; 67
-    else;           62
-    end
+      when :features; 67
+      else; 62       end
 
     # 入札会一覧
     opens_base = Open.where("opens.id >= ?", start_open_id)
@@ -131,115 +130,168 @@ class System::TotalController < System::ApplicationController
     @title = "入札会別 - #{@total_selector.key(@total)}"
 
     @results = case @total
-    when :features
-      featured = Product.where(featured: true).group(:open_id)
+      when :features
+        featured = Product.where(featured: true).group(:open_id)
 
-      {
-        "出品数"       => featured.count,
-        "最低金額"     => featured.sum(:min_price),
-        "出品会社数"    => featured.distinct.count(:company_id),
+        {
+          "出品数" => featured.count,
+          "最低金額" => featured.sum(:min_price),
+          "出品会社数" => featured.distinct.count(:company_id),
 
-        "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
-        "お気に入り"   => featured.joins(:favorites).count("favorites.id"),
-        "入札数"       => featured.sum(:bids_count),
-        "落札数"       => featured.count(:success_bid_id),
-        "落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
-      }
+          "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+          "お気に入り" => featured.joins(:favorites).count("favorites.id"),
+          "入札数" => featured.sum(:bids_count),
+          "落札数" => featured.count(:success_bid_id),
+          "落札金額" => featured.joins(:success_bid).sum("bids.amount"),
+        }
+      else
+        products = Product.group(:open_id)
+        details = products.joins(:detail_logs)
+        favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+        deletes = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+        pdfs = favorites.where("favorites.amount IS NOT NULL")
 
-    else
-      products  = Product.group(:open_id)
-      details   = products.joins(:detail_logs)
-      favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
-      deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
-      pdfs      = favorites.where("favorites.amount IS NOT NULL")
+        {
+          "ユーザ(累計)" => opens_base
+            .joins("LEFT JOIN users ON users.created_at < opens.bid_end_at")
+            .where("users.confirmed_at IS NOT NULL").group(:id).count("users.id"),
+          "ユーザ(新規)" => opens_base
+            .joins("LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at")
+            .where("users.confirmed_at IS NOT NULL").group(:id).count("users.id"),
 
-      {
-        "ユーザ(累計)" => opens_base
-          .joins('LEFT JOIN users ON users.created_at < opens.bid_end_at')
-          .where('users.confirmed_at IS NOT NULL').group(:id).count("users.id"),
-        "ユーザ(新規)" => opens_base
-          .joins('LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at')
-          .where('users.confirmed_at IS NOT NULL').group(:id).count("users.id"),
-
-        "出品数"              => products.count,
-        "詳細(件)"            => details.count("detail_logs.id"),
-        "詳細(utag)"          => details.distinct.count("detail_logs.utag"),
-        "詳細(ログイン人)"    => details.distinct.count("detail_logs.user_id"),
-        "詳細(商品数)"        => details.distinct.count("detail_logs.product_id"),
-        "お気に入り(件)"      => favorites.count("favorites.id"),
-        "お気に入り(人)"      => favorites.distinct.count("favorites.user_id"),
-        "お気に入り(商品)"    => favorites.distinct.count("favorites.product_id"),
-        "うち、削除(件)"      => deletes.count("favorites.id"),
-        "うち、削除(人)"      => deletes.distinct.count("favorites.user_id"),
-        "うち、PDF生成(件)"   => pdfs.count("favorites.id"),
-        "うち、PDF生成(人)"   => pdfs.distinct.count("favorites.user_id"),
-        "うち、PDF生成(商品)" => pdfs.distinct.count("favorites.product_id"),
-      }
-    end
+          "出品数" => products.count,
+          "詳細(件)" => details.count("detail_logs.id"),
+          "詳細(utag)" => details.distinct.count("detail_logs.utag"),
+          "詳細(ログイン人)" => details.distinct.count("detail_logs.user_id"),
+          "詳細(商品数)" => details.distinct.count("detail_logs.product_id"),
+          "お気に入り(件)" => favorites.count("favorites.id"),
+          "お気に入り(人)" => favorites.distinct.count("favorites.user_id"),
+          "お気に入り(商品)" => favorites.distinct.count("favorites.product_id"),
+          "うち、削除(件)" => deletes.count("favorites.id"),
+          "うち、削除(人)" => deletes.distinct.count("favorites.user_id"),
+          "うち、PDF生成(件)" => pdfs.count("favorites.id"),
+          "うち、PDF生成(人)" => pdfs.distinct.count("favorites.user_id"),
+          "うち、PDF生成(商品)" => pdfs.distinct.count("favorites.product_id"),
+        }
+      end
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@total}_#{Time.now.strftime('%Y%m%d') }.csv" }
+      format.csv { export_csv "#{@total}_#{Time.now.strftime("%Y%m%d")}.csv" }
     end
   end
 
   def formula
     @open_selector = Open.order(bid_end_at: :desc).pluck(:name, :id)
-    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id  ? (@open_next&.id - 1) : @open_selector.first[1])
-    @open    = Open.find(@open_id)
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
+    @open = Open.find(@open_id)
 
     @company_selector = ["入札会全体", nil] + Company.order(:no).pluck("no || ' : ' || name", :id)
     @company_id = params[:company_id]
 
-    @company = Company.find(@company_id) if @company_id
+    # 条件作成
     products = @open.products.includes(:company, :area)
-
-    products     = @open.products.includes(:company, :area)
-    details      = products.joins(:detail_logs)
-    bids         = products.joins(:bids)
+    details = products.joins(:detail_logs)
+    bids = products.joins(:bids)
     success_bids = products.joins(:success_bid)
     favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
-    deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
-    pdfs      = favorites.where("favorites.amount IS NOT NULL")
-
+    deletes = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+    pdfs = favorites.where("favorites.amount IS NOT NULL")
     featured = products.where(featured: true)
 
-    @results = {
-        "出品数"             => products.count,
-        "出品最低入札価格合計" => products.sum(:min_price),
-        "出品会社数"          => products.distinct.count(:company_id),
+    if @company_id # 会社ごと
+      @company = Company.find(@company_id)
+      company_products = products.where(company_id: @company_id)
+      company_details = company_products.joins(:detail_logs)
+      company_bids = company_products.joins(:bids) # 出品会社
+      company_success_bids = company_products.joins(:success_bid)
+      company_favorites = company_products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+      company_deletes = company_favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+      company_pdfs = company_favorites.where("favorites.amount IS NOT NULL")
+      company_featured = company_products.where(featured: true)
+      company_buys = bids.where("bids.company_id" => @company_id) # 入札側
+      company_success_buys = success_bids.where("bids.company_id" => @company_id)
 
-        "入札数"         => products.sum(:bids_count),
-        "入札した会社数"   => bids.distinct.count("bids.company_id"),
-        "落札数"         => products.count(:success_bid_id),
-        "落札金額"       => success_bids.sum("bids.amount"),
-        "落札した会社数"      => success_bids.distinct.count("bids.company_id"),
+      @results = {
+        # 出品会社
+        "出品数" => company_products.count,
+        "出品最低入札価格合計" => company_products.sum(:min_price),
+
+        "入札された件数" => company_products.sum(:bids_count),
+        "入札された会社数" => company_bids.distinct.count("bids.company_id"),
+        "落札された数" => products.count(:success_bid_id),
+        "落札された金額" => company_success_bids.sum("bids.amount"),
+
+        "商品詳細閲覧件数" => company_details.count("detail_logs.id"),
+        "商品詳細閲覧したユニークユーザ" => company_details.distinct.count("detail_logs.utag"),
+        "商品詳細閲覧したログインユーザ" => company_details.distinct.count("detail_logs.user_id"),
+        "商品詳細閲覧された商品数" => company_details.distinct.count("detail_logs.product_id"),
+
+        "お気に入り件数" => company_favorites.count("favorites.id"),
+        "お気に入り利用ユーザ" => company_favorites.distinct.count("favorites.user_id"),
+        "お気に入りされた商品数" => company_favorites.distinct.count("favorites.product_id"),
+
+        "お気に入りのうち、削除された件数" => company_deletes.count("favorites.id"),
+        "お気に入りのうち、削除したユーザ" => company_deletes.distinct.count("favorites.user_id"),
+        "お気に入りのうち、PDF生成件数" => company_pdfs.count("favorites.id"),
+        "お気に入りのうち、PDF生成したユーザ" => company_pdfs.distinct.count("favorites.user_id"),
+        "お気に入りのうち、PDF生成された商品数" => company_pdfs.distinct.count("favorites.product_id"),
+
+        "目玉商品の出品数" => company_featured.count,
+        "目玉商品の出品最低入札価格合計" => company_featured.sum(:min_price),
+        "目玉商品の出品会社数" => company_featured.distinct.count(:company_id),
+        "目玉商品の商品詳細閲覧件数" => company_featured.joins(:detail_logs).count("detail_logs.id"),
+        "目玉商品のお気に入り件数" => company_featured.joins(:favorites).count("favorites.id"),
+        "目玉商品の入札数" => company_featured.sum(:bids_count),
+        "目玉商品の落札数" => company_featured.count(:success_bid_id),
+        "目玉商品の落札金額" => company_featured.joins(:success_bid).sum("bids.amount"),
+
+        # 入札側
+        "入札した件数" => company_buys.sum(:bids_count),
+        "落札した数" => company_success_buys,
+        "落札した金額" => company_success_buys.sum("bids.amount"),
+      }
+    else # 全体
+      @results = {
+        "出品数" => products.count,
+        "出品最低入札価格合計" => products.sum(:min_price),
+        "出品会社数" => products.distinct.count(:company_id),
+
+        "入札数" => products.sum(:bids_count),
+        "入札した会社数" => bids.distinct.count("bids.company_id"),
+        "落札数" => products.count(:success_bid_id),
+        "落札金額" => success_bids.sum("bids.amount"),
+        "落札した会社数" => success_bids.distinct.count("bids.company_id"),
         "落札された出品会社数" => products.where.not(success_bid_id: nil).distinct.count(:company_id),
 
-        "商品詳細閲覧件数"             => details.count("detail_logs.id"),
+        "商品詳細閲覧件数" => details.count("detail_logs.id"),
         "商品詳細閲覧したユニークユーザ" => details.distinct.count("detail_logs.utag"),
         "商品詳細閲覧したログインユーザ" => details.distinct.count("detail_logs.user_id"),
-        "商品詳細閲覧された商品数"      => details.distinct.count("detail_logs.product_id"),
+        "商品詳細閲覧された商品数" => details.distinct.count("detail_logs.product_id"),
 
-        "お気に入り件数"        => favorites.count("favorites.id"),
-        "お気に入り利用ユーザ"   => favorites.distinct.count("favorites.user_id"),
+        "お気に入り件数" => favorites.count("favorites.id"),
+        "お気に入り利用ユーザ" => favorites.distinct.count("favorites.user_id"),
         "お気に入りされた商品数" => favorites.distinct.count("favorites.product_id"),
 
-        "お気に入りのうち、削除された件数"      => deletes.count("favorites.id"),
-        "お気に入りのうち、削除したユーザ"      => deletes.distinct.count("favorites.user_id"),
-        "お気に入りのうち、PDF生成件数"        => pdfs.count("favorites.id"),
-        "お気に入りのうち、PDF生成したユーザ"   => pdfs.distinct.count("favorites.user_id"),
+        "お気に入りのうち、削除された件数" => deletes.count("favorites.id"),
+        "お気に入りのうち、削除したユーザ" => deletes.distinct.count("favorites.user_id"),
+        "お気に入りのうち、PDF生成件数" => pdfs.count("favorites.id"),
+        "お気に入りのうち、PDF生成したユーザ" => pdfs.distinct.count("favorites.user_id"),
         "お気に入りのうち、PDF生成された商品数" => pdfs.distinct.count("favorites.product_id"),
 
-        "目玉商品の出品数"             => featured.count,
+        "目玉商品の出品数" => featured.count,
         "目玉商品の出品最低入札価格合計" => featured.sum(:min_price),
-        "目玉商品の出品会社数"         => featured.distinct.count(:company_id),
+        "目玉商品の出品会社数" => featured.distinct.count(:company_id),
         "目玉商品の商品詳細閲覧件数" => featured.joins(:detail_logs).count("detail_logs.id"),
-        "目玉商品のお気に入り件数"   => featured.joins(:favorites).count("favorites.id"),
-        "目玉商品の入札数"       => featured.sum(:bids_count),
-        "目玉商品の落札数"       => featured.count(:success_bid_id),
-        "目玉商品の落札金額"     => featured.joins(:success_bid).sum("bids.amount"),
-    }
+        "目玉商品のお気に入り件数" => featured.joins(:favorites).count("favorites.id"),
+        "目玉商品の入札数" => featured.sum(:bids_count),
+        "目玉商品の落札数" => featured.count(:success_bid_id),
+        "目玉商品の落札金額" => featured.joins(:success_bid).sum("bids.amount"),
+      }
+    end
+
+    @company = Company.find(@company_id) if @company_id
+    products = @open.products.includes(:company, :area)
   end
 
   private
@@ -353,7 +405,7 @@ ORDER BY
     "アクセス数(件)" DESC;
 }
     when :price_amount
-    %q{
+      %q{
       SELECT
   '〜 ' || CEIL(pr.min_price * 1.0 / 10000) * 10000 AS "最低価格の価格帯",
   count(*) AS "出品数",
@@ -478,169 +530,169 @@ LEFT JOIN
 ORDER BY
   d.date;
 }
-#     when :opens_favorite
-#     %q{
-# SELECT
-#   o.id,
-#   regexp_replace(o.name, '第([0-9]+)回(.*)', '第\1回') as "入札会",
-#   tb6.user_c AS "ユーザ(累計)",
-#   COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
-#   ORDER BY
-#     o.id
-#   ), tb6.user_c) AS "ユーザ(新規)",
-#   tb8.pc AS "出品数",
-#   tb7.detail_c AS "詳細(件)",
-#   tb7.detail_utag AS "詳細(utag)",
-#   tb7.detail_u AS "詳細(ログイン人)",
-#   tb7.detail_p AS "詳細(商品数)",
-#   tb1.fa_c AS "お気に入り(件)",
-#   tb1.fa_u AS "お気に入り(人)",
-#   tb1.fa_p AS "お気に入り(商品)",
-#   tb3.delete_c AS "削除(件)",
-#   tb3.delete_u AS "削除(人)",
-#   tb2.pdf_c AS "PDF生成(件)",
-#   tb2.pdf_u AS "PDF生成(人)",
-#   tb2.pdf_p AS "PDF生成(商品)"
-#   -- tb4.pdf_delete_c AS "PDF&削除(件)",
-#   -- tb4.pdf_delete_u AS "PDF&削除(人)"
-#   -- tb5.pdf_miss_c AS "短時間で削除(件)",
-#   -- tb5.pdf_miss_u AS "短時間で削除(人)"
-# FROM
-#   opens o
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(f2.id) AS fa_c,
-#       count(DISTINCT f2.user_id) AS fa_u,
-#       count(DISTINCT f2.product_id) AS fa_p
-#     FROM
-#       favorites f2
-#     LEFT JOIN products p2 ON
-#       p2.id = f2.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb1 ON
-#   tb1.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(f2.id) AS pdf_c,
-#       count(DISTINCT f2.user_id) AS pdf_u,
-#       count(DISTINCT f2.product_id) AS pdf_p
-#     FROM
-#       favorites f2
-#     LEFT JOIN products p2 ON
-#       p2.id = f2.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#       AND f2.amount IS NOT NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb2 ON
-#   tb2.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(f2.id) AS delete_c,
-#       count(DISTINCT f2.user_id) AS delete_u
-#     FROM
-#       favorites f2
-#     LEFT JOIN products p2 ON
-#       p2.id = f2.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#       AND f2.soft_destroyed_at IS NOT NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb3 ON
-#   tb3.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(f2.id) AS pdf_delete_c,
-#       count(DISTINCT f2.user_id) AS pdf_delete_u
-#     FROM
-#       favorites f2
-#     LEFT JOIN products p2 ON
-#       p2.id = f2.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#       AND f2.amount IS NOT NULL
-#       AND f2.soft_destroyed_at IS NOT NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb4 ON
-#   tb4.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(f2.id) AS pdf_miss_c,
-#       count(DISTINCT f2.user_id) AS pdf_miss_u
-#     FROM
-#       favorites f2
-#     LEFT JOIN products p2 ON
-#       p2.id = f2.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#       AND f2.soft_destroyed_at IS NOT NULL
-#       AND f2.soft_destroyed_at < f2.created_at + INTERVAL '1hour'
-#     GROUP BY
-#       p2.open_id
-#   ) tb5 ON
-#   tb5.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       o2.id,
-#       count(u.id) AS user_c
-#     FROM
-#       opens o2
-#     LEFT JOIN users u ON
-#       u.created_at < o2.bid_end_at
-#     WHERE
-#       u.confirmed_at IS NOT NULL
-#     GROUP BY
-#       o2.id
-#   )
-#   tb6 ON
-#   tb6.id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(dl.id) AS detail_c,
-#       count(DISTINCT dl.utag) AS detail_utag,
-#       count(DISTINCT dl.user_id) AS detail_u,
-#       count(DISTINCT dl.product_id) AS detail_p
-#     FROM
-#       detail_logs dl
-#     LEFT JOIN products p2 ON
-#       p2.id = dl.product_id
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb7 ON
-#   tb7.open_id = o.id
-# LEFT JOIN (
-#     SELECT
-#       p2.open_id,
-#       count(p2.id) AS pc
-#     FROM
-#       products p2
-#     WHERE
-#       p2.soft_destroyed_at IS NULL
-#     GROUP BY
-#       p2.open_id
-#   ) tb8 ON
-#   tb8.open_id = o.id
-# WHERE
-#   o.id > 61
-# ORDER BY
-#   o.id
-#     }
-  when :feature_products
-    %q{
+      #     when :opens_favorite
+      #     %q{
+      # SELECT
+      #   o.id,
+      #   regexp_replace(o.name, '第([0-9]+)回(.*)', '第\1回') as "入札会",
+      #   tb6.user_c AS "ユーザ(累計)",
+      #   COALESCE(tb6.user_c - LAG(tb6.user_c, 1) OVER (
+      #   ORDER BY
+      #     o.id
+      #   ), tb6.user_c) AS "ユーザ(新規)",
+      #   tb8.pc AS "出品数",
+      #   tb7.detail_c AS "詳細(件)",
+      #   tb7.detail_utag AS "詳細(utag)",
+      #   tb7.detail_u AS "詳細(ログイン人)",
+      #   tb7.detail_p AS "詳細(商品数)",
+      #   tb1.fa_c AS "お気に入り(件)",
+      #   tb1.fa_u AS "お気に入り(人)",
+      #   tb1.fa_p AS "お気に入り(商品)",
+      #   tb3.delete_c AS "削除(件)",
+      #   tb3.delete_u AS "削除(人)",
+      #   tb2.pdf_c AS "PDF生成(件)",
+      #   tb2.pdf_u AS "PDF生成(人)",
+      #   tb2.pdf_p AS "PDF生成(商品)"
+      #   -- tb4.pdf_delete_c AS "PDF&削除(件)",
+      #   -- tb4.pdf_delete_u AS "PDF&削除(人)"
+      #   -- tb5.pdf_miss_c AS "短時間で削除(件)",
+      #   -- tb5.pdf_miss_u AS "短時間で削除(人)"
+      # FROM
+      #   opens o
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(f2.id) AS fa_c,
+      #       count(DISTINCT f2.user_id) AS fa_u,
+      #       count(DISTINCT f2.product_id) AS fa_p
+      #     FROM
+      #       favorites f2
+      #     LEFT JOIN products p2 ON
+      #       p2.id = f2.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb1 ON
+      #   tb1.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(f2.id) AS pdf_c,
+      #       count(DISTINCT f2.user_id) AS pdf_u,
+      #       count(DISTINCT f2.product_id) AS pdf_p
+      #     FROM
+      #       favorites f2
+      #     LEFT JOIN products p2 ON
+      #       p2.id = f2.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #       AND f2.amount IS NOT NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb2 ON
+      #   tb2.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(f2.id) AS delete_c,
+      #       count(DISTINCT f2.user_id) AS delete_u
+      #     FROM
+      #       favorites f2
+      #     LEFT JOIN products p2 ON
+      #       p2.id = f2.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #       AND f2.soft_destroyed_at IS NOT NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb3 ON
+      #   tb3.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(f2.id) AS pdf_delete_c,
+      #       count(DISTINCT f2.user_id) AS pdf_delete_u
+      #     FROM
+      #       favorites f2
+      #     LEFT JOIN products p2 ON
+      #       p2.id = f2.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #       AND f2.amount IS NOT NULL
+      #       AND f2.soft_destroyed_at IS NOT NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb4 ON
+      #   tb4.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(f2.id) AS pdf_miss_c,
+      #       count(DISTINCT f2.user_id) AS pdf_miss_u
+      #     FROM
+      #       favorites f2
+      #     LEFT JOIN products p2 ON
+      #       p2.id = f2.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #       AND f2.soft_destroyed_at IS NOT NULL
+      #       AND f2.soft_destroyed_at < f2.created_at + INTERVAL '1hour'
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb5 ON
+      #   tb5.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       o2.id,
+      #       count(u.id) AS user_c
+      #     FROM
+      #       opens o2
+      #     LEFT JOIN users u ON
+      #       u.created_at < o2.bid_end_at
+      #     WHERE
+      #       u.confirmed_at IS NOT NULL
+      #     GROUP BY
+      #       o2.id
+      #   )
+      #   tb6 ON
+      #   tb6.id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(dl.id) AS detail_c,
+      #       count(DISTINCT dl.utag) AS detail_utag,
+      #       count(DISTINCT dl.user_id) AS detail_u,
+      #       count(DISTINCT dl.product_id) AS detail_p
+      #     FROM
+      #       detail_logs dl
+      #     LEFT JOIN products p2 ON
+      #       p2.id = dl.product_id
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb7 ON
+      #   tb7.open_id = o.id
+      # LEFT JOIN (
+      #     SELECT
+      #       p2.open_id,
+      #       count(p2.id) AS pc
+      #     FROM
+      #       products p2
+      #     WHERE
+      #       p2.soft_destroyed_at IS NULL
+      #     GROUP BY
+      #       p2.open_id
+      #   ) tb8 ON
+      #   tb8.open_id = o.id
+      # WHERE
+      #   o.id > 61
+      # ORDER BY
+      #   o.id
+      #     }
+    when :feature_products
+      %q{
 SELECT
   p.list_no AS  "No.",
   p.name AS "商品名",
@@ -691,7 +743,7 @@ ORDER BY
   p.list_no;
     }
     when :area_amount
-    %q{
+      %q{
 SELECT
   CASE
     WHEN p2.area_id IS NULL THEN '店頭出品'

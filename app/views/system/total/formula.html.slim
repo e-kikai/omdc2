@@ -4,13 +4,18 @@
 .row
   = form_tag("/system/total/formula", method: :get, class: "form-inline filtering-form") do
     = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
-    = select_tag :open_id, options_for_select(@company_selector, @company_id), class: "form-control"
+    span " | "
+    = select_tag :company_id, options_for_select(@company_selector, @company_id), class: "form-control"
 
     = button_tag class: "btn btn-info" do
       span.glyphicon.glyphicon-search
       span.btn-content 検索
 
   h4 #{@open.name} 結果概要
+
+  -if @company
+    ・ 会社No. : #{@company.no}
+    ・ 会社名 : #{@company.name}
 
   .formula_area
     . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}

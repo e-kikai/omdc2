@@ -5,7 +5,7 @@ class System::ToppageLogsController < System::ApplicationController
   before_action :date_selector, only: [:index]
 
   def index
-    @toppage_logs  = ToppageLog.all.includes(:user).where(@where).order(id: :desc)
+    @toppage_logs = ToppageLog.all.includes(:user).where(@where).order(id: :desc)
 
     @ptoppage_logs = @toppage_logs.page(params[:page]).per(100)
 
