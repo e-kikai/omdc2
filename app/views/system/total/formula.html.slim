@@ -18,10 +18,10 @@
     . 会社名 : #{@company.name}
 
   .formula_area
-    . 出品期間 : #{I18n.l(@open_now.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.entry_end_date, format: :short_with_week)}
-    . 下見期間 : #{I18n.l(@open_now.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.preview_end_date, format: :short_with_week)}
-    . 入札締切 : #{I18n.l(@open_now.user_bid_end_at, format: :full_date)} 締切
-    . 搬出期間 : #{I18n.l(@open_now.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open_now.carry_out_end_date, format: :short_with_week)}
+    . 出品期間 : #{I18n.l(@open.entry_start_date, format: :with_week)} 〜 #{I18n.l(@open.entry_end_date, format: :short_with_week)}
+    . 下見期間 : #{I18n.l(@open.preview_start_date, format: :with_week)} 〜 #{I18n.l(@open.preview_end_date, format: :short_with_week)}
+    . 入札締切 : #{I18n.l(@open.user_bid_end_at, format: :full_date)} 締切
+    . 搬出期間 : #{I18n.l(@open.carry_out_start_date, format: :with_week)} 〜 #{I18n.l(@open.carry_out_end_date, format: :short_with_week)}
 
     hr
 
