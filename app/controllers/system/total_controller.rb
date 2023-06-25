@@ -114,7 +114,7 @@ class System::TotalController < System::ApplicationController
 
   def opens
     @total_selector = {
-      # "指標目標"            => :target,
+      "指標目標"            => :target,
       "アクセス,お気に入り" => :favorites,
       "目玉商品"            => :features,
     }
@@ -181,7 +181,15 @@ class System::TotalController < System::ApplicationController
         }
       else
         {
-
+          "出品数"    => products.count,
+          "最低金額"   => products.sum(:min_price),
+          "出品会社数"  => products.distinct.count(:company_id),
+          "詳細アクセス" => products.joins(:detail_logs).count("detail_logs.id"),
+          "お気に入り"  => products.joins(:favorites).count("favorites.id"),
+          "入札数"    => products.sum(:bids_count),
+          "落札数"    => products.count(:success_bid_id),
+          "落札率(%)" => percents(products.count, products.count(:success_bid_id)),
+          "落札金額"   => products.joins(:success_bid).sum("bids.amount"),
         }
 
       end
