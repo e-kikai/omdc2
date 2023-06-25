@@ -176,12 +176,12 @@ class System::TotalController < System::ApplicationController
           "うち、PDF生成(商品)" => pdfs.distinct.count("favorites.product_id"),
         }
       else
+        hitoyama = products.where("products.hitoyama = 'true' OR products.name ~ '(一山|1山|雑品)'")
+
+        product_details = products.joins(:detail_logs).count("detail_logs.id")
+        hitoyama_details = hitoyama.joins(:detail_logs).count("detail_logs.id")
+
         {
-          hitoyama = products.where("products.hitoyama = 'true' OR products.name ~ '(一山|1山|雑品)'")
-
-          product_details = products.joins(:detail_logs).count("detail_logs.id")
-          hitoyama_details = hitoyama.joins(:detail_logs).count("detail_logs.id")
-
           "出品数"    => products.count,
           "出品最低入札価格(円)"   => products.sum(:min_price),
           "出品会社数"  => products.distinct.count(:company_id),
