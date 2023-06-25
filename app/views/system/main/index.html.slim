@@ -33,15 +33,15 @@
           span.btn-content Google Analytics
 
       ul.nav.nav-pills
-        li = link_to "/system/total/goal", class: "btn btn-default btn-square" do
+        li = link_to "/system/total/formula", class: "btn btn-default btn-square" do
           i.fas.fa-table
-          span.btn-content 指標目標
+          span.btn-content 指標目標・集計
         li = link_to "/system/total/", class: "btn btn-default btn-square" do
           i.fas.fa-table
-          span.btn-content 各種集計
-        li = link_to "/system/total/opens", class: "btn btn-default btn-square btn-twoline" do
-          i.fas.fa-table
-          span.btn-content 各種集計<br />(入札会ごと)
+          span.btn-content 入札会各種集計
+        / li = link_to "/system/total/opens", class: "btn btn-default btn-square btn-twoline" do
+        /   i.fas.fa-table
+        /   span.btn-content 各種集計<br />(入札会ごと)
         li = link_to "/system/total/formula", class: "btn btn-default btn-square" do
           i.fas.fa-receipt
           span.btn-content 結果概要
