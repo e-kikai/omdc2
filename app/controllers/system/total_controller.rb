@@ -10,6 +10,7 @@ class System::TotalController < System::ApplicationController
         "価格帯/落札結果金額"       => :price_amount,
         "日別/アクセス,お気に入り利用"  => :date_favorite,
         "エリア/出品・落札結果金額"    => :area_amount,
+        "ジャンル/出品・落札結果金額"    => :genre_amount,
         "目玉商品/結果一覧"        => :feature_products,
     }
 
@@ -33,84 +34,6 @@ class System::TotalController < System::ApplicationController
     end
   end
 
-#   def goal
-#     sql = %q{
-#     SELECT
-#     o.id AS ID,
-#     o.name AS "入札会名",
-#     tp.s_min_price AS "出品最低入札価格(円)",
-#     tp.c_id AS "出品数",
-#     tb.s_amount AS "落札金額(円)",
-#     tp.c_success_bid_id AS "落札数",
-#     tb.c_id AS "入札数",
-#     ROUND(tp.c_success_bid_id * 100.0 / tp.c_id, 2) AS "落札割合(%)",
-#     tp.c_hitoyama AS "一山出品数",
-#     ROUND(tp.c_hitoyama * 100.0 / tp.c_id, 2) AS "一山出品割合(%)",
-#     tdl.c_utag AS "utag数",
-#     tdl.c_id AS "詳細閲覧",
-#     tdl.c_hitoyama AS "一山閲覧",
-#     ROUND(tdl.c_hitoyama * 100.0 / tdl.c_id, 2) AS "一山閲覧割合(%)"
-#   FROM
-#     opens o
-#   LEFT JOIN (
-#       SELECT
-#         p.open_id,
-#         count(DISTINCT p.id) AS c_id,
-#         sum(p.min_price) AS s_min_price,
-#         count(DISTINCT p.success_bid_id) AS c_success_bid_id,
-#         sum(CASE WHEN p.hitoyama = 'true' OR p.name ~ '(一山|1山|雑品)' THEN 1 END) AS c_hitoyama
-#       FROM
-#         products p
-#       WHERE
-#         p.soft_destroyed_at IS NULL
-#       GROUP BY
-#         p.open_id
-#     ) tp ON
-#     tp.open_id = o.id
-#   LEFT JOIN (
-#       SELECT
-#         p2.open_id,
-#         count(b.id) AS c_id,
-#         sum(CASE WHEN b.id = p2.success_bid_id THEN b.amount END) AS s_amount
-#       FROM
-#         products p2
-#       LEFT JOIN bids b ON
-#         b.product_id = p2.id
-#       WHERE
-#         p2.soft_destroyed_at IS NULL
-#         AND b.soft_destroyed_at IS NULL
-#       GROUP BY
-#         p2.open_id
-#     ) tb ON tb.open_id = o.id
-#     LEFT JOIN (
-#       SELECT
-#         p3.open_id,
-#         count(dl.id) AS c_id,
-#         count(DISTINCT dl.utag) as c_utag,
-#         count(CASE WHEN p3.hitoyama = 'true' OR p3.name ~ '(一山|1山|雑品)'  AND dl.id IS NOT NULL THEN 1 END) AS c_hitoyama
-#       FROM
-#         detail_logs dl
-#       LEFT JOIN products p3 ON
-#         dl.product_id = p3.id
-#       WHERE
-#         p3.soft_destroyed_at IS NULL
-#       GROUP BY
-#         p3.open_id
-#     ) tdl ON tdl.open_id = o.id
-#   WHERE
-#     o.soft_destroyed_at IS NULL
-#   ORDER BY
-#     o.id
-# }
-
-#     @result = ActiveRecord::Base.connection.select_all(sql)
-
-#     respond_to do |format|
-#       format.html
-#       format.csv { export_csv "goal.csv", :index }
-#     end
-#   end
-
   def opens
     @total_selector = {
       "指標目標"            => :goal,
@@ -120,9 +43,9 @@ class System::TotalController < System::ApplicationController
     @total = (params[:total] || @total_selector.first[1]).to_sym
 
     start_open_id = case @total
-    when :features; 67
+    when :features;  67
     when :favorites; 62
-    else;           0
+    else;            0
     end
 
     # 入札会一覧
@@ -645,6 +568,51 @@ GROUP BY
   a.order_no
 ORDER BY
   a.order_no;
+    }
+  when :genre_amount
+    %q{
+SELECT
+  xg.name AS 大ジャンル,
+  lg.name AS 中ジャンル,
+  count(p.id) AS 出品商品数,
+  sum(p.min_price) AS "最低入札価格総額(円)",
+  sum(bc1.c) AS 入札数,
+  sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) AS 落札数,
+  round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 / sum(bc1.c), 2) AS "落札率(%)",
+  sum(sb.amount) AS "落札金額合計(円)"
+FROM
+  products p
+LEFT JOIN genres g ON
+  g.id = p.genre_id
+LEFT JOIN large_genres lg ON
+  lg.id = g.large_genre_id
+LEFT JOIN xl_genres xg ON
+  xg.id = lg.xl_genre_id
+LEFT JOIN bids sb ON
+  sb.id = p.success_bid_id
+LEFT JOIN (
+    SELECT
+      b2.product_id,
+      count(b2.id) AS c
+    FROM
+      bids b2
+    WHERE
+      b2.soft_destroyed_at IS NULL
+    GROUP BY
+      b2.product_id
+  ) bc1 ON
+  bc1.product_id = p.id
+WHERE
+  p.soft_destroyed_at IS NULL
+  AND open_id = ?
+GROUP BY
+  lg.name,
+  xg.name,
+  xg.order_no,
+  lg.order_no
+ORDER BY
+  xg.order_no,
+  lg.order_no;
     }
     end
   end

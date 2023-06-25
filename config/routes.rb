@@ -199,7 +199,7 @@ Rails.application.routes.draw do
 
     resources :total,  only: [:index] do
       collection do
-        get 'goal'
+        # get 'goal'
         get 'opens'
         get 'formula'
       end
