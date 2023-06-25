@@ -2,21 +2,21 @@ class System::TotalController < System::ApplicationController
   include Exports
 
   def index
-    @open_selector = Open.order(bid_end_at: :desc).pluck(:name, :id)
-    @total_selector = {
-      "検索方法/詳細アクセス、一山" => :search_hitoyama_by_period,
-      "リンク元/詳細アクセス、一山" => :links_hitoyama_by_period,
-      "出品会社/デメ半手数料" => :company_deme,
-      "価格帯/落札結果金額" => :price_amount,
-      "日別/アクセス,お気に入り利用" => :date_favorite,
+    @open_selector         = Open.order(bid_end_at: :desc).pluck(:name, :id)
+    @total_selector        = {
+        "検索方法/詳細アクセス、一山"   => :search_hitoyama_by_period,
+        "リンク元/詳細アクセス、一山"   => :links_hitoyama_by_period,
+        "出品会社/デメ半手数料"      => :company_deme,
+        "価格帯/落札結果金額"       => :price_amount,
+        "日別/アクセス,お気に入り利用"  => :date_favorite,
       # "入札会/アクセス,お気に入り利用" => :opens_favorite,
-      "エリア/出品・落札結果金額" => :area_amount,
-      "目玉商品/結果一覧" => :feature_products,
+        "エリア/出品・落札結果金額"    => :area_amount,
+        "目玉商品/結果一覧"        => :feature_products,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
-    @total = params[:total] || @total_selector.first[1]
-    @title = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
+    @total   = params[:total] || @total_selector.first[1]
+    @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
     target = if @total =~ /by_period/
         open = Open.find(@open_id)
@@ -114,42 +114,48 @@ class System::TotalController < System::ApplicationController
 
   def opens
     @total_selector = {
+      # "指標目標"            => :target,
       "アクセス,お気に入り" => :favorites,
-      "目玉商品" => :features,
+      "目玉商品"            => :features,
     }
     @total = (params[:total] || @total_selector.first[1]).to_sym
 
     start_open_id = case @total
-      when :features; 67
-      else; 62       end
+    when :features; 67
+    when :favorites; 62
+    else;           0
+    end
 
     # 入札会一覧
     opens_base = Open.where("opens.id >= ?", start_open_id)
-    @opens = opens_base.order(bid_end_at: :asc).pluck(:id, :name)
+    @opens     = opens_base.order(bid_end_at: :asc).pluck(:id, :name)
 
     @title = "入札会別 - #{@total_selector.key(@total)}"
 
+    products = Product.group(:open_id)
+
+
     @results = case @total
       when :features
-        featured = Product.where(featured: true).group(:open_id)
+        featured = products.where(featured: true)
 
         {
-          "出品数" => featured.count,
-          "最低金額" => featured.sum(:min_price),
-          "出品会社数" => featured.distinct.count(:company_id),
-
+          "出品数"    => featured.count,
+          "出品率(%)" => percents(products.count, featured.count),
+          "最低金額"   => featured.sum(:min_price),
+          "出品会社数"  => featured.distinct.count(:company_id),
           "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
-          "お気に入り" => featured.joins(:favorites).count("favorites.id"),
-          "入札数" => featured.sum(:bids_count),
-          "落札数" => featured.count(:success_bid_id),
-          "落札金額" => featured.joins(:success_bid).sum("bids.amount"),
+          "お気に入り"  => featured.joins(:favorites).count("favorites.id"),
+          "入札数"    => featured.sum(:bids_count),
+          "落札数"    => featured.count(:success_bid_id),
+          "落札率(%)" => percents(featured.count, featured.count(:success_bid_id)),
+          "落札金額"   => featured.joins(:success_bid).sum("bids.amount"),
         }
-      else
-        products = Product.group(:open_id)
-        details = products.joins(:detail_logs)
+      when :favorites
+        details   = products.joins(:detail_logs)
         favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
-        deletes = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
-        pdfs = favorites.where("favorites.amount IS NOT NULL")
+        deletes   = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+        pdfs      = favorites.where("favorites.amount IS NOT NULL")
 
         {
           "ユーザ(累計)" => opens_base
@@ -159,20 +165,25 @@ class System::TotalController < System::ApplicationController
             .joins("LEFT JOIN users ON users.created_at BETWEEN opens.bid_start_at AND opens.bid_end_at")
             .where("users.confirmed_at IS NOT NULL").group(:id).count("users.id"),
 
-          "出品数" => products.count,
-          "詳細(件)" => details.count("detail_logs.id"),
-          "詳細(utag)" => details.distinct.count("detail_logs.utag"),
-          "詳細(ログイン人)" => details.distinct.count("detail_logs.user_id"),
-          "詳細(商品数)" => details.distinct.count("detail_logs.product_id"),
-          "お気に入り(件)" => favorites.count("favorites.id"),
-          "お気に入り(人)" => favorites.distinct.count("favorites.user_id"),
-          "お気に入り(商品)" => favorites.distinct.count("favorites.product_id"),
-          "うち、削除(件)" => deletes.count("favorites.id"),
-          "うち、削除(人)" => deletes.distinct.count("favorites.user_id"),
-          "うち、PDF生成(件)" => pdfs.count("favorites.id"),
-          "うち、PDF生成(人)" => pdfs.distinct.count("favorites.user_id"),
+          "出品数"          => products.count,
+          "詳細(件)"        => details.count("detail_logs.id"),
+          "詳細(utag)"     => details.distinct.count("detail_logs.utag"),
+          "詳細(ログイン人)"    => details.distinct.count("detail_logs.user_id"),
+          "詳細(商品数)"      => details.distinct.count("detail_logs.product_id"),
+          "お気に入り(件)"     => favorites.count("favorites.id"),
+          "お気に入り(人)"     => favorites.distinct.count("favorites.user_id"),
+          "お気に入り(商品)"    => favorites.distinct.count("favorites.product_id"),
+          "うち、削除(件)"     => deletes.t("favorites.id"),
+          "うち、削除(人)"     => deletes.distinct.count("favorites.user_id"),
+          "うち、PDF生成(件)"  => pdfs.count("favorites.id"),
+          "うち、PDF生成(人)"  => pdfs.distinct.count("favorites.user_id"),
           "うち、PDF生成(商品)" => pdfs.distinct.count("favorites.product_id"),
         }
+      else
+        {
+
+        }
+
       end
 
     respond_to do |format|
@@ -190,26 +201,26 @@ class System::TotalController < System::ApplicationController
     @company_id = params[:company_id]
 
     # 条件作成
-    products = @open.products.includes(:company, :area)
-    details = products.joins(:detail_logs)
-    bids = products.joins(:bids)
+    products     = @open.products.includes(:company, :area)
+    details      = products.joins(:detail_logs)
+    bids         = products.joins(:bids)
     success_bids = products.joins(:success_bid)
-    favorites = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
-    deletes = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
-    pdfs = favorites.where("favorites.amount IS NOT NULL")
-    featured = products.where(featured: true)
+    favorites    = products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+    deletes      = favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+    pdfs         = favorites.where("favorites.amount IS NOT NULL")
+    featured     = products.where(featured: true)
 
     if @company_id # 会社ごと
-      @company = Company.find(@company_id)
-      company_products = products.where(company_id: @company_id)
-      company_details = company_products.joins(:detail_logs)
-      company_bids = company_products.joins(:bids) # 出品会社
+      @company             = Company.find(@company_id)
+      company_products     = products.where(company_id: @company_id)
+      company_details      = company_products.joins(:detail_logs)
+      company_bids         = company_products.joins(:bids) # 出品会社
       company_success_bids = company_products.joins(:success_bid)
-      company_favorites = company_products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
-      company_deletes = company_favorites.where("favorites.soft_destroyed_at IS NOT NULL")
-      company_pdfs = company_favorites.where("favorites.amount IS NOT NULL")
-      company_featured = company_products.where(featured: true)
-      company_buys = bids.where("bids.company_id" => @company_id) # 入札側
+      company_favorites    = company_products.joins("INNER JOIN favorites ON favorites.product_id = products.id")
+      company_deletes      = company_favorites.where("favorites.soft_destroyed_at IS NOT NULL")
+      company_pdfs         = company_favorites.where("favorites.amount IS NOT NULL")
+      company_featured     = company_products.where(featured: true)
+      company_buys         = bids.where("bids.company_id" => @company_id) # 入札側
       company_success_buys = success_bids.where("bids.company_id" => @company_id)
 
       @results = {
@@ -227,8 +238,8 @@ class System::TotalController < System::ApplicationController
         "商品詳細閲覧したログインユーザ" => company_details.distinct.count("detail_logs.user_id"),
         "商品詳細閲覧された商品数" => company_details.distinct.count("detail_logs.product_id"),
 
-        "お気に入り件数" => company_favorites.count("favorites.id"),
-        "お気に入り利用ユーザ" => company_favorites.distinct.count("favorites.user_id"),
+        "お気に入り件数"     => company_favorites.count("favorites.id"),
+        "お気に入り利用ユーザ"  => company_favorites.distinct.count("favorites.user_id"),
         "お気に入りされた商品数" => company_favorites.distinct.count("favorites.product_id"),
 
         "お気に入りのうち、削除された件数" => company_deletes.count("favorites.id"),
@@ -784,6 +795,12 @@ GROUP BY
 ORDER BY
   a.order_no;
     }
+    end
+  end
+
+  def percents(denominators, molecules)
+    denominators.to_h do |k, v|
+      [k, (((molecules[k] || 0) / v.to_f) * 100).round(2) ]
     end
   end
 end
