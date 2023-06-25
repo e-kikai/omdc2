@@ -133,18 +133,18 @@ class System::TotalController < System::ApplicationController
     @title = "入札会別 - #{@total_selector.key(@total)}"
 
     products = Product.group(:open_id)
-
+    hitoyama = products.where("products.hitoyama = 'true' OR products.name ~ '(一山|1山|雑品)'")
 
     @results = case @total
       when :features
         featured = products.where(featured: true)
 
         {
-          "出品数"    => featured.count,
-          "出品率(%)" => percents(products.count, featured.count),
+          "目玉商品出品数"    => featured.count,
+          "目玉商品出品率(%)" => percents(products.count, featured.count),
           "最低金額"   => featured.sum(:min_price),
           "出品会社数"  => featured.distinct.count(:company_id),
-          "詳細アクセス" => featured.joins(:detail_logs).count("detail_logs.id"),
+          "詳細閲覧" => featured.joins(:detail_logs).count("detail_logs.id"),
           "お気に入り"  => featured.joins(:favorites).count("favorites.id"),
           "入札数"    => featured.sum(:bids_count),
           "落札数"    => featured.count(:success_bid_id),
@@ -173,7 +173,7 @@ class System::TotalController < System::ApplicationController
           "お気に入り(件)"     => favorites.count("favorites.id"),
           "お気に入り(人)"     => favorites.distinct.count("favorites.user_id"),
           "お気に入り(商品)"    => favorites.distinct.count("favorites.product_id"),
-          "うち、削除(件)"     => deletes.t("favorites.id"),
+          "うち、削除(件)"     => deletes.count("favorites.id"),
           "うち、削除(人)"     => deletes.distinct.count("favorites.user_id"),
           "うち、PDF生成(件)"  => pdfs.count("favorites.id"),
           "うち、PDF生成(人)"  => pdfs.distinct.count("favorites.user_id"),
@@ -182,14 +182,19 @@ class System::TotalController < System::ApplicationController
       else
         {
           "出品数"    => products.count,
-          "最低金額"   => products.sum(:min_price),
+          "出品最低入札価格(円)"   => products.sum(:min_price),
           "出品会社数"  => products.distinct.count(:company_id),
-          "詳細アクセス" => products.joins(:detail_logs).count("detail_logs.id"),
-          "お気に入り"  => products.joins(:favorites).count("favorites.id"),
-          "入札数"    => products.sum(:bids_count),
+          "落札金額(円)"   => products.joins(:success_bid).sum("bids.amount"),
           "落札数"    => products.count(:success_bid_id),
+          "入札数"    => products.sum(:bids_count),
           "落札率(%)" => percents(products.count, products.count(:success_bid_id)),
-          "落札金額"   => products.joins(:success_bid).sum("bids.amount"),
+          "一山出品数"    => hitoyama.count,
+          "一山出品率(%)" => percents(products.count, hitoyama.count),
+          "utag数" => products.joins(:detail_logs).distinct.count("detail_logs.utag"),
+          "詳細閲覧" => products.joins(:detail_logs).count("detail_logs.id"),
+          "一山閲覧" => hitoyama.joins(:detail_logs).count("detail_logs.id"),
+          "一山閲覧率(%)" => percents(products.joins(:detail_logs).count("detail_logs.id"), hitoyama.joins(:detail_logs).count("detail_logs.id")),
+
         }
 
       end
