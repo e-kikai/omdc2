@@ -578,7 +578,7 @@ SELECT
   sum(p.min_price) AS "最低入札価格総額(円)",
   sum(bc1.c) AS 入札数,
   sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) AS 落札数,
-  round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 / sum(bc1.c), 2) AS "落札率(%)",
+  round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 /  count(DISTINCT p.id), 2) AS "落札率(%)",
   sum(sb.amount) AS "落札金額合計(円)"
 FROM
   products p
