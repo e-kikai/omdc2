@@ -30,7 +30,7 @@ class System::TotalController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@total}_#{@name.gsub(/[^\d]/, "")}.csv" }
+      format.csv { export_csv "#{@total}_#{@title.gsub(/[^\d]/, "")}.csv" }
     end
   end
 
@@ -88,7 +88,7 @@ class System::TotalController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@total}_#{@name.gsub(/[^\d]/, "")}.csv" }
+      format.csv { export_csv "#{@total}_#{@title.gsub(/[^\d]/, "")}.csv" }
     end
   end
 
