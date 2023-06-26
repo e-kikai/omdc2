@@ -61,14 +61,14 @@ class System::TotalController < System::ApplicationController
         {
           "目玉商品出品数"    => featured.count,
           "目玉商品出品率(%)" => percents(products.count, featured.count),
-          "最低金額"   => featured.sum(:min_price),
-          "出品会社数"  => featured.distinct.count(:company_id),
-          "詳細閲覧" => featured.joins(:detail_logs).count("detail_logs.id"),
-          "お気に入り"  => featured.joins(:favorites).count("favorites.id"),
-          "入札数"    => featured.sum(:bids_count),
-          "落札数"    => featured.count(:success_bid_id),
-          "落札率(%)" => percents(featured.count, featured.count(:success_bid_id)),
-          "落札金額"   => featured.joins(:success_bid).sum("bids.amount"),
+          "最低金額"       => featured.sum(:min_price),
+          "出品会社数"      => featured.distinct.count(:company_id),
+          "詳細閲覧"       => featured.joins(:detail_logs).count("detail_logs.id"),
+          "お気に入り"      => featured.joins(:favorites).count("favorites.id"),
+          "入札数"        => featured.sum(:bids_count),
+          "落札数"        => featured.count(:success_bid_id),
+          "落札率(%)"     => percents(featured.count, featured.count(:success_bid_id)),
+          "落札金額"       => featured.joins(:success_bid).sum("bids.amount"),
         }
       when :favorites
         details   = products.joins(:detail_logs)
@@ -105,19 +105,19 @@ class System::TotalController < System::ApplicationController
         hitoyama_details = hitoyama.joins(:detail_logs).count("detail_logs.id")
 
         {
-          "出品数"    => products.count,
-          "出品最低入札価格(円)"   => products.sum(:min_price),
-          "出品会社数"  => products.distinct.count(:company_id),
-          "落札金額(円)"   => products.joins(:success_bid).sum("bids.amount"),
-          "落札数"    => products.count(:success_bid_id),
-          "入札数"    => products.sum(:bids_count),
-          "落札率(%)" => percents(products.count, products.count(:success_bid_id)),
-          "一山出品数"    => hitoyama.count,
-          "一山出品率(%)" => percents(products.count, hitoyama.count),
-          "utag数" => products.joins(:detail_logs).distinct.count("detail_logs.utag"),
-          "詳細閲覧" => product_details,
-          "一山閲覧" => hitoyama_details,
-          "一山閲覧率(%)" => percents(product_details, hitoyama_details),
+          "出品数"         => products.count,
+          "出品最低入札価格(円)" => products.sum(:min_price),
+          "出品会社数"       => products.distinct.count(:company_id),
+          "落札金額(円)"     => products.joins(:success_bid).sum("bids.amount"),
+          "落札数"         => products.count(:success_bid_id),
+          "入札数"         => products.sum(:bids_count),
+          "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
+          "一山出品数"       => hitoyama.count,
+          "一山出品率(%)"    => percents(products.count, hitoyama.count),
+          "utag数"       => products.joins(:detail_logs).distinct.count("detail_logs.utag"),
+          "詳細閲覧"        => product_details,
+          "一山閲覧"        => hitoyama_details,
+          "一山閲覧率(%)"    => percents(product_details, hitoyama_details),
         }
       end
 
@@ -585,7 +585,7 @@ FROM
 LEFT JOIN xl_genres xg ON
   xg.id = lg.xl_genre_id
 LEFT JOIN genres g ON
-  g.large_genre_id = p.id
+  g.large_genre_id = lg.id
 LEFT JOIN products p ON
   p.genre_id = g.id
 LEFT JOIN bids sb ON
