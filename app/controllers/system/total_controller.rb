@@ -52,7 +52,7 @@ class System::TotalController < System::ApplicationController
     @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
     @results = case @total
-    when :features
+    # when :features
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
       products = Product.where(open_id: @open_id).joins(:genre, :large_genre).group("large_genres.id")
 
@@ -68,7 +68,7 @@ class System::TotalController < System::ApplicationController
         "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
         "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
       }
-    end
+    # end
 
     respond_to do |format|
       format.html
