@@ -1,5 +1,5 @@
 CSV.generate do |row|
-  head = @results.keys.each { |key| head << key }
+  head = @results.keys
   row << head
 
   @pivots.each do |pi|
