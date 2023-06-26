@@ -581,13 +581,13 @@ SELECT
   round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 /  count(DISTINCT p.id), 2) AS "落札率(%)",
   sum(sb.amount) AS "落札金額合計(円)"
 FROM
-  products p
-LEFT JOIN genres g ON
-  g.id = p.genre_id
-LEFT JOIN large_genres lg ON
-  lg.id = g.large_genre_id
+  large_genres lg
 LEFT JOIN xl_genres xg ON
   xg.id = lg.xl_genre_id
+LEFT JOIN genres g ON
+  g.large_genre_id = p.id
+LEFT JOIN products p ON
+  p.genre_id = g.id
 LEFT JOIN bids sb ON
   sb.id = p.success_bid_id
 LEFT JOIN (
