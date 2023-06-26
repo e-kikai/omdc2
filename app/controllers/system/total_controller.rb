@@ -52,7 +52,7 @@ class System::TotalController < System::ApplicationController
     @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
     @results = case @total
-    # when :features
+    when :genre_amount
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
       products = Product.where(open_id: @open_id).joins(:genre, :large_genre).group("large_genres.id")
 
@@ -68,7 +68,23 @@ class System::TotalController < System::ApplicationController
         "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
         "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
       }
-    # end
+    else
+      large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
+      products = Product.where(open_id: @open_id).joins(:genre, :large_genre).group("large_genres.id")
+
+      @pivots = large_genres.pluck(:id)
+
+      {
+        "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
+        "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
+        "出品商品数"       => products.count,
+        "最低入札価格総額(円)" => products.sum(:min_price),
+        "入札数"         => products.sum(:bids_count),
+        "落札数"         => products.count(:success_bid_id),
+        "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
+        "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
+      }
+    end
 
     respond_to do |format|
       format.html
