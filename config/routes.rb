@@ -200,6 +200,7 @@ Rails.application.routes.draw do
     resources :total,  only: [:index] do
       collection do
         # get 'goal'
+        get 'inddex2'
         get 'opens'
         get 'formula'
       end

@@ -1,0 +1,75 @@
+- set_meta_tags title: "入札会各種集計"
+- breadcrumb  :system_something, "入札会各種集計"
+
+.row
+  = form_tag("/system/total/index2", method: :get, class: "form-inline filtering-form") do
+    = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
+    = button_tag class: "btn btn-info" do
+      span.glyphicon.glyphicon-search
+      span.btn-content 検索
+
+    = button_tag :submit, name: :format, value: :csv, data: { "disable-with" => "出力中..." }, class: "btn btn-default btn-square" do
+      i.fas.fa-file-csv
+      span.btn-content CSV出力
+
+  h4 = @title
+
+  / . = @sql
+
+  .total_area.scroll_div
+    table.table.table-striped.table-hover.table-condensed.table-bordered.table-responsive
+      thead
+        tr
+          / th.id ID
+          / th 入札会
+          - @results.keys.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))
+      tbody
+        - @pivots.each do |pi|
+            tr
+              / td.id = open[0]
+              / td = open[1].gsub(/(.*)第([0-9]+)回(.*)/) { "第#{$2}回" }
+
+              - @results.each do |col, vals|
+                - val = vals[pi]
+
+                // クラス //
+                - cls = case
+                - when col =~ /(id|no.)/i;           :id
+                - when col =~ /(date)/i;             :date
+                - when col=~ /(order_no)/i;          next
+                - when col =~ /(商品名)/i;           :name
+                - when col =~ /(価格|金額|デメ半)/i; :price
+                - when col =~ /(年式)/i;             ""
+                - when val.is_a?(Numeric);           :num
+
+                // 数値 //
+                - v = case
+                - when val.blank? ;        ""
+                - when col =~ /(id|no.)/i; r
+                - when col =~ /(date)/i;   I18n.l(DateTime.parse(val), format: :date)
+                - when val.is_a?(Numeric); number_with_delimiter(val)
+                - else;                    Charwidth.normalize(val)
+
+                td class="#{cls} #{col}" = v
+
+      tfoot
+        tr
+          / th.id ID
+          / th 入札会
+          - @results.keys.each do |col|
+            - if col =~ /(id|no.)/i
+              - cls = :id
+            - elsif col =~ /(date)/i
+              - cls = :date
+              - col = "日付"
+            - elsif col =~ /(order_no)/i
+              - next
+            th class="#{cls}" = nl2br(col.gsub("(", "\n(").gsub("&", "\n&"))

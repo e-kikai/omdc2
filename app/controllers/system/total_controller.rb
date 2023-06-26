@@ -4,14 +4,14 @@ class System::TotalController < System::ApplicationController
   def index
     @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
     @total_selector = {
-        "検索方法/詳細アクセス、一山"   => :search_hitoyama_by_period,
-        "リンク元/詳細アクセス、一山"   => :links_hitoyama_by_period,
-        "出品会社/デメ半手数料"      => :company_deme,
-        "価格帯/落札結果金額"       => :price_amount,
-        "日別/アクセス,お気に入り利用"  => :date_favorite,
-        "エリア/出品・落札結果金額"    => :area_amount,
-        "ジャンル/出品・落札結果金額"    => :genre_amount,
-        "目玉商品/結果一覧"        => :feature_products,
+        "検索方法/詳細アクセス、一山"  => :search_hitoyama_by_period,
+        "リンク元/詳細アクセス、一山"  => :links_hitoyama_by_period,
+        "出品会社/デメ半手数料"     => :company_deme,
+        "価格帯/落札結果金額"      => :price_amount,
+        "日別/アクセス,お気に入り利用" => :date_favorite,
+        "エリア/出品・落札結果金額"   => :area_amount,
+        "ジャンル/出品・落札結果金額"  => :genre_amount,
+        "目玉商品/結果一覧"       => :feature_products,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
@@ -30,7 +30,49 @@ class System::TotalController < System::ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { export_csv "#{@total}_#{@open_id}.csv" }
+      format.csv { export_csv "#{@total}_#{@name.gsub(/[^\d]/, "")}.csv" }
+    end
+  end
+
+  def index2
+    @open_selector  = Open.order(bid_end_at: :desc).pluck(:name, :id)
+    @total_selector = {
+        # "検索方法/詳細アクセス、一山"  => :search_hitoyama_by_period,
+        # "リンク元/詳細アクセス、一山"  => :links_hitoyama_by_period,
+        # "出品会社/デメ半手数料"     => :company_deme,
+        # "価格帯/落札結果金額"      => :price_amount,
+        # "日別/アクセス,お気に入り利用" => :date_favorite,
+        # "エリア/出品・落札結果金額"   => :area_amount,
+        "ジャンル/出品・落札結果金額"  => :genre_amount,
+        # "目玉商品/結果一覧"       => :feature_products,
+    }
+
+    @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
+    @total   = params[:total] || @total_selector.first[1]
+    @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
+
+    @results = case @total
+    when :features
+      large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
+      products = Product.where(open_id: @open_id).joins(:genre, :large_genre).group("large_genres.id")
+
+      @pivots = large_genres.pluck(:id)
+
+      {
+        "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
+        "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
+        "出品商品数"       => products.count,
+        "最低入札価格総額(円)" => products.sum(:min_price),
+        "入札数"         => products.sum(:bids_count),
+        "落札数"         => products.count(:success_bid_id),
+        "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
+        "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
+      }
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv { export_csv "#{@total}_#{@name.gsub(/[^\d]/, "")}.csv" }
     end
   end
 
