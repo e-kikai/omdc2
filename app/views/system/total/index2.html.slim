@@ -3,6 +3,8 @@
 
 .row
   = form_tag("/system/total/index2", method: :get, class: "form-inline filtering-form") do
+    = select_tag :open_id, options_for_select(@open_selector, @open_id), class: "form-control"
+    span = " - "
     = select_tag :total, options_for_select(@total_selector, @total), class: "form-control"
     = button_tag class: "btn btn-info" do
       span.glyphicon.glyphicon-search
