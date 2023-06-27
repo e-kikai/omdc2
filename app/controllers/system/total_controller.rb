@@ -10,7 +10,7 @@ class System::TotalController < System::ApplicationController
         "価格帯/落札結果金額"      => :price_amount,
         "日別/アクセス,お気に入り利用" => :date_favorite,
         "エリア/出品・落札結果金額"   => :area_amount,
-        "ジャンル/出品・落札結果金額"  => :genre_amount,
+        # "ジャンル/出品・落札結果金額"  => :genre_amount,
         "目玉商品/結果一覧"       => :feature_products,
     }
 
@@ -42,8 +42,8 @@ class System::TotalController < System::ApplicationController
         # "出品会社/デメ半手数料"     => :company_deme,
         # "価格帯/落札結果金額"      => :price_amount,
         # "日別/アクセス,お気に入り利用" => :date_favorite,
-        # "エリア/出品・落札結果金額"   => :area_amount,
-        "ジャンル/出品・落札結果金額"  => :genre_amount,
+        "ジャンル/出品・落札結果金額" => :genre_amount,
+        "エリア/出品・落札結果金額"   => :area_amount,
         # "目玉商品/結果一覧"       => :feature_products,
     }
 
@@ -52,15 +52,14 @@ class System::TotalController < System::ApplicationController
     @title   = "#{@open_selector.to_h.key(@open_id.to_i)} - #{@total_selector.key(@total.to_sym)}"
 
     @results = case @total
-    when :genre_amount
-      large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
-      products = Product.where(open_id: @open_id).joins(:genre).group("genres.large_genre_id")
+    when :area_amount
+      areas = Area..order(:order_no)
+      products = Product.where(open_id: @open_id).group(:area_id)
 
-      @pivots = large_genres.pluck(:id)
+      @pivots = areas.pluck(:id)
 
       {
-        "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
-        "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
+        "エリア"       => areas.pluck(:id, :name).to_h,
         "出品商品数"       => products.count,
         "最低入札価格総額(円)" => products.sum(:min_price),
         "入札数"         => products.sum(:bids_count),
