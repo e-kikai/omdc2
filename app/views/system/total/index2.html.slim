@@ -49,14 +49,14 @@
                 - when col=~ /(order_no)/i;          next
                 - when col =~ /(商品名)/i;           :name
                 - when col =~ /(価格|金額|デメ半)/i; :price
-                - when col =~ /(数|件|率)/i;          :num
+                - when col =~ /(数|件|率)/i;         :num
                 - when col =~ /(年式)/i;             ""
                 - when val.is_a?(Numeric);           :num
 
                 // 数値 //
                 - v = case
                 - when val.is_a?(Numeric);    number_with_delimiter(val)
-                - when cls.in?(:num, :price); number_with_delimiter(val)
+                - when cls.in?([:num, :price]); number_with_delimiter(val)
                 - when val.blank? ;        ""
                 - when col =~ /(id|no.)/i; r
                 - when col =~ /(date)/i;   I18n.l(DateTime.parse(val), format: :date)
