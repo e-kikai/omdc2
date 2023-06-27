@@ -79,7 +79,7 @@
 
             // 数値 //
             - v = case
-            - when cls.in?([:num, :price]); number_with_delimiter(vals.sum)
+            - when cls.in?([:num, :price]); number_with_delimiter(vals.values.sum)
             - else;                         "合計"
 
             th class="#{cls} #{col}" = v
