@@ -77,14 +77,14 @@ class System::TotalController < System::ApplicationController
     # 共通部分
     products_count = products.count
     success_count  = products.count(:success_bid_id)
-    @result.merge {
+    @result.merge({
       "出品商品数"       => products_count,
       "最低入札価格総額(円)" => products.sum(:min_price),
       "入札数"         => products.sum(:bids_count),
       "落札数"         => success_count,
       "落札率(%)"      => percents(products_count, success_count),
       "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
-    }
+    })
 
     respond_to do |format|
       format.html
