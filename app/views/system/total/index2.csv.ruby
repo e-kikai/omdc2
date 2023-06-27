@@ -4,11 +4,7 @@ CSV.generate do |row|
 
   @pivots.each do |pi|
     data = @results.map do |col, vals|
-      if col =~ /(価格|金額|デメ半|数|件|率)/
-        vals[pi] || 0
-      else
-        vals[pi]
-      end
+      vals[pi] || (col =~ /(価格|金額|デメ半|数|件|率)/ ? 0 : "")
     end
     row << data
   end
