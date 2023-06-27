@@ -50,15 +50,17 @@
                 - when col =~ /(商品名)/i;           :name
                 - when col =~ /(価格|金額|デメ半)/i; :price
                 - when col =~ /(年式)/i;             ""
+                - when col =~ /(数|件)/i;            :num
                 - when val.is_a?(Numeric);           :num
 
                 // 数値 //
                 - v = case
-                - when val.blank? ;        ""
-                - when col =~ /(id|no.)/i; r
-                - when col =~ /(date)/i;   I18n.l(DateTime.parse(val), format: :date)
-                - when val.is_a?(Numeric); number_with_delimiter(val)
-                - else;                    Charwidth.normalize(val)
+                / - when val.blank? ;          ""
+                - when col =~ /(id|no.)/i;    r
+                - when col =~ /(date)/i;      I18n.l(DateTime.parse(val), format: :date)
+                - when val.is_a?(Numeric);    number_with_delimiter(val)
+                - when cls =~ /(price|num)/i; 0
+                - else;                       Charwidth.normalize(val)
 
                 td class="#{cls} #{col}" = v
 
