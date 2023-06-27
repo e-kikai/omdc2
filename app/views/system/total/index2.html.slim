@@ -55,8 +55,8 @@
 
                 // 数値 //
                 - v = case
-                - when val.is_a?(Numeric);    number_with_delimiter(val)
-                - when cls.in?([:num, :price]); number_with_delimiter(val)
+                / - when val.is_a?(Numeric);    number_with_delimiter(val)
+                - when cls.in?([:num, :price]); number_with_delimiter(val || 0)
                 - when val.blank? ;        ""
                 - when col =~ /(id|no.)/i; r
                 - when col =~ /(date)/i;   I18n.l(DateTime.parse(val), format: :date)
