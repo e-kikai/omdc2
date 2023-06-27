@@ -54,7 +54,7 @@ class System::TotalController < System::ApplicationController
     @results = case @total
     when :genre_amount
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
-      products = Product.where(open_id: @open_id).joins(:genre, :large_genre).group("large_genres.id")
+      products = Product.where(open_id: @open_id).joins(:genre).group("genres.large_genre_id")
 
       @pivots = large_genres.pluck(:id)
 
