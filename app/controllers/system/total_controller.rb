@@ -60,13 +60,7 @@ class System::TotalController < System::ApplicationController
       @pivots = areas.pluck(:id)
 
       {
-        "エリア"       => areas.pluck(:id, :name).to_h,
-        "出品商品数"       => products.count,
-        "最低入札価格総額(円)" => products.sum(:min_price),
-        "入札数"         => products.sum(:bids_count),
-        "落札数"         => products.count(:success_bid_id),
-        "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
-        "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
+        "エリア" => areas.pluck(:id, :name).to_h,
       }
     else
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
@@ -75,16 +69,22 @@ class System::TotalController < System::ApplicationController
       @pivots = large_genres.pluck(:id)
 
       {
-        "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
-        "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
-        "出品商品数"       => products.count,
-        "最低入札価格総額(円)" => products.sum(:min_price),
-        "入札数"         => products.sum(:bids_count),
-        "落札数"         => products.count(:success_bid_id),
-        "落札率(%)"      => percents(products.count, products.count(:success_bid_id)),
-        "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
+        "大ジャンル" => large_genres.pluck(:id, "xl_genres.name").to_h,
+        "中ジャンル" => large_genres.pluck(:id, :name).to_h,
       }
     end
+
+    # 共通部分
+    products_count = products.count
+    success_count  = products.count(:success_bid_id)
+    @result += {
+      "出品商品数"       => products_count,
+      "最低入札価格総額(円)" => products.sum(:min_price),
+      "入札数"         => products.sum(:bids_count),
+      "落札数"         => success_count,
+      "落札率(%)"      => percents(products_count, success_count),
+      "落札金額合計(円)"   => products.joins(:success_bid).sum("bids.amount"),
+    }
 
     respond_to do |format|
       format.html

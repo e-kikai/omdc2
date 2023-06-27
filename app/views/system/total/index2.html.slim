@@ -70,19 +70,17 @@
             // クラス //
             - cls = case
             - when col =~ /(id|no.)/i;           :id
-            - when col =~ /(date)/i;             :date
-            - when col=~ /(order_no)/i;          next
-            - when col =~ /(商品名)/i;           :name
             - when col =~ /(価格|金額|デメ半)/i; :price
-            - when col =~ /(数|件|率)/i;         :num
+            - when col =~ /(数|件)/i;            :num
             - else;                              ""
 
             // 数値 //
             - v = case
             - when cls.in?([:num, :price]); number_with_delimiter(vals.values.sum)
+            - when cls == :id;              ""
             - else;                         "合計"
 
-            th class="#{cls} #{col}" = v
+            td class="#{cls} #{col}" = v
 
         tr
           / th.id ID
