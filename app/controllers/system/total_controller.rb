@@ -77,7 +77,7 @@ class System::TotalController < System::ApplicationController
     # 共通部分
     products_count = products.count
     success_count  = products.count(:success_bid_id)
-    @result += {
+    @result.merge {
       "出品商品数"       => products_count,
       "最低入札価格総額(円)" => products.sum(:min_price),
       "入札数"         => products.sum(:bids_count),
