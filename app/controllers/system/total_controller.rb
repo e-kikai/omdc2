@@ -54,7 +54,7 @@ class System::TotalController < System::ApplicationController
 
     @results = case @total
     when :area_amount
-      areas = Area..order(:order_no)
+      areas = Area.order(:order_no)
       products = Product.where(open_id: @open_id).group(:area_id)
 
       @pivots = areas.pluck(:id)
