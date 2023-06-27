@@ -75,8 +75,7 @@
             - when col =~ /(商品名)/i;           :name
             - when col =~ /(価格|金額|デメ半)/i; :price
             - when col =~ /(数|件|率)/i;         :num
-            - when col =~ /(年式)/i;             ""
-            - when val.is_a?(Numeric);           :num
+            - else;                              ""
 
             // 数値 //
             - v = case
