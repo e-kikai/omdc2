@@ -9,7 +9,7 @@ class System::TotalController < System::ApplicationController
         "出品会社/デメ半手数料"     => :company_deme,
         "価格帯/落札結果金額"      => :price_amount,
         "日別/アクセス,お気に入り利用" => :date_favorite,
-        "エリア/出品・落札結果金額"   => :area_amount,
+        # "エリア/出品・落札結果金額"   => :area_amount,
         # "ジャンル/出品・落札結果金額"  => :genre_amount,
         "目玉商品/結果一覧"       => :feature_products,
     }
@@ -107,7 +107,8 @@ class System::TotalController < System::ApplicationController
     end
 
     # 入札会一覧
-    @opens = Open.where("opens.id >= ?", start_open_id).order(:id).pluck(:id, :name)
+    opens_base = Open.where("opens.id >= ?", start_open_id).order(:id)
+    @opens = opens_base.pluck(:id, :name)
     @title = @total_selector.key(@total)
 
     products = Product.group(:open_id)
@@ -584,94 +585,94 @@ WHERE
 ORDER BY
   p.list_no;
     }
-    when :area_amount
-      %q{
-SELECT
-  CASE
-    WHEN p2.area_id IS NULL THEN '店頭出品'
-    ELSE a.name
-  END AS "エリア",
-  count(DISTINCT p2.id) AS "出品数",
-  sum(p2.min_price) AS "最低入札価格総額",
-  sum(bc.c) AS "入札数",
-  count(DISTINCT p2.success_bid_id) AS "落札数",
-  ROUND(count(DISTINCT p2.success_bid_id) * 100.0 / count(DISTINCT p2.id) ,2) AS "落札率(%)",
-  sum(b.amount) AS "落札金額"
-FROM
-  products p2
-LEFT JOIN bids b ON
-  b.id = p2.success_bid_id
-LEFT JOIN (
-    SELECT
-      b2.product_id,
-      count(b2.id) AS c
-    FROM
-      bids b2
-    WHERE
-      b2.soft_destroyed_at IS NULL
-    GROUP BY
-      b2.product_id
-  ) bc ON
-  bc.product_id = p2.id
-LEFT JOIN areas a ON
-  a.id = p2.area_id
-WHERE
-  a.soft_destroyed_at IS NULL
-  AND p2.soft_destroyed_at IS NULL
-  AND b.soft_destroyed_at IS NULL
-  AND p2.open_id = ?
-GROUP BY
-  p2.area_id,
-  a.name,
-  a.order_no
-ORDER BY
-  a.order_no;
-    }
-  when :genre_amount
-    %q{
-SELECT
-  xg.name AS 大ジャンル,
-  lg.name AS 中ジャンル,
-  count(p.id) AS 出品商品数,
-  sum(p.min_price) AS "最低入札価格総額(円)",
-  sum(bc1.c) AS 入札数,
-  sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) AS 落札数,
-  round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 /  count(DISTINCT p.id), 2) AS "落札率(%)",
-  sum(sb.amount) AS "落札金額合計(円)"
-FROM
-  large_genres lg
-LEFT JOIN xl_genres xg ON
-  xg.id = lg.xl_genre_id
-LEFT JOIN genres g ON
-  g.large_genre_id = lg.id
-LEFT JOIN products p ON
-  p.genre_id = g.id
-LEFT JOIN bids sb ON
-  sb.id = p.success_bid_id
-LEFT JOIN (
-    SELECT
-      b2.product_id,
-      count(b2.id) AS c
-    FROM
-      bids b2
-    WHERE
-      b2.soft_destroyed_at IS NULL
-    GROUP BY
-      b2.product_id
-  ) bc1 ON
-  bc1.product_id = p.id
-WHERE
-  p.soft_destroyed_at IS NULL
-  AND open_id = ?
-GROUP BY
-  lg.name,
-  xg.name,
-  xg.order_no,
-  lg.order_no
-ORDER BY
-  xg.order_no,
-  lg.order_no;
-    }
+#     when :area_amount
+#       %q{
+# SELECT
+#   CASE
+#     WHEN p2.area_id IS NULL THEN '店頭出品'
+#     ELSE a.name
+#   END AS "エリア",
+#   count(DISTINCT p2.id) AS "出品数",
+#   sum(p2.min_price) AS "最低入札価格総額",
+#   sum(bc.c) AS "入札数",
+#   count(DISTINCT p2.success_bid_id) AS "落札数",
+#   ROUND(count(DISTINCT p2.success_bid_id) * 100.0 / count(DISTINCT p2.id) ,2) AS "落札率(%)",
+#   sum(b.amount) AS "落札金額"
+# FROM
+#   products p2
+# LEFT JOIN bids b ON
+#   b.id = p2.success_bid_id
+# LEFT JOIN (
+#     SELECT
+#       b2.product_id,
+#       count(b2.id) AS c
+#     FROM
+#       bids b2
+#     WHERE
+#       b2.soft_destroyed_at IS NULL
+#     GROUP BY
+#       b2.product_id
+#   ) bc ON
+#   bc.product_id = p2.id
+# LEFT JOIN areas a ON
+#   a.id = p2.area_id
+# WHERE
+#   a.soft_destroyed_at IS NULL
+#   AND p2.soft_destroyed_at IS NULL
+#   AND b.soft_destroyed_at IS NULL
+#   AND p2.open_id = ?
+# GROUP BY
+#   p2.area_id,
+#   a.name,
+#   a.order_no
+# ORDER BY
+#   a.order_no;
+#     }
+#   when :genre_amount
+#     %q{
+# SELECT
+#   xg.name AS 大ジャンル,
+#   lg.name AS 中ジャンル,
+#   count(p.id) AS 出品商品数,
+#   sum(p.min_price) AS "最低入札価格総額(円)",
+#   sum(bc1.c) AS 入札数,
+#   sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) AS 落札数,
+#   round(sum(CASE WHEN p.success_bid_id > 1 THEN 1 ELSE 0 END) * 100 /  count(DISTINCT p.id), 2) AS "落札率(%)",
+#   sum(sb.amount) AS "落札金額合計(円)"
+# FROM
+#   large_genres lg
+# LEFT JOIN xl_genres xg ON
+#   xg.id = lg.xl_genre_id
+# LEFT JOIN genres g ON
+#   g.large_genre_id = lg.id
+# LEFT JOIN products p ON
+#   p.genre_id = g.id
+# LEFT JOIN bids sb ON
+#   sb.id = p.success_bid_id
+# LEFT JOIN (
+#     SELECT
+#       b2.product_id,
+#       count(b2.id) AS c
+#     FROM
+#       bids b2
+#     WHERE
+#       b2.soft_destroyed_at IS NULL
+#     GROUP BY
+#       b2.product_id
+#   ) bc1 ON
+#   bc1.product_id = p.id
+# WHERE
+#   p.soft_destroyed_at IS NULL
+#   AND open_id = ?
+# GROUP BY
+#   lg.name,
+#   xg.name,
+#   xg.order_no,
+#   lg.order_no
+# ORDER BY
+#   xg.order_no,
+#   lg.order_no;
+#     }
     end
   end
 
