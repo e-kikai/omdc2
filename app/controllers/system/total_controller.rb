@@ -45,6 +45,7 @@ class System::TotalController < System::ApplicationController
         "ジャンル/出品・落札結果金額" => :genre_amount,
         "エリア/出品・落札結果金額"   => :area_amount,
         # "目玉商品/結果一覧"       => :feature_products,
+        "目玉商品 - ジャンル/出品・落札結果金額" => :feature_genre_amount,
     }
 
     @open_id = params[:open_id] || @open_now&.id || (@open_next&.id ? (@open_next&.id - 1) : @open_selector.first[1])
@@ -59,8 +60,28 @@ class System::TotalController < System::ApplicationController
 
       @pivots = areas.pluck(:id)
 
+      products_count = products.count
+
       {
         "エリア" => areas.pluck(:id, :name).to_h,
+        "出品商品数"       => products_count,
+      }
+    when :feature_genre_amount
+      large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
+      products = Product.where(open_id: @open_id).joins(:genre).group("genres.large_genre_id")
+      base_count = products.count
+
+      products = products.where(featured: true) # 目玉商品
+
+      @pivots = large_genres.pluck(:id)
+
+      products_count = products.count
+
+      {
+        "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
+        "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
+        "目玉商品出品数"     => products_count,
+        "目玉商品出品率(%)"  => percents(base_count, products_count,
       }
     else
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
@@ -68,18 +89,23 @@ class System::TotalController < System::ApplicationController
 
       @pivots = large_genres.pluck(:id)
 
+      products_count = products.count
+
       {
         "大ジャンル" => large_genres.pluck(:id, "xl_genres.name").to_h,
         "中ジャンル" => large_genres.pluck(:id, :name).to_h,
+        "出品商品数"       => products_count,
       }
     end
 
     # 共通部分
-    products_count = products.count
     success_count  = products.count(:success_bid_id)
+
     @results.update({
-      "出品商品数"       => products_count,
       "最低入札価格総額(円)" => products.sum(:min_price),
+      "出品会社数"       => products.distinct.count(:company_id),
+      "詳細閲覧"        => products.joins(:detail_logs).count("detail_logs.id"),
+      "お気に入り"       => products.joins(:favorites).count("favorites.id"),
       "入札数"         => products.sum(:bids_count),
       "落札数"         => success_count,
       "落札率(%)"      => percents(products_count, success_count),
