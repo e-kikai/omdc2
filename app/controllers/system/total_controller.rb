@@ -104,8 +104,8 @@ class System::TotalController < System::ApplicationController
     @results.update({
       "最低入札価格総額(円)" => products.sum(:min_price),
       "出品会社数"       => products.distinct.count(:company_id),
-      "詳細閲覧 件数"        => products.joins(:detail_logs).count("detail_logs.id"),
-      "お気に入り 件数"       => products.joins(:favorites).count("favorites.id"),
+      "詳細閲覧件数"        => products.joins(:detail_logs).count("detail_logs.id"),
+      "お気に入り件数"       => products.joins(:favorites).count("favorites.id"),
       "入札数"         => products.sum(:bids_count),
       "落札数"         => success_count,
       "落札率(%)"      => percents(products_count, success_count),
