@@ -81,7 +81,7 @@ class System::TotalController < System::ApplicationController
         "大ジャンル"       => large_genres.pluck(:id, "xl_genres.name").to_h,
         "中ジャンル"       => large_genres.pluck(:id, :name).to_h,
         "目玉商品出品数"     => products_count,
-        "目玉商品出品率(%)"  => percents(base_count, products_count,
+        "目玉商品出品率(%)"  => percents(base_count, products_count),
       }
     else
       large_genres = LargeGenre.joins(:xl_genre).order("xl_genres.order_no, large_genres.order_no")
