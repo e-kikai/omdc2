@@ -57,7 +57,9 @@ ul.nav.nav-pills
             / th = s.sort_link :model,                   "型式"
             th.img_link 画像
             th.img_link 動画
-            th.sepa = s.sort_link :min_price,          "最低入札金額"
+            th = s.sort_link :min_price,          "最低入札金額"
+            th.sepa = s.sort_link :company_id,    "出品会社"
+
             th.id = s.sort_link :bids_count,           "入札"
             th = s.sort_link :success_bid_amount,      "落札金額"
             th.sepa = s.sort_link :success_company_no, "落札会社"
@@ -79,7 +81,9 @@ ul.nav.nav-pills
                 - if p.youtube.present?
                   = link_to "/youtube/#{p.id}/", target: "_blank" do
                     span.glyphicon.glyphicon-film
-              td.num.sepa = number_to_currency(p.min_price)
+              td.num = number_to_currency(p.min_price)
+              td.sepa = p.company.name
+
               - if p.success_bid.present?
                 td.id = p.bids_count
                 td.num = number_to_currency(p.success_bid.amount)
