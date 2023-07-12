@@ -30,7 +30,6 @@
       res += ['○', p.comment]
     end
 
-
   end
   res.to_csv
 end
