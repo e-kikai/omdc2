@@ -70,7 +70,7 @@
                 = link_to "/youtube/#{p.id}/", target: "_blank" do
                   span.glyphicon.glyphicon-film
             td.num = number_to_currency(p.min_price)
-            td.sepa = p.success_company.name
+            td.sepa = p.company.name
 
             - if p.success_bid.present?
               td.no = p.bids_count
