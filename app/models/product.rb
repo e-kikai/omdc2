@@ -118,7 +118,8 @@ class Product < ApplicationRecord
     case key.to_i
     when 1; "最低落札価格1万円特集"
     when 2; "ひとやま特集"
-    when 3; "第200回記念 目玉商品"
+    # when 3; "第200回記念 目玉商品"
+    when 3; "今回の目玉商品"
     end
   end
 
