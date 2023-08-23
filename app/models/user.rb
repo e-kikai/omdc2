@@ -66,7 +66,7 @@ class User < ApplicationRecord
   validates :company, presence: true
   validates :name,    presence: true
 
-  # validates :allow_mail, inclusion: {in: [true, false]}
+  validates :allow_mail, inclusion: {in: [true, false]}
 
   _validators.delete(:email)
   _validate_callbacks.each do |callback|
