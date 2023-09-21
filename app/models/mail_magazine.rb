@@ -21,6 +21,11 @@ class MailMagazine
   def add_member(user, email)
     # Rails.logger.debug "########## add_member #{email}"
 
+    Rails.logger.debug "########## add_member #{email}"
+    Rails.logger.debug "########## add_member #{user.id}"
+    Rails.logger.debug "########## add_member #{user.name}"
+    Rails.logger.debug "########## add_member #{user.company}"
+
     ### 応急処置
     @mailchimp.lists.subscribe(
       @list_id, {email: email},
