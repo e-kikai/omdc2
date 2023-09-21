@@ -29,7 +29,8 @@ class MailMagazine
     ### 応急処置
     @mailchimp.lists.subscribe(
       @list_id, {email: email},
-      {USER_ID: user.id, FNAME: user.name, LNAME: user.company},
+      # {USER_ID: user.id, FNAME: user.name, LNAME: user.company},
+      {name: user.name, company: user.company},
       "html",
       false
     )
