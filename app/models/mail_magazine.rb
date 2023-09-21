@@ -24,7 +24,8 @@ class MailMagazine
     ### 応急処置
     # @mailchimp.lists.subscribe(@list_id, {email: email}, {"NAME" => user.name, "COMPANY" => user.company}, "html", false)
 
-    Rails.logger.unknown @mailchimp.lists.member_info(@list_id, [{email: email}])["success_count"]
+    Rails.logger.unknown "##########"
+    Rails.logger.unknown @mailchimp.lists
 
     @mailchimp.lists.subscribe(@list_id, {EMAIL: email})
 
