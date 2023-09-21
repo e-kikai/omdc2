@@ -23,12 +23,10 @@ class MailMagazine
 
     ### 応急処置
     @mailchimp.lists.subscribe(
-      @list_id, {email: email},,
+      @list_id, {email: email},
       # {USER_ID: user.id, FNAME: user.name, LNAME: user.company},
       {},
-      "html",
-      false
-    )
+      "html", false)
   end
 
   # リストから削除
