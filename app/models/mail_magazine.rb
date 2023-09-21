@@ -22,7 +22,8 @@ class MailMagazine
     # Rails.logger.debug "########## add_member #{email}"
 
     ### 応急処置
-    @mailchimp.lists.subscribe( @list_id, {email: email}, {"NAME" => user.name, "COMPANY" => user.company}, "html", false)
+    # @mailchimp.lists.subscribe(@list_id, {email: email}, {"NAME" => user.name, "COMPANY" => user.company}, "html", false)
+    @mailchimp.lists.subscribe(@list_id, {email: email})
 
     # {USER_ID: user.id, FNAME: user.name, LNAME: user.company},
 
