@@ -19,6 +19,7 @@
 #  name                   :string
 #  no                     :integer
 #  position               :string
+#  registration_number    :string           default(""), not null
 #  remember_created_at    :datetime
 #  representative         :string
 #  reset_password_sent_at :datetime

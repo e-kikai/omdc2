@@ -65,6 +65,7 @@ class Open < ApplicationRecord
 
   VECTOR_CACHE = "vector"
 
+  REGISTRATION_NUMBER = "T1122005000318"
 
   # 現在開催中の入札会を取得
   scope :now, -> {
@@ -191,6 +192,11 @@ class Open < ApplicationRecord
   def vectors_cache
     # PStore.new("/tmp/foo/#{cache_filename}")
     Rails.cache.read(cache_filename) || {}
+  end
+
+  # 登録番号を出力(とりあえずはハードコーディング)
+  def registration_number
+    REGISTRATION_NUMBER
   end
 
   private

@@ -4,7 +4,7 @@ class MailMagazine
   MAILCHIMP_URL = "https://us8.api.mailchimp.com/3.0"
 
   def initialize
-    @mailchimp = Mailchimp::API.new(Rails.application.secrets.mailchimp_api_key)
+    # @mailchimp = Mailchimp::API.new(Rails.application.secrets.mailchimp_api_key)
     @list_id   = Rails.application.secrets.mailchimp_list_id
 
     url = URI.parse(MAILCHIMP_URL)
@@ -14,15 +14,15 @@ class MailMagazine
   end
 
   # リストの情報を取得する
-  def fetch_mailing_list
-    @mailchimp.lists.list
-  end
+  # def fetch_mailing_list
+  #   @mailchimp.lists.list
+  # end
 
   # リストに対象のメールアドレスがあるか？
-  def member?(email)
-    result = @mailchimp.lists.member_info(@list_id, [{email: email}])["success_count"]
-    result > 0
-  end
+  # def member?(email)
+  #   result = @mailchimp.lists.member_info(@list_id, [{email: email}])["success_count"]
+  #   result > 0
+  # end
 
   # リストに追加
   def add_member(user, email)

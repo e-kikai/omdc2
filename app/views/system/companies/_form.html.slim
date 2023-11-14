@@ -11,6 +11,10 @@ table.table.table-hover.table-condensed.form-table
     td = f.number_field :no, class: "form-control",  required: "required"
 
   tr
+    th = f.label :registration_number
+    td = f.text_field :registration_number, class: "form-control"
+
+  tr
     th = f.label :charge
     td = f.text_field :charge, class: "form-control"
 

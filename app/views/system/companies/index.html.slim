@@ -27,6 +27,7 @@ ul.nav.nav-pills
           th.id No.
           th 会社名
           th 出品
+          th 登録番号
           th 住所
           th TEL
           th FAX
@@ -40,6 +41,7 @@ ul.nav.nav-pills
             td.id = c.no
             td = link_to c.name, "/system/companies/#{c.id}/edit"
             td = c.entry ? "◯" : "☓"
+            td = c.registration_number
             td = c.address
             td = c.tel
             td = c.fax

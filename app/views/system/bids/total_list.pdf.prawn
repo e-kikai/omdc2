@@ -3,7 +3,11 @@ prawn_document do |pdf|
     success_products = @company_products[c.id][:success_products] # 落札一覧
     products         = @company_products[c.id][:products]         # 出品一覧
 
+    ### 未参加の場合、skip ###
     next if products.blank? && success_products.blank?
+
+    ### 支払い? 請求? ###
+    shiharai = products.sum(&:shiharai) >= success_products.sum(&:seikyu)
 
     pdf.start_new_page layout: :portrait, margin: [10.mm, 24.mm]
     pdf.font "vendor/assets/fonts/ipaexm.ttf"
@@ -19,11 +23,23 @@ prawn_document do |pdf|
     pdf.text " ", size: 5
 
     # pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
-    pdf.text "#{c.no}", size: 12, leading: 16
+
+    # 20231113@ba-ta 追加
+    reg_no = shiharai ? " 登録番号 #{c.registration_number}" : ""
+    pdf.text "#{c.no}#{reg_no}", size: 12, leading: 16
+
+    # pdf.text "#{c.no}", size: 12, leading: 16
+
     pdf.text " ", size: 10
 
+    ### タイトル ###
     pdf.font "vendor/assets/fonts/ipaexm.ttf"
     pdf.text "#{@open_now.name}", size: 16
+
+    # 20231113@ba-ta 追加
+    pdf.text "", size: 10
+    pdf.text "#{shiharai ? '支払通知書' : '請求書'}", size: 16, align: :center
+    pdf.stroke_line [65.mm, 234.mm], [97.mm, 234.mm]
 
     pdf.bounding_box([96.mm, 276.mm], width: 76.mm, height: 120.mm) do
       # pdf.font "vendor/assets/fonts/VL-PGothic-Regular.ttf"
@@ -31,6 +47,10 @@ prawn_document do |pdf|
       pdf.text Time.now.strftime("%Y年%m月%d日"), size: 12, align: :center
       pdf.text " ", size: 12
       pdf.text @open_now.owner, size: 14, align: :center
+
+      # 20231113@ba-ta 追加
+      pdf.text " ", size: 5
+      pdf.text "登録番号 #{@open_now.registration_number}", size: 12, align: :center , padding_top: 18
     end
 
     pdf.bounding_box([0, 224.mm], width: 76.mm, height: 100.mm) do
@@ -62,6 +82,8 @@ prawn_document do |pdf|
 
       pdf.text "出品支払書", size: 14, align: :center
 
+      total = (products.sum(&:shiharai) - success_products.sum(&:seikyu)).abs
+
       arr1 = [
         ["出品支払額(イ)", number_with_delimiter(products.sum(&:success_price))],
         ["デメ半(ロ)", number_with_delimiter(products.sum(&:deme_h))],
@@ -77,10 +99,15 @@ prawn_document do |pdf|
         ["落札請求額", number_with_delimiter(@open_now.tax_total(success_products.sum(&:seikyu)))],
         ["出品支払額", number_with_delimiter(@open_now.tax_total(products.sum(&:shiharai)))],
         [
-          (products.sum(&:shiharai) >= success_products.sum(&:seikyu) ? "差引出品支払額" : "差引落札請求額"),
-          number_with_delimiter((@open_now.tax_total(products.sum(&:shiharai)) - @open_now.tax_total(success_products.sum(&:seikyu))).abs)
+          (shiharai ? "差引出品支払額" : "差引落札請求額"),
+          # number_with_delimiter((@open_now.tax_total(products.sum(&:shiharai)) - @open_now.tax_total(success_products.sum(&:seikyu))).abs)
+          number_with_delimiter(@open_now.tax_total(total))
         ],
-        ["", ""]
+        ["", ""],
+
+        ["#{@open_now.tax}%対象",    number_with_delimiter(total)],
+        ["消費税#{@open_now.tax}％", number_with_delimiter(@open_now.tax_calc(total))],
+
       ]
 
       pdf.table arr1, {
@@ -89,11 +116,12 @@ prawn_document do |pdf|
         t.columns(0).style(width: 46.mm, align: :left, padding: 4)
         t.columns(1).style(width: 36.mm, align: :right, padding: 4)
 
-        t.row(-4).style(size: 14, border_width: 0, padding: 2, padding_top: 18)
-        t.row(-3).style(size: 14, border_width: 0, padding: 2, padding_bottom: 18)
-        t.row(-2).style(size: 16, border_width: 0, border_top_width: 1, border_bottom_width: 1, padding: 2)
-        t.row(-1).style(size: 14, border_width: 0, border_bottom_width: 1, padding: 0, height: 3)
-
+        t.row(-6).style(size: 14, border_width: 0, padding: 2, padding_top: 18)
+        t.row(-5).style(size: 14, border_width: 0, padding: 2, padding_bottom: 18)
+        t.row(-4).style(size: 16, border_width: 0, border_top_width: 1, border_bottom_width: 1, padding: 2)
+        t.row(-3).style(size: 14, border_width: 0, border_bottom_width: 1, padding: 0, height: 3)
+        t.row(-2).style(size: 14, border_width: 0, padding: 2, padding_top: 18)
+        t.row(-1).style(size: 14, border_width: 0, padding: 2)
       end
     end
 
@@ -102,12 +130,20 @@ prawn_document do |pdf|
 
       pdf.default_leading 6
 
-      if products.sum(&:shiharai) >= success_products.sum(&:seikyu)
+      if shiharai
+        ### 支払い ###
+
         pdf.text "お支払い額は上記の通りです。", size: 12
         # pdf.text "平成#{@open_now.payment_date.strftime("%Y").to_i - 1988}年#{@open_now.payment_date.strftime("%m月%d日")}にお支払い致します。", size: 16
         pdf.text "#{@open_now.payment_date.strftime("%Y年%m月%d日")}に#{c.transfer? ? "ご指定の口座に振込" : "小切手"}にてお支払い致します。", size: 16
 
+        # 20231113@ba-ta 追加
+        pdf.text " "
+        pdf.text "尚、お支払日の2営業日前までに誤りのある旨の連絡がない場合には、", size: 12
+        pdf.text "記載内容のとおり確認があったものとします。", size: 12
       else
+        ### 請求 ###
+
         pdf.text "御請求額は上記の通りです。", size: 12
         # pdf.text "平成#{@open_now.billing_date.strftime("%Y").to_i - 1988}年#{@open_now.billing_date.strftime("%m月%d日")}までにご入金下さい。", size: 16
         pdf.text "#{@open_now.billing_date.strftime("%Y年%m月%d日")}までにご入金下さい。", size: 16
@@ -188,7 +224,7 @@ prawn_document do |pdf|
           number_with_delimiter(p.hanbai_fee_per), number_with_delimiter(p.shiharai), ""]
       end + [
         [ {content: "", colspan: 7}, {content: "出品数 : #{@company_products[c.id][:products].length}", colspan: 2}, {content: "合計金額", colspan: 3},
-         {content: number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai)), colspan: 2}],
+          {content: number_with_delimiter(@company_products[c.id][:products].sum(&:shiharai)), colspan: 2}],
         [ {content: "", colspan: 9}, {content: "消費税 : #{@open_now.tax}%", colspan: 3},
           {content: number_with_delimiter(@open_now.tax_calc(@company_products[c.id][:products].sum(&:shiharai))), colspan: 2}],
         [ {content: "", colspan: 9}, {content: "差引出品支払額", colspan: 3},

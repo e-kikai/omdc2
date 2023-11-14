@@ -17,7 +17,7 @@ ja:
       industry: 業種
     attributes:
       open:
-        name:  入札会名
+        name: 入札会名
         owner: 主催者
         entry_start_date: 登録開始日
         entry_end_date: 登録終了日
@@ -42,7 +42,8 @@ ja:
         fax: "FAX"
       company:
         name: 会社名
-        no: '会社No.'
+        no: "会社No."
+        registration_number: 登録番号
         charge: 担当者
         representative: 代表者
         position: 役職
