@@ -44,7 +44,7 @@ table.table.table-hover.table-condensed.form-table
 
   tr
     th = f.label :mail
-    td = f.text_field :mail, class: "form-control"
+    td = f.text_field :mail, class: "form-control", autocomplete: "off",
 
   tr
     th = f.label :memo
@@ -76,11 +76,11 @@ table.table.table-hover.table-condensed.form-table
   - if f.object.id.blank?
     tr
       th = f.label :password, class: :required
-      td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上", required: "required"
+      td = f.password_field :password, class: "form-control", autocomplete: "off", placeholder: "パスワードは半角英数8文字以上", required: "required"
   - else
     tr
       th = f.label :password, "パスワード変更"
-      td = f.password_field :password, class: "form-control", placeholder: "パスワードは半角英数8文字以上"
+      td = f.password_field :password, class: "form-control", autocomplete: "off", placeholder: "パスワードは半角英数8文字以上"
     / tr
     /   th = f.label :password_confirmation, "パスワード変更(確認)"
     /   td = f.password_field :password_confirmation, class: "form-control", placeholder: "確認用"
