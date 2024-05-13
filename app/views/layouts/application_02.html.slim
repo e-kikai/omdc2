@@ -5,7 +5,8 @@ html.layout2
     meta name="viewport" content="width=device-width, initial-scale=1"
 
     - site = @open_now&.name || "機械団地電子入札システム2.1"
-    = display_meta_tags site: "機械団地 #{site}", reverse: true, separator: "｜", nofollow: true, noindex: true
+    / = display_meta_tags site: "機械団地 #{site}", reverse: true, separator: "｜", nofollow: true, noindex: true
+    = display_meta_tags site: "機械団地 #{site}", reverse: true, separator: "｜"
 
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => :reload
     = javascript_include_tag 'application', 'data-turbolinks-track' => :reload
@@ -13,9 +14,24 @@ html.layout2
 
     meta name="theme-color" content="#{user_signed_in? ? '#eb5504' : '#004e98'}"
 
-    = analytics_init if Rails.env.production?
+    / = analytics_init if Rails.env.production?
+    /-- Google tag GA4 Turbo --/
+    - if Rails.env.production?
+      script[async src="https://www.googletagmanager.com/gtag/js?id=G-1D0Z9Q2SJ2"]
+      javascript:
+        document.addEventListener('turbolinks:load', (event) => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          gtag('js', new Date());
 
-  body onLoad="FixedMidashi.create();" data-controller="#{controller.controller_path}" data-action="#{controller.action_name}" id="#{controller.controller_path.gsub("/", "-")}-#{controller.action_name}"
+          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.detail.url });
+          gtag('event', 'page_view', {
+            page_location: event.detail.url,
+            send_to: 'G-1D0Z9Q2SJ2',
+          });
+        });
+
+  body onLoad="FixedMidashi.create();" data-controller="#{controller.controller_path}" data-action="#{controller.action_name}" id="#{controller.controller_path.tr("/", "-")}-#{controller.action_name}"
 
     - if system_signed_in? && Rails.env.production?
       = hidden_field_tag :nologging, 1
@@ -24,7 +40,7 @@ html.layout2
       section#headline.member
         .container
           ul
-            li = link_to "/mypage/"do
+            li = link_to "/mypage/" do
               i.fas.fa-address-book
               span.btn-content マイページ
 
@@ -40,11 +56,11 @@ html.layout2
       section#headline.login
         .container
           ul
-            li = link_to "/users/sign_up"do
+            li = link_to "/users/sign_up" do
               i.fas.fa-user-plus
               span.btn-content ユーザ登録
 
-            li = link_to "/users/login"do
+            li = link_to "/users/login" do
               i.fas.fa-sign-in-alt
               span.btn-content ログイン
 
@@ -52,30 +68,28 @@ html.layout2
               i.fas.fa-print
               span.btn-content ページを印刷
 
-
     header
       .container
         h1#logo = link_to "/" do
           = image_tag("logo.png", alt: "大阪機械卸業団地協同組合 機械工具入札会 電子入札システム2.1")
         ul#navi
           - if @open_now.persisted? && @open_now.display?
-            li = link_to "出品商品",           "/search/"
-          li = link_to "入札までの流れ",     "/helps/beginner"
+            li = link_to "出品商品", "/search/"
+          li = link_to "入札までの流れ", "/helps/beginner"
           li = link_to "機械工具入札会とは", "/helps/faq"
-          li = link_to "お問い合わせ",       "/contacts/new"
-          li = link_to "組合員ページ",       "/bid/", target: "_blank"
+          li = link_to "お問い合わせ", "/contacts/new"
+          li = link_to "組合員ページ", "/bid/", target: "_blank", rel: :noopener
 
         #dl-menu.dl-menuwrapper
           button.dl-trigger Open Menu
           ul.dl-menu
-            li = link_to "HOME",               "/"
+            li = link_to "HOME", "/"
             - if @open_now.persisted? && @open_now.display?
-              li = link_to "出品商品",           "/search/"
-            li = link_to "入札までの流れ",     "/helps/beginner"
+              li = link_to "出品商品", "/search/"
+            li = link_to "入札までの流れ", "/helps/beginner"
             li = link_to "機械工具入札会とは", "/helps/faq"
-            li = link_to "お問い合わせ",       "/contacts/new"
-            li = link_to "組合員ページ",       "/bid/", target: "_blank"
-
+            li = link_to "お問い合わせ", "/contacts/new"
+            li = link_to "組合員ページ", "/bid/", target: "_blank", rel: :noopener
 
     - unless controller.controller_path == "main" && controller.action_name == "index"
       section.pan
@@ -97,8 +111,8 @@ html.layout2
       = render "/products/history", histories: @histories
 
     footer.container-fluid
-      | Copyright &copy; #{Time.now.year}
-      span.button_content = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank"
+      | Copyright &copy; #{Time.current.year}
+      span.button_content = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank", rel: :noopener
       | , All Rights reserved.
 
     = button_tag "", class: "btn btn-default btn-square", id: "page-top" do

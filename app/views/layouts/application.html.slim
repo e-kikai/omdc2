@@ -11,12 +11,27 @@ html
 
     meta name="theme-color" content="#F4F6EB"
 
-    = analytics_init if Rails.env.production?
+    / = analytics_init if Rails.env.production?
+    /-- Google tag GA4 Turbo --/
+    - if Rails.env.production?
+      script[async src="https://www.googletagmanager.com/gtag/js?id=G-1D0Z9Q2SJ2"]
+      javascript:
+        document.addEventListener('turbolinks:load', (event) => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { window.dataLayer.push(arguments); }
+          gtag('js', new Date());
+
+          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.detail.url });
+          gtag('event', 'page_view', {
+            page_location: event.detail.url,
+            send_to: 'G-1D0Z9Q2SJ2',
+          });
+        });
 
   body onLoad="FixedMidashi.create();"
     header.navbar.navbar-default.container-fluid role="navigation"
       .navbar-header
-        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo", target: "_blank"
+        = link_to image_tag("omdc_logo.gif", alt: "機械団地 電子入札システム2"), "/", class: "navbar-brand omdc-logo", target: "_blank", rel: :noopener
 
         button.navbar-toggle data-toggle="collapse" data-target="#navbar-collapse-1"
           span.sr-only Toggle navigation
@@ -32,10 +47,10 @@ html
           / li = link_to "/wishlist" do
           /   .glyphicon.glyphicon-list
           /   span.btn-content ウィッシュリスト
-          li = link_to "http://www.omdc.or.jp/?page_id=542", target: "_blank" do
+          li = link_to "http://www.omdc.or.jp/?page_id=542", target: "_blank", rel: :noopener do
             .glyphicon.glyphicon-question-sign
             span.btn-content 入札会FAQ
-          li = link_to "/bid/", target: "_blank" do
+          li = link_to "/bid/", target: "_blank", rel: :noopener do
             .glyphicon.glyphicon-star-empty
             span.btn-content 組合員ページ
 
@@ -56,8 +71,8 @@ html
       = yield
 
     footer.container-fluid
-      | Copyright &copy; #{Time.now.year}
-      = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank"
+      | Copyright &copy; #{Time.current.year}
+      = link_to "OMDC", "https://www.omdc.or.jp/", target: "_blank", rel: :noopener
       | , All Rights reserved.
 
     = button_tag "", class: "btn btn-default btn-square", id: "page-top" do
