@@ -1,11 +1,11 @@
 - set_meta_tags title: "会員一覧"
-- breadcrumb  :system_companies
+- breadcrumb :system_companies
 
 ul.nav.nav-pills
   li = link_to "/system/companies/new", class: "btn btn-default btn-square" do
     span.glyphicon.glyphicon-plus
     span.btn-content 新規会社登録
-  li = link_to({format: :csv}, {class: "btn btn-default btn-square"}) do
+  li = link_to({ format: :csv }, { class: "btn btn-default btn-square" }) do
     span.glyphicon.glyphicon-download-alt
     span.btn-content CSV出力
 

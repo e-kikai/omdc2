@@ -23,12 +23,8 @@ html.layout2
           window.dataLayer = window.dataLayer || [];
           function gtag() { window.dataLayer.push(arguments); }
           gtag('js', new Date());
-
-          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.detail.url });
-          gtag('event', 'page_view', {
-            page_location: event.detail.url,
-            send_to: 'G-1D0Z9Q2SJ2',
-          });
+          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.data.url });
+          gtag('event', 'page_view', { page_location: event.data.url, send_to: 'G-1D0Z9Q2SJ2' });
         });
 
   body onLoad="FixedMidashi.create();" data-controller="#{controller.controller_path}" data-action="#{controller.action_name}" id="#{controller.controller_path.tr("/", "-")}-#{controller.action_name}"

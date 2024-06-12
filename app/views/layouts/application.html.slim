@@ -20,12 +20,8 @@ html
           window.dataLayer = window.dataLayer || [];
           function gtag() { window.dataLayer.push(arguments); }
           gtag('js', new Date());
-
-          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.detail.url });
-          gtag('event', 'page_view', {
-            page_location: event.detail.url,
-            send_to: 'G-1D0Z9Q2SJ2',
-          });
+          gtag('config', 'G-1D0Z9Q2SJ2', { page_location: event.data.url });
+          gtag('event', 'page_view', { page_location: event.data.url, send_to: 'G-1D0Z9Q2SJ2' });
         });
 
   body onLoad="FixedMidashi.create();"
